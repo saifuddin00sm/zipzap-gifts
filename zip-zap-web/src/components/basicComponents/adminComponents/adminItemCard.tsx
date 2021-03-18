@@ -74,8 +74,7 @@ function AdminItemCard(props: {
           <div className={`row center-column`}>
             {editableItem.mainPicture ? (
               <img
-                // src={props.item.mainPicture}
-                src={`media/images/testImage1.png`}
+                src={props.item.mainPicture}
                 alt={`${editableItem.name}-main-picture`}
                 className={`item-card-image-small`}
               ></img>
@@ -92,18 +91,10 @@ function AdminItemCard(props: {
         </div>
 
         {editableItem.pictures.map((pictureURL, pIndex) => (
-          // <img
-          //   key={pIndex}
-          //   // src={pictureURL}
-          //   src={`media/images/testImage1.png`}
-          //   alt={`${editableItem.name}-alt-picture-${pIndex}`}
-          //   className={`item-card-image-small`}
-          // ></img>
           <div key={pIndex} className={`row center space-between`}>
             <div className={`row center-column`}>
               <img
-                // src={props.item.mainPicture}
-                src={`media/images/testImage1.png`}
+                src={props.item.mainPicture}
                 alt={`${editableItem.name}-alt-picture-${pIndex}`}
                 className={`item-card-image-small`}
               ></img>
@@ -204,8 +195,7 @@ function AdminItemCard(props: {
       </h3>
       <div className={`column center`}>
         <img
-          // src={props.item.mainPicture}
-          src={`media/images/testImage1.png`}
+          src={props.item.mainPicture}
           alt={`${props.item.name}-main-picture`}
           className={`item-card-image-main`}
         ></img>
@@ -213,8 +203,7 @@ function AdminItemCard(props: {
           {props.item.pictures.slice(0, 4).map((pictureURL, pIndex) => (
             <img
               key={pIndex}
-              // src={pictureURL}
-              src={`media/images/testImage1.png`}
+              src={pictureURL}
               alt={`${props.item.name}-alt-picture-${pIndex}`}
               className={`item-card-image-small`}
             ></img>
