@@ -1,0 +1,137 @@
+import React, { useContext, useEffect, useState } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { fetchRequest, UserContext } from "../../../App";
+import { adminItem } from "../../../classes";
+import AdminItemCard from "../../basicComponents/adminComponents/adminItemCard";
+import LoadingIcon from "../../basicComponents/LoadingIcon";
+import { checkUserAdmin } from "../adminDashboard";
+
+function AdminItemsList() {
+  const { user, admin, setAdmin, adminItems, setAdminItems } = useContext(
+    UserContext
+  );
+  const [loading, setLoading] = useState(true);
+
+  const getAdminUser = async () => {
+    const { allowed } = await checkUserAdmin(user);
+
+    if (allowed) {
+      setAdmin(allowed);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (!admin && "email" in user) {
+      getAdminUser();
+    } else if (admin && Object.keys(adminItems).length === 0) {
+      getItems();
+    } else {
+      setSearchItems(Object.keys(adminItems));
+      setLoading(false);
+    }
+  }, []);
+
+  const [searchItems, setSearchItems] = useState([] as Array<string>);
+  const getItems = async () => {
+    let response = await fetchRequest(user, "items", "GET");
+
+    if ("items" in response) {
+      setAdminItems(response.items);
+      setSearchItems(Object.keys(response.items));
+    }
+
+    setLoading(false);
+  };
+
+  const handleItemAction = async (
+    type: string,
+    item: adminItem,
+    index: number
+  ) => {
+    let updateResponse = {} as any;
+    if (type === "save") {
+      updateResponse = await fetchRequest(
+        user,
+        `items/${item.itemID}`,
+        "PUT",
+        item
+      );
+    } else if (type === "delete") {
+      updateResponse = await fetchRequest(
+        user,
+        `items/${item.itemID}`,
+        "DELETE",
+        item
+      );
+    }
+
+    if ("itemsID" in updateResponse && updateResponse.itemsID) {
+      if (adminItems[item.itemID]) {
+        adminItems[item.itemID] = item;
+        setAdminItems({ ...adminItems });
+        // setSearchItems([...Object.keys(adminItems)]);
+      }
+    }
+  };
+
+  const handleSearch = (e: any) => {
+    if (e.key === "Enter") {
+      let searchTerm = e.target.value.toLowerCase();
+
+      let newList = Object.keys(adminItems);
+      if (searchTerm) {
+        newList = Object.keys(adminItems).filter((itemKey) => {
+          let item = adminItems[itemKey];
+          if (item.name.toLowerCase().includes(searchTerm)) {
+            return true;
+          } else if (item.description.toLowerCase().includes(searchTerm)) {
+            return true;
+          }
+        });
+      }
+
+      setSearchItems([...newList]);
+    }
+  };
+
+  return (
+    <section className={`column center`}>
+      {!loading && !admin ? <Redirect to={""} /> : null}
+
+      <Link className={`general-button admin-button`} to={`/admin/dashboard`}>
+        Back to Admin Dashboard
+      </Link>
+
+      <h1>Items</h1>
+
+      <div className={`column center width-90`}>
+        <input
+          className={`general-input`}
+          placeholder={`Search for Item`}
+          onKeyPress={handleSearch}
+        ></input>
+
+        <Link className={`general-button admin-button`} to={`/admin/items/new`}>
+          Add New Item
+        </Link>
+      </div>
+
+      {loading ? (
+        <LoadingIcon />
+      ) : (
+        searchItems.map((item, iIndex) => (
+          <AdminItemCard
+            key={iIndex}
+            index={iIndex}
+            item={adminItems[item]}
+            action={handleItemAction}
+          />
+        ))
+      )}
+    </section>
+  );
+}
+
+export default AdminItemsList;
