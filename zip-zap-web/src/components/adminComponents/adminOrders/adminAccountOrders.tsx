@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../../App";
 import { adminAccount, adminItem, adminOrder } from "../../../classes";
-import AdminOrderRow from "../../basicComponents/adminComponents/adminOrderCard";
+import AdminOrderRow from "../../basicComponents/adminComponents/adminOrderRow";
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
 
@@ -33,6 +33,7 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
 
   let query = useQuery();
   let orderID = query.get("order");
+  let fulfillID = query.get("fulfill");
 
   const getAdminUser = async () => {
     const { allowed } = await checkUserAdmin(user);
@@ -48,6 +49,9 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
     if (!admin && "email" in user) {
       getAdminUser();
     } else if (admin) {
+      if (adminAccounts.length == 0) {
+        getAdminAccounts();
+      }
       if (Object.keys(adminItems).length === 0) {
         getItems();
       }
@@ -83,6 +87,21 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
     orderCount: 0,
   } as adminAccount);
 
+  const getAdminAccounts = async () => {
+    let response = await fetchRequest(user, "admin/orders", "GET");
+
+    if ("accounts" in response) {
+      setAdminAccounts(response.accounts);
+      // setSearchItems(response.accounts);
+    }
+
+    // if ("dates" in response) {
+    //   setWeekDates(response.dates);
+    // }
+
+    setLoading(false);
+  };
+
   const getOrders = async () => {
     let response = await fetchRequest(
       user,
@@ -92,16 +111,16 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
 
     console.log("ORDER RES", response);
 
+    if ("accountUsers" in response) {
+      console.log("USERS", response.accountUsers, adminAccounts);
+      setAccountUserList(response.accountUsers);
+    }
+
     if ("orders" in response) {
       // setAdminAccounts(response.accounts);
       console.log("ORDERS", response.orders);
       setSearchItems(response.orders);
       setOrders(response.orders);
-    }
-
-    if ("accountUsers" in response) {
-      console.log("USERS", response.accountUsers);
-      setAccountUserList(response.accountUsers);
     }
 
     if ("dates" in response) {
@@ -123,7 +142,7 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
   };
 
   const getItems = async () => {
-    let response = await fetchRequest(user, "items", "GET");
+    let response = await fetchRequest(user, "items?admin=true", "GET");
 
     if ("items" in response) {
       setAdminItems(response.items);
@@ -142,37 +161,6 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
 
     // setLoading(false);
   };
-
-  // const handleItemAction = async (
-  //   type: string,
-  //   item: adminItem,
-  //   index: number
-  // ) => {
-  //   let updateResponse = {} as any;
-  //   if (type === "save") {
-  //     updateResponse = await fetchRequest(
-  //       user,
-  //       `items/${item.itemID}`,
-  //       "PUT",
-  //       item
-  //     );
-  //   } else if (type === "delete") {
-  //     updateResponse = await fetchRequest(
-  //       user,
-  //       `items/${item.itemID}`,
-  //       "DELETE",
-  //       item
-  //     );
-  //   }
-
-  //   if ("itemsID" in updateResponse && updateResponse.itemsID) {
-  //     if (adminItems[item.itemID]) {
-  //       adminItems[item.itemID] = item;
-  //       setAdminAccounts({ ...adminItems });
-  //       // setSearchItems([...Object.keys(adminItems)]);
-  //     }
-  //   }
-  // };
 
   const handleSearch = (e: any) => {
     if (e.key === "Enter") {
@@ -263,6 +251,10 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
       window.location.replace(
         `${window.location.origin}/#/admin/orders/${match.params.accountID}`
       );
+    } else if (type === "fulfillOrder") {
+      window.location.replace(
+        `${window.location.origin}/#/admin/orders/${match.params.accountID}?fulfill=${data}`
+      );
     }
   };
 
@@ -276,14 +268,31 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
     }
   }, [orderID]);
 
+  const [fulfillOrder, setfulfillOrder] = useState(null as null | number);
+  useEffect(() => {
+    console.log(
+      "fulfill",
+      fulfillID,
+      searchItems,
+      accountUserList,
+      match.params.accountID
+    );
+    if (fulfillID) {
+      setfulfillOrder(parseInt(fulfillID));
+    } else {
+      setfulfillOrder(null);
+    }
+  }, [fulfillID]);
+
   return (
-    <section className={`column center`}>
+    <section className={`column center-column full-height`}>
       {!loading && !admin ? <Redirect to={""} /> : null}
-      <Link className={`general-button admin-button`} to={`/admin/dashboard`}>
-        Back to Admin Dashboard
+      <Link className={`general-button admin-button`} to={`/admin/Orders`}>
+        Back to Weeks Orders
       </Link>
       <h1>Orders</h1>
-      <div className={`column center width-90`}>
+      <h1>UNDER DEVELOPMENT</h1>
+      <div className={`column center-column width-90`}>
         <input
           className={`general-input`}
           placeholder={`Search for Order`}
@@ -293,7 +302,7 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
           Add New Item
         </Link> */}
       </div>
-      <div className={`column center`}>
+      <div className={`column center-column full-height`}>
         {loading ? (
           <LoadingIcon />
         ) : (
@@ -346,22 +355,38 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
             </tbody>
           </table>
         )}
-        {searchItems.length > 0 &&
-        accountUserList.activeUsers &&
-        activeOrder !== null ? (
-          <div className={`column center-column admin-order-card-show`}>
-            <AdminOrderRow
-              index={activeOrder}
-              order={searchItems[activeOrder]}
-              giftee={
-                accountUserList.activeUsers[searchItems[activeOrder].giftee]
-              }
-              action={handleRowAction}
-              allowMultiple={false}
-              activeOrder={activeOrder}
-              cardMode={true}
-            />
-          </div>
+
+        {searchItems.length > 0 && accountUserList.activeUsers ? (
+          fulfillOrder !== null ? (
+            <div className={`column center-column admin-order-card-show`}>
+              <AdminOrderRow
+                index={fulfillOrder}
+                order={searchItems[fulfillOrder]}
+                giftee={
+                  accountUserList.activeUsers[searchItems[fulfillOrder].giftee]
+                }
+                action={handleRowAction}
+                allowMultiple={false}
+                activeOrder={activeOrder}
+                cardMode={true}
+                fulfill={match.params.accountID}
+              />
+            </div>
+          ) : activeOrder !== null ? (
+            <div className={`column center-column admin-order-card-show`}>
+              <AdminOrderRow
+                index={activeOrder}
+                order={searchItems[activeOrder]}
+                giftee={
+                  accountUserList.activeUsers[searchItems[activeOrder].giftee]
+                }
+                action={handleRowAction}
+                allowMultiple={false}
+                activeOrder={activeOrder}
+                cardMode={true}
+              />
+            </div>
+          ) : null
         ) : null}
       </div>
     </section>

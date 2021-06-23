@@ -35,6 +35,13 @@ function AdminOrders() {
     if (!admin && "email" in user) {
       getAdminUser();
     } else if (admin) {
+      console.log(
+        "ST",
+        admin,
+        Object.keys(adminItems).length,
+        Object.keys(adminGroupedItems).length,
+        adminAccounts.length
+      );
       if (Object.keys(adminItems).length === 0) {
         getItems();
       }
@@ -45,6 +52,9 @@ function AdminOrders() {
 
       if (adminAccounts.length === 0) {
         getOrders();
+      } else {
+        setSearchItems(adminAccounts);
+        setLoading(false);
       }
     } else {
       setSearchItems(adminAccounts);
@@ -73,7 +83,7 @@ function AdminOrders() {
   };
 
   const getItems = async () => {
-    let response = await fetchRequest(user, "items", "GET");
+    let response = await fetchRequest(user, "items?admin=true", "GET");
 
     if ("items" in response) {
       setAdminItems(response.items);

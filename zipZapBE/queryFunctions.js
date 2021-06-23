@@ -1,4 +1,42 @@
 const db = require("./database/index");
+const gFunctions = require("./genericFunctions");
+
+const checkFeature = async (featureName, roleID, planID) => {
+  let response = { error: "", allowed: false };
+
+  if (!featureName || !roleID || !planID) {
+    response.error = "Unauthorized to access feature";
+    return response;
+  }
+
+  let featureCheckQuery = await db.query(
+    `
+    SELECT fp.*
+    FROM feature_permissions fp
+    WHERE
+    fp.feature_name = $1
+    AND exists(
+      select *
+        from jsonb_array_elements(fp.allowed_roles) as x(o)
+        where x.o @> $2)
+    AND exists(
+      select *
+        from jsonb_array_elements(fp.allowed_plans) as x(o)
+        where x.o @> $3)
+    AND fp.is_active = true
+    `,
+    // feature name, roleID, planID
+    [featureName, roleID, planID]
+  ); // returns query rows with rowCount else error
+  if (featureCheckQuery.error) {
+    response.error = featureCheckQuery.error.stack;
+    return response;
+  } else if (featureCheckQuery.rowCount > 0) {
+    response.allowed = true;
+  }
+
+  return response;
+};
 
 const updateFeatures = async (featureIDs, allowedPlans) => {
   let response = { error: "", featuresUpdated: false };
@@ -75,11 +113,13 @@ const getAdminUsers = async (userEmail) => {
 };
 
 // ITEM QUERIES
-const getAllItems = async () => {
+const getAllItems = async (admin) => {
   let response = { error: "", items: {} };
 
-  let getQuery = await db.query(
-    `
+  let getQuery = { error: "", rows: [], rowCount: 0 };
+  if (admin) {
+    getQuery = await db.query(
+      `
         SELECT
             i.item_id as "itemID",
             i."name", i.description,
@@ -87,12 +127,36 @@ const getAllItems = async () => {
             i.price, i.quantity,
             i.pictures,
             i.quantity_available as "quantityAvailable",
-            i.is_active as "isActive"
+            i.is_active as "isActive",
+            i.detail_fields as "detailFields",
+            i.purchased_from as "purchasedFrom",
+            i.weight,
+            i.cost,
+            i.branding_available as "brandingAvailable"
         FROM items i
         ORDER BY i.item_id
         `,
-    []
-  ); // returns query rows with rowCount else error
+      []
+    ); // returns query rows with rowCount else error
+  } else {
+    getQuery = await db.query(
+      `
+          SELECT
+              i.item_id as "itemID",
+              i."name", i.description,
+              i.main_picture as "mainPicture",
+              i.price, i.quantity,
+              i.pictures,
+              i.quantity_available as "quantityAvailable",
+              i.is_active as "isActive",
+              i.detail_fields as "detailFields"
+          FROM items i
+          ORDER BY i.item_id
+          `,
+      []
+    ); // returns query rows with rowCount else error
+  }
+
   if (getQuery.error) {
     response.error = getQuery.error.stack;
     return response;
@@ -110,6 +174,7 @@ const getAllItems = async () => {
   return response;
 };
 
+// TO-DO - Allow detail fields to be added
 const addItem = async (data) => {
   let {
     name,
@@ -119,6 +184,10 @@ const addItem = async (data) => {
     quantity,
     pictures,
     quantityAvailable,
+    purchasedFrom,
+    weight,
+    cost,
+    brandingAvailable,
   } = data;
   let response = { error: "", itemsID: null };
 
@@ -131,16 +200,34 @@ const addItem = async (data) => {
     price === null ||
     !quantity ||
     !pictures ||
-    !quantityAvailable
+    !quantityAvailable ||
+    !purchasedFrom ||
+    weight === null ||
+    weight === undefined ||
+    cost === null ||
+    cost === undefined ||
+    brandingAvailable === undefined
   ) {
     response.error = "Missing Requirements";
     return response;
   }
 
   let postQuery = await db.query(
-    `INSERT INTO items ("name", description, main_picture, price, quantity, pictures, quantity_available)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING items.item_id as "itemID"
+    `INSERT INTO items (
+        "name",
+        description,
+        main_picture,
+        price,
+        quantity,
+        pictures,
+        quantity_available,
+        purchased_from,
+        weight,
+        cost,
+        branding_available
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING items.item_id as "itemID"
       `,
     [
       name,
@@ -150,6 +237,10 @@ const addItem = async (data) => {
       quantity,
       JSON.stringify(pictures),
       quantityAvailable,
+      purchasedFrom,
+      weight,
+      cost,
+      brandingAvailable,
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -184,7 +275,8 @@ const getItems = async (itemID) => {
             i.price, i.quantity,
             i.pictures,
             i.quantity_available as "quantityAvailable",
-            i.is_active as "isActive"
+            i.is_active as "isActive",
+            i.detail_fields as "detailFields"
         FROM items i
         WHERE i.item_id = $1
         `,
@@ -203,6 +295,7 @@ const getItems = async (itemID) => {
   return response;
 };
 
+// TO-DO - Allow detail fields to be added
 const updateItem = async (data, itemID) => {
   let {
     name,
@@ -212,6 +305,10 @@ const updateItem = async (data, itemID) => {
     quantity,
     pictures,
     quantityAvailable,
+    purchasedFrom,
+    weight,
+    cost,
+    brandingAvailable,
   } = data;
   let response = { error: "", itemsID: null };
 
@@ -229,7 +326,13 @@ const updateItem = async (data, itemID) => {
     !price ||
     !quantity ||
     !pictures ||
-    !quantityAvailable
+    !quantityAvailable ||
+    !purchasedFrom ||
+    weight === null ||
+    weight === undefined ||
+    cost === null ||
+    cost === undefined ||
+    brandingAvailable === undefined
   ) {
     response.error = "Missing Requirements";
     return response;
@@ -237,9 +340,19 @@ const updateItem = async (data, itemID) => {
 
   let postQuery = await db.query(
     `UPDATE items
-     SET "name" = $1, description = $2, main_picture = $3, price = $4, quantity = $5, pictures = $6, quantity_available = $7
-      WHERE item_id = $8
-      RETURNING item_id as "itemID"
+     SET "name" = $1,
+         description = $2,
+         main_picture = $3,
+         price = $4,
+         quantity = $5,
+         pictures = $6,
+         quantity_available = $7,
+         purchased_from = $9
+         weight = $10
+         cost = $11
+         branding_available = $12
+     WHERE item_id = $8
+     RETURNING item_id as "itemID"
       `,
     [
       name,
@@ -250,6 +363,10 @@ const updateItem = async (data, itemID) => {
       JSON.stringify(pictures),
       quantityAvailable,
       itemID,
+      purchasedFrom,
+      weight,
+      cost,
+      brandingAvailable,
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -297,25 +414,49 @@ const deactivateItem = async (itemID) => {
 };
 
 // GROUPED ITEMS QUERIES
-const getAllGroupedItems = async () => {
+const getAllGroupedItems = async (admin, userEmail) => {
   let response = { error: "", items: {} };
 
-  let getQuery = await db.query(
-    `
-    SELECT
-      gi.grouped_id as "groupedID",
-      gi."name",
-      gi.description,
-      gi.main_picture as "mainPicture",
-      gi.pictures,
-      gi.items_array as "itemsArray",
-      gi.price_override as "priceOverride",
-      gi.is_active as "isActive"
-    FROM grouped_items gi
-    ORDER BY gi.grouped_id
-    `,
-    []
-  ); // returns query rows with rowCount else error
+  let getQuery = { error: "", rows: [], rowCount: 0 };
+  if (admin) {
+    getQuery = await db.query(
+      `
+      SELECT
+        gi.grouped_id as "groupedID",
+        gi."name",
+        gi.description,
+        gi.main_picture as "mainPicture",
+        gi.pictures,
+        gi.items_array as "itemsArray",
+        gi.price_override as "priceOverride",
+        gi.is_active as "isActive"
+      FROM grouped_items gi
+      ORDER BY gi.grouped_id
+      `,
+      []
+    ); // returns query rows with rowCount else error
+  } else if (userEmail) {
+    getQuery = await db.query(
+      `
+      SELECT
+        gi.grouped_id as "groupedID",
+        gi."name",
+        gi.description,
+        gi.main_picture as "mainPicture",
+        gi.pictures,
+        gi.items_array as "itemsArray",
+        gi.price_override as "priceOverride",
+        gi.is_active as "isActive"
+      FROM grouped_items gi
+      LEFT JOIN accounts a ON a.account_id = gi.account
+      LEFT JOIN contacts c ON c.account_id = a.account_id
+      WHERE gi.account IS NULL OR c.email = $1
+      ORDER BY gi.grouped_id
+      `,
+      [userEmail]
+    ); // returns query rows with rowCount else error
+  }
+
   if (getQuery.error) {
     response.error = getQuery.error.stack;
     return response;
@@ -380,6 +521,7 @@ const addGroupedItem = async (data) => {
     pictures,
     itemsArray,
     priceOverride,
+    account,
   } = data;
   let response = { error: "", itemsID: null };
 
@@ -405,8 +547,8 @@ const addGroupedItem = async (data) => {
   }
 
   let postQuery = await db.query(
-    `INSERT INTO grouped_items ("name", description, main_picture, pictures, items_array, price_override)
-        VALUES ($1, $2, $3, $4, $5, $6)
+    `INSERT INTO grouped_items ("name", description, main_picture, pictures, items_array, price_override, account)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING grouped_items.grouped_id as "itemID"
       `,
     [
@@ -416,6 +558,7 @@ const addGroupedItem = async (data) => {
       JSON.stringify(pictures),
       JSON.stringify(itemsArray),
       priceOverride,
+      account ? account : null,
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -432,14 +575,8 @@ const addGroupedItem = async (data) => {
 };
 
 const updateGroupedItem = async (data, itemID) => {
-  let {
-    name,
-    description,
-    mainPicture,
-    pictures,
-    itemsArray,
-    priceOverride,
-  } = data;
+  let { name, description, mainPicture, pictures, itemsArray, priceOverride } =
+    data;
   let response = { error: "", itemsID: null };
 
   itemID = parseInt(itemID);
@@ -523,9 +660,14 @@ const deactivateGroupedItem = async (itemID) => {
 };
 
 // CAMPAIGN QUERIES
-const getAllCampaigns = async () => {
+const getAllCampaigns = async (userEmail) => {
   // ORDERED BY START DATE, THEN ARCHVIED
-  let response = { error: "", campaigns: [] };
+  let response = { error: "", campaigns: {} };
+
+  if (!userEmail) {
+    response.error = "Missing Requirements";
+    return response;
+  }
 
   let getQuery = await db.query(
     `
@@ -539,31 +681,34 @@ const getAllCampaigns = async () => {
       ac.end_early as "endEarly",
       ac.user_list as "userList",
       ac.default_item_id as "defaultItemID",
-      ac.default_grouped_item_id as "defaultGroupedItemID"
+      ac.default_grouped_item_id as "defaultGroupedItemID",
+      ac.default_details as "defaultDetails"
     FROM account_campaigns ac
+    JOIN contacts c ON c.account_id = ac.account_id
     WHERE ac.is_active = TRUE
+    AND c.email = $1
     ORDER BY ac.start_date, ac.archived
     `,
-    []
+    [userEmail]
   ); // returns query rows with rowCount else error
   if (getQuery.error) {
     response.error = getQuery.error.stack;
     return response;
   }
 
-  // let finalItemList = {};
-  // let itemSortPromise = getQuery.rows.map((item) => {
-  //   finalItemList[item.campaignID] = item;
-  // });
+  let finalItemList = {};
+  let itemSortPromise = getQuery.rows.map((item) => {
+    finalItemList[item.campaignID] = item;
+  });
 
-  // let itemSortResult = await Promise.all(itemSortPromise);
+  let itemSortResult = await Promise.all(itemSortPromise);
 
-  response.campaigns = getQuery.rows;
+  response.campaigns = finalItemList;
 
   return response;
 };
 
-const addCampaign = async (data) => {
+const addCampaign = async (data, userEmail) => {
   let {
     name,
     criteria,
@@ -572,18 +717,20 @@ const addCampaign = async (data) => {
     userList,
     defaultItemID,
     defaultGroupedItemID,
+    defaultDetails,
   } = data;
   let response = { error: "", campaignID: null };
 
-  if (!name || !criteria || !startDate || !endDate || !userList) {
-    console.log(name, criteria, startDate, endDate, userList);
+  if (!name || !criteria || !startDate || !endDate || !userList || !userEmail) {
     response.error = "Missing Requirements";
     return response;
   }
 
   let postQuery = await db.query(
-    `INSERT INTO account_campaigns ("name", criteria, start_date, end_date, user_list, default_item_id, default_grouped_item_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `INSERT INTO account_campaigns ("name", criteria, start_date, end_date, user_list, default_item_id, default_grouped_item_id, account_id, default_details)
+    SELECT $1, $2, $3, $4, $5, $6, $7, c.account_id, $9
+      FROM contacts c
+      WHERE c.email = $8
     RETURNING account_campaigns.a_campaign_id as "campaignID"
       `,
     [
@@ -594,6 +741,12 @@ const addCampaign = async (data) => {
       JSON.stringify(userList),
       defaultItemID,
       defaultGroupedItemID,
+      userEmail,
+      JSON.stringify(
+        defaultDetails
+          ? defaultDetails
+          : { note: "", customGift: { name: "", items: [], instructions: "" } }
+      ),
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -609,13 +762,32 @@ const addCampaign = async (data) => {
   return response;
 };
 
-const getCampaignData = async (campaignID) => {
-  let response = { error: "", campaign: {} };
+const getCampaignData = async (campaignID, userEmail) => {
+  let response = {
+    error: "",
+    campaign: {
+      campaignID: null,
+      name: "",
+      criteria: {},
+      startDate: "",
+      endDate: "",
+      archived: false,
+      endEarly: false,
+      userList: [],
+      defaultItemID: null,
+      defaultGroupedItemID: null,
+      defaultDetails: {
+        note: "",
+        eventIcon: 2,
+        customGift: { id: "", name: "", items: [], instructions: "" },
+      },
+    },
+  };
 
   campaignID = parseInt(campaignID);
 
-  if (!campaignID || isNaN(campaignID)) {
-    response.error = "Missing ItemID";
+  if (!campaignID || isNaN(campaignID) | !userEmail) {
+    response.error = "Missing Requirements";
     return response;
   }
 
@@ -631,13 +803,16 @@ const getCampaignData = async (campaignID) => {
       ac.end_early as "endEarly",
       ac.user_list as "userList",
       ac.default_item_id as "defaultItemID",
-      ac.default_grouped_item_id as "defaultGroupedItemID"
+      ac.default_grouped_item_id as "defaultGroupedItemID",
+      ac.default_details as "defaultDetails"
     FROM account_campaigns ac
+    JOIN contacts c ON c.account_id = ac.account_id
     WHERE ac.is_active = TRUE
     AND ac.a_campaign_id = $1
+    AND c.email = $2
     ORDER BY ac.start_date, ac.archived
     `,
-    [campaignID]
+    [campaignID, userEmail]
   ); // returns query rows with rowCount else error
   if (getQuery.error) {
     response.error = getQuery.error.stack;
@@ -659,7 +834,7 @@ const getCampaignData = async (campaignID) => {
   return response;
 };
 
-const updateCampaignData = async (data, campaignID) => {
+const updateCampaignData = async (data, campaignID, userEmail) => {
   let {
     name,
     criteria,
@@ -668,6 +843,7 @@ const updateCampaignData = async (data, campaignID) => {
     userList,
     defaultItemID,
     defaultGroupedItemID,
+    defaultDetails,
   } = data;
   let response = { error: "", campaignID: null };
 
@@ -678,7 +854,7 @@ const updateCampaignData = async (data, campaignID) => {
     return response;
   }
 
-  if (!name || !criteria || !startDate || !endDate || !userList) {
+  if (!name || !criteria || !startDate || !endDate || !userList || !userEmail) {
     console.log(name, criteria, startDate, endDate, userList);
     response.error = "Missing Requirements";
     return response;
@@ -692,7 +868,17 @@ const updateCampaignData = async (data, campaignID) => {
         end_date = $4,
         user_list = $5,
         default_item_id = $6,
-        default_grouped_item_id = $7
+        default_grouped_item_id = $7,
+        default_details = $10
+      FROM (
+        SELECT
+          ac.a_campaign_id as "campaignID"
+        FROM account_campaigns ac
+        JOIN contacts c ON c.account_id = ac.account_id
+        WHERE ac.is_active = TRUE
+        AND ac.a_campaign_id = $8
+        AND c.email = $9
+      ) as "campaign_table"
       WHERE a_campaign_id = $8
       RETURNING a_campaign_id as "campaignID"
       `,
@@ -705,6 +891,8 @@ const updateCampaignData = async (data, campaignID) => {
       defaultItemID,
       defaultGroupedItemID,
       campaignID,
+      userEmail,
+      JSON.stringify(defaultDetails ? defaultDetails : {}),
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -720,12 +908,16 @@ const updateCampaignData = async (data, campaignID) => {
   return response;
 };
 
+//ORDER QUERIES
 const addOrder = async (data) => {
   let {
     orderID,
     shippingDate,
     cost,
     shippingAddress,
+    shippingCity,
+    shippingState,
+    shippingZip,
     giftee,
     campaignID,
     groupedID,
@@ -737,38 +929,42 @@ const addOrder = async (data) => {
   let response = { error: "", orderID: null };
 
   if (
-    !orderID ||
+    orderID === undefined ||
     !shippingDate ||
     cost === undefined ||
     shippingAddress === undefined ||
-    !giftee ||
+    shippingCity === undefined ||
+    shippingState === undefined ||
+    shippingZip === undefined ||
+    giftee === undefined ||
     !campaignID ||
     (groupedID === undefined && giftID === undefined) ||
     shippingFee === undefined
   ) {
-    console.log(
-      "ERROR",
-      orderID,
-      shippingDate,
-      cost,
-      shippingAddress,
-      giftee,
-      campaignID,
-      groupedID,
-      giftID,
-      notes,
-      shippingFee,
-      isActive
-    );
     response.error = "Missing Requirements";
     return response;
   }
 
   let postQuery = await db.query(
     `
-    INSERT INTO temp_orders (order_id, shipping_date, "cost", shipping_address, giftee, campaign_id, grouped_id, gift_id, notes, shipping_fee, is_active)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-RETURNING order_id as "orderID"
+    INSERT INTO temp_orders (
+        order_id,
+        shipping_date,
+        "cost",
+        shipping_address,
+        giftee,
+        campaign_id,
+        grouped_id,
+        gift_id,
+        notes,
+        shipping_fee,
+        is_active,
+        shipping_city,
+        shipping_state,
+        shipping_zip
+      )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+    RETURNING order_id as "orderID"
       `,
     [
       orderID,
@@ -782,6 +978,9 @@ RETURNING order_id as "orderID"
       notes,
       shippingFee,
       isActive,
+      shippingCity,
+      shippingState,
+      shippingZip,
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -802,6 +1001,9 @@ const editOrder = async (data, campaignID, orderID) => {
     shippingDate,
     cost,
     shippingAddress,
+    shippingCity,
+    shippingState,
+    shippingZip,
     giftee,
     groupedID,
     giftID,
@@ -812,15 +1014,30 @@ const editOrder = async (data, campaignID, orderID) => {
   let response = { error: "", orderID: null };
 
   if (
-    !orderID ||
+    orderID === undefined ||
     !shippingDate ||
     cost === undefined ||
     shippingAddress === undefined ||
-    !giftee ||
+    shippingCity === undefined ||
+    shippingState === undefined ||
+    shippingZip === undefined ||
+    giftee === undefined ||
     !campaignID ||
     (groupedID === undefined && giftID === undefined) ||
     shippingFee === undefined
   ) {
+    console.log(
+      "REQ",
+      shippingDate,
+      cost,
+      shippingAddress,
+      giftee,
+      groupedID,
+      giftID,
+      notes,
+      shippingFee,
+      isActive
+    );
     response.error = "Missing Requirements";
     return response;
   }
@@ -836,16 +1053,19 @@ const editOrder = async (data, campaignID, orderID) => {
   let postQuery = await db.query(
     `UPDATE temp_orders
         SET order_id = $1,
-        shipping_address = $2,
-         "cost" = $3,
-         shipping = $4,
-         giftee = $5,
-         campaign_id = $6,
-         grouped_id = $7,
-          gift_id = $8,
-          notes = $9,
-          shipping_fee = $10,
-          is_active = $11
+        shipping_date = $2,
+        "cost" = $3,
+        shipping_address = $4,
+        giftee = $5,
+        campaign_id = $6,
+        grouped_id = $7,
+        gift_id = $8,
+        notes = $9,
+        shipping_fee = $10,
+        is_active = $11,
+        shipping_city = $14,
+        shipping_state = $15,
+        shipping_zip = $16
       WHERE campaign_id = $12
       AND order_id = $13
       RETURNING order_id as "orderID"
@@ -864,6 +1084,9 @@ const editOrder = async (data, campaignID, orderID) => {
       isActive,
       campaignID,
       orderID,
+      shippingCity,
+      shippingState,
+      shippingZip,
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -892,6 +1115,10 @@ const getWeekAccounts = async (startDate, endDate) => {
     SELECT
     a.account_id as "accountID",
     a."name",
+    a.address,
+    a.city,
+    a.state,
+    a.zip,
 
     (SELECT COUNT (*)
       FROM account_campaigns ac
@@ -1016,8 +1243,20 @@ const getWeekCampaigns = async (startDate, endDate, accountID) => {
   return response;
 };
 
-const getWeekOrders = async (startDate, endDate, accountID) => {
-  let response = { error: "", orders: [], campaignList: {} };
+const getWeekOrders = async (
+  startDate,
+  endDate,
+  accountID,
+  makeOrderObject,
+  makeDateObject
+) => {
+  let response = {
+    error: "",
+    orders: [],
+    campaignList: {},
+    orderObject: {},
+    dateObject: {},
+  };
 
   if (!startDate || !endDate || !accountID) {
     response.error = "Missing Requirements";
@@ -1058,16 +1297,44 @@ const getWeekOrders = async (startDate, endDate, accountID) => {
 
   // TO-DO - Is this needed because they are all the same account?
   let campaignList = {};
+  let orderObject = {};
+  let dateObject = {};
+
   let itemSortPromise = getQuery.rows.map((item) => {
     if (!(item.campaignID in campaignList)) {
       campaignList[item.campaignID] = { users: {}, count: 0 };
     }
 
     campaignList[item.campaignID].count += 1;
-    // campaignList[item.campaignID].orders.push(item);
+
+    if (!(item.campaignID in orderObject)) {
+      orderObject[item.campaignID] = {};
+    }
+
+    let date = new Date(item.shippingDate).toDateString();
+    // if (!(date in orderObject[item.campaignID])) {
+    //   orderObject[item.campaignID][date] = {};
+    // }
+
+    if (!(date in dateObject)) {
+      dateObject[date] = {};
+    }
+
+    // orderObject[item.campaignID][date][item.orderID] = item;
+    orderObject[item.campaignID][item.orderID] = item;
+
+    dateObject[date][item.orderID] = item;
   });
 
-  let itemSortResult = await Promise.all(itemSortPromise);
+  let itemSortResult = await Promise.all(itemSortPromise, orderObject);
+
+  if (makeOrderObject) {
+    response.orderObject = orderObject;
+  }
+
+  if (makeDateObject) {
+    response.dateObject = dateObject;
+  }
 
   response.orders = getQuery.rows;
   response.campaignList = campaignList;
@@ -1075,6 +1342,285 @@ const getWeekOrders = async (startDate, endDate, accountID) => {
   return response;
 };
 
+const getAccountData = async (userEmail) => {
+  let response = {
+    error: "",
+    account: {
+      accountID: null,
+      planID: null,
+      roleID: null,
+    },
+  };
+
+  if (!userEmail) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let getQuery = await db.query(
+    `SELECT
+        a.account_id as "accountID",
+        a.plan_id as "planID",
+        c.role_id as "roleID"
+      FROM accounts a
+      JOIN contacts c ON c.account_id = a.account_id
+      WHERE c.email = $1
+      `,
+    [userEmail]
+  ); // returns query rows with rowCount else error
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  } else if (getQuery.rowCount === 0) {
+    response.error = "No Account Found";
+    return response;
+  }
+
+  response.account.accountID = getQuery.rows[0].accountID;
+  response.account.planID = getQuery.rows[0].planID;
+  response.account.roleID = getQuery.rows[0].roleID;
+
+  return response;
+};
+
+// USER QUERIES
+const queryUser = async (userEmail) => {
+  let response = {
+    error: "",
+    validUser: false,
+    user: {
+      email: null,
+    },
+  };
+
+  if (!userEmail) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let getQuery = await db.query(
+    `
+    SELECT
+      c.email,
+      c.account_id as "accountID"
+    FROM contacts c
+    WHERE c.email =  $1
+      `,
+    [userEmail]
+  ); // returns query rows with rowCount else error
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  } else if (getQuery.rowCount === 0) {
+    response.error = "No User Found";
+    return response;
+  }
+
+  response.user = getQuery.rows[0];
+  response.validUser = true;
+  return response;
+};
+
+const queryAccount = async (data) => {
+  let { Company: company, City: companyCity, State: companyState } = data;
+
+  let response = {
+    error: "",
+    validCompany: false,
+    company: {
+      Company: "",
+      City: "",
+      State: "",
+    },
+  };
+
+  if (!company || !companyCity || !companyState) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let getQuery = await db.query(
+    `
+    SELECT a."name" as "Company", a.city as "City", a.state as "State"
+    FROM accounts a
+    WHERE LOWER(a."name") = $1
+    AND LOWER(a.city) = $2
+    AND LOWER(a.state) = $3
+      `,
+    [
+      company.toLowerCase(),
+      companyCity.toLowerCase(),
+      companyState.toLowerCase(),
+    ]
+  ); // returns query rows with rowCount else error
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  } else if (getQuery.rowCount > 0) {
+    response.company = getQuery.rows[0];
+    response.validCompany = false;
+    return response;
+  }
+
+  response.validCompany = true;
+  return response;
+};
+
+const createNewUser = async (userEmail, data, accountID, roleID = 1) => {
+  // TO-DO - CHANGE ROLE
+
+  let response = { error: "", userID: null };
+
+  let {
+    Email: rawEmail,
+    "First Name": firstName,
+    "Last Name": lastName,
+  } = data;
+
+  let eFirstName = gFunctions.encryptStringLocal(firstName); // TO-DO - CHANGE
+  let eLastName = gFunctions.encryptStringLocal(lastName); // TO-DO - CHANGE
+  let eEmail = gFunctions.encryptStringLocal(rawEmail); // TO-DO - CHANGE
+
+  let encryptPromise = await Promise.all([eFirstName, eLastName, eEmail]).then(
+    (values) => {
+      eFirstName = values[0].result;
+      eLastName = values[1].result;
+      eEmail = values[2].result;
+    }
+  );
+
+  if (!userEmail || !eFirstName || !eLastName || !eEmail || !accountID) {
+    response.error = "Missing User Requirements";
+    return response;
+  }
+
+  let insertQuery = await db.query(
+    `
+    INSERT INTO contacts (email, e_email, first_name, last_name, account_id, role_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING contact_id as "userID"
+      `,
+    [userEmail, eEmail, eFirstName, eLastName, accountID, roleID]
+  ); // returns query rows with rowCount else error
+  if (insertQuery.error) {
+    response.error = insertQuery.error.stack;
+    return response;
+  } else if (insertQuery.rowCount === 0) {
+    response.error = "Error Creating User";
+    return response;
+  }
+
+  response.userID = insertQuery.rows[0].userID;
+  return response;
+};
+
+const createNewCompanyAccount = async (data) => {
+  let response = { error: "", accountID: null };
+
+  let { Company, Address, City, State, Zip } = data;
+
+  if (!Company || !Address || !City || !State || !Zip) {
+    response.error = "Missing Company Account Requirements";
+    return response;
+  }
+
+  // TO-DO - CHANGE THIS
+  let planID = 1;
+
+  let insertQuery = await db.query(
+    `
+    INSERT INTO accounts (name, plan_id, address, city, state, zip)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING account_id as "accountID"
+      `,
+    [Company, planID, Address, City, State, Zip]
+  ); // returns query rows with rowCount else error
+  if (insertQuery.error) {
+    response.error = insertQuery.error.stack;
+    return response;
+  } else if (insertQuery.rowCount === 0) {
+    response.error = "Error Creating Company Account";
+    return response;
+  }
+
+  response.accountID = insertQuery.rows[0].accountID;
+  return response;
+};
+
+const updateAccountContact = async (accountID, userID) => {
+  let response = { error: "", accountID: "" };
+
+  if (!accountID || isNaN(userID)) {
+    response.error = "Missing Update Requirements";
+    return response;
+  }
+
+  let postQuery = await db.query(
+    `
+    UPDATE accounts
+    SET main_contact_id = $1
+      FROM (
+        SELECT
+          *
+        FROM contacts c
+        WHERE c.contact_id = $1
+        AND c.account_id = $2
+      ) as "accounts_table"
+    WHERE accounts.account_id = $2
+    RETURNING accounts.account_id as "campaignID"
+      `,
+    [userID, accountID]
+  ); // returns query rows with rowCount else error
+  if (postQuery.error) {
+    response.error = postQuery.error.stack;
+    return response;
+  } else if (postQuery.rowCount === 0) {
+    response.error = "No Account or User Found";
+    return response;
+  }
+
+  response.accountID = postQuery.rows[0].accountID;
+
+  return response;
+};
+
+const removeOldTempOrders = async (campaignID, orderList) => {
+  let response = { error: "", updated: false, updatedRows: [] };
+
+  if (!campaignID || !orderList) {
+    response.error = "Missing Update Requirements";
+    return response;
+  }
+
+  let deleteQuery = await db.query(
+    `
+      DELETE FROM temp_orders te
+      WHERE te.campaign_id = $1
+      AND te.order_id = ANY($2)
+      AND te.shipment_details = '{}'
+      RETURNING te.order_id as "orderID"
+      `,
+    [campaignID, orderList]
+  ); // returns query rows with rowCount else error
+  if (deleteQuery.error) {
+    response.error = deleteQuery.error.stack;
+    return response;
+  }
+
+  let updatedRows = [];
+  let rowSort = deleteQuery.rows.map((row) => {
+    updatedRows.push(row.orderID);
+  });
+
+  let rowSortPromise = await Promise.all(rowSort);
+
+  response.updatedRows = updatedRows;
+  response.updated = true;
+
+  return response;
+};
+
+exports.checkFeature = checkFeature;
 exports.getFeaturesList = getFeaturesList;
 exports.getAdminUsers = getAdminUsers;
 exports.getAllItems = getAllItems;
@@ -1096,3 +1642,10 @@ exports.editOrder = editOrder;
 exports.getWeekOrders = getWeekOrders;
 exports.getWeekCampaigns = getWeekCampaigns;
 exports.getWeekAccounts = getWeekAccounts;
+exports.getAccountData = getAccountData;
+exports.queryUser = queryUser;
+exports.queryAccount = queryAccount;
+exports.createNewCompanyAccount = createNewCompanyAccount;
+exports.createNewUser = createNewUser;
+exports.updateAccountContact = updateAccountContact;
+exports.removeOldTempOrders = removeOldTempOrders;

@@ -6,6 +6,66 @@ import AdminGroupedItemCard from "../../basicComponents/adminComponents/adminGro
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
 
+const putImageURLGrouped = async (
+  user: any,
+  file: any,
+  item: adminGroupedItem,
+  kIndex: number
+) => {
+  // let file = imageFiles[parseInt(key)];
+  let errors = "";
+  // let response = {errors:errors, item:item}
+  let fileTypeSplit = file.name.split(".");
+  let fileType = fileTypeSplit[fileTypeSplit.length - 1];
+
+  let fileTempURL = await fetchRequest(
+    user,
+    `items/tempURL?pictureName=${`${item.name}-${
+      item.pictures.length + 2 + kIndex
+    }.${fileType}`}&itemType=${"groupedItem"}&itemName=${item.name}`,
+    "GET"
+  );
+
+  // Example Response
+  // { error: "", itemURL: "", itemPath: "" }
+
+  if ("error" in fileTempURL && fileTempURL.error) {
+    errors = `${fileTempURL.error} - Image:${kIndex + 1}`;
+    // response.errors = errors
+    return { errors, item, fileTempURL };
+  }
+
+  let fileUpload = await fetch(fileTempURL.itemURL, {
+    method: "PUT",
+    body: file,
+    headers: {
+      "Content-Type": file.type,
+    },
+  })
+    .then((res) => {
+      if (res.status === 200) {
+        return { uploaded: true, error: "" };
+      } else {
+        return { uploaded: false, error: "Please Contact Support" };
+      }
+    })
+    .catch((err) => {
+      return {
+        uploaded: false,
+        error: "Please Contact Support",
+        errorDetails: err,
+      };
+    });
+
+  if (fileUpload.error) {
+    errors = `${fileTempURL.error} - Image:${kIndex + 1}`;
+    // response.errors = errors
+    return { errors, item, fileTempURL };
+  }
+
+  return { errors, item, fileTempURL };
+};
+
 function AdminGroupedItemNew() {
   const {
     user,
@@ -40,12 +100,46 @@ function AdminGroupedItemNew() {
   const handleItemAction = async (
     type: string,
     item: adminGroupedItem,
-    index: number
+    index: number,
+    imageFiles?: FileList
   ) => {
     if (type === "cancel") {
       setRedirect("/admin/groupedItems");
       return true;
     }
+
+    let errors = [] as Array<string>;
+    if (type === "save" && imageFiles) {
+      console.log("yo", imageFiles);
+
+      let fileLoop = Object.keys(imageFiles).map(async (key, kIndex) => {
+        let itemResponse = await putImageURLGrouped(
+          user,
+          imageFiles[parseInt(key)],
+          item,
+          kIndex
+        );
+
+        if (itemResponse.errors) {
+          errors.push(itemResponse.errors);
+          return;
+        }
+        item = itemResponse.item;
+
+        let fileTempURL = itemResponse.fileTempURL;
+
+        item.pictures.push(fileTempURL.itemPath);
+
+        if (!item.mainPicture) {
+          item.mainPicture = fileTempURL.itemPath;
+        }
+      });
+
+      let fileUploadResult = await Promise.all(fileLoop);
+    }
+
+    // TO-DO - Show Errors
+    console.log("ERROR", errors, item);
 
     let updateResponse = await fetchRequest(user, `groupedItems`, "POST", item);
 
@@ -97,5 +191,6 @@ function AdminGroupedItemNew() {
     </section>
   );
 }
+export { putImageURLGrouped };
 
 export default AdminGroupedItemNew;

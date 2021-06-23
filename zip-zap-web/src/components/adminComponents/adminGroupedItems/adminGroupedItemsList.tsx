@@ -5,6 +5,7 @@ import { adminGroupedItem, adminItem } from "../../../classes";
 import AdminGroupedItemCard from "../../basicComponents/adminComponents/adminGroupedItemCard";
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
+import { putImageURLGrouped } from "./adminGroupedItemNew";
 
 function AdminGroupedItemsList() {
   const {
@@ -54,7 +55,7 @@ function AdminGroupedItemsList() {
 
   const [searchItems, setSearchItems] = useState([] as Array<string>);
   const getItems = async () => {
-    let response = await fetchRequest(user, "items", "GET");
+    let response = await fetchRequest(user, "items?admin=true", "GET");
 
     if ("items" in response) {
       setAdminItems(response.items);
@@ -78,10 +79,41 @@ function AdminGroupedItemsList() {
   const handleItemAction = async (
     type: string,
     item: adminGroupedItem,
-    index: number
+    index: number,
+    imageFiles?: FileList
   ) => {
     let updateResponse = {} as any;
     if (type === "save") {
+      let errors = [] as Array<string>;
+      if (type === "save" && imageFiles) {
+        console.log("yo", imageFiles);
+
+        let fileLoop = Object.keys(imageFiles).map(async (key, kIndex) => {
+          let itemResponse = await putImageURLGrouped(
+            user,
+            imageFiles[parseInt(key)],
+            item,
+            kIndex
+          );
+
+          if (itemResponse.errors) {
+            errors.push(itemResponse.errors);
+            return;
+          }
+          item = itemResponse.item;
+
+          let fileTempURL = itemResponse.fileTempURL;
+
+          item.pictures.push(fileTempURL.itemPath);
+
+          if (!item.mainPicture) {
+            item.mainPicture = fileTempURL.itemPath;
+          }
+        });
+
+        let fileUploadResult = await Promise.all(fileLoop);
+      }
+
       updateResponse = await fetchRequest(
         user,
         `groupedItems/${item.groupedID}`,

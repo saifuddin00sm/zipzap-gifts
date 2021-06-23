@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { adminItem } from "../../../classes";
 import { ReactComponent as CloseIcon } from "../../../icons/close.svg";
+import appSettings from "../../../appSettings.json";
 
 // props.action req = (type:string, item:adminItem, index:number)
 function AdminItemCard(props: {
@@ -10,10 +11,13 @@ function AdminItemCard(props: {
   editing?: boolean;
 }) {
   const [editing, setEditing] = useState(props.editing ? props.editing : false);
+  const [editingError, setEditingError] = useState("");
 
   const [editableItem, setEditableItem] = useState(
     JSON.parse(JSON.stringify(props.item)) as adminItem
   );
+
+  const [imageFiles, setImageFiles] = useState({} as FileList);
 
   useEffect(() => {
     setEditableItem(JSON.parse(JSON.stringify(props.item)));
@@ -30,14 +34,56 @@ function AdminItemCard(props: {
       editableItem.quantity = e.target.value;
     } else if (type === "quantityAvailable") {
       editableItem.quantityAvailable = e.target.value;
+    } else if (type === "purchasedFrom") {
+      editableItem.purchasedFrom = e.target.value;
+    } else if (type === "weight") {
+      editableItem.weight = e.target.value;
+    } else if (type === "cost") {
+      editableItem.cost = e.target.value;
+    } else if (type === "brandingAvailable") {
+      editableItem.brandingAvailable = !editableItem.brandingAvailable;
     }
 
     setEditableItem({ ...editableItem });
   };
 
   const handleSave = () => {
-    props.action("save", editableItem, props.index);
+    if (!editableItem.name) {
+      setEditingError("Please Enter an Item Name");
+      return true;
+    } else if (!editableItem.price) {
+      setEditingError("Please Enter an Item Price");
+      return true;
+    } else if (!editableItem.cost) {
+      setEditingError("Please Enter an Item Cost");
+      return true;
+    } else if (!editableItem.description) {
+      setEditingError("Please Enter an Item Description");
+      return true;
+    } else if (!editableItem.quantity) {
+      setEditingError("Please Enter an Item Quantity");
+      return true;
+    } else if (!editableItem.quantityAvailable) {
+      setEditingError("Please Enter an Item Quantity Available");
+      return true;
+    } else if (!editableItem.purchasedFrom) {
+      setEditingError("Please Enter a Vendor");
+      return true;
+    } else if (!editableItem.weight) {
+      setEditingError("Please Enter a Weight in Ounces");
+      return true;
+    } else {
+      setEditingError("");
+    }
+
+    props.action(
+      "save",
+      editableItem,
+      props.index,
+      Object.keys(imageFiles).length > 0 ? imageFiles : null
+    );
     setEditing(false);
+    setImageFiles({} as FileList);
   };
 
   const handleDelete = () => {
@@ -54,9 +100,14 @@ function AdminItemCard(props: {
   const changeMainPicture = (index: number) => {
     editableItem.pictures.push(editableItem.mainPicture);
     editableItem.mainPicture = editableItem.pictures[index];
+
     setEditableItem({ ...editableItem });
 
     handleImageRemove(index);
+  };
+
+  const handlePictureAdd = async (e: any) => {
+    setImageFiles(e.target.files);
   };
 
   return editing ? (
@@ -74,7 +125,7 @@ function AdminItemCard(props: {
           <div className={`row center-column`}>
             {editableItem.mainPicture ? (
               <img
-                src={props.item.mainPicture}
+                src={`${appSettings.pictureURL}/${editableItem.mainPicture}`}
                 alt={`${editableItem.name}-main-picture`}
                 className={`item-card-image-small`}
               ></img>
@@ -94,7 +145,7 @@ function AdminItemCard(props: {
           <div key={pIndex} className={`row center space-between`}>
             <div className={`row center-column`}>
               <img
-                src={props.item.mainPicture}
+                src={`${appSettings.pictureURL}/${pictureURL}`}
                 alt={`${editableItem.name}-alt-picture-${pIndex}`}
                 className={`item-card-image-small`}
               ></img>
@@ -111,12 +162,17 @@ function AdminItemCard(props: {
           </div>
         ))}
 
-        <button
-          className={`general-button admin-button`}
-          // onClick={() => setShowSearchContainer(!showSearchContainer)}
-        >
-          Add Image
-        </button>
+        <input
+          className={`item-picture-upload general-button admin-button`}
+          type="file"
+          multiple
+          accept="image/png, image/gif, image/jpeg"
+          onChange={handlePictureAdd}
+          disabled={!editableItem.name}
+        ></input>
+        <span className={`item-picture-upload-message`}>
+          Please Enter Item Name First
+        </span>
       </div>
 
       <div className={`item-card-body`}>
@@ -133,6 +189,16 @@ function AdminItemCard(props: {
             step={"0.01"}
             value={editableItem.price}
             onChange={(e: any) => handleEditItem("price", e)}
+          ></input>
+        </p>
+        <p>
+          Cost: $
+          <input
+            type={`number`}
+            min={"1.00"}
+            step={"0.01"}
+            value={editableItem.cost}
+            onChange={(e: any) => handleEditItem("cost", e)}
           ></input>
         </p>
         <p className={`column`}>
@@ -156,6 +222,44 @@ function AdminItemCard(props: {
             ></input>
           </span>
         </p>
+
+        <p className={`column`}>
+          <span>
+            Vendor:
+            <input
+              type={`text`}
+              value={editableItem.purchasedFrom}
+              onChange={(e: any) => handleEditItem("purchasedFrom", e)}
+            ></input>
+          </span>
+          <span>
+            {" "}
+            Weight (oz):
+            <input
+              type={`number`}
+              min={"0"}
+              value={editableItem.weight}
+              onChange={(e: any) => handleEditItem("weight", e)}
+            ></input>
+          </span>
+          <span>
+            {" "}
+            Custom Branding Available:
+            <input
+              type={`checkbox`}
+              checked={editableItem.brandingAvailable}
+              onChange={(e: any) => handleEditItem("brandingAvailable", e)}
+            ></input>
+          </span>
+        </p>
+      </div>
+
+      <div className={`row center`}>
+        {editingError ? (
+          <span className={`error-message-text`}>{editingError}</span>
+        ) : (
+          ""
+        )}
       </div>
 
       <div className={`row center`}>
@@ -194,16 +298,21 @@ function AdminItemCard(props: {
         {props.item.name} {!props.item.isActive ? ` - INACTIVE` : ""}
       </h3>
       <div className={`column center`}>
-        <img
-          src={props.item.mainPicture}
-          alt={`${props.item.name}-main-picture`}
-          className={`item-card-image-main`}
-        ></img>
+        {props.item.mainPicture ? (
+          <img
+            src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
+            alt={`${props.item.name}-main-picture`}
+            className={`item-card-image-main`}
+          ></img>
+        ) : (
+          "No Image"
+        )}
+
         <div className={`row center`}>
           {props.item.pictures.slice(0, 4).map((pictureURL, pIndex) => (
             <img
               key={pIndex}
-              src={pictureURL}
+              src={`${appSettings.pictureURL}/${pictureURL}`}
               alt={`${props.item.name}-alt-picture-${pIndex}`}
               className={`item-card-image-small`}
             ></img>
@@ -212,10 +321,12 @@ function AdminItemCard(props: {
       </div>
 
       <div className={`item-card-body`}>
-        <p>{props.item.description}</p>
-        <p>Price: ${props.item.price}</p>
+        <p>Description: {props.item.description}</p>
         <p>
-          Quantity: {props.item.quantity}, Quantity Available:{" "}
+          Price / Cost: ${props.item.price} / ${props.item.cost}
+        </p>
+        <p>
+          Quantity / Available: {props.item.quantity} /{" "}
           {props.item.quantityAvailable}
         </p>
       </div>

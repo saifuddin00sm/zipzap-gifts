@@ -34,6 +34,8 @@ function AdminDashboard() {
       getAdminUser();
     } else if (admin) {
       setLoading(false);
+    } else {
+      setLoading(false);
     }
   }, []);
 

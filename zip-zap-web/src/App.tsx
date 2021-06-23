@@ -1,16 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import appSettings from "./appSettings.json";
 import HomePageComponent from "./components/homePageComponent";
 import AdminDashboard from "./components/adminComponents/adminDashboard";
 import AdminItemsList from "./components/adminComponents/adminItems/adminItemsList";
-import { adminAccount, adminGroupedItem, adminItem } from "./classes";
+import {
+  adminAccount,
+  adminGroupedItem,
+  adminItem,
+  userEvent,
+  userGroupedItem,
+  userItem,
+  userMonthOrderList,
+  userRecipient,
+} from "./classes";
 import AdminItemNew from "./components/adminComponents/adminItems/adminItemNew";
 import AdminGroupedItemsList from "./components/adminComponents/adminGroupedItems/adminGroupedItemsList";
 import AdminGroupedItemNew from "./components/adminComponents/adminGroupedItems/adminGroupedItemNew";
 import AdminOrders from "./components/adminComponents/adminOrders/adminOrders";
 import AdminAccountOrders from "./components/adminComponents/adminOrders/adminAccountOrders";
+import EventDashboard from "./components/eventComponents/eventDashboard";
+import EventNew from "./components/eventComponents/eventNew";
+import OrderNew from "./components/orderComponents/orderNew";
+import NavBarComponent from "./components/navBarComponents/navBarComponent";
+import FooterComponent from "./components/navBarComponents/footerComponent";
+import OrderPastDashboard from "./components/orderComponents/orderPastDashboard";
+import UserDashboard from "./components/userComponents/userDashboard";
+import AuthCallback, {
+  getRefreshToken,
+  newUserInfo,
+} from "./components/basicComponents/accountComponents/authCallback";
+import LoadingIcon from "./components/basicComponents/LoadingIcon";
+import UserNewList from "./components/userComponents/userNewList";
+import ExampleNewCampaign from "./components/propsExample";
+import RegisterComponent from "./components/basicComponents/accountComponents/registerComponent";
+import Logout from "./components/basicComponents/accountComponents/logout";
 
 interface AppContext {
   user: any;
@@ -25,6 +50,27 @@ interface AppContext {
 
   adminAccounts: Array<adminAccount>;
   setAdminAccounts: Function;
+
+  // userEvents: Array<userEvent>;
+  userEvents: { [key: string]: userEvent };
+  setUserEvents: Function;
+
+  userItems: { [key: string]: userItem };
+  setUserItems: Function;
+
+  userGroupedItems: { [key: string]: userGroupedItem };
+  setUserGroupedItems: Function;
+
+  userUsers: {
+    activeUsers: { [key: string]: userRecipient };
+    inActiveUsers: { [key: string]: userRecipient };
+  };
+  setUserUsers: Function;
+  userUsersLoaded: boolean;
+  setUserUsersLoaded: Function;
+
+  userMonthOrders: userMonthOrderList;
+  setUserMonthOrders: Function;
 }
 
 let context: AppContext = {
@@ -40,6 +86,24 @@ let context: AppContext = {
 
   adminAccounts: [],
   setAdminAccounts: () => null,
+
+  // userEvents: [],
+  userEvents: {},
+  setUserEvents: () => null,
+
+  userItems: {},
+  setUserItems: () => null,
+
+  userGroupedItems: {},
+  setUserGroupedItems: () => null,
+
+  userUsers: { activeUsers: {}, inActiveUsers: {} },
+  setUserUsers: () => null,
+  userUsersLoaded: false,
+  setUserUsersLoaded: () => null,
+
+  userMonthOrders: { orders: {} },
+  setUserMonthOrders: () => null,
 };
 
 const UserContext = React.createContext(context);
@@ -119,9 +183,44 @@ const fetchRequest = async (
     });
 };
 
+// WILL BE REMOVED
+const getBetaPasswordFromLocalStorage = () => {
+  let betaPasswordLocal;
+  betaPasswordLocal = localStorage.getItem("betaPassword");
+  if (betaPasswordLocal) {
+    betaPasswordLocal = JSON.parse(betaPasswordLocal);
+
+    if (betaPasswordLocal && betaPasswordLocal.betaPassword) {
+      return betaPasswordLocal.betaPassword;
+    }
+
+    return "";
+  }
+
+  return "";
+};
+
+const setBetaPasswordToLocalStorage = (betaPasswordValue: string) => {
+  localStorage.setItem(
+    "betaPassword",
+    JSON.stringify({ betaPassword: betaPasswordValue })
+  );
+
+  return;
+};
+
 function App() {
-  const [user, setUser] = useState({ email: "kevinpsites@gmail.com" } as any);
-  const [admin, setAdmin] = useState(true); // CHANGE
+  const [betaPassword, setBetaPassword] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({
+    // email: "kevinpsites@gmail.com",
+    // id: "1",
+    // firstName: "Kevin",
+    // lastName: "Sites",
+  } as any);
+  const userRef = useRef(user);
+  userRef.current = user;
+  const [admin, setAdmin] = useState(false); // CHANGE
   const [adminItems, setAdminItems] = useState(
     {} as { [key: string]: adminItem }
   );
@@ -131,45 +230,258 @@ function App() {
 
   const [adminAccounts, setAdminAccounts] = useState([] as Array<adminAccount>);
 
-  return (
+  const [userEvents, setUserEvents] = useState(
+    {} as { [key: string]: userEvent }
+  );
+
+  const [userItems, setUserItems] = useState({} as { [key: string]: userItem });
+  const [userGroupedItems, setUserGroupedItems] = useState(
+    {} as { [key: string]: userGroupedItem }
+  );
+
+  const [userUsers, setUserUsers] = useState({
+    activeUsers: {},
+    inActiveUsers: {},
+  } as {
+    activeUsers: { [key: string]: userRecipient };
+    inActiveUsers: { [key: string]: userRecipient };
+  });
+  const [userUsersLoaded, setUserUsersLoaded] = useState(false);
+
+  const [userMonthOrders, setUserMonthOrders] = useState({
+    orders: {},
+  } as userMonthOrderList);
+
+  useEffect(() => {
+    // if (
+    //   location.pathname.includes("/id/") ||
+    //   location.pathname.includes("/a/") ||
+    //   location.pathname.includes("/dashboard/") ||
+    //   location.pathname.includes("/present")
+    // ) {
+    //   setShowNavBar(false);
+    // } else {
+    //   setShowNavBar(true);
+    // }
+
+    if (window.location.pathname === "/callback") {
+      window.location.replace(
+        `${window.location.origin}/#/callback${window.location.search}`
+      );
+    } else if (window.location.pathname === "/callback/register") {
+      window.location.replace(
+        `${window.location.origin}/#/callback${window.location.search}&type=register`
+      );
+    }
+  }, [window.location]);
+
+  const loadUser = async () => {
+    let localUser;
+    localUser = localStorage.getItem("user");
+    if (localUser) {
+      localUser = JSON.parse(localUser);
+      if (localUser.expiresIn) {
+        let now = new Date();
+        let expire = new Date(localUser.expiresIn);
+        // console.log("COMPARE: ", now, expire, expire < now);
+        if (expire < now) {
+          console.log("EXPIRED:", now, expire);
+          // logout(setAppUser);
+          // localUser = null;
+          // setLoading(false);
+
+          if ("refresh" in localUser) {
+            // console.log("GETTING REFRESH");
+            let refreshTokens = await getRefreshToken(localUser.refresh);
+            localUser = await newUserInfo(refreshTokens);
+
+            console.log("Expired Refresh", refreshTokens, localUser);
+
+            localStorage.setItem("user", JSON.stringify(localUser));
+          } else {
+            // console.log("NO REFRESH");
+            localUser = {};
+            localStorage.removeItem("user");
+            // setUser({} as any);
+          }
+        }
+      }
+      //  else {
+      //   localUser = null;
+      // }
+    } else {
+      localUser = null;
+    }
+    return localUser;
+  };
+
+  const setAppUser = async () => {
+    let testUser = await loadUser();
+    // console.log("local user", testUser);
+    setUser(testUser);
+    setLoading(false);
+  };
+
+  // WILL BE REMOVED
+  const setBetaPasswordForApp = async () => {
+    let password = await getBetaPasswordFromLocalStorage();
+    setBetaPassword(password);
+  };
+
+  useEffect(() => {
+    if (!userRef.current || !("email" in userRef.current)) {
+      setAppUser();
+    } else {
+      setLoading(false);
+    }
+
+    if (!betaPassword) {
+      setBetaPasswordForApp();
+    }
+  }, []);
+
+  const handleBetaChange = (e: any) => {
+    if (e.key === "Enter" && tempBetaPassword === "ZipZapFlashBang") {
+      setBetaPassword(tempBetaPassword);
+      setBetaPasswordToLocalStorage(tempBetaPassword);
+      return;
+    }
+
+    if ("target" in e) {
+      setTempBetaPassword(e.target.value);
+    }
+  };
+
+  const [tempBetaPassword, setTempBetaPassword] = useState("");
+
+  return loading ? (
+    <div className="App">
+      <NavBarComponent />
+      <LoadingIcon />
+      <FooterComponent />
+    </div>
+  ) : !betaPassword ? (
+    <div
+      className="App"
+      style={{
+        color: `var(--primary-text-grey)`,
+        background: `var(--primary-white)`,
+      }}
+    >
+      <h2>
+        Welcome to Zip Zap, we are not quite ready for you, please check back
+        soon!
+      </h2>
+      <br></br>
+      <img
+        src={`media/images/coming_soon.jpeg`}
+        className={`item-card-image-main`}
+        alt={`Coming Soon Image`}
+      ></img>
+      <hr></hr>
+      <div>
+        <label>
+          If you have the super secret beta password enter it now to preview the
+          website
+        </label>
+        <br></br>
+        <br></br>
+        <input
+          type="password"
+          value={tempBetaPassword}
+          onChange={handleBetaChange}
+          onKeyPress={handleBetaChange}
+        ></input>
+        <br></br>
+        <button
+          className="general-button back-link"
+          onClick={() => handleBetaChange({ key: "Enter" })}
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  ) : (
     <div className="App">
       <UserContext.Provider
         value={{
-          user: user,
-          setUser: setUser,
-          admin: admin,
-          setAdmin: setAdmin,
-          adminItems: adminItems,
-          setAdminItems: setAdminItems,
-          adminGroupedItems: adminGroupedItems,
-          setAdminGroupedItems: setAdminGroupedItems,
-          adminAccounts: adminAccounts,
-          setAdminAccounts: setAdminAccounts,
+          user: userRef.current,
+          setUser,
+          admin,
+          setAdmin,
+          adminItems,
+          setAdminItems,
+          adminGroupedItems,
+          setAdminGroupedItems,
+          adminAccounts,
+          setAdminAccounts,
+          userEvents,
+          setUserEvents,
+          userItems,
+          setUserItems,
+          userGroupedItems,
+          setUserGroupedItems,
+          userUsers,
+          setUserUsers,
+          userUsersLoaded,
+          setUserUsersLoaded,
+          userMonthOrders,
+          setUserMonthOrders,
         }}
       >
-        <Route exact path="/" component={HomePageComponent} />
+        {/* TO-DO - HANDLE ERRORS */}
+        <NavBarComponent />
+        <Route exact path="/callback" component={AuthCallback} />
+        <Route exact path="/register" component={RegisterComponent} />
+        <Route exact path="/logout" component={Logout} />
 
-        {/* ADMIN PAGES */}
-        <Route exact path="/admin/dashboard" component={AdminDashboard} />
-        <Route exact path="/admin/items" component={AdminItemsList} />
-        <Route exact path="/admin/items/new" component={AdminItemNew} />
-        <Route
-          exact
-          path="/admin/groupedItems"
-          component={AdminGroupedItemsList}
-        />
-        <Route
-          exact
-          path="/admin/groupedItems/new"
-          component={AdminGroupedItemNew}
-        />
+        {user && "email" in user && user.email ? (
+          <Route exact path="/" component={EventDashboard} />
+        ) : (
+          <Route exact path="/" component={HomePageComponent} />
+        )}
 
-        <Route exact path="/admin/orders" component={AdminOrders} />
-        <Route
-          exact
-          path="/admin/orders/:accountID"
-          component={AdminAccountOrders}
-        />
+        {!user || !("email" in user) || !user.email ? null : ( // <Route exact path="/" component={HomePageComponent} /> // <Redirect to="/" />
+          <div className={`full-width full-height`}>
+            {/* Event Pages  */}
+            <Route exact path="/dashboard" component={EventDashboard} />
+            <Route exact path="/event/new" component={EventNew} />
+            <Route exact path="/event/e/:eventID" component={EventNew} />
+
+            {/* User Pages  */}
+            <Route exact path="/people" component={UserDashboard} />
+            <Route exact path="/people/upload" component={UserNewList} />
+
+            {/* Order Pages */}
+            <Route exact path="/order/new" component={OrderNew} />
+            <Route exact path="/order/past" component={OrderPastDashboard} />
+            <Route exact path="/order/:eventID/:orderID" component={OrderNew} />
+
+            {/* ADMIN PAGES */}
+            <Route exact path="/admin/dashboard" component={AdminDashboard} />
+            <Route exact path="/admin/items" component={AdminItemsList} />
+            <Route exact path="/admin/items/new" component={AdminItemNew} />
+            <Route
+              exact
+              path="/admin/groupedItems"
+              component={AdminGroupedItemsList}
+            />
+            <Route
+              exact
+              path="/admin/groupedItems/new"
+              component={AdminGroupedItemNew}
+            />
+
+            <Route exact path="/admin/orders" component={AdminOrders} />
+            <Route
+              exact
+              path="/admin/orders/:accountID"
+              component={AdminAccountOrders}
+            />
+          </div>
+        )}
+
+        <FooterComponent />
       </UserContext.Provider>
     </div>
   );

@@ -8,7 +8,7 @@ function AdminAccountCard(props: {
 }) {
   return (
     <div className={`column center item-card-container `}>
-      <h3>{props.account.name}</h3>
+      <h3>Account: {props.account.name}</h3>
       <div className={`item-card-body`}>
         <p>Orders: {props.account.orderCount}</p>
       </div>
