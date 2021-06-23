@@ -1,0 +1,55 @@
+{
+  "activeUsers": {
+    "user-1": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "CEO"
+    },
+    "user-2": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Manager"
+    },
+
+    "user-3": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Sales Rep"
+    },
+    "user-4": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Developer"
+    },
+    "user-5": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Secretary"
+    },
+    "user-6": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "HR Rep"
+    },
+    "user-7": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Accountant"
+    },
+    "user-8": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Sales Rep"
+    },
+    "user-9": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Manager"
+    },
+    "user-10": {
+      "Name": "Kevin Sites",
+      "Birthday": "07/30/1995",
+      "Job Title": "Director"
+    }
+  }
+}

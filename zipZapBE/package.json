@@ -1,0 +1,19 @@
+{
+  "name": "zipzapbe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Sites",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "koa": "^2.13.1",
+    "koa-body": "^4.2.0",
+    "koa-cors": "0.0.16",
+    "koa-router": "^10.0.0",
+    "pg": "^8.5.1"
+  }
+}

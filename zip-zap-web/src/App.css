@@ -1,0 +1,280 @@
+:root {
+  --primary-border: 1px solid rgba(0, 0, 0, 0.12);
+
+  --light-black: rgba(0, 0, 0, 0.38);
+  --medium-black: rgba(0, 0, 0, 0.6);
+  --high-black: rgba(0, 0, 0, 0.87);
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.width-90 {
+  width: 90%;
+}
+
+html,
+body,
+.root,
+.App,
+.full-height {
+  height: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
+.center-row {
+  justify-content: center;
+}
+
+.center-column {
+  align-items: center;
+}
+
+.left-align-row {
+  justify-content: flex-start;
+}
+
+.right-align-row {
+  justify-content: flex-end;
+}
+
+.general-button {
+  border: var(--primary-border);
+  margin: 0px;
+  padding: 0px;
+}
+
+.admin-button,
+a.admin-button {
+  margin: 3px 3px;
+  padding: 3px;
+  text-decoration: none;
+  color: var(--high-black);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-button {
+  background: lightcoral;
+  color: white;
+}
+
+.delete-button-svg {
+  fill: lightcoral;
+  cursor: pointer;
+}
+
+.item-card-container,
+.admin-dashboard-card {
+  border: var(--primary-border);
+  min-width: 270px;
+  width: 80%;
+  max-width: 80%;
+  min-height: 200px;
+  margin: 15px 0px;
+}
+
+.item-card-container {
+  text-align: left;
+  padding: 8px 16px;
+  /* padding-left: 16px; */
+}
+
+.item-card-container-name {
+  align-self: flex-start;
+  margin: 2px 4px;
+  border: var(--primary-border);
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.item-card-body,
+.item-card-container h3 {
+  align-self: end;
+  /* padding-left: 6px; */
+}
+
+.item-card-image-main {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.item-card-image-small {
+  max-width: 20%;
+  max-height: 20%;
+  border: var(--primary-border);
+  margin: 2px;
+}
+
+.general-input,
+.item-card-body {
+  width: 100%;
+}
+
+.general-input,
+.item-card-body textarea,
+.item-card-body input {
+  margin: 2px 4px;
+  border: var(--primary-border);
+  border-radius: 5px;
+}
+
+.item-card-body textarea {
+  margin: 0px;
+  padding: 0px 4px;
+  margin-top: 10px;
+  width: calc(100% - 8px);
+  min-height: 100px;
+}
+
+.item-card-container-inactive {
+  background: lightgray;
+}
+
+.item-card-row-container {
+  border: var(--primary-border);
+  margin: 2px;
+  padding: 2px;
+}
+
+.item-card-row-title {
+  width: 30%;
+  margin-left: 5px;
+}
+
+.item-card-row-price-quant {
+  width: 15%;
+}
+
+.item-card-row-add,
+.item-card-row-remove {
+  width: 40%;
+  cursor: pointer;
+}
+
+.item-card-row-add svg {
+  transform: rotate(45deg);
+}
+
+.admin-order-table {
+  /* border: 1px solid #ccc; */
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  width: 90%;
+}
+
+.admin-order-table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 0.35em;
+  margin: 8px 0px;
+}
+
+.admin-order-table th,
+.admin-order-table td {
+  padding: 0.625em;
+  text-align: center;
+}
+
+.admin-order-card-show {
+  position: absolute;
+  z-index: 1;
+  background: white;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+}
+
+@media screen and (max-width: 650px) {
+  .admin-order-table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  .admin-order-table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+  }
+
+  .admin-order-table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    text-align: right;
+  }
+
+  .admin-order-table td::before {
+    content: attr(data-label);
+    float: left;
+  }
+
+  .admin-order-table .admin-order-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+}
