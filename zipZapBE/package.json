@@ -9,6 +9,8 @@
   "author": "Kevin Sites",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.877.0",
+    "dataframe-js": "^1.4.4",
     "dotenv": "^8.2.0",
     "koa": "^2.13.1",
     "koa-body": "^4.2.0",
