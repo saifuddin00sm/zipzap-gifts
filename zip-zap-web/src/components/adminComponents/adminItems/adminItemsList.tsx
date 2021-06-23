@@ -5,11 +5,11 @@ import { adminItem } from "../../../classes";
 import AdminItemCard from "../../basicComponents/adminComponents/adminItemCard";
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
+import { putImageURL } from "./adminItemNew";
 
 function AdminItemsList() {
-  const { user, admin, setAdmin, adminItems, setAdminItems } = useContext(
-    UserContext
-  );
+  const { user, admin, setAdmin, adminItems, setAdminItems } =
+    useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
   const getAdminUser = async () => {
@@ -26,7 +26,7 @@ function AdminItemsList() {
     if (!admin && "email" in user) {
       getAdminUser();
     } else if (admin && Object.keys(adminItems).length === 0) {
-      getItems();
+      getItems(true);
     } else {
       setSearchItems(Object.keys(adminItems));
       setLoading(false);
@@ -34,8 +34,12 @@ function AdminItemsList() {
   }, []);
 
   const [searchItems, setSearchItems] = useState([] as Array<string>);
-  const getItems = async () => {
-    let response = await fetchRequest(user, "items", "GET");
+  const getItems = async (admin = false) => {
+    let response = await fetchRequest(
+      user,
+      `items${admin ? "?admin=true" : ""}`,
+      "GET"
+    );
 
     if ("items" in response) {
       setAdminItems(response.items);
@@ -48,10 +52,43 @@ function AdminItemsList() {
   const handleItemAction = async (
     type: string,
     item: adminItem,
-    index: number
+    index: number,
+    imageFiles?: FileList
   ) => {
+    // TO-DO - LOADING
+    // TO-DO - NOTE THAT IMAGE MIGHT NOT LOAD UNTIL REFRESH
     let updateResponse = {} as any;
     if (type === "save") {
+      let errors = [] as Array<string>;
+      if (type === "save" && imageFiles) {
+        console.log("yo", imageFiles);
+
+        let fileLoop = Object.keys(imageFiles).map(async (key, kIndex) => {
+          let itemResponse = await putImageURL(
+            user,
+            imageFiles[parseInt(key)],
+            item,
+            kIndex
+          );
+
+          if (itemResponse.errors) {
+            errors.push(itemResponse.errors);
+            return;
+          }
+          item = itemResponse.item;
+
+          let fileTempURL = itemResponse.fileTempURL;
+
+          item.pictures.push(fileTempURL.itemPath);
+
+          if (!item.mainPicture) {
+            item.mainPicture = fileTempURL.itemPath;
+          }
+        });
+
+        let fileUploadResult = await Promise.all(fileLoop);
+      }
+
       updateResponse = await fetchRequest(
         user,
         `items/${item.itemID}`,
@@ -87,6 +124,8 @@ function AdminItemsList() {
           if (item.name.toLowerCase().includes(searchTerm)) {
             return true;
           } else if (item.description.toLowerCase().includes(searchTerm)) {
+            return true;
+          } else if (item.purchasedFrom.toLowerCase().includes(searchTerm)) {
             return true;
           }
         });

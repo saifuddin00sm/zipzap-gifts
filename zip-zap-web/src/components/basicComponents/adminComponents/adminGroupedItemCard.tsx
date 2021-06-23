@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../App";
 import { adminGroupedItem, adminItem } from "../../../classes";
-
 import { ReactComponent as CloseIcon } from "../../../icons/close.svg";
 import AdminItemRow from "./adminItemRow";
+import appSettings from "../../../appSettings.json";
 
 // props.action req = (type:string, item:adminItem, index:number)
 function AdminGroupedItemCard(props: {
@@ -14,10 +14,13 @@ function AdminGroupedItemCard(props: {
 }) {
   const { adminItems } = useContext(UserContext);
   const [editing, setEditing] = useState(props.editing ? props.editing : false);
+  const [editingError, setEditingError] = useState("");
 
   const [editableItem, setEditableItem] = useState(
     JSON.parse(JSON.stringify(props.item)) as adminGroupedItem
   );
+
+  const [imageFiles, setImageFiles] = useState({} as FileList);
 
   useEffect(() => {
     setEditableItem(JSON.parse(JSON.stringify(props.item)));
@@ -41,8 +44,32 @@ function AdminGroupedItemCard(props: {
   };
 
   const handleSave = () => {
-    props.action("save", editableItem, props.index);
+    if (!editableItem.name) {
+      setEditingError("Please Enter an Item Name");
+      return true;
+    } else if (!editableItem.description) {
+      setEditingError("Please Enter an Item Description");
+      return true;
+    }
+    // else if (!editableItem.quantity) {
+    //   setEditingError("Please Enter an Item Quantity");
+    //   return true;
+    // } else if (!editableItem.quantityAvailable) {
+    //   setEditingError("Please Enter an Item Quantity Available");
+    //   return true;
+    // }
+    else {
+      setEditingError("");
+    }
+
+    props.action(
+      "save",
+      editableItem,
+      props.index,
+      Object.keys(imageFiles).length > 0 ? imageFiles : null
+    );
     setEditing(false);
+    setImageFiles({} as FileList);
   };
 
   const handleDelete = () => {
@@ -87,6 +114,10 @@ function AdminGroupedItemCard(props: {
     handleImageRemove(index);
   };
 
+  const handlePictureAdd = async (e: any) => {
+    setImageFiles(e.target.files);
+  };
+
   return editing ? (
     <div className={`column center item-card-container`}>
       <input
@@ -102,7 +133,8 @@ function AdminGroupedItemCard(props: {
           <div className={`row center-column`}>
             {editableItem.mainPicture ? (
               <img
-                src={props.item.mainPicture}
+                // src={props.item.mainPicture}
+                src={`${appSettings.pictureURL}/${editableItem.mainPicture}`}
                 alt={`${editableItem.name}-main-picture`}
                 className={`item-card-image-small`}
               ></img>
@@ -122,7 +154,7 @@ function AdminGroupedItemCard(props: {
           <div key={pIndex} className={`row center space-between`}>
             <div className={`row center-column`}>
               <img
-                src={props.item.mainPicture}
+                src={`${appSettings.pictureURL}/${pictureURL}`}
                 alt={`${editableItem.name}-alt-picture-${pIndex}`}
                 className={`item-card-image-small`}
               ></img>
@@ -139,12 +171,23 @@ function AdminGroupedItemCard(props: {
           </div>
         ))}
 
-        <button
+        {/* <button
           className={`general-button admin-button`}
           // onClick={() => setShowSearchContainer(!showSearchContainer)}
         >
           Add Image
-        </button>
+        </button> */}
+        <input
+          className={`item-picture-upload general-button admin-button`}
+          type="file"
+          multiple
+          accept="image/png, image/gif, image/jpeg"
+          onChange={handlePictureAdd}
+          disabled={!editableItem.name}
+        ></input>
+        <span className={`item-picture-upload-message`}>
+          Please Enter Item Name First
+        </span>
       </div>
 
       <div className={`item-card-body`}>
@@ -244,7 +287,7 @@ function AdminGroupedItemCard(props: {
       </h3>
       <div className={`column center`}>
         <img
-          src={props.item.mainPicture}
+          src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
           alt={`${props.item.name}-main-picture`}
           className={`item-card-image-main`}
         ></img>
@@ -252,7 +295,7 @@ function AdminGroupedItemCard(props: {
           {props.item.pictures.slice(0, 4).map((pictureURL, pIndex) => (
             <img
               key={pIndex}
-              src={pictureURL}
+              src={`${appSettings.pictureURL}/${pictureURL}`}
               alt={`${props.item.name}-alt-picture-${pIndex}`}
               className={`item-card-image-small`}
             ></img>
