@@ -1082,6 +1082,7 @@ router.put("/orders/:campaignID", async (ctx) => {
   let campaignOrders = await gFunctions.readAWSJsonFile(filePath);
 
   if (
+    campaignOrders.error &&
     "code" in campaignOrders.error &&
     campaignOrders.error.code.includes("NoSuchKey")
   ) {
@@ -1186,6 +1187,108 @@ router.get("/orders/:campaignID/:orderID", async (ctx) => {
 
   // TO-DO - test if slower than DB grab
   response.order = campaignOrders.data[ctx.params.orderID];
+  ctx.body = response;
+  return ctx;
+});
+
+// update single order on campaign
+router.put("/orders/fulfill", async (ctx) => {
+  let response = { error: "", saved: false, orderID: null };
+  let body = ctx.request.body;
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminFulfillOrder
+  );
+  if (allowed.error || !allowed.allowed) {
+    response.error = allowed.error ? allowed.error : "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let campaignData = await qFunctions.getCampaignData(
+    body.user.campaignID,
+    allowed.userEmail
+  );
+
+  if (campaignData.error) {
+    response.error = campaignData.error;
+    ctx.body = response;
+    return ctx;
+  }
+
+  // EXAMPLE BODY - will either replace or add new user
+  // {
+  //   user:{
+  //       "orderID":"501",
+  //       "cost": 45,
+  //       "shippingAddress": "1153 north 240 east",
+  //       "shippingCity": "Orem",
+  //       "shippingState": "UT",
+  //       "shippingZip": "84057",
+  //       "giftee": 0,
+  //       "campaignID": 123,
+  //       "groupedID": 23, - or null if giftID
+  //       "giftID": 2, - or null if groupedID
+  //       "notes": "Thank you for being such an amazing employee, I really don't know how I could do it without you!",
+  //       "shippingFee": 5.90,
+  //       "shippingDetails":{}
+  //   },
+  //   oneTime?:boolean
+  //   oneTimeDB?:boolean
+  // }
+
+  let filePath = `campaigns/${campaignData.campaign.campaignID}/orders.json`;
+  let campaignOrders = await gFunctions.readAWSJsonFile(filePath);
+
+  if (
+    campaignOrders.error &&
+    "code" in campaignOrders.error &&
+    campaignOrders.error.code.includes("NoSuchKey")
+  ) {
+    campaignOrders.data = {};
+    campaignOrders.error = "";
+  }
+
+  if (campaignOrders.error) {
+    response.error = "Error updating campaign orders.";
+    ctx.body = response;
+    return ctx;
+  }
+
+  if (body.oneTime) {
+    // console.log("ONE", body.oneTime);
+    let order = campaignOrders.data[body.user.orderID];
+    if (order && order.giftee === body.user.giftee) {
+      // console.log("same", body.user.orderID, body.user.giftee, order.giftee);
+      campaignOrders.data[body.user.orderID] = body.user;
+    } else {
+      let orderTotal = Object.keys(campaignOrders.data).length;
+
+      body.user.orderID = orderTotal + 1;
+      campaignOrders.data[orderTotal + 1] = body.user;
+    }
+  } else {
+    campaignOrders.data[body.user.orderID] = body.user;
+  }
+
+  let saved = await gFunctions.writeAWSFile(filePath, campaignOrders.data);
+
+  response.saved = saved.saved;
+
+  let rowUpdate = await qFunctions.editOrder(
+    body.user,
+    body.user.campaignID,
+    body.user.orderID
+  );
+
+  if (rowUpdate.error !== "No Order Found") {
+    response.error = rowUpdate.error;
+    ctx.body = response;
+    return ctx;
+  }
+  response.orderID = rowUpdate.orderID;
+
   ctx.body = response;
   return ctx;
 });

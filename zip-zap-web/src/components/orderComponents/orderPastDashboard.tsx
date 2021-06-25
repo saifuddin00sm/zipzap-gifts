@@ -29,9 +29,9 @@ const calcMonthPrice = (campaignOrders: { [key: string]: eventOrder }) => {
   Object.keys(campaignOrders).filter((orderID) => {
     let order = campaignOrders[orderID];
 
-    totalPrice += order.cost;
+    totalPrice += order.cost + order.shippingFee;
   });
-  return totalPrice;
+  return parseFloat(totalPrice.toFixed(2));
 };
 
 const getPreviousOrders = async (user: any, monthQuery?: string | number) => {

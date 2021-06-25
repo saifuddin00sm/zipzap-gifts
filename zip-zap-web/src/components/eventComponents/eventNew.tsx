@@ -191,7 +191,10 @@ const createOrders = async (
       shippingDate:
         oneTime && oneTimeDate
           ? oneTimeDate
-          : `${getRandomInt(4, 7)}/${getRandomInt(1, 28)}/21`,
+          : `${getRandomInt(new Date().getMonth() + 1, 12)}/${getRandomInt(
+              1,
+              28
+            )}/21`,
       // TO-DO - handleCalcShippingDate
       shippingDetails: null,
       isActive: true,
@@ -297,6 +300,13 @@ const handleCalcShippingDate = async (
 
 const handleCalcShippingFee = async (user: userRecipient) => {
   return 0;
+};
+
+const getDateRestriction = (daysToAdd: number = 7) => {
+  let date = new Date();
+  date.setDate(date.getDate() + daysToAdd);
+
+  return date;
 };
 
 function EventNew({ match, location }: RouteComponentProps<TParams>) {
@@ -1036,6 +1046,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 className={`general-input-fit new-event-date-input`}
                 value={eventStartDate}
                 onChange={(e: any) => setEventStartDate(e.target.value)}
+                min={formatDate(getDateRestriction().toString())}
               ></input>{" "}
               -
               <input
@@ -1446,5 +1457,6 @@ export {
   editOrderList,
   calcGiftPackagePrice,
   calcGiftPackageWeight,
+  getDateRestriction,
 };
 export default EventNew;

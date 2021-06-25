@@ -1010,6 +1010,7 @@ const editOrder = async (data, campaignID, orderID) => {
     notes,
     shippingFee,
     isActive,
+    shippingDetails,
   } = data;
   let response = { error: "", orderID: null };
 
@@ -1065,7 +1066,8 @@ const editOrder = async (data, campaignID, orderID) => {
         is_active = $11,
         shipping_city = $14,
         shipping_state = $15,
-        shipping_zip = $16
+        shipping_zip = $16,
+        shipment_details = $17
       WHERE campaign_id = $12
       AND order_id = $13
       RETURNING order_id as "orderID"
@@ -1087,6 +1089,7 @@ const editOrder = async (data, campaignID, orderID) => {
       shippingCity,
       shippingState,
       shippingZip,
+      JSON.stringify(shippingDetails ? shippingDetails : {}),
     ]
   ); // returns query rows with rowCount else error
   if (postQuery.error) {
@@ -1270,6 +1273,9 @@ const getWeekOrders = async (
       tmp.shipping_date as "shippingDate",
       tmp."cost",
       tmp.shipping_address as "shippingAddress",
+      tmp.shipping_city as "shippingCity",
+      tmp.shipping_state as "shippingState",
+      tmp.shipping_zip as "shippingZip",
       tmp.giftee,
       tmp.campaign_id as "campaignID",
       tmp.grouped_id as "groupedID",
