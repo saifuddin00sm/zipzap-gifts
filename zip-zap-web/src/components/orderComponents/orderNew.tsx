@@ -45,6 +45,8 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
   } = useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
+  const [initalLoading, setInitialLoading] = useState(true);
+
   const [success, setSuccess] = useState(false);
   const [redirect, setRedirect] = useState("");
 
@@ -495,11 +497,15 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
         id: order.groupedID ? order.groupedID.toString() : "",
       });
     }
+
+    setInitialLoading(false);
   };
 
   useEffect(() => {
     if (match.params.eventID && match.params.orderID) {
       handleInitialLoad(match.params.eventID, match.params.orderID);
+    } else {
+      setInitialLoading(false);
     }
   }, [match.params.eventID, match.params.orderID]);
 
@@ -508,6 +514,7 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
       <header className={`column center page-header`}>
         <h1>{match.params.orderID ? "Edit" : "Add a"} One-Time Gift</h1>
       </header>
+      {initalLoading ? <LoadingIcon /> : ""}
 
       <section className={`row width-90`}>
         <Link to={"/dashboard"} className={`back-link`}>
@@ -899,6 +906,18 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
                           userItems
                         )
                     : 0}
+                </span>
+              </div>
+
+              <div className={`row`}>
+                <span className={`row`}>Shipping: </span>
+                <span className={`row`}>TBD</span>
+              </div>
+
+              <div className={`row`}>
+                <span className={`row`}>
+                  Gift will be charged to default payment method for{" "}
+                  {match.params.orderID ? "the event" : " the account"}
                 </span>
               </div>
             </div>

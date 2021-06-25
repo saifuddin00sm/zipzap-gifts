@@ -349,6 +349,10 @@ a.admin-button {
   /* overflow: scroll; */
 }
 
+.main-section-white-bg {
+  background-color: var(--primary-white-background);
+}
+
 .main-section-scroll {
   /* overflow: scroll; */
 }
@@ -393,6 +397,10 @@ a.admin-button {
 
 .event-dashboard-half-column-right {
   margin-right: 0px;
+}
+
+.column-grey-bg {
+  background-color: var(--primary-grey-background);
 }
 
 .event-dashboard-sub-title {
@@ -595,6 +603,10 @@ a.new-event-button {
 .new-event-button:disabled {
   background: var(--primary-grey);
   color: var(--primary-black);
+}
+
+.new-event-button-no-margin {
+  margin: 0px;
 }
 
 .previous-order-button {
@@ -1326,10 +1338,52 @@ a.nav-bar-logo {
   margin: 1%;
 }
 
+.shipment-rate-button-container-active {
+  border: 1px solid var(--primary-red);
+}
+
 .shipment-rate-button-text-container span {
   margin: 1px;
   padding: 1px;
   text-align: left;
+}
+
+.stripe-card-input-form {
+  text-align: center;
+}
+
+.stripe-card-input-field {
+  height: 32px;
+  width: 90%;
+  background: var(--primary-white);
+  font-size: 15px;
+  border: var(--primary-border);
+  border-radius: 5px;
+  margin: 5px 0px;
+  padding: 0px 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stripe-card-input-header {
+  width: calc(90% + 15px);
+  margin: 5px 0px;
+  padding: 0px;
+}
+
+.stripe-saved-card-button {
+  border: var(--primary-border);
+  width: 90%;
+  font-size: 15px;
+  margin: 2px 0px;
+  background: var(--primary-white);
+  border-radius: 5px;
+}
+
+.active-stripe-card {
+  border: 1px solid var(--primary-red);
 }
 
 /* @media screen and (max-width: 850px) {
