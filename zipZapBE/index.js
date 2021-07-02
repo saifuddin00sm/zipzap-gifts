@@ -188,7 +188,7 @@ router.get("/admin/orders", async (ctx) => {
   return ctx;
 });
 
-// TO-DO - AWS Permission
+// AWS COMPLETE - PERMISSIONED
 // get all orders for the current week
 router.get("/admin/orders/:accountID", async (ctx) => {
   let response = {
@@ -201,6 +201,18 @@ router.get("/admin/orders/:accountID", async (ctx) => {
       nextSunday: "",
     },
   };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminGetAccountOrders
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
   let { lastSunday, nextSunday } = gFunctions.getLastSunday();
 
   let params = ctx.params;
@@ -240,6 +252,85 @@ router.get("/admin/orders/:accountID", async (ctx) => {
   response.campaignList = weekOrders.campaignList;
 
   ctx.body = response;
+  return ctx;
+});
+
+// AWS COMPLETE - PERMISSIONED
+// get shippo shipmentRates
+const fetch = require("node-fetch");
+router.post("/admin/shipmentRates", async (ctx) => {
+  let response = {
+    error: "",
+  };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminGetShipmentRates
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let body = ctx.body;
+
+  let shippo = await fetch("https://api.goshippo.com/shipments/", {
+    headers: {
+      Authorization: `ShippoToken ${appSettings.shippoKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+    method: "POST",
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
+      return { error: err };
+    });
+
+  ctx.body = shippo;
+  return ctx;
+});
+
+// AWS COMPLETE - PERMISSIONED
+// complete shippo transaction
+router.post("/admin/completeTransaction", async (ctx) => {
+  let response = {
+    error: "",
+  };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminCompleteShipment
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let body = ctx.body;
+
+  let shippo = await fetch("https://api.goshippo.com/transactions", {
+    headers: {
+      Authorization: `ShippoToken ${appSettings.shippoKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+    method: "POST",
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
+      return { error: err };
+    });
+
+  ctx.body = shippo;
   return ctx;
 });
 
