@@ -135,20 +135,27 @@ function AdminOrderRow(props: {
         async: false,
       };
 
-      let shippo = await fetch("https://api.goshippo.com/shipments/", {
-        headers: {
-          Authorization: `ShippoToken ${appSettings.shippoKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(shipmentObject),
-        method: "POST",
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .catch((err) => {
-          return { error: err };
-        });
+      let shippo = await fetchRequest(
+        user,
+        "admin/shipmentRates",
+        "POST",
+        shipmentObject
+      );
+
+      // let shippo = await fetch("https://api.goshippo.com/shipments/", {
+      //   headers: {
+      //     Authorization: `ShippoToken ${appSettings.shippoKey}`,
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(shipmentObject),
+      //   method: "POST",
+      // })
+      //   .then((res) => {
+      //     return res.json();
+      //   })
+      //   .catch((err) => {
+      //     return { error: err };
+      //   });
 
       if (shippo.error) {
         // To-DO - Handle Error
@@ -188,27 +195,16 @@ function AdminOrderRow(props: {
 
     let rateObject = shipmentRates[shipoRateSelection];
 
-    let shippoTransaction = await fetch(
-      "https://api.goshippo.com/transactions",
+    let shippoTransaction = await fetchRequest(
+      user,
+      "admin/completeTransaction",
+      "POST",
       {
-        headers: {
-          Authorization: `ShippoToken ${appSettings.shippoKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          rate: rateObject.object_id,
-          label_file_type: "PDF",
-          async: false,
-        }),
-        method: "POST",
+        rate: rateObject.object_id,
+        label_file_type: "PDF",
+        async: false,
       }
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        return { error: err };
-      });
+    );
 
     if (shippoTransaction.error) {
       // To-DO - Handle Error
