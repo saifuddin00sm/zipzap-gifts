@@ -1349,6 +1349,12 @@ const getAccountData = async (userEmail) => {
       accountID: null,
       planID: null,
       roleID: null,
+      name: "",
+      address: "",
+      city: "",
+      state: "",
+      zip: "",
+      stripeID: "",
     },
   };
 
@@ -1361,7 +1367,13 @@ const getAccountData = async (userEmail) => {
     `SELECT
         a.account_id as "accountID",
         a.plan_id as "planID",
-        c.role_id as "roleID"
+        c.role_id as "roleID",
+        a."name",
+        a.address,
+        a.city,
+        a."state",
+        a.zip,
+        a.stripe_id as "stripeID"
       FROM accounts a
       JOIN contacts c ON c.account_id = a.account_id
       WHERE c.email = $1
@@ -1379,6 +1391,12 @@ const getAccountData = async (userEmail) => {
   response.account.accountID = getQuery.rows[0].accountID;
   response.account.planID = getQuery.rows[0].planID;
   response.account.roleID = getQuery.rows[0].roleID;
+  response.account.name = getQuery.rows[0].name;
+  response.account.address = getQuery.rows[0].address;
+  response.account.city = getQuery.rows[0].city;
+  response.account.state = getQuery.rows[0].state;
+  response.account.zip = getQuery.rows[0].zip;
+  response.account.stripeID = getQuery.rows[0].stripeID;
 
   return response;
 };
@@ -1620,6 +1638,36 @@ const removeOldTempOrders = async (campaignID, orderList) => {
   return response;
 };
 
+const updateAccountStripeID = async (stripeID, accountID) => {
+  let response = { error: "", added: false, accountID: null };
+
+  if (!stripeID || !accountID) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let postQuery = await db.query(
+    `UPDATE accounts
+        SET stripe_id = $1
+      WHERE accounts.account_id = $2
+      RETURNING accounts.account_id as "accountID"
+      `,
+    [stripeID, accountID]
+  ); // returns query rows with rowCount else error
+  if (postQuery.error) {
+    response.error = postQuery.error.stack;
+    return response;
+  } else if (postQuery.rowCount === 0) {
+    response.error = "No Account Found";
+    return response;
+  }
+
+  response.accountID = postQuery.rows[0].accountID;
+  response.added = true;
+
+  return response;
+};
+
 exports.checkFeature = checkFeature;
 exports.getFeaturesList = getFeaturesList;
 exports.getAdminUsers = getAdminUsers;
@@ -1649,3 +1697,4 @@ exports.createNewCompanyAccount = createNewCompanyAccount;
 exports.createNewUser = createNewUser;
 exports.updateAccountContact = updateAccountContact;
 exports.removeOldTempOrders = removeOldTempOrders;
+exports.updateAccountStripeID = updateAccountStripeID;

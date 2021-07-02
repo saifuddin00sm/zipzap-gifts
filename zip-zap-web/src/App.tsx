@@ -36,6 +36,8 @@ import UserNewList from "./components/userComponents/userNewList";
 import ExampleNewCampaign from "./components/propsExample";
 import RegisterComponent from "./components/basicComponents/accountComponents/registerComponent";
 import Logout from "./components/basicComponents/accountComponents/logout";
+import StripeWrapper from "./components/stripeComponents/stripeWrapper";
+import CheckoutPage from "./components/stripeComponents/checkoutPage";
 
 interface AppContext {
   user: any;
@@ -434,6 +436,7 @@ function App() {
         <Route exact path="/callback" component={AuthCallback} />
         <Route exact path="/register" component={RegisterComponent} />
         <Route exact path="/logout" component={Logout} />
+        {/* <Route exact path="/stripe" component={StripeWrapper} /> */}
 
         {user && "email" in user && user.email ? (
           <Route exact path="/" component={EventDashboard} />
@@ -443,6 +446,9 @@ function App() {
 
         {!user || !("email" in user) || !user.email ? null : ( // <Route exact path="/" component={HomePageComponent} /> // <Redirect to="/" />
           <div className={`full-width full-height`}>
+            {/* Stripe Pages  */}
+            <Route exact path="/checkout" component={CheckoutPage} />
+
             {/* Event Pages  */}
             <Route exact path="/dashboard" component={EventDashboard} />
             <Route exact path="/event/new" component={EventNew} />

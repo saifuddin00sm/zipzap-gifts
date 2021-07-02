@@ -230,44 +230,7 @@ function CalendarMonth(props: {
           </li>
         ))}
 
-        {/* {console.log("teet", props.userMonthOrders, props.listOrders)} */}
         {[...Array(lastDay)].map((d, dIndex) => (
-          // <li key={dIndex}>
-          //   <span>{dIndex + 1}</span>
-          //   <div className={`column calendar-event-list`}>
-          //     {Object.keys(props.userMonthOrders.orders).map(
-          //       (date: string, daIndex) =>
-          //         compareCurrentDate(date, month, dIndex) ? (
-          //           <div
-          //             key={daIndex}
-          //             className={`row center row-wrap`}
-          //             style={{
-          //               background:
-          //                 Object.keys(props.userMonthOrders.orders[date])
-          //                   .length > 0
-          //                   ? `var(${colorList[getRandomInt(0, 3)]})`
-          //                   : "",
-          //             }}
-          //             onClick={() => handleDateClick("show", date, date)}
-          //           >
-          //             {console.log(
-          //               "INNER",
-          //               Object.keys(props.userMonthOrders.orders[date]).length,
-          //               props.userMonthOrders.orders[date],
-          //               date
-          //             )}
-          //             {Object.keys(props.userMonthOrders.orders[date]).length >
-          //             1
-          //               ? `x${
-          //                   Object.keys(props.userMonthOrders.orders[date])
-          //                     .length
-          //                 }`
-          //               : null}
-          //           </div>
-          //         ) : null
-          //     )}
-          //   </div>
-          // </li>
           <CalendarDay
             key={dIndex}
             action={() => null}
@@ -290,14 +253,6 @@ function CalendarMonth(props: {
             {" "}
           </li>
         ))}
-
-        {/* <li>Mo</li>
-        <li>Tu</li>
-        <li>We</li>
-        <li>Th</li>
-        <li>Fr</li>
-        <li>Sa</li>
-        <li>Su</li> */}
       </ul>
     </div>
   );

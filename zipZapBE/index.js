@@ -1823,6 +1823,132 @@ router.post("/user/registerUser", async (ctx) => {
   return ctx;
 });
 
+const STRIPE_KEY = appSettings.databaseToggle.productionDatabase
+  ? process.env.STRIPE_PROD_KEY
+  : process.env.STRIPE_TEST_KEY;
+router.get("/payment/addCard", async (ctx) => {
+  const stripe = require("stripe")(STRIPE_KEY);
+
+  let response = {
+    error: "",
+    customerSecret: "",
+    newCustomer: false,
+  };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.addCard
+  );
+  if (allowed.error || !allowed.allowed) {
+    response.error = allowed.error ? allowed.error : "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let customer = { id: "" };
+  if (!allowed.account.stripeID) {
+    customer = await stripe.customers.create({
+      description: `Customer Added: ${new Date().toString()} - from AWS Lambda`,
+      address: {
+        city: allowed.account.city,
+        country: "us",
+        line1: allowed.account.address,
+        postal_code: allowed.account.zip,
+        state: allowed.account.state,
+      },
+      name: allowed.account.name,
+    });
+    if (customer.id) {
+      response.newCustomer = true;
+
+      let addStripeID = qFunctions.updateAccountStripeID(
+        customer.id,
+        allowed.account.accountID
+      );
+      response.stripeAdded = addStripeID;
+    }
+    response.newCustomerData = customer;
+  } else {
+    customer.id = allowed.account.stripeID;
+  }
+
+  if (!customer.id) {
+    response.error = "Missing Customer ID";
+    ctx.body = response;
+    return ctx;
+  }
+
+  const intent = await stripe.setupIntents.create({
+    customer: customer.id,
+  });
+  response.customerSecret = intent.client_secret;
+  response.customerData = intent;
+
+  ctx.body = response;
+  return ctx;
+});
+
+router.get("/payment/listCards", async (ctx) => {
+  const stripe = require("stripe")(STRIPE_KEY);
+
+  let response = {
+    error: "",
+    cards: [],
+  };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.getCards
+  );
+  if (allowed.error || !allowed.allowed) {
+    response.error = allowed.error ? allowed.error : "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let customer = { id: "" };
+  if (!allowed.account.stripeID) {
+    customer = await stripe.customers.create({
+      description: `Customer Added: ${new Date().toString()} - from AWS Lambda`,
+      address: {
+        city: allowed.account.city,
+        country: "us",
+        line1: allowed.account.address,
+        postal_code: allowed.account.zip,
+        state: allowed.account.state,
+      },
+      name: allowed.account.name,
+    });
+    if (customer.id) {
+      response.newCustomer = true;
+
+      let addStripeID = qFunctions.updateAccountStripeID(
+        customer.id,
+        allowed.account.accountID
+      );
+      response.stripeAdded = addStripeID;
+    }
+    response.newCustomerData = customer;
+  } else {
+    customer.id = allowed.account.stripeID;
+  }
+
+  if (!customer.id) {
+    response.error = "Missing Customer ID";
+    ctx.body = response;
+    return ctx;
+  }
+
+  const paymentMethods = await stripe.paymentMethods.list({
+    customer: customer.id,
+    type: "card",
+  });
+  response.cards = paymentMethods.data;
+
+  ctx.body = response;
+  return ctx;
+});
+
 // TESTING PURPOSE
 
 function getRandomInt(min, max) {

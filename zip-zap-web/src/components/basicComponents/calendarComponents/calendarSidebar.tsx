@@ -17,33 +17,42 @@ function CalendarSidebar(props: {
       {Object.keys(props.orders.orders).map((date, dIndex) => (
         <div key={dIndex} className={`column calendar-side-bar-date-box`}>
           <strong>{getDateMonthDay(date)}</strong>
-          <div>
+          <div className={`column`}>
             {Object.keys(props.orders.orders[date]).map((orderID, oIndex) => (
               <Link
                 to={`/order/${props.orders.orders[date][orderID].campaignID}/${orderID}`}
                 key={oIndex}
-                className={`calendar-side-bar-order-box`}
+                className={`calendar-side-bar-order-box row center`}
               >
-                {props.orders.orders[date][orderID].campaignID in userEvents
-                  ? getIcon(props.orders.orders[date][orderID].campaignID)
-                  : null}
+                {props.orders.orders[date][orderID].campaignID in userEvents &&
+                userEvents[props.orders.orders[date][orderID].campaignID]
+                  .defaultDetails.eventIcon !== undefined ? (
+                  <span>
+                    {getIcon(
+                      userEvents[props.orders.orders[date][orderID].campaignID]
+                        .defaultDetails.eventIcon
+                    )}{" "}
+                    -{" "}
+                  </span>
+                ) : null}
                 {/* {props.orders.orders[date][orderID].campaignID in userEvents
                   ? userEvents[props.orders.orders[date][orderID].campaignID]
                       .name
                   : null} */}
-                {" - "}
-                {props.orders.orders[date][orderID].giftee in
-                userUsers.activeUsers
-                  ? `${
-                      userUsers.activeUsers[
-                        props.orders.orders[date][orderID].giftee
-                      ]["First Name"]
-                    } ${
-                      userUsers.activeUsers[
-                        props.orders.orders[date][orderID].giftee
-                      ]["Last Name"]
-                    }`
-                  : null}
+                <span>
+                  {props.orders.orders[date][orderID].giftee in
+                  userUsers.activeUsers
+                    ? `${
+                        userUsers.activeUsers[
+                          props.orders.orders[date][orderID].giftee
+                        ]["First Name"]
+                      } ${
+                        userUsers.activeUsers[
+                          props.orders.orders[date][orderID].giftee
+                        ]["Last Name"]
+                      }`
+                    : null}
+                </span>
               </Link>
             ))}
           </div>

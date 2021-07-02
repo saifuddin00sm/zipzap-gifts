@@ -313,6 +313,7 @@ class userEvent {
       instructions: string;
     };
     eventIcon: number;
+    eventCard: string;
   } = {
     note: "",
     customGift: {
@@ -322,6 +323,7 @@ class userEvent {
       instructions: "",
     },
     eventIcon: 1,
+    eventCard: "",
   };
   constructor(
     campaignID: number,
@@ -480,6 +482,102 @@ class shippoShipmentRate {
   }
 }
 
+class stripeCard {
+  id: string;
+  object: string;
+  billing_details: {
+    address: {
+      city: string;
+      country: string;
+      line1: string;
+      line2: null;
+      postal_code: string;
+      state: string;
+    };
+    email: string | null;
+    name: string;
+    phone: string | null;
+  };
+  card: {
+    brand: string;
+    checks: {
+      address_line1_check: string;
+      address_postal_code_check: string;
+      cvc_check: string;
+    };
+    country: string;
+    exp_month: number;
+    exp_year: number;
+    fingerprint: string;
+    funding: string;
+    generated_from: null;
+    last4: string;
+    networks: {
+      available: Array<string>;
+      preferred: null;
+    };
+    three_d_secure_usage: {
+      supported: true;
+    };
+    wallet: null;
+  };
+  created: number;
+  customer: string;
+  type: string;
+
+  constructor(
+    id: string,
+    object: string,
+    billing_details: {
+      address: {
+        city: string;
+        country: string;
+        line1: string;
+        line2: null;
+        postal_code: string;
+        state: string;
+      };
+      email: string | null;
+      name: string;
+      phone: string | null;
+    },
+    card: {
+      brand: string;
+      checks: {
+        address_line1_check: string;
+        address_postal_code_check: string;
+        cvc_check: string;
+      };
+      country: string;
+      exp_month: number;
+      exp_year: number;
+      fingerprint: string;
+      funding: string;
+      generated_from: null;
+      last4: string;
+      networks: {
+        available: Array<string>;
+        preferred: null;
+      };
+      three_d_secure_usage: {
+        supported: true;
+      };
+      wallet: null;
+    },
+    created: number,
+    customer: string,
+    type: string
+  ) {
+    this.id = id;
+    this.object = object;
+    this.billing_details = billing_details;
+    this.card = card;
+    this.created = created;
+    this.customer = customer;
+    this.type = type;
+  }
+}
+
 export {
   adminMenuButton,
   adminItem,
@@ -495,4 +593,5 @@ export {
   navButton,
   userRecipient,
   shippoShipmentRate,
+  stripeCard,
 };

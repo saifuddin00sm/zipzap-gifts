@@ -3,6 +3,7 @@ import { fetchRequest, UserContext } from "../../App";
 import {
   adminItem,
   eventOrder,
+  stripeCard,
   userEvent,
   userGroupedItem,
   userItem,
@@ -10,7 +11,7 @@ import {
 } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link, Redirect, RouteComponentProps } from "react-router-dom";
 import ForwardArrow from "../basicComponents/forwardArrow";
 import {
   getItems,
@@ -352,6 +353,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [itemsLoading, setItemsLoading] = useState(true);
   const [groupedItemsLoading, setGroupedItemsLoading] = useState(true);
   const [usersLoading, setUsersLoading] = useState(true);
+  const [userCards, setUserCards] = useState([] as Array<stripeCard>);
 
   useEffect(() => {
     if (Object.keys(userEvents).length === 0) {
@@ -378,17 +380,21 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setUserList(Object.keys(userUsers.activeUsers));
       setUsersLoading(false);
     }
+
+    if (userCards.length === 0) {
+      handleGetSavedCards();
+    }
+
+    handleLoadDetailsFromLocalStorage();
   }, []);
 
   useEffect(() => {
-    console.log("use", match.params.eventID, userEvents, userUsers);
     if (
       match.params.eventID &&
       match.params.eventID !== "new" &&
       Object.keys(userEvents).length > 0 &&
       Object.keys(userUsers.activeUsers).length > 0
     ) {
-      console.log("here", [match.params.eventID]);
       handleInitialEventSetup(match.params.eventID);
     }
   }, [
@@ -458,6 +464,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setEventNote(event.defaultDetails.note ? event.defaultDetails.note : "");
       setCustomGift(event.defaultDetails.customGift);
       setEventIcon(event.defaultDetails.eventIcon);
+      setActiveCard(event.defaultDetails.eventCard);
     }
   };
 
@@ -466,6 +473,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [eventEndDate, setEventEndDate] = useState("");
   const [eventNote, setEventNote] = useState("");
   const [eventIcon, setEventIcon] = useState(1);
+  const [activeCard, setActiveCard] = useState("");
 
   const [itemPaginationStart, setItemPaginationStart] = useState(0);
   const [activeItemDetails, setActiveItemDetails] = useState({
@@ -549,6 +557,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     } else if (userSelectedList.length === 0) {
       setError("Please select at least one recipient");
       return true;
+    } else if (!activeCard) {
+      setError("Please select a card for billing");
+      return true;
     } else {
       setError("");
       setLoading(true);
@@ -579,6 +590,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           note: eventNote,
           customGift: customGift,
           eventIcon: eventIcon,
+          eventCard: activeCard,
         },
       }
     );
@@ -647,6 +659,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           note: eventNote,
           customGift: customGift,
           eventIcon: eventIcon,
+          eventCard: activeCard,
         },
       }
     );
@@ -887,8 +900,69 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
+  const handleSaveDetailsToLocalStorage = () => {
+    localStorage.setItem(
+      "newEventTemp",
+      JSON.stringify({
+        name: eventName,
+        criteria: {},
+        startDate: eventStartDate,
+        endDate: eventEndDate,
+        userList: userSelectedList,
+        defaultItemID: activeItem.type === "item" ? activeItem.id : null,
+        defaultGroupedItemID: activeItem.type === "item" ? null : activeItem.id,
+        defaultDetails: {
+          note: eventNote,
+          customGift: customGift,
+          eventIcon: eventIcon,
+          eventCard: activeCard,
+        },
+      })
+    );
+
+    setRedirect("/checkout?redirectURL=/event/new&checkoutType=add");
+  };
+
+  const handleLoadDetailsFromLocalStorage = () => {
+    let tempEvent = localStorage.getItem("newEventTemp");
+
+    if (tempEvent) {
+      let tempEventJSON = JSON.parse(tempEvent);
+
+      setEventName(tempEventJSON.name);
+      setEventStartDate(tempEventJSON.startDate);
+      setEventEndDate(tempEventJSON.endDate);
+      setUserSelectedList(tempEventJSON.userList);
+      setActiveItem({
+        type: "grouped",
+        id: tempEventJSON.defaultGroupedItemID,
+      });
+
+      setEventNote(tempEventJSON.defaultDetails.note);
+      setCustomGift(tempEventJSON.defaultDetails.customGift);
+      setEventIcon(tempEventJSON.defaultDetails.eventIcon);
+      setActiveCard(tempEventJSON.defaultDetails.eventCard);
+
+      localStorage.removeItem("newEventTemp");
+    }
+  };
+
+  const handleGetSavedCards = async () => {
+    let cardResponse = await fetchRequest(user, "payment/listCards", "GET");
+
+    if (cardResponse.error) {
+      // TO-DO - Handle Errors
+      return;
+    }
+
+    if (cardResponse.cards) {
+      setUserCards(cardResponse.cards);
+    }
+  };
+
   return (
     <section className={`column center-column full-height`}>
+      {redirect ? <Redirect to={redirect} /> : null}
       <header className={`column center page-header`}>
         <h1>{match.params.eventID ? "Edit" : "Add an"} Event</h1>
       </header>
@@ -1268,6 +1342,86 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           </div>
         </section>
 
+        {/* checkout confirmation  */}
+        <section className={`column center-row event-dashboard-full-column `}>
+          <div className={`event-dashboard-sub-title primary-black-header`}>
+            <span>Checkout</span>
+          </div>
+          <br></br>
+
+          <div className={`row center center-self width-90`}>
+            {/* total price details  */}
+            <div
+              className={`event-dashboard-half-column column left-align-column`}
+            >
+              <div className={`column`}>
+                <div className={`row`}>
+                  <span className={`row`}>Total Gift Price Per Person: </span>
+                  <span className={`row`}>
+                    $
+                    {activeItem.type === "grouped" &&
+                    activeItem.id in userGroupedItems
+                      ? userGroupedItems[activeItem.id].priceOverride
+                        ? userGroupedItems[activeItem.id].priceOverride
+                        : calcGiftPackagePrice(
+                            userGroupedItems[activeItem.id],
+                            userItems
+                          )
+                      : 0}
+                  </span>
+                </div>
+                <div className={`row`}>
+                  <span>Shipping: TBD per person</span>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`event-dashboard-half-column column left-align-column`}
+            ></div>
+          </div>
+
+          {/* credit card details  */}
+          <div className={`row center-row center-self width-90`}>
+            <div
+              className={`event-dashboard-half-column column left-align-column`}
+            >
+              <div className={`event-dashboard-sub-title`}>
+                <span>Choose a Saved Payment Method</span>
+              </div>
+              <br></br>
+              {userCards.map((card, cIndex) => (
+                <button
+                  key={cIndex}
+                  className={`column stripe-saved-card-button ${
+                    activeCard === card.id ? "active-stripe-card" : ""
+                  }`}
+                  onClick={() => setActiveCard(card.id)}
+                >
+                  <span>Credit Card Ending In: **** {card.card.last4}</span>
+                  <span>
+                    Exp. MM/YY: {card.card.exp_month} / {card.card.exp_year}
+                  </span>
+                  <span>Name on Card: {card.billing_details.name}</span>
+                </button>
+              ))}
+            </div>
+            <div className={`event-dashboard-half-column column center`}>
+              <div className={`event-dashboard-sub-title`}>
+                <span></span>
+              </div>
+              <br></br>
+              <button
+                className={`new-event-button new-event-button-blue new-event-button-no-margin`}
+                onClick={handleSaveDetailsToLocalStorage}
+                // disabled={userSelectedList.length === 0 || !activeItem.id}
+              >
+                Add New Card
+              </button>
+            </div>
+
+            {/* credit card details  */}
+          </div>
+        </section>
         {/* Create Button */}
         <div className={`column center full-width`}>
           {error ? error : ""}

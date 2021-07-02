@@ -473,9 +473,6 @@ function AdminOrderRow(props: {
     // GET tracking number  - tracking_number
     // parcel number - parcel
     // label URL - label_url
-
-    // TO-DO - Show Selected Rate
-
     setShipmentTransaction({
       parcel: shippoTransaction.parcel,
       tracking: shippoTransaction.tracking_number,
@@ -544,13 +541,6 @@ function AdminOrderRow(props: {
         >
           Order Details
         </button>
-        {/* <button
-          className={`general-button admin-button`}
-          onClick={() => setEditing(true)}
-          // disabled={!props.item.isActive}
-        >
-          Print Slip
-        </button> */}
         <button
           className={`general-button admin-button`}
           onClick={() => props.action("fulfillOrder", props.index)}
@@ -559,17 +549,6 @@ function AdminOrderRow(props: {
           Fulfill Order
         </button>
       </td>
-
-      {/* {props.activeOrder !== null ? (
-        <tr>
-          <th scope="col" rowSpan={2}>
-            Details
-          </th>
-          <td data-label="Body">{props.order.campaignName}</td>
-        </tr>
-      ) : null} */}
-
-      {/* <td data-label="Giftee Name">03/01/2016 - 03/31/2016</td> */}
     </tr>
   ) : (
     <div
@@ -712,7 +691,11 @@ function AdminOrderRow(props: {
                 {shipmentRates.map((rate, rIndex) => (
                   <button
                     key={rIndex}
-                    className={`column center shipment-rate-button-container`}
+                    className={`column center shipment-rate-button-container ${
+                      shipoRateSelection === rIndex
+                        ? "shipment-rate-button-container-active"
+                        : ""
+                    }`}
                     onClick={() => setShipoRateSelection(rIndex)}
                   >
                     <span>
