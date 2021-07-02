@@ -21,6 +21,7 @@ import { ReactComponent as PlusIcon } from "../../icons/plusSign.svg";
 import {
   calcGiftPackagePrice,
   createOrders,
+  getDateRestriction,
 } from "../eventComponents/eventNew";
 
 type TParams = {
@@ -509,6 +510,20 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
     }
   }, [match.params.eventID, match.params.orderID]);
 
+  const handleDateValidation = (e: any) => {
+    let newDate = new Date(e.target.value);
+    let minDate = getDateRestriction();
+
+    if (newDate < minDate) {
+      setError(
+        `Please Choose a Date Later Than ${formatDate(minDate.toString())}`
+      );
+      return;
+    }
+
+    setEventStartDate(e.target.value);
+  };
+
   return (
     <section className={`column center-column full-height`}>
       <header className={`column center page-header`}>
@@ -556,13 +571,16 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
             className={`event-dashboard-half-column column left-align-column`}
           >
             <div className={`column full-width`}>
-              <span className={`row`}>Gift Date</span>
+              <span className={`row`}>
+                Gift Date{" "}
+                {error.toLowerCase().includes("date") ? ` - ${error}` : ""}
+              </span>
               <input
                 type={"date"}
                 placeholder={"From"}
                 className={`general-input-fit new-event-date-input`}
                 value={eventStartDate}
-                onChange={(e: any) => setEventStartDate(e.target.value)}
+                onChange={handleDateValidation}
               ></input>
             </div>
 

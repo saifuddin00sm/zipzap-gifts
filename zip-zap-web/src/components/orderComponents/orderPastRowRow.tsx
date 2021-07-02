@@ -56,7 +56,9 @@ function OrderPastRowRow(props: { campaignID: string; order: eventOrder }) {
       </td>
       <td data-label="Cost">
         $
-        {props.order.groupedID && props.order.groupedID in userGroupedItems
+        {props.order.cost
+          ? props.order.cost + props.order.shippingFee
+          : props.order.groupedID && props.order.groupedID in userGroupedItems
           ? userGroupedItems[props.order.groupedID].priceOverride
           : "0"}
       </td>

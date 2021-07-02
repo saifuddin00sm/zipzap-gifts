@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../../App";
+import { fetchRequest, UserContext } from "../../../App";
 import {
   adminItem,
   adminOrder,
@@ -12,6 +12,7 @@ import { calcGiftPackageWeight } from "../../eventComponents/eventNew";
 import AdminItemRow from "./adminItemRow";
 import appSettings from "../../../appSettings.json";
 import LoadingIcon from "../LoadingIcon";
+import { setegid } from "node:process";
 
 const boxSizes = [
   {
@@ -39,270 +40,11 @@ function AdminOrderRow(props: {
   editing?: boolean;
   fulfill?: string; // accountID in adminAccounts
 }) {
-  const { adminItems, adminGroupedItems, adminAccounts } =
+  const { adminItems, adminGroupedItems, adminAccounts, user } =
     useContext(UserContext);
 
   const [loading, setLoading] = useState(false);
   const [shipmentRates, setShipmentRates] = useState(
-    // [
-    //   {
-    //     object_created: "2021-06-23T14:08:23.362Z",
-    //     object_id: "0a78fed6fb604d0a9998f29ff68608a9",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: ["CHEAPEST"],
-    //     amount: "7.59",
-    //     currency: "USD",
-    //     amount_local: "7.59",
-    //     currency_local: "USD",
-    //     provider: "USPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/USPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/USPS.png",
-    //     servicelevel: {
-    //       name: "Parcel Select",
-    //       token: "usps_parcel_select",
-    //       terms: "",
-    //     },
-    //     estimated_days: 7,
-    //     arrives_by: null,
-    //     duration_terms: "Delivery in 2 to 8 days.",
-    //     messages: [],
-    //     carrier_account: "74841298ca2e4739880dbc0e336de9f5",
-    //     test: true,
-    //     zone: "1",
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.363Z",
-    //     object_id: "7a4e5d3c1e91467cb89e599de1f03b7d",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: ["BESTVALUE"],
-    //     amount: "7.79",
-    //     currency: "USD",
-    //     amount_local: "7.79",
-    //     currency_local: "USD",
-    //     provider: "USPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/USPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/USPS.png",
-    //     servicelevel: {
-    //       name: "Priority Mail",
-    //       token: "usps_priority",
-    //       terms: "",
-    //     },
-    //     estimated_days: 1,
-    //     arrives_by: null,
-    //     duration_terms:
-    //       "Delivery within 1, 2, or 3 days based on where your package started and where it’s being sent.",
-    //     messages: [],
-    //     carrier_account: "74841298ca2e4739880dbc0e336de9f5",
-    //     test: true,
-    //     zone: "1",
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.988Z",
-    //     object_id: "b626b116de554ca6a224f1e2e39f8d30",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: [],
-    //     amount: "7.89",
-    //     currency: "USD",
-    //     amount_local: "7.89",
-    //     currency_local: "USD",
-    //     provider: "UPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/UPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/UPS.png",
-    //     servicelevel: {
-    //       name: "Ground",
-    //       token: "ups_ground",
-    //       terms: "",
-    //     },
-    //     estimated_days: 1,
-    //     arrives_by: null,
-    //     duration_terms:
-    //       "Delivery times vary. Delivered usually in 1-5 business days.",
-    //     messages: [],
-    //     carrier_account: "b5e18aa50aef4adf89ef2592f8611c21",
-    //     test: true,
-    //     zone: null,
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.990Z",
-    //     object_id: "b0d7d9e1b08f4f0486c30cd8688e3fe0",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: [],
-    //     amount: "9.01",
-    //     currency: "USD",
-    //     amount_local: "9.01",
-    //     currency_local: "USD",
-    //     provider: "UPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/UPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/UPS.png",
-    //     servicelevel: {
-    //       name: "3 Day Select®",
-    //       token: "ups_3_day_select",
-    //       terms: "",
-    //     },
-    //     estimated_days: 3,
-    //     arrives_by: null,
-    //     duration_terms: "Delivery by the end of the third business day.",
-    //     messages: [],
-    //     carrier_account: "b5e18aa50aef4adf89ef2592f8611c21",
-    //     test: true,
-    //     zone: null,
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.989Z",
-    //     object_id: "26e4e7a98b66494298b2bda20e820798",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: [],
-    //     amount: "11.25",
-    //     currency: "USD",
-    //     amount_local: "11.25",
-    //     currency_local: "USD",
-    //     provider: "UPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/UPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/UPS.png",
-    //     servicelevel: {
-    //       name: "2nd Day Air®",
-    //       token: "ups_second_day_air",
-    //       terms: "",
-    //     },
-    //     estimated_days: 2,
-    //     arrives_by: null,
-    //     duration_terms: "Delivery by the end of the second business day.",
-    //     messages: [],
-    //     carrier_account: "b5e18aa50aef4adf89ef2592f8611c21",
-    //     test: true,
-    //     zone: null,
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.988Z",
-    //     object_id: "a18d48d9a0a047169181afc2a64830df",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: [],
-    //     amount: "16.68",
-    //     currency: "USD",
-    //     amount_local: "16.68",
-    //     currency_local: "USD",
-    //     provider: "UPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/UPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/UPS.png",
-    //     servicelevel: {
-    //       name: "Next Day Air Saver®",
-    //       token: "ups_next_day_air_saver",
-    //       terms: "",
-    //     },
-    //     estimated_days: 1,
-    //     arrives_by: "15:00:00",
-    //     duration_terms:
-    //       "Next business day delivery by 3:00 or 4:30 p.m. for commercial destinations and by end of day for residentail destinations.",
-    //     messages: [],
-    //     carrier_account: "b5e18aa50aef4adf89ef2592f8611c21",
-    //     test: true,
-    //     zone: null,
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.987Z",
-    //     object_id: "9d5fa317dff9423d861e2c051cce0026",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: [],
-    //     amount: "21.30",
-    //     currency: "USD",
-    //     amount_local: "21.30",
-    //     currency_local: "USD",
-    //     provider: "UPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/UPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/UPS.png",
-    //     servicelevel: {
-    //       name: "Next Day Air®",
-    //       token: "ups_next_day_air",
-    //       terms: "",
-    //     },
-    //     estimated_days: 1,
-    //     arrives_by: "10:30:00",
-    //     duration_terms:
-    //       "Next business day delivery by 10:30 a.m., 12:00 noon, or end of day, depending on destination.",
-    //     messages: [],
-    //     carrier_account: "b5e18aa50aef4adf89ef2592f8611c21",
-    //     test: true,
-    //     zone: null,
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.364Z",
-    //     object_id: "90ed9660adb640758e974eed4381d707",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: [],
-    //     amount: "23.25",
-    //     currency: "USD",
-    //     amount_local: "23.25",
-    //     currency_local: "USD",
-    //     provider: "USPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/USPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/USPS.png",
-    //     servicelevel: {
-    //       name: "Priority Mail Express",
-    //       token: "usps_priority_express",
-    //       terms: "",
-    //     },
-    //     estimated_days: 2,
-    //     arrives_by: null,
-    //     duration_terms: "Overnight delivery to most U.S. locations.",
-    //     messages: [],
-    //     carrier_account: "74841298ca2e4739880dbc0e336de9f5",
-    //     test: true,
-    //     zone: "1",
-    //   },
-    //   {
-    //     object_created: "2021-06-23T14:08:23.986Z",
-    //     object_id: "808221a53d0b4b2fb950e08bbdf1280c",
-    //     object_owner: "connect.zipzapgifts@gmail.com",
-    //     shipment: "2aa6704e750d4280bae527363a89ac7e",
-    //     attributes: ["FASTEST"],
-    //     amount: "51.30",
-    //     currency: "USD",
-    //     amount_local: "51.30",
-    //     currency_local: "USD",
-    //     provider: "UPS",
-    //     provider_image_75:
-    //       "https://shippo-static.s3.amazonaws.com/providers/75/UPS.png",
-    //     provider_image_200:
-    //       "https://shippo-static.s3.amazonaws.com/providers/200/UPS.png",
-    //     servicelevel: {
-    //       name: "Next Day Air® Early",
-    //       token: "ups_next_day_air_early_am",
-    //       terms: "",
-    //     },
-    //     estimated_days: 1,
-    //     arrives_by: "08:30:00",
-    //     duration_terms:
-    //       "Next business day delivery by 8:30 a.m., 9:00 a.m., or 9:30 a.m. ",
-    //     messages: [],
-    //     carrier_account: "b5e18aa50aef4adf89ef2592f8611c21",
-    //     test: true,
-    //     zone: null,
-    //   },
-    // ] as Array<shippoShipmentRate>
     [] as Array<shippoShipmentRate>
   );
   const [shipmentItem, setShipmentItem] = useState({} as any);
@@ -366,18 +108,18 @@ function AdminOrderRow(props: {
       let shipmentObject = {
         address_to: {
           name: `${giftee["First Name"]} ${giftee["Last Name"]}`,
-          street1: "1153 North 240 East",
-          city: "Orem",
+          street1: giftee.Address,
+          city: giftee.City,
           state: giftee.State,
           zip: giftee.Zip,
           country: "US",
         },
         address_from: {
-          name: account.name,
-          street1: account.address,
-          city: account.city,
-          state: account.state,
-          zip: account.zip,
+          name: appSettings.hqAddress.name,
+          street1: appSettings.hqAddress.address,
+          city: appSettings.hqAddress.city,
+          state: appSettings.hqAddress.state,
+          zip: appSettings.hqAddress.zip,
           country: "US",
         },
         parcels: [
@@ -413,7 +155,10 @@ function AdminOrderRow(props: {
         setLoading(false);
         return;
       }
+
       setShipmentItem(shippo);
+      console.log("RA", shippo);
+
       setShipmentRates(
         shippo.rates.sort(
           (a: shippoShipmentRate, b: shippoShipmentRate) =>
@@ -429,6 +174,7 @@ function AdminOrderRow(props: {
     null as null | number
   );
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleCreateShipmentTransaction = async () => {
     if (shipoRateSelection === null) {
@@ -466,6 +212,7 @@ function AdminOrderRow(props: {
 
     if (shippoTransaction.error) {
       // To-DO - Handle Error
+      setError("Error with shipment, please try again later");
       setLoading(false);
       return;
     }
@@ -487,16 +234,39 @@ function AdminOrderRow(props: {
       shippmentDate: "",
     };
 
+    props.order.shippingFee = parseFloat(rateObject.amount);
+
     // TO-DO - Endpoint to add order details to DB and list
+    let orderUpdateResponse = await fetchRequest(
+      user,
+      "orders/fulfill",
+      "PUT",
+      {
+        user: props.order,
+      }
+    );
+
+    if (orderUpdateResponse.error) {
+      // TO-DO - Handle Error
+      setError("Error with shipment, please try again later");
+      setLoading(false);
+      return;
+    }
 
     // TO-DO - Show Success Message and close Order
-
+    setSuccessMessage("Shipment Fulfilled, Please Print the Shipment Label.");
     setLoading(false);
-    console.log("rate", rateObject.object_id, shippoTransaction);
   };
 
   return !props.cardMode ? (
-    <tr>
+    <tr
+      className={`${
+        props.order.shippingDetails &&
+        props.order.shippingDetails.fulfillmentDate
+          ? "admin-order-fulfilled"
+          : ""
+      }`}
+    >
       {props.allowMultiple ? (
         <td className={`admin-order-button`}>
           <input
@@ -546,7 +316,10 @@ function AdminOrderRow(props: {
           onClick={() => props.action("fulfillOrder", props.index)}
           // disabled={!props.item.isActive}
         >
-          Fulfill Order
+          {props.order.shippingDetails &&
+          props.order.shippingDetails.fulfillmentDate
+            ? "Fulfillment Details"
+            : "Fulfill Order"}
         </button>
       </td>
     </tr>
@@ -613,7 +386,38 @@ function AdminOrderRow(props: {
         <p>Note: {props.order.notes}</p>
       </div>
 
-      {props.fulfill ? (
+      {error ? (
+        <span>{error}</span>
+      ) : successMessage ? (
+        <span>{successMessage}</span>
+      ) : null}
+      <br></br>
+      {props.order.shippingDetails &&
+      props.order.shippingDetails.fulfillmentDate ? (
+        <div className={`column`}>
+          <span>
+            Order Fulfilled @{props.order.shippingDetails.fulfillmentDate}
+          </span>
+
+          <div className={`row center`}>
+            <a
+              className={`general-button admin-button`}
+              href={props.order.shippingDetails.labelURL}
+              target={"_blank"}
+              // disabled={!props.item.isActive}
+            >
+              Print Shipment Label
+            </a>
+            <button
+              className={`general-button admin-button`}
+              onClick={() => props.action("orderDetailsClose", props.index)}
+              // disabled={!props.item.isActive}
+            >
+              Close Order Details
+            </button>
+          </div>
+        </div>
+      ) : props.fulfill ? (
         <div className={`column column-center`}>
           <div className={`row`}>
             <button
@@ -758,6 +562,19 @@ function AdminOrderRow(props: {
                 Close Order Details
               </button>
             </div>
+          ) : (
+            <button
+              className={`general-button admin-button`}
+              onClick={() => props.action("orderDetailsClose", props.index)}
+              // disabled={!props.item.isActive}
+            >
+              Close Order Details
+            </button>
+          )}
+          {error ? (
+            <span>{error}</span>
+          ) : successMessage ? (
+            <span>{successMessage}</span>
           ) : null}
 
           {/* <button
@@ -796,7 +613,9 @@ function AdminOrderRow(props: {
             onClick={() => props.action("fulfillOrder", props.index)}
             // disabled={!props.item.isActive}
           >
-            Fulfill Order
+            {props.order.shippingDetails
+              ? "Fulfillment Details"
+              : "Fulfill Order"}
           </button>
         </div>
       )}

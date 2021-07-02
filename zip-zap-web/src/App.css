@@ -314,7 +314,7 @@ a.admin-button {
 
 .previous-order-table th,
 .previous-order-table td {
-  width: 25%;
+  width: 20%;
   text-align: left;
 }
 
@@ -1346,6 +1346,10 @@ a.nav-bar-logo {
   margin: 1px;
   padding: 1px;
   text-align: left;
+}
+
+.admin-order-table tr.admin-order-fulfilled {
+  background-color: var(--primary-green);
 }
 
 .stripe-card-input-form {
