@@ -10,6 +10,7 @@ import { putImageURLGrouped } from "./adminGroupedItemNew";
 function AdminGroupedItemsList() {
   const {
     user,
+    setUserFeatures,
     admin,
     setAdmin,
     adminItems,
@@ -20,10 +21,14 @@ function AdminGroupedItemsList() {
   const [loading, setLoading] = useState(true);
 
   const getAdminUser = async () => {
-    const { allowed } = await checkUserAdmin(user);
+    const { allowed, userFeatures } = await checkUserAdmin(user);
 
     if (allowed) {
       setAdmin(allowed);
+    }
+
+    if (userFeatures.length > 0) {
+      setUserFeatures(userFeatures);
     }
 
     setLoading(false);
