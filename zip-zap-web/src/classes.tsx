@@ -578,6 +578,55 @@ class stripeCard {
   }
 }
 
+class adminAccountDetails {
+  accountID: number;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  stripeID: string;
+  dateCreated: string;
+  firstName: string;
+  lastName: string;
+  mainContactID: number;
+  email: string;
+  planName: string;
+  planPrice: number;
+
+  constructor(
+    accountID: number,
+    name: string,
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    stripeID: string,
+    dateCreated: string,
+    firstName: string,
+    lastName: string,
+    mainContactID: number,
+    email: string,
+    planName: string,
+    planPrice: number
+  ) {
+    this.accountID = accountID;
+    this.name = name;
+    this.address = address;
+    this.city = city;
+    this.state = state;
+    this.zip = zip;
+    this.stripeID = stripeID;
+    this.dateCreated = dateCreated;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.mainContactID = mainContactID;
+    this.email = email;
+    this.planName = planName;
+    this.planPrice = planPrice;
+  }
+}
+
 export {
   adminMenuButton,
   adminItem,
@@ -594,4 +643,5 @@ export {
   userRecipient,
   shippoShipmentRate,
   stripeCard,
+  adminAccountDetails,
 };

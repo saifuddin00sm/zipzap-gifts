@@ -137,6 +137,10 @@ const fetchRequest = async (
     return { error: "Expired User" };
   }
 
+  if (!("id_Token" in user)) {
+    user.id_Token = user.id;
+  }
+
   return await fetch(
     `${appSettings.backendServer}/${endpoint}`,
     customHeader !== undefined
@@ -177,6 +181,10 @@ const fetchRequest = async (
     .then((suc) => {
       console.log("RES JSON: ", suc);
       // return suc.body;
+      if ("message" in suc) {
+        return { error: suc.message };
+      }
+
       if ("body" in suc) {
         return suc.body;
       }

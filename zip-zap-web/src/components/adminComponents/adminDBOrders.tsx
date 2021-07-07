@@ -46,6 +46,11 @@ function AdminDBOrders() {
       ) : (
         <button onClick={handlePayments}>Load Orders</button>
       )}
+      <section className={`row width-90`}>
+        <Link to={"/admin/dashboard"} className={`back-link`}>
+          Back to Admin Dashboard
+        </Link>
+      </section>
       <br></br>
       {errorLog.map((error, eIndex) => (
         <div key={eIndex} className={`column center-column`}>
