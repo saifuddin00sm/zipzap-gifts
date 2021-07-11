@@ -28,6 +28,8 @@ function AdminDBOrders() {
 
   const handlePayments = async () => {
     setLoading(true);
+    // This API can accept a query param "month" which should be the month number (1 based)
+    // to load orders for
     let response = await fetchRequest(user, "admin/updateDBOrders", "GET");
 
     setLoading(false);

@@ -35,10 +35,19 @@ function AdminAccountRow(props: {
         {" "}
         <button
           className={`general-button admin-button`}
-          onClick={() => props.action("chargeAccount", props.account.accountID)}
+          onClick={() =>
+            props.action("chargeAccountOrders", props.account.accountID)
+          }
           // disabled={!props.item.isActive}
         >
-          Charge Account
+          Charge Subscription + Orders
+        </button>
+        <button
+          className={`general-button admin-button`}
+          onClick={() => props.action("chargeOrders", props.account.accountID)}
+          // disabled={!props.item.isActive}
+        >
+          Charge Orders Only
         </button>
       </td>
     </tr>

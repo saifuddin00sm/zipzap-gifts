@@ -41,16 +41,21 @@ function AdminPayments() {
   const handleRowAction = (type: string, accountID: number) => {
     if (loading) {
       return;
-    } else if (type === "chargeAccount") {
-      handlePayment(accountID);
+    } else if (type === "chargeAccountOrders") {
+      handlePayment(accountID, "both");
+    } else if (type === "chargeOrders") {
+      handlePayment(accountID, "orders");
     }
   };
 
-  const handlePayment = async (accountID: number) => {
+  const handlePayment = async (accountID: number, subscription: string) => {
     setLoading(true);
+    setError("");
     let chargeResponse = await fetchRequest(
       user,
-      `admin/chargeAccounts/${accountID}`,
+      `admin/chargeAccounts/${accountID}${
+        subscription === "both" ? `?subscription=true` : ""
+      }`,
       "GET"
     );
 
@@ -94,6 +99,7 @@ function AdminPayments() {
       <h2>Accounts</h2>
 
       <br></br>
+      <div>{error}</div>
       <table className={`admin-order-table`}>
         <thead>
           <th scope="col">Account ID</th>
