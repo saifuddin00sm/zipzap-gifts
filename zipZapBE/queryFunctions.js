@@ -67,27 +67,38 @@ const updateFeatures = async (featureIDs, allowedPlans) => {
   return response;
 };
 
-const getFeaturesList = async () => {
-  let response = { error: "", featuresList: {} };
+const getUserFeaturesList = async (userEmail, roleID) => {
+  let response = { error: "", featuresList: [] };
+
+  if (!userEmail | !roleID) {
+    response.error = "Missing Requirements";
+    return response;
+  }
 
   let featureCheckQuery = await db.query(
-    `SELECT
-          fp.feature_id as "featureID",
-          fp.feature_name as "featureName",
-          fp.allowed_users as "allowedPlans",
-          fp.is_active as "featureActive"
-       FROM features_permissions fp
-       ORDER BY fp.feature_id
-       `,
-    []
+    `
+    SELECT fp.feature_name as "featureName"
+    FROM feature_permissions fp,
+    (SELECT c.account_id, c.email FROM contacts c WHERE c.email = $1) us
+    WHERE exists(
+      select *
+        from jsonb_array_elements(fp.allowed_roles) as x(o)
+        where x.o @> $2)
+    AND fp.is_active = true
+    AND us.email = $1
+    `,
+    [userEmail, roleID]
   ); // returns query rows with rowCount else error
 
+  let features = [];
   let featureSort = featureCheckQuery.rows.map((feature) => {
-    response.featuresList[feature.featureName] = feature;
+    // response.featuresList[feature.featureName] = feature;
+    features.push(feature.featureName);
   });
 
   let featureResult = await Promise.all(featureSort);
 
+  response.featuresList = features;
   return response;
 };
 
@@ -108,6 +119,406 @@ const getAdminUsers = async (userEmail) => {
   } else if (getQuery.rowCount > 0) {
     response.allowed = true;
   }
+
+  return response;
+};
+
+const getAllAccountsOrByID = async (accountID) => {
+  let response = { error: "", accounts: {} };
+
+  let getQuery = { rows: [], rowCount: 0 };
+
+  if (accountID) {
+    getQuery = await db.query(
+      `
+      SELECT
+        a.account_id as "accountID",
+        a."name",
+        a.address,
+        a.city,
+        a."state",
+        a.zip,
+        a.stripe_id as "stripeID",
+        c.first_name as "firstName",
+        c.last_name as "lastName",
+        c.e_email as "email",
+        p.description as "planName",
+        p.price as "planPrice"
+      FROM accounts a
+      JOIN contacts c ON c.contact_id = a.main_contact_id
+      JOIN plans p ON p.plan_id = a.plan_id
+      WHERE a.account_id = $1
+          `,
+      [accountID]
+    ); // returns query rows with rowCount else error
+  } else {
+    getQuery = await db.query(
+      `
+      SELECT
+        a.account_id as "accountID",
+        a."name",
+        a.address,
+        a.city,
+        a."state",
+        a.zip,
+        a.stripe_id as "stripeID",
+        a.date_created as "dateCreated",
+        c.first_name as "firstName",
+        c.last_name as "lastName",
+        a.main_contact_id as "mainContactID",
+        c.e_email as "email",
+        p.description as "planName",
+        p.price as "planPrice"
+      FROM accounts a
+      JOIN contacts c ON c.contact_id = a.main_contact_id
+      JOIN plans p ON p.plan_id = a.plan_id
+          `,
+      []
+    ); // returns query rows with rowCount else error
+  }
+
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  } else if (getQuery.rowCount === 0) {
+    response.error = "No Accounts";
+    return response;
+  }
+
+  let accountDict = {};
+  let accountPromise = getQuery.rows.map(async (row) => {
+    if (!(row.accountID in accountDict)) {
+      let firstName = gFunctions.decryptStringLocal(row.firstName);
+      let lastName = gFunctions.decryptStringLocal(row.lastName);
+      let email = gFunctions.decryptStringLocal(row.email);
+
+      let decryptResult = await Promise.all([firstName, lastName, email]).then(
+        (values) => {
+          firstName = values[0].result;
+          lastName = values[1].result;
+          email = values[2].result;
+        }
+      );
+
+      row.firstName = firstName;
+      row.lastName = lastName;
+      row.email = email;
+
+      accountDict[row.accountID] = row;
+    }
+  });
+
+  let accountResult = await Promise.all(accountPromise);
+
+  response.accounts = accountDict;
+  return response;
+};
+
+const getShippedOrdersByAccount = async (accountID) => {
+  let response = { error: "", orders: [] };
+
+  if (!accountID) {
+    response.error = "Missing Account ID";
+    return response;
+  }
+
+  let getQuery = await db.query(
+    `
+    SELECT
+      tmp.order_id as "orderID",
+      tmp.shipping_date as "shippingDate",
+      tmp."cost",
+      tmp.shipping_address as "shippingAddress",
+      tmp.shipping_city as "shippingCity",
+      tmp.shipping_state as "shippingState",
+      tmp.shipping_zip as "shippingZip",
+      tmp.giftee,
+      tmp.campaign_id as "campaignID",
+      tmp.grouped_id as "groupedID",
+      tmp.gift_id as "giftID",
+      tmp.notes,
+      tmp.shipping_fee as "shippingFee",
+      tmp.is_active as "isActive",
+      tmp.shipment_details as "shippingDetails",
+      ac."name",
+      ac.default_details as "defaultDetails"
+    FROM temp_orders tmp
+    JOIN account_campaigns ac ON ac.a_campaign_id = tmp.campaign_id
+    WHERE tmp.shipment_details != '{}'
+    AND tmp.campaign_id IN (
+      SELECT ac.a_campaign_id
+      FROM account_campaigns ac
+      WHERE ac.account_id = $1
+      )
+        `,
+    [accountID]
+  ); // returns query rows with rowCount else error
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  }
+
+  response.orders = getQuery.rows;
+  return response;
+};
+
+const RemovePaidOrdersByAccount = async (accountID, orderIDs) => {
+  let response = { error: "", orders: [] };
+
+  if (!accountID || !orderIDs || orderIDs.length === 0) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let getQuery = await db.query(
+    `
+    DELETE FROM temp_orders tmp
+    WHERE tmp.shipment_details != '{}'
+    AND tmp.campaign_id IN (
+      SELECT ac.a_campaign_id
+      FROM account_campaigns ac
+      WHERE ac.account_id = $1
+      )
+      AND tmp.order_id = ANY($2)
+    RETURNING tmp.order_id as "orderID", tmp.campaign_id as "campaignID"
+        `,
+    [accountID, orderIDs]
+  ); // returns query rows with rowCount else error
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  }
+
+  response.orders = getQuery.rows;
+  return response;
+};
+
+const addTempBillingStatus = async (accountID, userEmail) => {
+  let response = { error: "", tempBillID: null };
+
+  accountID = parseInt(accountID);
+
+  if (!accountID || isNaN(accountID) || !userEmail) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let postQuery = await db.query(
+    `
+    INSERT INTO temp_billing_status (account_id, user_email)
+    VALUES ($1, $2)
+    RETURNING temp_billing_status.temp_bill_id as "tempBillID"
+      `,
+    [accountID, userEmail]
+  ); // returns query rows with rowCount else error
+  if (postQuery.error) {
+    response.error = postQuery.error.stack;
+    return response;
+  } else if (postQuery.rowCount === 0) {
+    response.error = "Error Making Temp Billing";
+    return response;
+  }
+
+  response.tempBillID = postQuery.rows[0].tempBillID;
+
+  return response;
+};
+
+const updateTempBillingStatus = async (data) => {
+  let { accountID, status, errorDetails, tempBillID } = data;
+  let response = { error: "", tempBillID: null };
+
+  accountID = parseInt(accountID);
+  tempBillID = parseInt(tempBillID);
+
+  if (!accountID || isNaN(accountID) || !tempBillID || isNaN(tempBillID)) {
+    response.error = "Missing Identifier";
+    return response;
+  }
+
+  if (!status) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let postQuery = await db.query(
+    `
+    UPDATE temp_billing_status
+    SET "status" = $1,
+      error_details = $2
+    WHERE temp_billing_status.account_id = $3
+    AND temp_billing_status.temp_bill_id = $4
+    RETURNING temp_billing_status.temp_bill_id as "tempBillID"
+      `,
+    [
+      status,
+      errorDetails ? JSON.stringify(errorDetails) : null,
+      accountID,
+      tempBillID,
+    ]
+  ); // returns query rows with rowCount else error
+  if (postQuery.error) {
+    response.error = postQuery.error.stack;
+    return response;
+  } else if (postQuery.rowCount === 0) {
+    response.error = "No Temp Billing Found";
+    return response;
+  }
+
+  response.tempBillID = postQuery.rows[0].tempBillID;
+
+  return response;
+};
+
+const getThisMonthsCampaigns = async (queryMonth) => {
+  let response = { error: "", campaigns: [] };
+
+  let today = new Date();
+
+  let getQuery = await db.query(
+    `
+    SELECT
+      ac."name" as "campaignName",
+      ac.a_campaign_id as "campaignID",
+      ac.criteria,
+
+      ac.account_id as "accountID"
+    FROM account_campaigns ac
+    WHERE EXTRACT(MONTH FROM ac.start_date) <= $1
+    AND EXTRACT(YEAR FROM ac.start_date) = $2
+    AND EXTRACT(MONTH FROM ac.end_date) >= $1
+    OR ac."name" = 'onetime'
+    `,
+    [
+      queryMonth !== undefined ? queryMonth : today.getMonth() + 1,
+      today.getFullYear(),
+    ]
+  ); // returns query rows with rowCount else error
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  }
+  // ac.user_list as "userList",
+  response.campaigns = getQuery.rows;
+  return response;
+};
+
+const getThisMonthsDBOrdersByCampaignID = async () => {
+  let response = {
+    error: "",
+    campaignOrders: {},
+  };
+
+  let getQuery = await db.query(
+    `
+    SELECT
+      tmp.order_id as "orderID",
+      tmp.campaign_id as "campaignID"
+    FROM temp_orders tmp
+    WHERE tmp.shipment_details = '{}'
+    ORDER BY tmp.campaign_id
+    `,
+    []
+  ); // returns query rows with rowCount else error
+  if (getQuery.error) {
+    response.error = getQuery.error.stack;
+    return response;
+  }
+
+  let campaignList = {};
+
+  let itemSortPromise = getQuery.rows.map((item) => {
+    if (!(item.campaignID in campaignList)) {
+      campaignList[item.campaignID] = { orders: [] };
+    }
+
+    campaignList[item.campaignID].orders.push(item.orderID);
+  });
+
+  let itemSortResult = await Promise.all(itemSortPromise);
+
+  response.campaignOrders = campaignList;
+
+  return response;
+};
+
+const addTempOrderStatus = async (
+  campaignID,
+  userEmail,
+  campaignMonth = new Date().getMonth()
+) => {
+  let response = { error: "", tempOrderID: null };
+
+  campaignID = parseInt(campaignID);
+
+  if (!campaignID || isNaN(campaignID) || !userEmail) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let postQuery = await db.query(
+    `
+    INSERT INTO temp_orders_status (campaign_id, user_email, campaign_month)
+    VALUES ($1, $2, $3)
+    RETURNING temp_orders_status.temp_order_id as "tempOrderID"
+      `,
+    [campaignID, userEmail, campaignMonth]
+  ); // returns query rows with rowCount else error
+  if (postQuery.error) {
+    response.error = postQuery.error.stack;
+    return response;
+  } else if (postQuery.rowCount === 0) {
+    response.error = "Error Making Temp Order Status";
+    return response;
+  }
+
+  response.tempOrderID = postQuery.rows[0].tempOrderID;
+
+  return response;
+};
+
+const updateTempOrderStatus = async (data) => {
+  let { campaignID, status, errorDetails, tempOrderID } = data;
+  let response = { error: "", tempOrderID: null };
+
+  campaignID = parseInt(campaignID);
+  tempOrderID = parseInt(tempOrderID);
+
+  if (!campaignID || isNaN(campaignID) || !tempOrderID || isNaN(tempOrderID)) {
+    response.error = "Missing Identifier";
+    return response;
+  }
+
+  if (!status) {
+    response.error = "Missing Requirements";
+    return response;
+  }
+
+  let postQuery = await db.query(
+    `
+    UPDATE temp_orders_status
+    SET "status" = $1,
+      error_details = $2
+    WHERE temp_orders_status.campaign_id = $3
+    AND temp_orders_status.temp_order_id = $4
+    RETURNING temp_orders_status.temp_order_id as "tempOrderID"
+      `,
+    [
+      status,
+      errorDetails ? JSON.stringify(errorDetails) : null,
+      campaignID,
+      tempOrderID,
+    ]
+  ); // returns query rows with rowCount else error
+  if (postQuery.error) {
+    response.error = postQuery.error.stack;
+    return response;
+  } else if (postQuery.rowCount === 0) {
+    response.error = "No Temp Billing Found";
+    return response;
+  }
+
+  response.tempOrderID = postQuery.rows[0].tempOrderID;
 
   return response;
 };
@@ -1675,7 +2086,7 @@ const updateAccountStripeID = async (stripeID, accountID) => {
 };
 
 exports.checkFeature = checkFeature;
-exports.getFeaturesList = getFeaturesList;
+exports.getUserFeaturesList = getUserFeaturesList;
 exports.getAdminUsers = getAdminUsers;
 exports.getAllItems = getAllItems;
 exports.addItem = addItem;
@@ -1704,3 +2115,12 @@ exports.createNewUser = createNewUser;
 exports.updateAccountContact = updateAccountContact;
 exports.removeOldTempOrders = removeOldTempOrders;
 exports.updateAccountStripeID = updateAccountStripeID;
+exports.getAllAccountsOrByID = getAllAccountsOrByID;
+exports.getShippedOrdersByAccount = getShippedOrdersByAccount;
+exports.addTempBillingStatus = addTempBillingStatus;
+exports.updateTempBillingStatus = updateTempBillingStatus;
+exports.RemovePaidOrdersByAccount = RemovePaidOrdersByAccount;
+exports.getThisMonthsCampaigns = getThisMonthsCampaigns;
+exports.getThisMonthsDBOrdersByCampaignID = getThisMonthsDBOrdersByCampaignID;
+exports.addTempOrderStatus = addTempOrderStatus;
+exports.updateTempOrderStatus = updateTempOrderStatus;

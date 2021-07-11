@@ -131,7 +131,13 @@ router.get("/admin/userCheck", async (ctx) => {
     ctx.headers.user,
     appSettings.features.adminLogin
   );
-  // let response = await qFunctions.getAdminUsers(ctx.headers.user);
+
+  let featureList = await qFunctions.getUserFeaturesList(
+    response.userEmail,
+    response.account.roleID
+  );
+  response.userFeatures = featureList.featuresList;
+
   ctx.body = response;
   return ctx;
 });
@@ -331,6 +337,623 @@ router.post("/admin/completeTransaction", async (ctx) => {
     });
 
   ctx.body = shippo;
+  return ctx;
+});
+
+// NOT AWS IMPLEMENTED
+router.get("/admin/chargeAccounts", async (ctx) => {
+  let response = { error: "", accounts: {} };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminChargePayment
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  // 1. query accounts
+  let allAccounts = await qFunctions.getAllAccountsOrByID();
+  response.accounts = allAccounts.accounts;
+
+  // 2. get all orders for the account that have been shipped
+  let accountOrdersPromise = Object.keys(allAccounts.accounts).map(
+    async (accountID) => {
+      console.log("Account: ", accountID);
+      response.accounts[accountID].orders = [];
+
+      let accountOrders = await qFunctions.getShippedOrdersByAccount(accountID);
+
+      response.accounts[accountID].orders = accountOrders.orders;
+    }
+  );
+
+  let accountOrdersResult = await Promise.all(accountOrdersPromise);
+
+  // 3. calculate total for the month + SASS fee
+  let monthlyTotal = response.accounts["6"].planPrice; // SASS Fee
+
+  let orderErrors = [];
+  let orderMapping = response.accounts["6"].orders.map((order) => {
+    let packageTotal = 0;
+    if (!order.cost) {
+      orderErrors.push({ error: "Missing Pacakge Cost", order: order });
+    }
+
+    if (!order.shippingFee) {
+      orderErrors.push({ error: "Missing Pacakge Shipping Fee", order: order });
+    }
+
+    packageTotal += order.cost ? order.cost : 0;
+    packageTotal += order.shippingFee ? order.shippingFee : 0;
+
+    monthlyTotal += packageTotal;
+  });
+
+  let orderMapResult = await Promise.all(orderMapping);
+
+  response.accounts["6"].monthlyCost = parseFloat(monthlyTotal.toFixed(2));
+
+  // 4. Charge Card for total - leave note of which user (computer, krista, ...)
+  // 5. remove items from DB
+  // 6. mark items as paid in campaign list
+
+  ctx.body = response;
+  return ctx;
+});
+
+// AWS COMPLETE - PERMISSIONED
+router.get("/admin/chargeAccounts/:accountID", async (ctx) => {
+  const stripe = require("stripe")(STRIPE_KEY);
+
+  let response = { error: "", account: {} };
+  let params = ctx.params;
+  let query = ctx.query;
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminChargePayment
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  if (!params.accountID) {
+    response.error = "Missing AccountID";
+    ctx.body = response;
+    return ctx;
+  }
+
+  // 1. query accounts
+  let allAccounts = await qFunctions.getAllAccountsOrByID(params.accountID);
+
+  if (
+    !allAccounts.accounts[params.accountID] ||
+    Object.keys(allAccounts.accounts).length === 0
+  ) {
+    response.error = "No Account Found";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let account = allAccounts.accounts[params.accountID];
+
+  let billingStarted = await qFunctions.addTempBillingStatus(
+    params.accountID,
+    allowed.userEmail
+  );
+  if (billingStarted.error) {
+    response.error = billingStarted.error;
+    ctx.body = response;
+    return ctx;
+  }
+
+  // 2. get all orders for the account that have been shipped
+  account.orders = [];
+
+  let accountOrders = await qFunctions.getShippedOrdersByAccount(
+    params.accountID
+  );
+
+  account.orders = accountOrders.orders;
+
+  // 3. calculate total for the month + SASS fee
+  let monthlyTotal = account.planPrice; // SASS Fee
+  let cardTotals = {};
+
+  let orderErrors = [];
+  let orderMapping = account.orders.map((order) => {
+    let cardToCharge = order.defaultDetails
+      ? order.defaultDetails.eventCard
+      : "";
+    let packageTotal = 0;
+    if (!order.cost) {
+      orderErrors.push({ error: "Missing Package Cost", order: order });
+    }
+
+    if (!order.shippingFee) {
+      orderErrors.push({ error: "Missing Package Shipping Fee", order: order });
+    }
+
+    if (!cardToCharge) {
+      orderErrors.push({ error: "Missing Payment Method", order: order });
+    }
+
+    if (cardToCharge) {
+      if (!(cardToCharge in cardTotals)) {
+        cardTotals[cardToCharge] = {
+          total: 0,
+          orders: 0,
+          campaignIDs: [],
+          orderIDs: [],
+        };
+      }
+
+      if (!cardTotals[cardToCharge].campaignIDs.includes(order.campaignID)) {
+        cardTotals[cardToCharge].campaignIDs.push(order.campaignID);
+      }
+
+      cardTotals[cardToCharge].orderIDs.push(order.orderID);
+
+      packageTotal += order.cost ? order.cost : 0;
+      packageTotal += order.shippingFee ? order.shippingFee : 0;
+
+      monthlyTotal += packageTotal;
+
+      cardTotals[cardToCharge].orders += 1;
+      cardTotals[cardToCharge].total += packageTotal;
+    }
+  });
+
+  let orderMapResult = await Promise.all(orderMapping);
+
+  account.monthlyCost = parseFloat(monthlyTotal.toFixed(2));
+  account.cardTotals = cardTotals;
+
+  if (orderErrors.length > 0) {
+    let billingErrorMissing = await qFunctions.updateTempBillingStatus({
+      accountID: params.accountID,
+      tempBillID: billingStarted.tempBillID,
+      status: `Error @ ${new Date()}`,
+      errorDetails: {
+        error: "Missing Payment Method",
+        errorLog: orderErrors,
+      },
+    });
+
+    response.error = "Missing Payment Method";
+    ctx.body = response;
+    return ctx;
+  }
+
+  // 4. Charge Card for total - leave note of which user (computer, krista, ...)
+  const paymentMethods = await stripe.paymentMethods.list({
+    customer: account.stripeID,
+    type: "card",
+  });
+
+  if (paymentMethods.data.length === 0) {
+    let billingError = await qFunctions.updateTempBillingStatus({
+      accountID: params.accountID,
+      tempBillID: billingStarted.tempBillID,
+      status: `Error @ ${new Date()}`,
+      errorDetails: {
+        error: "Missing Payment Method in Stripe",
+      },
+    });
+
+    response.error = "Missing Payment Method";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let defaultPaymentCard = paymentMethods.data[0];
+
+  if (!(defaultPaymentCard.id in cardTotals)) {
+    cardTotals[defaultPaymentCard.id] = {
+      total: 0,
+      orders: 0,
+      campaignIDs: [],
+      orderIDs: [],
+    };
+  }
+
+  if (query && "subscription" in query && query.subscription) {
+    cardTotals[defaultPaymentCard.id].total += account.planPrice;
+  }
+
+  let paymentErrors = [];
+  let paymentSuccess = [];
+  let paidOrders = [];
+  let paymentMapping = Object.keys(cardTotals).map(async (card) => {
+    let chargeAmount = parseInt((cardTotals[card].total * 100).toFixed(0));
+    console.log("Charging: ", card, chargeAmount);
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: chargeAmount,
+        currency: "usd",
+        customer: account.stripeID,
+        payment_method: card,
+        off_session: true,
+        confirm: true,
+      });
+
+      paymentSuccess.push({
+        card: card,
+        paymentIntent: paymentIntent.id,
+        cardTotal: paymentIntent.amount,
+        cardCampaigns: cardTotals[card].campaignIDs,
+        paymentDate: new Date(),
+      });
+
+      paidOrders = paidOrders.concat(cardTotals[card].orderIDs);
+    } catch (err) {
+      if (err.code === "authentication_required") {
+        paymentErrors.push({
+          error: "Payment Method Requires Authentication",
+          errorDetails: {
+            error: "Payment Method Requires Authentication",
+            cardCampaigns: cardTotals[card].campaignIDs,
+            cardDetails: {
+              brand: err.raw.payment_method.card.brand,
+              last4: err.raw.payment_method.card.last4,
+            },
+            amount: chargeAmount,
+            customer: account.stripeID,
+          },
+        });
+      } else {
+        paymentErrors.push({
+          error: "Error with Payment Method",
+          errorDetails: {
+            error: "Error with Payment Method",
+            amount: chargeAmount,
+            customer: account.stripeID,
+            cardCampaigns: cardTotals[card].campaignIDs,
+            cardDetails: err.raw,
+          },
+        });
+      }
+    }
+  });
+
+  let paymentResults = await Promise.all(paymentMapping);
+
+  if (
+    paymentErrors.length > 0 ||
+    paymentSuccess.length !== Object.keys(cardTotals).length
+  ) {
+    let billingError = await qFunctions.updateTempBillingStatus({
+      accountID: params.accountID,
+      tempBillID: billingStarted.tempBillID,
+      status: `Error @ ${new Date()}`,
+      errorDetails: {
+        error: "Error with Payment - ONLY PARTIAL",
+        paymentErrors: paymentErrors,
+        paymentSuccess: paymentSuccess,
+      },
+    });
+
+    response.error = "Error with Payment - ONLY PARTIAL";
+    ctx.body = response;
+    return ctx;
+  }
+
+  response.paymentErrors = paymentErrors;
+  response.paymentSuccess = paymentSuccess;
+  // 5. remove items from DB
+  let paidOrdersQuery = await qFunctions.RemovePaidOrdersByAccount(
+    params.accountID,
+    paidOrders
+  );
+
+  let campaignDict = {};
+
+  let orderSort = account.orders.map((order) => {
+    let cardToCharge = order.defaultDetails
+      ? order.defaultDetails.eventCard
+      : "";
+
+    let cardPayment = paymentSuccess.filter(
+      (payment) => payment.card === cardToCharge
+    );
+
+    if (paidOrders.includes(order.orderID) && cardPayment.length > 0) {
+      let payment = cardPayment[0];
+
+      order.shippingDetails.paymentIntent = payment.paymentIntent;
+      order.shippingDetails.paymentDate = payment.paymentDate;
+
+      if (!(order.campaignID in campaignDict)) {
+        campaignDict[order.campaignID] = [];
+      }
+
+      campaignDict[order.campaignID].push(order);
+    }
+  });
+
+  let orderResult = await Promise.all(orderSort);
+
+  // 6. mark items as paid in campaign list
+  let campaignErrors = [];
+  let campaignUpdateMap = Object.keys(campaignDict).map(async (campaignID) => {
+    let filePath = `campaigns/${campaignID}/orders.json`;
+    let campaignFile = await gFunctions.readAWSJsonFile(filePath);
+
+    if (campaignFile.error) {
+      campaignErrors.push({
+        error: "Error with S3",
+        errorDetails: campaignFile,
+      });
+      return;
+    }
+
+    let campaignOrdersMap = campaignDict[campaignID].map((order) => {
+      if (!(order.orderID in campaignFile.data)) {
+        campaignErrors.push({ error: "Campaign Missing Order", order: order });
+        return;
+      }
+
+      campaignFile.data[order.orderID] = order;
+    });
+
+    let campaignOrdersResult = await Promise.all(campaignOrdersMap);
+
+    let campaignFileSave = await gFunctions.writeAWSFile(
+      filePath,
+      campaignFile.data
+    );
+
+    if (campaignFileSave.error) {
+      campaignErrors.push({
+        error: "Error with S3 Save",
+        errorDetails: campaignFileSave,
+      });
+      return;
+    }
+  });
+
+  let campaignUpdateResult = await Promise.all(campaignUpdateMap);
+
+  if (campaignErrors.length > 0) {
+    let billingError = await qFunctions.updateTempBillingStatus({
+      accountID: params.accountID,
+      tempBillID: billingStarted.tempBillID,
+      status: `Error @ ${new Date()}`,
+      errorDetails: {
+        error: "Error with Updating Orders - AFTER PAYMENT",
+        paymentErrors: paymentErrors,
+        paymentSuccess: paymentSuccess,
+        campaignErrors: campaignErrors,
+        paidOrders: paidOrders,
+      },
+    });
+
+    response.error = "Error with Updating Orders - AFTER PAYMENT";
+    ctx.body = response;
+    return ctx;
+  }
+
+  let billingFinished = await qFunctions.updateTempBillingStatus({
+    accountID: params.accountID,
+    tempBillID: billingStarted.tempBillID,
+    status: `Complete @ ${new Date()}`,
+    errorDetails: {
+      paymentSuccess,
+      paidOrders: paidOrders,
+      paidOrdersQuery: paidOrdersQuery,
+    },
+  });
+  if (billingFinished.error) {
+    response.error = billingFinished.error;
+    ctx.body = response;
+    return ctx;
+  }
+
+  response.account = account;
+  response.cardTotals = cardTotals;
+  response.paidOrders = paidOrders;
+  response.paidOrdersQuery = paidOrdersQuery;
+  ctx.body = response;
+  return ctx;
+});
+
+// AWS COMPLETE - PERMISSIONED
+// Import all orders for the current month into DB
+router.get("/admin/updateDBOrders", async (ctx) => {
+  let response = { error: "", campaigns: [] };
+  let query = ctx.query;
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminUpdateDBOrders
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  // 1. Get All Campaigns that are still active && the orders that are
+  //    already in the DB and not shipped
+  let campaigns = qFunctions.getThisMonthsCampaigns(query.month);
+  let campaignCurrentOrders = qFunctions.getThisMonthsDBOrdersByCampaignID();
+
+  let allQueryPromise = await Promise.all([
+    campaigns,
+    campaignCurrentOrders,
+  ]).then((values) => {
+    campaigns = values[0];
+    campaignCurrentOrders = values[1];
+  });
+
+  // TO-DO - Notify somehow?
+  if (campaigns.error || campaignCurrentOrders.error) {
+    response.error = campaigns.error
+      ? campaigns.error
+      : campaignCurrentOrders.error;
+    ctx.body = response;
+    return ctx;
+  }
+
+  response.campaigns = campaigns.campaigns;
+  response.orders = campaignCurrentOrders.campaignOrders;
+
+  // 2. Go Through campaigns and get all orders that should be put into the DB
+  // 2.1 - Load them in during loop
+  let newMonth = new Date().getMonth();
+  let currentYear = new Date().getFullYear();
+
+  let completedCampaigns = [];
+  let errorCampaigns = [];
+
+  let campaignLoopPromise = response.campaigns.map(async (campaign) => {
+    let addedTempOrderStatus = await qFunctions.addTempOrderStatus(
+      campaign.campaignID,
+      allowed.userEmail
+    );
+    if (addedTempOrderStatus.error) {
+      errorCampaigns.push({
+        error: addedTempOrderStatus.error,
+        campaign: campaign,
+      });
+      return;
+    }
+
+    let orderFilePath = `campaigns/${campaign.campaignID}/orders.json`;
+    let orderFile = await gFunctions.readAWSJsonFile(orderFilePath);
+
+    if (orderFile.error) {
+      if (
+        "message" in orderFile.error &&
+        orderFile.error.message === "The specified key does not exist."
+      ) {
+        completedCampaigns.push({
+          campaignID: campaign.campaignID,
+          message: "No Orders to add this month",
+        });
+
+        let errorCampaign = await qFunctions.updateTempOrderStatus({
+          campaignID: campaign.campaignID,
+
+          tempOrderID: addedTempOrderStatus.tempOrderID,
+          status: `Complete @ ${new Date()}`,
+          errorDetails: {
+            message: "No Orders this Month",
+          },
+        });
+      } else {
+        let errorCampaign = await qFunctions.updateTempOrderStatus({
+          campaignID: campaign.campaignID,
+          tempOrderID: addedTempOrderStatus.tempOrderID,
+          status: `Error @ ${new Date()}`,
+          errorDetails: {
+            message: "Error Getting S3 File",
+            details: { error: orderFile.error, campaign: campaign },
+          },
+        });
+
+        errorCampaigns.push({ error: orderFile.error, campaign: campaign });
+      }
+
+      return;
+    }
+
+    let alreadyLoadedOrders =
+      campaign.campaignID in response.orders
+        ? response.orders[campaign.campaignID].orders
+        : [];
+    let ordersLoaded = [];
+    let ordersErrored = [];
+
+    // 2.1 Load new orders into DB
+    let orderPromise = Object.keys(orderFile.data).map(async (orderNumber) => {
+      let order = orderFile.data[orderNumber];
+      let orderDate = new Date(order.shippingDate);
+      if (
+        !alreadyLoadedOrders.includes(parseInt(orderNumber)) &&
+        orderDate.getMonth() === newMonth &&
+        orderDate.getFullYear() === currentYear
+      ) {
+        let orderAdded = await qFunctions.addOrder(order);
+
+        if (orderAdded.error) {
+          ordersErrored.push({ error: orderAdded.error, order: orderNumber });
+        } else {
+          ordersLoaded.push(orderNumber);
+        }
+      }
+    });
+    let orderResult = await Promise.all(orderPromise);
+
+    campaign.ordersLoaded = ordersLoaded;
+    campaign.ordersErrored = ordersErrored;
+    campaign.alreadyLoadedOrders = alreadyLoadedOrders;
+
+    if (ordersErrored.length > 0) {
+      errorCampaigns.push({
+        error: "Partial Failure to load all orders",
+        campaign: campaign,
+      });
+
+      let errorCampaign = await qFunctions.updateTempOrderStatus({
+        campaignID: campaign.campaignID,
+        tempOrderID: addedTempOrderStatus.tempOrderID,
+        status: `Error @ ${new Date()}`,
+        errorDetails: {
+          message: "Partial Failure to load all orders",
+          campaign,
+        },
+      });
+
+      return;
+    }
+
+    completedCampaigns.push({ campaignID: campaign.campaignID });
+    let successCampaign = await qFunctions.updateTempOrderStatus({
+      campaignID: campaign.campaignID,
+
+      tempOrderID: addedTempOrderStatus.tempOrderID,
+      status: `Complete @ ${new Date()}`,
+      errorDetails: {},
+    });
+  });
+  let campaignLoopResult = await Promise.all(campaignLoopPromise);
+
+  response.details = {
+    completedCampaigns,
+    errorCampaigns,
+  };
+
+  ctx.body = response;
+  return ctx;
+});
+
+// AWS COMPLETE - PERMISSIONED
+router.get("/admin/accounts", async (ctx) => {
+  let response = { error: "", accounts: {} };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminGetAccounts
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  response = await qFunctions.getAllAccountsOrByID();
+
+  ctx.body = response;
   return ctx;
 });
 

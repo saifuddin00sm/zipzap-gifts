@@ -38,12 +38,18 @@ import RegisterComponent from "./components/basicComponents/accountComponents/re
 import Logout from "./components/basicComponents/accountComponents/logout";
 import StripeWrapper from "./components/stripeComponents/stripeWrapper";
 import CheckoutPage from "./components/stripeComponents/checkoutPage";
+import AdminPayments from "./components/adminComponents/adminPayments";
+import AdminDBOrders from "./components/adminComponents/adminDBOrders";
 
 interface AppContext {
   user: any;
   setUser: Function;
+  userFeatures: Array<string>;
+  setUserFeatures: Function;
+
   admin: boolean;
   setAdmin: Function;
+
   adminItems: { [key: string]: adminItem };
   setAdminItems: Function;
 
@@ -78,6 +84,9 @@ interface AppContext {
 let context: AppContext = {
   user: {},
   setUser: () => null,
+  userFeatures: [],
+  setUserFeatures: () => null,
+
   admin: false,
   setAdmin: () => null,
   adminItems: {},
@@ -128,6 +137,10 @@ const fetchRequest = async (
     return { error: "Expired User" };
   }
 
+  if (!("id_Token" in user)) {
+    user.id_Token = user.id;
+  }
+
   return await fetch(
     `${appSettings.backendServer}/${endpoint}`,
     customHeader !== undefined
@@ -168,6 +181,10 @@ const fetchRequest = async (
     .then((suc) => {
       console.log("RES JSON: ", suc);
       // return suc.body;
+      if ("message" in suc) {
+        return { error: suc.message };
+      }
+
       if ("body" in suc) {
         return suc.body;
       }
@@ -222,6 +239,7 @@ function App() {
   } as any);
   const userRef = useRef(user);
   userRef.current = user;
+  const [userFeatures, setUserFeatures] = useState([] as Array<string>);
   const [admin, setAdmin] = useState(false); // CHANGE
   const [adminItems, setAdminItems] = useState(
     {} as { [key: string]: adminItem }
@@ -409,6 +427,8 @@ function App() {
         value={{
           user: userRef.current,
           setUser,
+          userFeatures,
+          setUserFeatures,
           admin,
           setAdmin,
           adminItems,
@@ -484,6 +504,12 @@ function App() {
               path="/admin/orders/:accountID"
               component={AdminAccountOrders}
             />
+            <Route
+              exact
+              path="/admin/chargePayments"
+              component={AdminPayments}
+            />
+            <Route exact path="/admin/dbOrders" component={AdminDBOrders} />
           </div>
         )}
 

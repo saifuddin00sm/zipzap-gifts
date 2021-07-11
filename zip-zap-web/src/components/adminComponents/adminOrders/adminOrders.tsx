@@ -10,6 +10,7 @@ import { checkUserAdmin } from "../adminDashboard";
 function AdminOrders() {
   const {
     user,
+    setUserFeatures,
     admin,
     setAdmin,
     adminAccounts,
@@ -22,10 +23,14 @@ function AdminOrders() {
   const [loading, setLoading] = useState(true);
 
   const getAdminUser = async () => {
-    const { allowed } = await checkUserAdmin(user);
+    const { allowed, userFeatures } = await checkUserAdmin(user);
 
     if (allowed) {
       setAdmin(allowed);
+    }
+
+    if (userFeatures.length > 0) {
+      setUserFeatures(userFeatures);
     }
 
     setLoading(false);

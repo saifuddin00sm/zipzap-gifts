@@ -8,15 +8,19 @@ import { checkUserAdmin } from "../adminDashboard";
 import { putImageURL } from "./adminItemNew";
 
 function AdminItemsList() {
-  const { user, admin, setAdmin, adminItems, setAdminItems } =
+  const { user, setUserFeatures, admin, setAdmin, adminItems, setAdminItems } =
     useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
   const getAdminUser = async () => {
-    const { allowed } = await checkUserAdmin(user);
+    const { allowed, userFeatures } = await checkUserAdmin(user);
 
     if (allowed) {
       setAdmin(allowed);
+    }
+
+    if (userFeatures.length > 0) {
+      setUserFeatures(userFeatures);
     }
 
     setLoading(false);

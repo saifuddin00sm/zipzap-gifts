@@ -3,27 +3,46 @@ import { Redirect } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../App";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import AdminMenuCard from "./adminMenuCard";
+import appSettings from "../../appSettings.json";
 
 const checkUserAdmin = async (user: any) => {
-  let functionResponse = { allowed: false };
+  let functionResponse = { allowed: false, userFeatures: [] };
   let response = await fetchRequest(user, "admin/userCheck", "GET");
 
   if ("allowed" in response && response.allowed) {
     functionResponse.allowed = true;
   }
 
+  if (
+    "userFeatures" in response &&
+    response.userFeatures &&
+    response.userFeatures.length > 0
+  ) {
+    functionResponse.userFeatures = response.userFeatures;
+  }
+
   return functionResponse;
 };
 
 function AdminDashboard() {
-  const { user, admin, setAdmin } = useContext(UserContext);
+  const {
+    user,
+    admin,
+    setAdmin,
+    setUserFeatures,
+    userFeatures: AppUserFeatures,
+  } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
   const getAdminUser = async () => {
-    const { allowed } = await checkUserAdmin(user);
+    const { allowed, userFeatures } = await checkUserAdmin(user);
 
     if (allowed) {
       setAdmin(allowed);
+    }
+
+    if (userFeatures.length > 0) {
+      setUserFeatures(userFeatures);
     }
 
     setLoading(false);
@@ -50,6 +69,21 @@ function AdminDashboard() {
   ) : (
     <section className={`column center`}>
       <h1>Admin Dashboard</h1>
+
+      {AppUserFeatures.includes(appSettings.features.adminChargePayment) ? (
+        <AdminMenuCard
+          title={"Payments"}
+          buttons={[{ text: "Charge Payments", link: "/admin/chargePayments" }]}
+        />
+      ) : null}
+
+      {AppUserFeatures.includes(appSettings.features.adminUpdateDBOrders) ? (
+        <AdminMenuCard
+          title={"Import This Months Orders"}
+          buttons={[{ text: "Import Orders", link: "/admin/dbOrders" }]}
+        />
+      ) : null}
+
       <AdminMenuCard
         title={"Items"}
         buttons={[
