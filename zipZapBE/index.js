@@ -340,6 +340,7 @@ router.post("/admin/completeTransaction", async (ctx) => {
   return ctx;
 });
 
+// NOT AWS IMPLEMENTED
 router.get("/admin/chargeAccounts", async (ctx) => {
   let response = { error: "", accounts: {} };
 
@@ -404,11 +405,13 @@ router.get("/admin/chargeAccounts", async (ctx) => {
   return ctx;
 });
 
+// AWS COMPLETE - PERMISSIONED
 router.get("/admin/chargeAccounts/:accountID", async (ctx) => {
   const stripe = require("stripe")(STRIPE_KEY);
 
   let response = { error: "", account: {} };
   let params = ctx.params;
+  let query = ctx.query;
 
   let allowed = await gFunctions.endPointAuthorize(
     ctx.headers.user,
@@ -561,7 +564,9 @@ router.get("/admin/chargeAccounts/:accountID", async (ctx) => {
     };
   }
 
-  cardTotals[defaultPaymentCard.id].total += account.planPrice;
+  if (query && "subscription" in query && query.subscription) {
+    cardTotals[defaultPaymentCard.id].total += account.planPrice;
+  }
 
   let paymentErrors = [];
   let paymentSuccess = [];
@@ -763,6 +768,7 @@ router.get("/admin/chargeAccounts/:accountID", async (ctx) => {
 // Import all orders for the current month into DB
 router.get("/admin/updateDBOrders", async (ctx) => {
   let response = { error: "", campaigns: [] };
+  let query = ctx.query;
 
   let allowed = await gFunctions.endPointAuthorize(
     ctx.headers.user,
@@ -777,7 +783,7 @@ router.get("/admin/updateDBOrders", async (ctx) => {
 
   // 1. Get All Campaigns that are still active && the orders that are
   //    already in the DB and not shipped
-  let campaigns = qFunctions.getThisMonthsCampaigns();
+  let campaigns = qFunctions.getThisMonthsCampaigns(query.month);
   let campaignCurrentOrders = qFunctions.getThisMonthsDBOrdersByCampaignID();
 
   let allQueryPromise = await Promise.all([
@@ -925,6 +931,27 @@ router.get("/admin/updateDBOrders", async (ctx) => {
     completedCampaigns,
     errorCampaigns,
   };
+
+  ctx.body = response;
+  return ctx;
+});
+
+// AWS COMPLETE - PERMISSIONED
+router.get("/admin/accounts", async (ctx) => {
+  let response = { error: "", accounts: {} };
+
+  let allowed = await gFunctions.endPointAuthorize(
+    ctx.headers.user,
+    appSettings.features.adminGetAccounts
+  );
+
+  if (allowed.error || !allowed.allowed) {
+    response.error = "Unauthorized";
+    ctx.body = response;
+    return ctx;
+  }
+
+  response = await qFunctions.getAllAccountsOrByID();
 
   ctx.body = response;
   return ctx;

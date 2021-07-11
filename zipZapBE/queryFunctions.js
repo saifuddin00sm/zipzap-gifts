@@ -126,11 +126,6 @@ const getAdminUsers = async (userEmail) => {
 const getAllAccountsOrByID = async (accountID) => {
   let response = { error: "", accounts: {} };
 
-  if (!accountID) {
-    response.error = "Missing Account ID";
-    return response;
-  }
-
   let getQuery = { rows: [], rowCount: 0 };
 
   if (accountID) {
@@ -167,8 +162,10 @@ const getAllAccountsOrByID = async (accountID) => {
         a."state",
         a.zip,
         a.stripe_id as "stripeID",
+        a.date_created as "dateCreated",
         c.first_name as "firstName",
         c.last_name as "lastName",
+        a.main_contact_id as "mainContactID",
         c.e_email as "email",
         p.description as "planName",
         p.price as "planPrice"
@@ -373,7 +370,7 @@ const updateTempBillingStatus = async (data) => {
   return response;
 };
 
-const getThisMonthsCampaigns = async () => {
+const getThisMonthsCampaigns = async (queryMonth) => {
   let response = { error: "", campaigns: [] };
 
   let today = new Date();
@@ -392,7 +389,10 @@ const getThisMonthsCampaigns = async () => {
     AND EXTRACT(MONTH FROM ac.end_date) >= $1
     OR ac."name" = 'onetime'
     `,
-    [today.getMonth() + 1, today.getFullYear()]
+    [
+      queryMonth !== undefined ? queryMonth : today.getMonth() + 1,
+      today.getFullYear(),
+    ]
   ); // returns query rows with rowCount else error
   if (getQuery.error) {
     response.error = getQuery.error.stack;
