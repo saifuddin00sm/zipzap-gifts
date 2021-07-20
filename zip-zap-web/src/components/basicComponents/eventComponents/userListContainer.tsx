@@ -141,7 +141,7 @@ function UserListContainer(props: {
         <div className={`full-width`}>
           <input
             className={`event-user-search-bar`}
-            placeholder={`Search for a user`}
+            placeholder={`Search for a user / group`}
             onChange={handleSearch}
           ></input>
         </div>
