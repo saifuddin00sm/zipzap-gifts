@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
+import {Row, Col, Button, ButtonGroup,ToggleButton} from 'react-bootstrap'
 import {
   adminItem,
   eventOrder,
@@ -125,7 +126,7 @@ const calcGiftPackageWeight = (
     if (!(iGiftID in individualItems)) {
       itemError = `Missing Item - ${iGiftID}`;
     } else {
-      console.log("ADding", [individualItems[iGiftID].weight]);
+      console.log("Adding", [individualItems[iGiftID].weight]);
       totalPrice += parseFloat(individualItems[iGiftID].weight.toString());
     }
   });
@@ -439,7 +440,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setCompletedEvent(event);
       setEventName(event.name);
       setEventStartDate(formatDate(event.startDate));
-      setEventEndDate(formatDate(event.endDate));
+      // setEventEndDate(formatDate(event.endDate));
 
       setUserList(
         Object.keys(userUsers.activeUsers).filter(
@@ -480,10 +481,11 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const [eventName, setEventName] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
-  const [eventEndDate, setEventEndDate] = useState("");
+  // const [eventEndDate, setEventEndDate] = useState("");
   const [eventNote, setEventNote] = useState("");
   const [eventIcon, setEventIcon] = useState(1);
   const [activeCard, setActiveCard] = useState("");
+  const [radioValue, setRadioValue] = useState('1');
 
   const [itemPaginationStart, setItemPaginationStart] = useState(0);
   const [activeItemDetails, setActiveItemDetails] = useState({
@@ -558,10 +560,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     } else if (!eventStartDate) {
       setError("Please enter an Event Start Date");
       return true;
-    } else if (!eventEndDate) {
-      setError("Please enter an Event End Date");
-      return true;
-    } else if (!activeItem.id) {
+    } 
+    // else if (!eventEndDate) {
+    //   setError("Please enter an Event End Date");
+    //   return true;
+    // } 
+    else if (!activeItem.id) {
       setError("Please select a gift");
       return true;
     } else if (userSelectedList.length === 0) {
@@ -592,7 +596,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         name: eventName,
         criteria: {},
         startDate: eventStartDate,
-        endDate: eventEndDate,
+        // endDate: eventEndDate,
         userList: userSelectedList,
         defaultItemID: activeItem.type === "item" ? activeItem.id : null,
         defaultGroupedItemID: activeItem.type === "item" ? null : activeItem.id,
@@ -661,7 +665,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         name: eventName,
         criteria: {},
         startDate: eventStartDate,
-        endDate: eventEndDate,
+        // endDate: eventEndDate,
         userList: userSelectedList,
         defaultItemID: activeItem.type === "item" ? activeItem.id : null,
         defaultGroupedItemID: activeItem.type === "item" ? null : activeItem.id,
@@ -894,6 +898,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
+  const addItemButton = () => {}
   const handleGroupedItemSearch = (e: any) => {
     if (e.target.value) {
       let searchResults = Object.keys(userGroupedItems).filter((itemID) => {
@@ -917,7 +922,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         name: eventName,
         criteria: {},
         startDate: eventStartDate,
-        endDate: eventEndDate,
         userList: userSelectedList,
         defaultItemID: activeItem.type === "item" ? activeItem.id : null,
         defaultGroupedItemID: activeItem.type === "item" ? null : activeItem.id,
@@ -941,7 +945,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
       setEventName(tempEventJSON.name);
       setEventStartDate(tempEventJSON.startDate);
-      setEventEndDate(tempEventJSON.endDate);
+      // setEventEndDate(tempEventJSON.endDate);
       setUserSelectedList(tempEventJSON.userList);
       setActiveItem({
         type: "grouped",
@@ -971,20 +975,72 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   };
 
   return (
-    <section className={`column center-column full-height`}>
+    <Col>
       {redirect ? <Redirect to={redirect} /> : null}
-      <header className={`column center page-header`}>
-        <h1>{match.params.eventID ? "Edit" : "Add an"} Event</h1>
-      </header>
-
-      <section className={`row width-90`}>
+      <Row>
+        <Col className="page-header justify-content-center ">
+          <h3>{match.params.eventID ? "Edit" : "Add an"} Event</h3>
+        </Col>
+      </Row>
+      {/* <Row>
+        <Col md={4}>
         <Link to={"/dashboard"} className={`back-link`}>
           Back to Event Dashboard
         </Link>
-      </section>
+        </Col>
+      </Row> */}
 
       {/* holds 4 Containers */}
-      <main className={` column center-column main-section`}>
+      <Row className="event-dashboard-sub-title primary-green-header mx-5">
+          <span>{completedEvent ? completedEvent.name : "Event"} Details</span>
+      </Row>
+      <Row className="new-event-main-section p-3 mx-5">
+        <Col className="mx-3"> 
+          <Row>
+              <span>Event Name</span>
+              <input
+                placeholder={"Birthdays"}
+                className={`general-input-fit new-event-input`}
+                value={eventName}
+                onChange={(e: any) => setEventName(e.target.value)}
+              ></input>
+              </Row>
+              <Row>
+              <span>Custom Note</span>
+              <textarea
+                placeholder={"i.e. Thanks for being a great employee!"}
+                className={`note-input-fit full-width`}
+                value={eventNote}
+                onChange={(e: any) => setEventNote(e.target.value)}
+              ></textarea>
+              </Row>
+        </Col>
+        <Col  className="px-3">
+          <Row className="new-event-main-section">
+          <span >Event Date</span>
+                <input
+                  type={"date"}
+                  placeholder={"From"}
+                  className={`general-input-fit new-event-date-input`}
+                  value={eventStartDate}
+                  onChange={(e: any) => setEventStartDate(e.target.value)}
+                  min={formatDate(getDateRestriction().toString())}
+                ></input>{" "}
+                {/* <input type="checkbox" id="birthday1" name="birthday" value="birthday"></input>
+                <label for="birthday1">Date is Birthday</label> */}
+
+          </Row>
+          {/* <Row className="px-3">
+            <span>Icon to Represent Event</span>
+                <SelectList
+                  detailList={iconList}
+                  action={(option: any, oIndex: number) => setEventIcon(oIndex)}
+                  selected={eventIcon}
+                  altDisplay={getIcon}
+                />
+          </Row> */}
+        </Col>
+      </Row>
         {loading || success ? (
           <ModalBox>
             {success ? (
@@ -1003,173 +1059,108 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             )}{" "}
           </ModalBox>
         ) : null}
-
-        <div className={`event-dashboard-sub-title primary-green-header`}>
-          <span>{completedEvent ? completedEvent.name : "Event"} Details</span>
-        </div>
-
-        {/* name, event date */}
-        <section className={`row center-row full-width`}>
-          <div
-            className={`event-dashboard-half-column column left-align-column`}
-          >
-            <div className={`column full-width`}>
-              <span className={`row`}>Event Name</span>
-              <input
-                placeholder={"Birthdays"}
-                className={`general-input-fit new-event-input`}
-                value={eventName}
-                onChange={(e: any) => setEventName(e.target.value)}
-              ></input>
-            </div>
-
-            <br></br>
-            <div className={`column  full-width`}>
-              <span className={`row`}>Custom Note</span>
-              <input
-                placeholder={"i.e. Thanks for being a great employee!"}
-                className={`general-input-fit full-width`}
-                value={eventNote}
-                onChange={(e: any) => setEventNote(e.target.value)}
-              ></input>
-            </div>
-          </div>
-
-          <div
-            className={`event-dashboard-half-column column left-align-column`}
-          >
-            <span className={`row`}>Event Date</span>
-            <div className={`row center left-align-row full-width`}>
-              <input
-                type={"date"}
-                placeholder={"From"}
-                className={`general-input-fit new-event-date-input`}
-                value={eventStartDate}
-                onChange={(e: any) => setEventStartDate(e.target.value)}
-                min={formatDate(getDateRestriction().toString())}
-              ></input>{" "}
-              -
-              <input
-                type={"date"}
-                placeholder={"To"}
-                className={`general-input-fit new-event-date-input`}
-                value={eventEndDate}
-                onChange={(e: any) => setEventEndDate(e.target.value)}
-              ></input>
-            </div>
-
-            <div className={`column full-width`}>
-              <span className={`row`}>Event Icon</span>
-              <SelectList
-                detailList={iconList}
-                action={(option: any, oIndex: number) => setEventIcon(oIndex)}
-                selected={eventIcon}
-                altDisplay={getIcon}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* button row and gift package container*/}
-        <section
-          className={`column center-row event-dashboard-full-column event-dashboard-lower-row`}
-        >
-          <div className={`row left-align-row`}>
-            <button
-              className={`new-event-button`}
-              onClick={() => handleChangeGiftType("grouped")}
-            >
-              Gift Package
-            </button>
-            <button
-              className={`new-event-button`}
-              onClick={() => handleChangeGiftType("custom")}
-            >
-              Custom Gift
-            </button>
-          </div>
-
-          <div className={`event-dashboard-sub-title primary-black-header`}>
-            <span>Gift Packages</span>
-          </div>
-          <br></br>
-          {giftType !== "custom" ? (
-            <div className={`column  center-self width-90`}>
-              <input
-                className={`general-input-fit full-width`}
-                placeholder={"Search for an item"}
-                onChange={handleGroupedItemSearch}
-              ></input>
-            </div>
-          ) : null}
-
-          {giftType !== "custom" ? (
-            <div className={`row center center-self width-90`}>
-              {itemPaginationStart > 0 ? (
-                <ForwardArrow
-                  action={() =>
-                    setItemPaginationStart(
-                      itemPaginationStart - 4 < 0 ? 0 : itemPaginationStart - 4
-                    )
-                  }
-                  class={`forward-arrow-grey backward-arrow-svg`}
-                />
+            
+        <Row className="event-dashboard-sub-title primary-black-header inner-row mt-3 mx-5">
+                <span>Choose a Gift</span>
+        </Row>
+        <Row className="new-event-main-section pt-3 mx-5">
+        <Row>
+            <Col sm={6}>
+            {giftType !== "custom" ? (
+                  <input
+                    className={`general-input-fit full-width`}
+                    placeholder={"Search for an item"}
+                    onChange={handleGroupedItemSearch}
+                  ></input>
               ) : null}
-              <div className={`row full-width`}>
-                {itemsLoading || groupedItemsLoading
-                  ? [...Array(4)].map((item, iIndex) => (
-                      <ItemCard
-                        key={iIndex}
-                        index={iIndex}
-                        action={() => null}
-                      />
-                    ))
-                  : null}
+            </Col>
+            <Col className="align-items-right">
+              <button
+                className={`new-event-button`}
+                onClick={() => handleChangeGiftType("grouped")}
+              >
+                Gift Package
+              </button>
+              <button
+                className={`new-event-button`}
+                onClick={() => handleChangeGiftType("custom")}
+              >
+                Custom Gift
+              </button>
+            </Col>
+          </Row>
 
-                {!itemsLoading && giftType === "grouped"
-                  ? searchGroupedItems
-                      .slice(itemPaginationStart, itemPaginationStart + 4)
-                      .map((itemID, iIndex) => (
-                        <GroupedItemCard
+          {giftType !== "custom" ? (
+            <Row className="p-3">
+              <Col xs={1} className="align-self-center">
+                {itemPaginationStart > 0 ? (
+                  <ForwardArrow
+                    action={() =>
+                      setItemPaginationStart(
+                        itemPaginationStart - 4 < 0 ? 0 : itemPaginationStart - 4
+                      )
+                    }
+                    class={`forward-arrow-grey backward-arrow-svg`}
+                  />
+                ) : null}
+              </Col>
+              <Col>
+                <Row>
+                  {itemsLoading || groupedItemsLoading
+                    ? [...Array(4)].map((item, iIndex) => (
+                        <ItemCard
                           key={iIndex}
                           index={iIndex}
-                          item={userGroupedItems[itemID]}
-                          action={() => handleActiveItem("grouped", itemID)}
-                          class={
-                            activeItem.type === "grouped" &&
-                            activeItem.id.toString() === itemID.toString()
-                              ? `event-item-card-active`
-                              : activeItem.type === "grouped" &&
-                                activeItem.id.toString() !== itemID.toString()
-                              ? "event-item-card-inactive"
-                              : ``
-                          }
+                          action={() => null}
                         />
                       ))
-                  : null}
-              </div>
+                    : null}
 
-              <ForwardArrow
-                action={() => setItemPaginationStart(itemPaginationStart + 4)}
-                class={`forward-arrow-grey`}
-                disabled={
-                  giftType === "grouped" &&
-                  itemPaginationStart + 5 > Object.keys(userGroupedItems).length
-                    ? true
-                    : giftType === "item" &&
-                      itemPaginationStart + 5 > Object.keys(userItems).length
-                    ? true
-                    : false
-                }
-              />
-            </div>
+                  {!itemsLoading && giftType === "grouped"
+                    ? searchGroupedItems
+                        .slice(itemPaginationStart, itemPaginationStart + 4)
+                        .map((itemID, iIndex) => (
+                          <GroupedItemCard
+                            key={iIndex}
+                            index={iIndex}
+                            item={userGroupedItems[itemID]}
+                            action={() => handleActiveItem("grouped", itemID)}
+                            class={
+                              activeItem.type === "grouped" &&
+                              activeItem.id.toString() === itemID.toString()
+                                ? `event-item-card-active`
+                                : activeItem.type === "grouped" &&
+                                  activeItem.id.toString() !== itemID.toString()
+                                ? "event-item-card-inactive"
+                                : ``
+                            }
+                          />
+                        ))
+                    : null}
+                </Row>
+              </Col>
+
+              <Col xs={1} className="align-self-center">
+                <ForwardArrow
+                  action={() => setItemPaginationStart(itemPaginationStart + 4)}
+                  class={`forward-arrow-grey`}
+                  disabled={
+                    giftType === "grouped" &&
+                    itemPaginationStart + 5 > Object.keys(userGroupedItems).length
+                      ? true
+                      : giftType === "item" &&
+                        itemPaginationStart + 5 > Object.keys(userItems).length
+                      ? true
+                      : false
+                  }
+                />
+              </Col>
+            </Row>
           ) : (
-            <div className={`column center center-self width-90`}>
-              <div className={`row center center-self full-width`}>
-                <div
-                  className={`event-dashboard-half-column column left-align-column`}
-                >
-                  <span className={`row`}>Gift Name</span>
+            <Col>
+              <Row>
+                  <Col className="mx-3" sm={4}>
+                  <span className={`row`} >Gift Name</span>
                   <input
                     placeholder={"i.e. Welcome Box"}
                     className={`general-input-fit new-event-input`}
@@ -1178,9 +1169,18 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                       handleCustomGiftChange("name", e.target.value)
                     }
                   ></input>
-                  {/* <br></br> */}
-
-                  <span className={`row`}>Items: </span>
+                  <span className={`row`}>Special Instructions:</span>
+                  <textarea
+                    placeholder={"i.e. No Peanuts"}
+                    className={`note-input-fit t new-event-input`}
+                    value={customGift.instructions}
+                    onChange={(e: any) =>
+                      handleCustomGiftChange("instructions", e.target.value)
+                    }
+                  ></textarea>
+                </Col>
+                <Col>
+                <span className={`row`}>Items: </span>
                   {customGift.items.map((itemID, iIndex) =>
                     itemID.id in userItems ? (
                       <ItemRow
@@ -1229,40 +1229,36 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                         Close
                       </button>
                     </div>
-                  ) : null}
 
+                  ) :                   
                   <button
-                    className={`new-event-button`}
-                    onClick={() => setShowItemList(true)}
+                  className={`new-event-button new-event-button-blue`}
+                  onClick={() => setShowItemList(true)}
                   >
-                    Add Another Item
-                  </button>
+                    Add Item
+                  </button>}
+                </Col>
+                {/* <button
+                    className={`new-event-button new-event-button-blue`}
+                    onClick={() => setShowItemList(true)}
+                    >
+                      Add Another Item
+                    </button> */}
+              </Row>
 
-                  <span className={`row`}>Special Instructions:</span>
-                  <input
-                    placeholder={"i.e. No Peanuts"}
-                    className={`general-input-fit new-event-input`}
-                    value={customGift.instructions}
-                    onChange={(e: any) =>
-                      handleCustomGiftChange("instructions", e.target.value)
-                    }
-                  ></input>
-                </div>
-                <div
-                  className={`event-dashboard-half-column column left-align-column`}
-                ></div>
-              </div>
-
-              {error ? error : ""}
-
-              <button
-                className={`new-event-button new-event-button-blue`}
-                onClick={handleCustomGiftSave}
-                disabled={customGiftLoading}
-              >
-                Save Gift Package
-              </button>
-            </div>
+              <Row>
+                <p className="error-message-text">
+                {error ? error : ""}
+                </p>
+                <button
+                  className={`new-event-button`}
+                  onClick={handleCustomGiftSave}
+                  disabled={customGiftLoading}
+                >
+                  Save Gift Package
+                </button>
+              </Row>
+            </Col>
           )}
 
           <div
@@ -1324,51 +1320,53 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               </button>
             </div>
           </div>
-        </section>
+        </Row>
 
         {/* Recipient List */}
-        <section
+        {/* <section
           className={`column center-column event-dashboard-full-column new-event-lower-row`}
-        >
-          <div className={`event-dashboard-sub-title primary-black-header`}>
-            <span>Recipient List</span>
-          </div>
-
-          <div className={`row full-width full-height`}>
-            <UserListContainer
-              users={userUsers.activeUsers}
-              userList={userList}
-              loading={usersLoading}
-              action={handleEditUserList}
-            />
-
-            <UserListContainer
-              users={userUsers.activeUsers}
-              userList={userSelectedList}
-              loading={usersLoading}
-              action={handleEditUserList}
-              buttonType={"remove"}
-              title={"Users on Event List"}
-            />
-          </div>
-        </section>
+        > */}
+          <Row className="event-dashboard-sub-title primary-black-header mt-3 mx-5">
+                <span>Recipient List</span>
+          </Row>
+          <Row className="new-event-main-section p-3 mx-5 ">
+              <UserListContainer
+                users={userUsers.activeUsers}
+                userList={userList}
+                loading={usersLoading}
+                action={handleEditUserList}
+              />
+              <UserListContainer
+                users={userUsers.activeUsers}
+                userList={userSelectedList}
+                loading={usersLoading}
+                action={handleEditUserList}
+                buttonType={"remove"}
+                title={"Users on Event List"}
+              />
+        </Row>
 
         {/* checkout confirmation  */}
-        <section className={`column center-row event-dashboard-full-column `}>
-          <div className={`event-dashboard-sub-title primary-black-header`}>
-            <span>Checkout</span>
-          </div>
-          <br></br>
+        <Row className="event-dashboard-sub-title primary-black-header mt-3 mx-5">
+                <span>Checkout</span>
+        </Row>
 
-          <div className={`row center center-self width-90`}>
+          <Row className={`new-event-main-section p-3 mx-5`}>
             {/* total price details  */}
-            <div
+            {/* <div
               className={`event-dashboard-half-column column left-align-column`}
-            >
-              <div className={`column`}>
-                <div className={`row`}>
-                  <span className={`row`}>Total Gift Price Per Person: </span>
-                  <span className={`row`}>
+            > */}
+              <Col>
+                <Row className="border-bottom">
+                  <Col>
+                    <Row className="border-bottom">
+                      Total Gift Price Per Person: 
+                    </Row>
+                    <Row>
+                      Shipping: TBD per person
+                    </Row>
+                  </Col>
+                  <Col>
                     $
                     {activeItem.type === "grouped" &&
                     activeItem.id in userGroupedItems
@@ -1379,27 +1377,19 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                             userItems
                           )
                       : 0}
-                  </span>
-                </div>
-                <div className={`row`}>
-                  <span>Shipping: TBD per person</span>
-                </div>
-              </div>
-            </div>
+                  </Col>
+                </Row>
+
+              </Col>
+            {/* </div>
             <div
               className={`event-dashboard-half-column column left-align-column`}
-            ></div>
-          </div>
+            ></div> */}
 
           {/* credit card details  */}
-          <div className={`row center-row center-self width-90`}>
-            <div
-              className={`event-dashboard-half-column column left-align-column`}
-            >
-              <div className={`event-dashboard-sub-title`}>
-                <span>Choose a Saved Payment Method</span>
-              </div>
-              <br></br>
+          <Row className={`mt-3`}>
+            <Col sm={8}>
+              <p className="bold align-left">Choose a Saved Payment Method</p>
               {userCards.map((card, cIndex) => (
                 <button
                   key={cIndex}
@@ -1415,8 +1405,8 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   <span>Name on Card: {card.billing_details.name}</span>
                 </button>
               ))}
-            </div>
-            <div className={`event-dashboard-half-column column center`}>
+            </Col>
+            <Col>
               <div className={`event-dashboard-sub-title`}>
                 <span></span>
               </div>
@@ -1428,13 +1418,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               >
                 Add New Card
               </button>
-            </div>
+            </Col>
 
             {/* credit card details  */}
-          </div>
-        </section>
-        {/* Create Button */}
-        <div className={`column center full-width`}>
+          </Row>
+        </Row>
+        <Row className={"mt-3 mx-5"}>
           {error ? error : ""}
           <button
             className={`new-event-button new-event-button-blue`}
@@ -1443,9 +1432,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           >
             {match.params.eventID ? "Edit" : "Create"} Event
           </button>
-        </div>
-      </main>
-    </section>
+        </Row>
+    </Col>
+
   );
 }
 

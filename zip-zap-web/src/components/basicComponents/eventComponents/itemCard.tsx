@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { userEvent, userItem } from "../../../classes";
+import {Card, Col} from 'react-bootstrap'
 import appSettings from "../../../appSettings.json";
 
 function ItemCard(props: {
@@ -10,36 +11,43 @@ function ItemCard(props: {
 }) {
   const [showDetails, setShowDetails] = useState(false);
   return !props.item ? (
-    <div
-      className={`column center-column event-item-card-container ${props.class}`}
-    >
-      <div className={`event-item-card-image-loading`}>
-        <div className={`loading-skeleton`}></div>
-      </div>
-
-      <div className={`event-item-card-text-loading`}>
-        <div className={`loading-skeleton`}></div>
-      </div>
-      <div className={`event-item-card-text-loading`}>
-        <div className={`loading-skeleton`}></div>
-      </div>
-    </div>
+    <Col sm={3}>
+      <Card
+        className={`m-1 ${props.class}`}
+      >
+        {/* <Card.Img className={`event-item-card-image-loading`}>
+          <div className={`loading-skeleton`}></div>
+        </Card.Img> */}
+        <Card.Body>
+          <Card.Text className={`event-item-card-text-loading`}>
+            <div className={`loading-skeleton`}></div>
+          </Card.Text>
+          <Card.Text className={`event-item-card-text-loading`}>
+            <div className={`loading-skeleton`}></div>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
   ) : (
-    <div
-      className={`column event-item-card-container ${props.class}`}
-      onClick={() => props.action(props.item?.itemID)}
-    >
-      {props.item.mainPicture ? (
-        <img
-          src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
-          alt={props.item.name}
-          className={`event-item-card-image`}
-        ></img>
-      ) : null}
+    <Col sm={3}>
+      <Card
+        className={`event-item-card-container ${props.class}`}
+        onClick={() => props.action(props.item?.itemID)}
+      >
+        {props.item.mainPicture ? (
+          <Card.Img
+            src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
+            alt={props.item.name}
+            className={`event-item-card-image`}
+          />
+        ) : null}
 
-      <span className={`event-item-card-text`}>{props.item.name}</span>
-      <span className={`event-item-card-text`}>${props.item.price}</span>
-    </div>
+        <Card.Body>
+          <Card.Text className={`event-item-card-text`}>{props.item.name}</Card.Text>
+          <Card.Text className={`event-item-card-text`}>${props.item.price}</Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }
 

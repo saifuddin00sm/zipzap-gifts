@@ -10,7 +10,7 @@ import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
 import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link } from "react-router-dom";
-import CalendarMonth from "../basicComponents/calendarMonth";
+import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
 import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
 import { getUserList } from "../eventComponents/eventDashboard";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
@@ -18,6 +18,7 @@ import UserGroupRow from "../basicComponents/userComponents/userGroupRow";
 import UserGroupEditContainer from "./userGroupEditContainer";
 import UserAddRecipientContainer from "./userAddRecipientContainer";
 import ModalBox from "../basicComponents/modalBox";
+import {Row, Col, Button} from 'react-bootstrap';
 
 function UserNewList() {
   const { user, userUsers, setUserUsers, setUserUsersLoaded } =
@@ -179,19 +180,24 @@ function UserNewList() {
   };
 
   return (
-    <section className={`column center-column full-height`}>
-      <header className={`column center page-header`}>
-        <h1>People Dashboard</h1>
-      </header>
+    <Col className="mb-3">
+      <Row>
+        <Col className="page-header justify-content-center">
+          <h3>People Dashboard</h3>
+        </Col>
+      </Row>
 
-      <section className={`row width-90`}>
-        <Link to={"/people"} className={`back-link`}>
+      <Row className={`mx-2 width-45`}>
+        <Link to={"/recipients"} className={`back-link`}>
           Back to People Dashboard
         </Link>
-      </section>
+      </Row>
 
       {/* holds 4 Containers */}
-      <main className={`column center-column main-section main-section-scroll`}>
+      <Row className={`mx-2 people-dashboard-events-list`}>
+        <div className={`event-dashboard-sub-title primary-black-header`}>
+          <span>Upload List</span>
+        </div>
         {loading ? (
           <ModalBox>
             {success ? (
@@ -211,22 +217,18 @@ function UserNewList() {
           </ModalBox>
         ) : null}
 
-        <div className={`event-dashboard-sub-title primary-black-header`}>
-          <span>Upload List</span>
-        </div>
-
         {/* instructions */}
         {newUploads.length === 0 ? (
-          <section className={`row center-row full-width`}>
-            <div
-              className={`event-dashboard-full-column  column left-align-column`}
-            >
-              <div className={`column full-width`}>
-                <h3 className={`row`}>
+          <Col className={`m-4`}>
+          <Row>
+                <p><b>
                   Step 1: Format an csv document with a person on each row and
-                  the following attributes (see example below):
-                </h3>
-                <div className={`row center space-between`}>
+                  the following attributes (see example above):
+                  </b>
+                </p>
+          </Row>
+          <Row>
+            <Col md="4">
                   <ul className={`new-recipient-list-fields`}>
                     {Object.keys(editUser).map(
                       (key: string, kIndex: number) => (
@@ -234,24 +236,24 @@ function UserNewList() {
                       )
                     )}
                   </ul>
-
-                  <a
-                    href={"/media/files/zipzap-template.csv"}
-                    className={`row center new-event-button new-event-button-blue`}
-                  >
-                    Download Template
-                  </a>
-                </div>
-                <img
-                  src={`/media/images/new-list-example.png`}
-                  alt={`New List Example`}
-                  className={`item-card-image-main`}
-                ></img>
-              </div>
-              <br></br>
-
+              </Col>
+              <Col md="8">
+              <img
+                src={`/media/images/new-list-example.png`}
+                alt={`New List Example`}
+                className={`item-card-image-main mb-3`}
+              ></img>
+              <a
+                  href={"/media/files/zipzap-template.csv"}
+                  className={`new-event-button new-event-button mt-3 px-3`}
+                >
+                  Download Template
+                </a>
+            </Col>
+          </Row>
+          <Row>
               <div className={`column full-width`}>
-                <h3 className={`row`}>Step 2: Choose a File</h3>
+                <p> <b>Step 2: Choose a File </b> </p>
                 <div className={`row center space-between`}>
                   <input
                     accept=".csv"
@@ -260,10 +262,10 @@ function UserNewList() {
                   ></input>
                 </div>
               </div>
-            </div>
-          </section>
+          </Row>
+        </Col>
         ) : (
-          <section className={`row center-row full-width`}>
+          <Row>
             <div
               className={`event-dashboard-full-column  column left-align-column`}
             >
@@ -279,9 +281,8 @@ function UserNewList() {
                   class={`full-width center-self full-height`}
                 />
               </div>
-              <br></br>
             </div>
-          </section>
+          </Row>
         )}
 
         {newUploads.length > 0 && editUser["First Name"] ? (
@@ -322,8 +323,8 @@ function UserNewList() {
           </div>
         )}
         {/* Upload Button */}
-      </main>
-    </section>
+      </Row>
+    </Col>
   );
 }
 

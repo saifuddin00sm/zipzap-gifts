@@ -3,6 +3,7 @@ import { fetchRequest, UserContext } from "../../App";
 import { eventOrder, userEvent, userItem } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
+import {Row, Col} from 'react-bootstrap';
 import { Link, RouteComponentProps } from "react-router-dom";
 import ForwardArrow from "../basicComponents/forwardArrow";
 import {
@@ -525,20 +526,21 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
   };
 
   return (
-    <section className={`column center-column full-height`}>
-      <header className={`column center page-header`}>
-        <h1>{match.params.orderID ? "Edit" : "Add a"} One-Time Gift</h1>
-      </header>
+    <Col>
+      <Row>
+        <Col className="page-header justify-content-center">
+        <h3>{match.params.orderID ? "Edit" : "Add a"} One-Time Gift</h3>
+        </Col>
+      </Row>
       {initalLoading ? <LoadingIcon /> : ""}
-
-      <section className={`row width-90`}>
-        <Link to={"/dashboard"} className={`back-link`}>
+      <Row className={`mx-3 width-45`}>
+        <Link to={"/event"} className={`back-link`}>
           Back to Event Dashboard
         </Link>
-      </section>
+      </Row>
 
       {/* holds 4 Containers */}
-      <main className={` column center-column main-section`}>
+      <Row className="d-flex justify-content-center mx-3">
         {loading || success ? (
           <ModalBox>
             {success ? (
@@ -558,18 +560,13 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
           </ModalBox>
         ) : null}
 
-        <div className={`event-dashboard-sub-title primary-green-header`}>
-          <span>
-            {/* {completedEvent ? completedEvent.name : "Event"} */}
-            Details
-          </span>
-        </div>
+      <Row className="event-dashboard-sub-title primary-green-header mx-5">
+          <span>Details</span>
+      </Row>
+      <Row className="new-event-main-section p-3 mx-5">
 
         {/* name, event date */}
-        <section className={`row center-row full-width new-order-row`}>
-          <div
-            className={`event-dashboard-half-column column left-align-column`}
-          >
+          <Col sm="5">
             <div className={`column full-width`}>
               <span className={`row`}>
                 Gift Date{" "}
@@ -595,24 +592,20 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
             </div> */}
 
             {/* <br></br> */}
-            <div className={`column  full-width`}>
               <span className={`row`}>Note</span>
-              <input
+              <textarea
                 placeholder={"i.e. Thanks for being a great employee!"}
-                className={`general-input-fit full-width`}
+                className={`note-input-fit full-width`}
                 value={eventNote}
                 onChange={(e: any) => setEventNote(e.target.value)}
-              ></input>
-            </div>
-          </div>
-
-          <div
-            className={`event-dashboard-half-column column left-align-column`}
-          >
+              ></textarea>
+            
+          </Col>
+          <Col>
             {/* <div className={`row center-column full-width space-between`}>
 
             </div> */}
-            <span className={`row`}>Employees</span>
+            <p className={`row m-1`}>Employees</p>
 
             {userSelectedList.length > 0 &&
             Object.keys(userUsers.activeUsers).length > 0 ? (
@@ -642,8 +635,8 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
                 class={`full-width full-height`}
               />
             )}
-          </div>
-        </section>
+          </Col>
+        </Row>
 
         {/* button row and gift package container*/}
         <section className={`column center-row event-dashboard-full-column `}>
@@ -961,8 +954,8 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
             {match.params.orderID ? "Edit" : "Create"} Gift
           </button>
         </div>
-      </main>
-    </section>
+      </Row>
+  </Col>
   );
 }
 

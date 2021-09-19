@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../../App";
 import { userEvent, userMonthOrderList } from "../../../classes";
 import { getIcon } from "../../eventComponents/eventNew";
-import { getDateMonthDay } from "../calendarMonth";
+import { getDateMonthDay } from "./calendarMonth";
 
 function CalendarSidebar(props: {
   action: Function;

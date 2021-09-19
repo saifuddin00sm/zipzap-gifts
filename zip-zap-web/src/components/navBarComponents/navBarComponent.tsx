@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { navButton } from "../../classes";
+import { Image, Navbar, Container, NavDropdown, Nav, Button} from 'react-bootstrap'
 import { ReactComponent as MenuIcon } from "../../icons/menu.svg";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
+import { ReactComponent as Usericon } from "../../icons/usericon.svg";
 
 import { ReactComponent as BoltIcon } from "../../icons/logo.svg";
 import { ReactComponent as LogoTextIcon } from "../../icons/logo-words-only.svg";
@@ -13,11 +15,11 @@ function NavBarComponent() {
   const { user } = useContext(UserContext);
 
   const [navButtons, setNavButtons] = useState([
-    { text: "Events", link: "/dashboard" },
-    { text: "Orders", link: "/order/past" },
+    // { text: "Events", link: "/dashboard" },
+    // { text: "Orders", link: "/order/past" },
 
-    { text: "People", link: "/people" },
-    { text: "Gifts", link: "/" },
+    // { text: "People", link: "/people" },
+    // { text: "Gifts", link: "/" },
     {
       text: "Profile",
       link: `/`,
@@ -39,82 +41,56 @@ function NavBarComponent() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className={`row center space-between nav-bar-container`}>
-      <div className={`row center space-between nav-bar-header`}>
-        <Link
+    <Navbar expand="md" className="nav-bar-container p-3" variant="dark">
+      <Navbar.Brand>
+      <Link
           to={"/"}
-          className={"row center nav-bar-logo"}
+          className={"nav-bar-logo"}
           onClick={() => setIsExpanded(false)}
         >
           <LogoTextFullIcon className={`nav-bar-svg`} />
         </Link>
-
-        <MenuIcon
-          className={`nav-bar-mobile-menu ${
-            isExpanded ? " nav-bar-mobile-menu-hide" : ""
-          }`}
-          onClick={() => setIsExpanded(!isExpanded)}
-        />
-        <CloseIcon
-          className={`nav-bar-mobile-menu ${
-            isExpanded ? "" : " nav-bar-mobile-menu-hide"
-          }`}
-          onClick={() => setIsExpanded(!isExpanded)}
-        />
-      </div>
-
-      <nav className={`column center`}>
-        <ul
-          className={`row center space-between ${
-            isExpanded ? " nav-bar-list-expanded" : ""
-          }`}
-        >
-          {user && "email" in user && user.email
-            ? navButtons.map((button, bIndex) =>
-                button.external ? (
-                  <a
-                    href={button.link}
-                    key={bIndex}
-                    className={`row center`}
-                    onClick={() => setIsExpanded(false)}
-                  >
-                    {button.text}
-                  </a>
-                ) : (
-                  <Link
-                    to={button.link}
-                    key={bIndex}
-                    className={`row center`}
-                    onClick={() => setIsExpanded(false)}
-                  >
-                    {button.text}
-                  </Link>
-                )
-              )
-            : guestNavButtons.map((button, bIndex) =>
-                button.external ? (
-                  <a
-                    href={button.link}
-                    key={bIndex}
-                    className={`row center`}
-                    onClick={() => setIsExpanded(false)}
-                  >
-                    {button.text}
-                  </a>
-                ) : (
-                  <Link
-                    to={button.link}
-                    key={bIndex}
-                    className={`row center`}
-                    onClick={() => setIsExpanded(false)}
-                  >
-                    {button.text}
-                  </Link>
-                )
-              )}
-        </ul>
-      </nav>
-    </div>
+        </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+        </Nav>
+        {user && "email" in user && user.email ?
+        <Nav className="mr-auto pr-4 d-flex align-items-center justify-content-center">
+          <Link
+            to={"/profile"}
+            className={"nav-bar-logo"}
+            onClick={() => setIsExpanded(false)}
+          >
+            <Usericon className={`nav-bar-icon`}/>
+          </Link>
+          <Nav.Link href="/logout">
+            <Button variant="light" size="sm">Log Out</Button>
+          </Nav.Link>
+        </Nav>
+        : guestNavButtons.map((button, bIndex) =>
+            button.external ? (
+              <Button variant="light" size="lg"
+                className={`text-dark`}
+                href={button.link}
+                key={bIndex}
+                onClick={() => setIsExpanded(false)}
+                >
+                {button.text}
+              </Button>
+            ) : (
+              <Link
+                to={button.link}
+                key={bIndex}
+                className={`row center`}
+                onClick={() => setIsExpanded(false)}
+              >
+                {button.text}
+              </Link>
+            )
+          )}
+      </Navbar.Collapse> 
+  </Navbar>
   );
 }
 

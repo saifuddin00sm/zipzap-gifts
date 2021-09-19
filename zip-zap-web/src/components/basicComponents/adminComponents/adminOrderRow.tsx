@@ -12,9 +12,10 @@ import { calcGiftPackageWeight } from "../../eventComponents/eventNew";
 import AdminItemRow from "./adminItemRow";
 import appSettings from "../../../appSettings.json";
 import LoadingIcon from "../LoadingIcon";
-import { setegid } from "node:process";
+// import { setegid } from "node:process";
 
 const boxSizes = [
+
   {
     type: "1",
     width: "12",

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import {Row, Col} from 'react-bootstrap';
 import { UserContext } from "../../../App";
 import { userEvent } from "../../../classes";
 import { getIcon } from "../../eventComponents/eventNew";
@@ -14,9 +15,9 @@ function UserGroupRow(props: {
 
   const [showDetails, setShowDetails] = useState(false);
   return (
-    <li className={`column center-column`}>
-      <div
-        className={`row center space-between full-width event-details-header ${
+    <Row className={`recipient-row`}>
+      <Col xs="10"
+        className={`event-details-header ${
           showDetails ? "event-details-header-show" : ""
         }`}
       >
@@ -24,9 +25,10 @@ function UserGroupRow(props: {
           {" "}
           {props.group} <i>({props.index} members)</i>
         </span>
-
+        </Col>
+        <Col xs="2">
         <ForwardArrow action={() => props.action(props.group)} />
-      </div>
+        </Col>
       <div
         className={`column event-details ${
           showDetails ? "event-details-show" : ""
@@ -52,12 +54,12 @@ function UserGroupRow(props: {
             "event-dashboard-icon"
           )}
         </p> */}
-
+{/* 
         <Link to={`/event/`} className={`back-link back-link-blue`}>
           Edit Event
-        </Link>
+        </Link> */}
       </div>
-    </li>
+    </Row>
   );
 }
 

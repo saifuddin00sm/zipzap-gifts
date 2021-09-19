@@ -10,7 +10,7 @@ import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
 import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link, RouteComponentProps } from "react-router-dom";
-import CalendarMonth from "../basicComponents/calendarMonth";
+import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
 import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
 import {
   getEvents,

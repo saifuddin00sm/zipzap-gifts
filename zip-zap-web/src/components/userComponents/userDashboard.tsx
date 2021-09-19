@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import {Row, Col} from 'react-bootstrap';
 import { fetchRequest, UserContext } from "../../App";
 import {
   userGroupedItem,
@@ -10,7 +11,7 @@ import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
 import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link } from "react-router-dom";
-import CalendarMonth from "../basicComponents/calendarMonth";
+import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
 import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
 import { getUserList } from "../eventComponents/eventDashboard";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
@@ -32,9 +33,8 @@ function UserDashboard() {
     setUserUsersLoaded(true);
 
     if ("activeUsers" in users) {
-      setUserList(Object.keys(users.activeUsers));
+      // setUserList(Object.keys(users.activeUsers));
       userGroupSetup(users.activeUsers);
-      return;
     }
 
     setLoading(false);
@@ -228,14 +228,21 @@ function UserDashboard() {
   };
 
   return (
-    <section className={`column center-column full-height`}>
-      <header className={`column center page-header`}>
+    <Col>
+      <Row>
+        <Col className="page-header justify-content-center">
+          <h3>Recipient Dashboard</h3>
+        </Col>
+      </Row>
+      {/* <header className={`column center page-header`}>
         <h1>People Dashboard</h1>
-      </header>
+      </header> */}
+      <Row>
       {loading ? <LoadingIcon /> : null}
+      </Row>
 
       {/* holds 4 Containers */}
-      <main className={`full-width column center-column main-section`}>
+      <Row className="d-flex justify-content-center mb-3">
         {addNewUser ? (
           <UserAddRecipientContainer
             saveAction={handleAddNewUser}
@@ -276,105 +283,96 @@ function UserDashboard() {
           </ModalBox>
         ) : null}
 
-        <section
+        {/* <section
           className={`row center-row full-width event-dashboard-top-row`}
-        >
+        > */}
           {/* event list container */}
-          <section
-            className={`event-dashboard-half-column event-dashboard-half-column-left`}
-          >
-            <div className={`event-dashboard-sub-title primary-black-header`}>
+          {/* <Col sm="6">
+            <Row className="event-dashboard-sub-title primary-black-header mx-2">
               <span>Groups</span>
-            </div>
-
-            <ol className={`column center event-dashboard-events-list`}>
-              {userUsersLoaded &&
-              Object.keys(userUsers.activeUsers).length === 0 ? (
-                <div>
-                  No Recipients, upload a list now!
-                  <br></br>
-                  <div className={`column center event-dashboard-events-list`}>
-                    <Link
-                      to={"/people/upload"}
-                      className={`row center add-event-button add-event-button-black `}
-                    >
-                      <AddIcon />
-                    </Link>
+            </Row>
+            <Row className="mx-2">
+              <ol className={`column center event-dashboard-events-list`}>
+                {userUsersLoaded &&
+                Object.keys(userUsers.activeUsers).length === 0 ? (
+                  <div>
+                    No Recipients, upload a list now!
+                    <br></br>
+                    <div className={`column center event-dashboard-events-list`}>
+                      <Link
+                        to={"/people/upload"}
+                        className={`row center add-event-button add-event-button-black `}
+                      >
+                        <AddIcon />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                Object.keys(userGroupList)
-                  .sort()
-                  .map((group, gIndex) => (
-                    <UserGroupRow
-                      group={group === "" ? "No Group" : group}
-                      index={userGroupList[group].count}
-                      key={gIndex}
-                      action={handleActivateGroup}
-                    />
-                  ))
-              )}
-            </ol>
-          </section>
+                ) : (
+                  Object.keys(userGroupList)
+                    .sort()
+                    .map((group, gIndex) => (
+                      <UserGroupRow
+                        group={group === "" ? "No Group" : group}
+                        index={userGroupList[group].count}
+                        key={gIndex}
+                        action={handleActivateGroup}
+                      />
+                    ))
+                )}
+              </ol>
+            </Row>
+          </Col> */}
 
           {/* Add List/Recipient container */}
-          <section
-            className={`event-dashboard-half-column event-dashboard-half-column-right`}
-          >
+          <Col sm="6">
             <div className={`full-width`}>
               <div className={`event-dashboard-sub-title primary-black-header`}>
                 <span>Upload a List</span>
               </div>
               <div className={`column center event-dashboard-events-list`}>
-                <br></br>
                 <Link
-                  to={"/people/upload"}
-                  className={`row center add-event-button`}
+                  to={"/recipients/upload"}
+                  className={`add-event-button-link`}
                 >
-                  <AddIcon />
+                  <AddIcon className="addIcon" />
                 </Link>
               </div>
             </div>
-
-            <br></br>
+            </Col>
+            <Col sm="6">
             <div className={`full-width`}>
               <div className={`event-dashboard-sub-title primary-black-header`}>
                 <span>Add a Recipient</span>
               </div>
               <div className={`column center event-dashboard-events-list`}>
-                <br></br>
                 <button
-                  className={`row center add-event-button add-event-button-blue`}
+                  className={`add-event-button add-event-button-blue`}
                   onClick={() => setAddNewUser(true)}
                 >
-                  <AddIcon />
+                  <AddIcon className="addIcon" />
                 </button>
               </div>
             </div>
-          </section>
-        </section>
-
-        <br></br>
-        <section
-          className={`column center-column full-width event-dashboard-lower-row`}
-        >
+            </Col>
+          </Row>
+        <Row>
+        <Col>
           <div className={`event-dashboard-sub-title primary-black-header`}>
             <span>List of Recipients</span>
           </div>
-          <br></br>
-
+          
           <UserListContainer
             users={userUsers.activeUsers}
             userList={userList}
             loading={loading}
             action={selectUserToEdit}
-            class={`full-width center-self full-height`}
+            class={`full-width center-self pb-2`}
             hideTitle={true}
             showDetails={true}
           />
-        </section>
-      </main>
-    </section>
+        </Col>
+      </Row>
+    </Col>
   );
 }
 

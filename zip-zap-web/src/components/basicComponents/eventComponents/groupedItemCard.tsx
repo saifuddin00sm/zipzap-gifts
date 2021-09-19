@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../../App";
+import {Card, Col} from 'react-bootstrap'
 import { userGroupedItem } from "../../../classes";
 import { getGroupedGiftPrice } from "../../eventComponents/eventDashboard";
 import appSettings from "../../../appSettings.json";
+import { CardCvcElement } from "@stripe/react-stripe-js";
 
 function GroupedItemCard(props: {
   item?: userGroupedItem;
@@ -13,40 +15,48 @@ function GroupedItemCard(props: {
   const { userItems } = useContext(UserContext);
 
   return !props.item ? (
-    <div
-      className={`column center-column event-item-card-container ${props.class}`}
-    >
-      <div className={`event-item-card-image-loading`}>
-        <div className={`loading-skeleton`}></div>
-      </div>
-
-      <div className={`event-item-card-text-loading`}>
-        <div className={`loading-skeleton`}></div>
-      </div>
-      <div className={`event-item-card-text-loading`}>
-        <div className={`loading-skeleton`}></div>
-      </div>
-    </div>
+    <Col md={3}>
+      <Card
+        className={`event-item-card-container ${props.class}`}
+      >
+        <div className={`event-item-card-image-loading`}>
+          <div className={`loading-skeleton`}></div>
+        </div>
+    
+        <Card.Img>
+        <Card.Text className={`event-item-card-text-loading`}>
+          <div className={`loading-skeleton`}></div>
+        </Card.Text>
+        <div className={`event-item-card-text-loading`}>
+          <div className={`loading-skeleton`}></div>
+        </div>
+        </Card.Img>
+      </Card>
+    </Col>
   ) : (
-    <div
-      className={`column event-item-card-container ${props.class}`}
-      onClick={() => props.action(props.item?.groupedID)}
-    >
-      {props.item.mainPicture ? (
-        <img
-          src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
-          alt={props.item.name}
-          className={`event-item-card-image`}
-        ></img>
-      ) : null}
-      <span className={`event-item-card-text`}>{props.item.name}</span>
-      <span className={`event-item-card-text`}>
-        $
-        {props.item.priceOverride
-          ? props.item.priceOverride
-          : getGroupedGiftPrice(props.item, userItems)}
-      </span>
-    </div>
+    <Col md={3}>
+      <Card
+        className={`event-item-card-container ${props.class}`}
+        onClick={() => props.action(props.item?.groupedID)}
+      >
+        {props.item.mainPicture ? (
+          <Card.Img
+            src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
+            alt={props.item.name}
+            className={`event-item-card-image`}
+          ></Card.Img>
+        ) : null}
+        <Card.Body>
+        <Card.Text className={`event-item-card-title`}>{props.item.name}</Card.Text>
+        <Card.Text className={`event-item-card-text`}>
+          $
+          {props.item.priceOverride
+            ? props.item.priceOverride
+            : getGroupedGiftPrice(props.item, userItems)}
+        </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }
 

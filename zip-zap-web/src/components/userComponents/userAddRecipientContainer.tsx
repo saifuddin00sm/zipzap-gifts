@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-
+import {Row, Col, Table} from 'react-bootstrap';
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
 import { userRecipient } from "../../classes";
+import { Link } from "react-router-dom";
 
 const convertDateToInput = (date: string) => {
   let newDate = new Date(date);
@@ -73,7 +74,9 @@ function UserAddRecipientContainer(props: {
     }
 
     props.saveAction(editUser);
-    props.closeAction();
+    // to={"/recipients"}
+    // props.closeAction();
+    // props.history.push("/recipients")
   };
 
   const handleNewEdit = (type: string, event: any) => {
@@ -118,18 +121,22 @@ function UserAddRecipientContainer(props: {
   }, [props.user]);
 
   return (
-    <section
-      className={`column center-column full-width user-group-edit-container`}
-    >
-      <div className={`row center space-between full-width`}>
-        <h2>{props.user ? "Edit" : "New"} Recipient</h2>
-        <button
-          onClick={() => props.closeAction("")}
-          className={`user-group-edit-close row center`}
-        >
-          <CloseIcon />
-        </button>
-      </div>
+    <Row>
+      <Row className={`user-group-edit-container m-3`}>
+        <Col>
+          <h3 className="m-3">{props.user ? "Edit" : "New"} Recipient</h3>
+        </Col>
+        <Col xs="1">
+          <div className={`space-between m-3`}>
+            <button
+                onClick={() => props.closeAction("")}
+                className={`user-group-edit-close`}
+              >
+                <CloseIcon />
+              </button>
+          </div>
+        </Col>
+
 
       <div className={`column center full-width`}>
         <div className={`width-60 row left-align-column user-add-field-row`}>
@@ -232,17 +239,18 @@ function UserAddRecipientContainer(props: {
           ></input>
         </div>
       </div>
-      <div className={`column width-60 center`}>
+      <div className={`column width-60 center mt-3`}>
         {error ? <span className={`error-message-text`}>{error}</span> : null}
         <button
-          className={`event-item-description-button new-event-button-grey user-add-button`}
+          className={`event-item-description-button new-event-button user-add-button`}
           onClick={handleEdit}
         >
           {props.user ? "Edit " : "Create New "}
           Recipient
         </button>
       </div>
-    </section>
+      </Row>
+    </Row>
   );
 }
 

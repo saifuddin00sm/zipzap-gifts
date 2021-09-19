@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../App";
-import { userEvent, userMonthOrderList } from "../../classes";
-import { getUserList } from "../eventComponents/eventDashboard";
-import { getIcon, getRandomInt } from "../eventComponents/eventNew";
-import CalendarDay from "./calendarComponents/calendarDay";
-import ModalBox from "./modalBox";
+import { UserContext } from "../../../App";
+import {Container, Row, Col, Table} from 'react-bootstrap'
+import { userEvent, userMonthOrderList } from "../../../classes";
+import { getUserList } from "../../eventComponents/eventDashboard";
+import { getIcon, getRandomInt } from "../../eventComponents/eventNew";
+import CalendarDay from "./calendarDay";
+import Calendar from "./Calendar";
+import ModalBox from "../modalBox";
 
 const daysOfTheWeek = [
   "Sunday",
@@ -34,6 +36,8 @@ const monthsOfTheYear = [
 
 const colorList = ["--primary-blue", "--primary-pink", "--primary-green"];
 
+let dayRowCount = 0;
+
 const getMonthSunday = (startingDate?: string) => {
   let date = startingDate ? new Date(startingDate) : new Date();
 
@@ -58,6 +62,7 @@ const getMonthSunday = (startingDate?: string) => {
   let firstDayOfTheWeek = new Date(firstDate).getDay();
   let lastDayOfTheWeek = new Date(lastDate).getDay();
 
+
   return {
     month,
     firstDate,
@@ -68,6 +73,7 @@ const getMonthSunday = (startingDate?: string) => {
     lastDayOfTheWeek,
   };
 };
+
 
 const compareCurrentDate = (date: string, month: number, day: number) => {
   let eventDate = new Date(date);
@@ -83,6 +89,44 @@ const getDateMonthDay = (date: string) => {
 
   return `${monthsOfTheYear[eventDate.getMonth()]} ${eventDate.getDate()}`;
 };
+
+// function newLineTest(userMonthOrders: userMonthOrderList) {
+//   let {
+//     month,
+//     firstDate,
+//     lastDate,
+//     firstDay,
+//     lastDay,
+//     firstDayOfTheWeek,
+//     lastDayOfTheWeek,
+//   } = getMonthSunday();
+//   let calRows = "<tr>";
+
+//   let numDays = 1;
+
+//   while (numDays <= lastDay ) {
+//     calRows += " <tr> <td>1</td> </tr>"
+//     numDays++;
+//   }
+
+
+
+//   return{__html:
+//   // [...Array(7 - firstDayOfTheWeek)].map((d, dIndex) => (
+//   //   <td>
+//   //   <CalendarDay
+//   //     key={dIndex}
+//   //     action={() => null}
+//   //     dayIndex={dIndex}
+//   //     month={month}
+//   //     orders={userMonthOrders}
+//   //   />
+//   //   </td>
+//   // ))
+//   calRows
+// }
+// }
+
 
 function CalendarMonth(props: {
   userMonthOrders: userMonthOrderList;
@@ -108,6 +152,10 @@ function CalendarMonth(props: {
     setUserUsers(users);
     setUserUsersLoaded(true);
   };
+
+  // const settingDays = days => {
+
+  // }
 
   useEffect(() => {
     if (Object.keys(userUsers.activeUsers).length === 0) {
@@ -136,21 +184,11 @@ function CalendarMonth(props: {
   };
 
   return (
-    <div className={`column center calendar-container`}>
-      <h2>
+    <Col>
+      {/* <h2>
         {monthsOfTheYear[today.getMonth()]} {today.getFullYear()}
-      </h2>
-
-      <ul className={`row center-column calendar-week-days`}>
-        {daysOfTheWeek.map((day, dIndex) => (
-          <li key={dIndex} className={`row center`}>
-            {day.slice(0, 3)}
-          </li>
-        ))}
-      </ul>
-
-      <ul className={`row center-column row-wrap calendar-days`}>
-        {showDateDetails.eventID ? (
+      </h2> */}
+          {showDateDetails.eventID ? (
           <ModalBox>
             <div className={`column calendar-orders`}>
               <h3>Orders on {showDateDetails.date}:</h3>
@@ -215,10 +253,19 @@ function CalendarMonth(props: {
             </div>
           </ModalBox>
         ) : null}
+      <Row>
+        {/* {daysOfTheWeek.map((day, dIndex) => (
+          <Col xs="2" className={`calendar-week-days`} key={dIndex}>
+            {day.slice(0, 3)}
+          </Col>
+        ))} */}
+        
+
+      {/* <ul className={`row center-column row-wrap calendar-days`}> */}
 
         {/* put empty dates to line up the first */}
-        {[...Array(firstDayOfTheWeek)].map((d, dIndex) => (
-          <li
+        {/* {[...Array(firstDayOfTheWeek)].map((d, dIndex) => (
+          <td
             key={dIndex}
             style={{
               background: "inherit",
@@ -226,11 +273,11 @@ function CalendarMonth(props: {
               boxShadow: "none",
             }}
           >
-            {" "}
-          </li>
+          </td>
+          
         ))}
-
-        {[...Array(lastDay)].map((d, dIndex) => (
+        {[...Array(4)].map((d, dIndex) => (
+          <td>
           <CalendarDay
             key={dIndex}
             action={() => null}
@@ -238,23 +285,29 @@ function CalendarMonth(props: {
             month={month}
             orders={props.userMonthOrders}
           />
-        ))}
+          </td>
+        ))} */}
 
-        {/* put empty box for end of the month to line up dates  */}
-        {[...Array(6 - lastDayOfTheWeek)].map((d, dIndex) => (
-          <li
-            key={dIndex}
-            style={{
-              background: "inherit",
-              border: "1px solid transparent",
-              boxShadow: "none",
-            }}
-          >
-            {" "}
-          </li>
-        ))}
-      </ul>
-    </div>
+
+          {/* put empty box for end of the month to line up dates  */}
+          {/* {[...Array(6 - lastDayOfTheWeek)].map((d, dIndex) => (
+            <td
+              key={dIndex}
+              style={{
+                background: "inherit",
+                border: "1px solid transparent",
+                boxShadow: "none",
+              }}
+            >
+              {" "}
+            </td>
+          ))}
+      </Row> */}
+      <Calendar />
+      </Row>
+            
+    </Col>
+
   );
 }
 

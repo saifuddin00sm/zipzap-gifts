@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ReactComponent as ArrowRightIcon } from "../../icons/arrowHeadRight.svg";
+import {Col} from 'react-bootstrap'
 
 function SelectList(props: {
   action: Function;
@@ -15,7 +16,7 @@ function SelectList(props: {
     setShowList(false);
   };
   return (
-    <div className={`column select-list-container`}>
+    <div className={`select-list-container dropdown`}>
       <li
         onClick={() => setShowList(!showList)}
         className={`select-list-item row center space-between`}

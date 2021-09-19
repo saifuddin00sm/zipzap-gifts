@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Router } from "react-router-dom";
+import {Container, Row, Col} from 'react-bootstrap';
 import appSettings from "./appSettings.json";
 import HomePageComponent from "./components/homePageComponent";
 import AdminDashboard from "./components/adminComponents/adminDashboard";
@@ -24,9 +25,13 @@ import EventDashboard from "./components/eventComponents/eventDashboard";
 import EventNew from "./components/eventComponents/eventNew";
 import OrderNew from "./components/orderComponents/orderNew";
 import NavBarComponent from "./components/navBarComponents/navBarComponent";
+import SideBarComponent from "./components/navBarComponents/SideBarComponent";
 import FooterComponent from "./components/navBarComponents/footerComponent";
 import OrderPastDashboard from "./components/orderComponents/orderPastDashboard";
 import UserDashboard from "./components/userComponents/userDashboard";
+import giftDashboard from "./components/giftComponents/giftDashboard";
+import profileDashboard from "./components/basicComponents/profileComponents/ProfileDashboard";
+import giftDetails from "./components/giftComponents/GiftDetails";
 import AuthCallback, {
   getRefreshToken,
   newUserInfo,
@@ -40,6 +45,7 @@ import StripeWrapper from "./components/stripeComponents/stripeWrapper";
 import CheckoutPage from "./components/stripeComponents/checkoutPage";
 import AdminPayments from "./components/adminComponents/adminPayments";
 import AdminDBOrders from "./components/adminComponents/adminDBOrders";
+import UserAddRecipientContainer from "./components/userComponents/userAddRecipientContainer";
 
 interface AppContext {
   user: any;
@@ -422,7 +428,7 @@ function App() {
       </div>
     </div>
   ) : (
-    <div className="App">
+      <Container fluid={true} className="min-vh-100 App">
       <UserContext.Provider
         value={{
           user: userRef.current,
@@ -452,70 +458,86 @@ function App() {
         }}
       >
         {/* TO-DO - HANDLE ERRORS */}
-        <NavBarComponent />
-        <Route exact path="/callback" component={AuthCallback} />
-        <Route exact path="/register" component={RegisterComponent} />
-        <Route exact path="/logout" component={Logout} />
-        {/* <Route exact path="/stripe" component={StripeWrapper} /> */}
+      <Row>
+          <NavBarComponent />
+      </Row>
+          <Route exact path="/callback" component={AuthCallback} />
+          <Route exact path="/register" component={RegisterComponent} />
+          <Route exact path="/logout" component={Logout} />
 
-        {user && "email" in user && user.email ? (
-          <Route exact path="/" component={EventDashboard} />
-        ) : (
-          <Route exact path="/" component={HomePageComponent} />
-        )}
+          {user && "email" in user && user.email ? (
+            <Row>
+            <Col>
+            <Route exact path="/" component={EventDashboard} />
+            </Col>
+            </Row>
+          ) : (
+            <Route exact path="/" component={HomePageComponent} />
+          )}
 
-        {!user || !("email" in user) || !user.email ? null : ( // <Route exact path="/" component={HomePageComponent} /> // <Redirect to="/" />
-          <div className={`full-width full-height`}>
-            {/* Stripe Pages  */}
-            <Route exact path="/checkout" component={CheckoutPage} />
+          {!user || !("email" in user) || !user.email ? null : ( // <Route exact path="/" component={HomePageComponent} /> // <Redirect to="/" /> 
+            <Row className="main-section-row">
+            <Col xs="2" className="side-bar-container">
+              <SideBarComponent />
+            </Col>
+              {/* Stripe Pages  */}
+              <Route exact path="/checkout" component={CheckoutPage} />
 
-            {/* Event Pages  */}
-            <Route exact path="/dashboard" component={EventDashboard} />
-            <Route exact path="/event/new" component={EventNew} />
-            <Route exact path="/event/e/:eventID" component={EventNew} />
+              {/* Event Pages  */}
+              <Route exact path="/event" component={EventDashboard} />
+              <Route exact path="/event/new" component={EventNew} />
+              <Route exact path="/event/e/:eventID" component={EventNew} />
 
-            {/* User Pages  */}
-            <Route exact path="/people" component={UserDashboard} />
-            <Route exact path="/people/upload" component={UserNewList} />
+              {/* User Pages  */}
+              <Route exact path="/recipients" component={UserDashboard} />
+              <Route exact path="/recipients/add" component={UserAddRecipientContainer} />
+              <Route exact path="/recipients/upload" component={UserNewList} />
 
-            {/* Order Pages */}
-            <Route exact path="/order/new" component={OrderNew} />
-            <Route exact path="/order/past" component={OrderPastDashboard} />
-            <Route exact path="/order/:eventID/:orderID" component={OrderNew} />
+              {/* Order Pages */}
+              <Route exact path="/order/new" component={OrderNew} />
+              <Route exact path="/order/past" component={OrderPastDashboard} />
+              <Route exact path="/order/:eventID/:orderID" component={OrderNew} />
 
-            {/* ADMIN PAGES */}
-            <Route exact path="/admin/dashboard" component={AdminDashboard} />
-            <Route exact path="/admin/items" component={AdminItemsList} />
-            <Route exact path="/admin/items/new" component={AdminItemNew} />
-            <Route
-              exact
-              path="/admin/groupedItems"
-              component={AdminGroupedItemsList}
-            />
-            <Route
-              exact
-              path="/admin/groupedItems/new"
-              component={AdminGroupedItemNew}
-            />
+              {/* Gift Pages */}
+              <Route exact path="/gifts" component={giftDashboard} />
 
-            <Route exact path="/admin/orders" component={AdminOrders} />
-            <Route
-              exact
-              path="/admin/orders/:accountID"
-              component={AdminAccountOrders}
-            />
-            <Route
-              exact
-              path="/admin/chargePayments"
-              component={AdminPayments}
-            />
-            <Route exact path="/admin/dbOrders" component={AdminDBOrders} />
-          </div>
-        )}
+              {/* Gift Pages */}
+              <Route exact path="/profile" component={profileDashboard} />
 
-        <FooterComponent />
+              {/* ADMIN PAGES */}
+              <Route exact path="/admin/dashboard" component={AdminDashboard} />
+              <Route exact path="/admin/items" component={AdminItemsList} />
+              <Route exact path="/admin/items/new" component={AdminItemNew} />
+              <Route
+                exact
+                path="/admin/groupedItems"
+                component={AdminGroupedItemsList}
+              />
+              <Route
+                exact
+                path="/admin/groupedItems/new"
+                component={AdminGroupedItemNew}
+              />
+
+              <Route exact path="/admin/orders" component={AdminOrders} />
+              <Route
+                exact
+                path="/admin/orders/:accountID"
+                component={AdminAccountOrders}
+              />
+              <Route
+                exact
+                path="/admin/chargePayments"
+                component={AdminPayments}
+              />
+              <Route exact path="/admin/dbOrders" component={AdminDBOrders} />
+              </Row>
+            )}
+        <Row>
+          <FooterComponent />
+        </Row>
       </UserContext.Provider>
-    </div>
+    </Container>
   );
 }
 

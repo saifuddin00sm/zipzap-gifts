@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { navButton } from "../classes";
+import {Row, Col, Button} from 'react-bootstrap';
 import logo from "../logo.svg";
 
 function HomePageComponent() {
@@ -22,24 +23,26 @@ function HomePageComponent() {
   ] as Array<navButton>);
 
   return (
-    <main className="App-header home-page-container">
+    <Row className="App-header home-page-container">
       {/* <header>Zip Zap Gifts</header> */}
       <br></br>
       {guestNavButtons.map((button: navButton, bIndex: number) =>
         button.external ? (
-          <a
+          <Button
             href={button.link}
             key={bIndex}
-            className={`row center`}
+            className={`row center px-3 p-2`}
+            variant="outline-light"
+            size="lg"
             // onClick={() => setIsExpanded(false)}
           >
             {button.text}
-          </a>
+          </Button>
         ) : (
           <hr className={"home-page-hr"} key={bIndex}></hr>
         )
       )}
-    </main>
+    </Row>
   );
 }
 

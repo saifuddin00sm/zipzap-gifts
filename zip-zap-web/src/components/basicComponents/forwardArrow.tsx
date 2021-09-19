@@ -1,5 +1,6 @@
 import React from "react";
 import { ReactComponent as ArrowRightIcon } from "../../icons/arrowHeadRight.svg";
+import {Button} from 'react-bootstrap'
 
 function ForwardArrow(props: {
   action: Function;
@@ -8,7 +9,7 @@ function ForwardArrow(props: {
 }) {
   return (
     <button
-      className={`row center forward-arrow-svg ${props.class}`}
+      className={`forward-arrow-svg ${props.class}`}
       disabled={props.disabled}
       onClick={() => props.action()}
     >

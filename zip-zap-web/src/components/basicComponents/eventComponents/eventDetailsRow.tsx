@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import {Accordion, Col} from 'react-bootstrap'
 import { UserContext } from "../../../App";
 import { userEvent } from "../../../classes";
 import { ReactComponent as ArrowRightIcon } from "../../../icons/arrowHeadRight.svg";
@@ -10,26 +11,23 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
   const { userItems, userGroupedItems } = useContext(UserContext);
 
   const [showDetails, setShowDetails] = useState(false);
+  var campaignKey = "1";
+  if (props.event.campaignID) {
+    campaignKey = "" + props.event.campaignID;
+  }
   return (
-    <li className={`column center-column`}>
-      <div
-        className={`row center space-between full-width event-details-header ${
-          showDetails ? "event-details-header-show" : ""
-        }`}
+    <Accordion className="m-1">
+      <Accordion.Item
+        eventKey={campaignKey}
       >
-        {props.event.name}
-
-        <ForwardArrow action={() => setShowDetails(!showDetails)} />
-      </div>
-      <div
-        className={`column event-details ${
-          showDetails ? "event-details-show" : ""
-        }`}
-      >
-        <p>Start Date: {new Date(props.event.startDate).toDateString()}</p>
-        <p>End Date: {new Date(props.event.endDate).toDateString()}</p>
+      <Accordion.Header>
+        <p className="event-list-title"> {props.event.name} </p>
+      </Accordion.Header>
+      <Accordion.Body>
+        <Col></Col>
+        <p className="event-list-info">Start Date: {new Date(props.event.startDate).toDateString()}</p>
         {props.event.defaultItemID || props.event.defaultGroupedItemID ? (
-          <p>
+          <p className="event-list-info">
             Default Gift:{" "}
             {props.event.defaultItemID && props.event.defaultItemID in userItems
               ? userItems[props.event.defaultItemID].name
@@ -39,7 +37,6 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
               : null}
           </p>
         ) : null}
-
         <p className={`row center`}>
           {getIcon(
             props.event.defaultDetails.eventIcon,
@@ -53,8 +50,9 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
         >
           Edit Event
         </Link>
-      </div>
-    </li>
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
   );
 }
 

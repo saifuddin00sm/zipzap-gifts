@@ -1,5 +1,7 @@
 <svg id="Layer_1" data-name="Layer 1"
-    xmlns="http://www.w3.org/2000/svg" viewBox="120 100 300 190">
+    xmlns="http://www.w3.org/2000/svg" 
+    height="40"
+    viewBox="120 100 300 190">
     <defs>
         <style>.cls-1{fill:#6d6e70;}.cls-2{fill:#fff;}</style>
     </defs>

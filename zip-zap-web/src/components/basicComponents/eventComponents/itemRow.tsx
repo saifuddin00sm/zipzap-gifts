@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { userItem } from "../../../classes";
+import {Row, Col} from 'react-bootstrap'
 import { ReactComponent as PlusIcon } from "../../../icons/plusSign.svg";
+import { ReactComponent as CloseIcon } from "../../../icons/close.svg";
 import SelectList from "../selectList";
 import appSettings from "../../../appSettings.json";
 
@@ -13,12 +15,13 @@ function ItemRow(props: {
 }) {
   const [showDetails, setShowDetails] = useState(true);
   return (
-    <li className={`column item-row-container`}>
+    <Row>
       <div
         className={`row center-column space-between ${props.class} `}
         onClick={() => setShowDetails(!showDetails)}
       >
-        <div className={`row center-column`}>
+        <Row className="m-1">
+          <Col>
           {props.item.mainPicture ? (
             <img
               src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
@@ -26,16 +29,23 @@ function ItemRow(props: {
               className={`event-item-row-image`}
             ></img>
           ) : null}
+          </Col>
+          <Col>
           <span className={`event-item-card-text`}>{props.item.name}</span>
+          </Col>
+          <Col>
           <span className={`event-item-card-text`}>${props.item.price}</span>
-        </div>
-
-        <button
-          className={`item-row-button`}
-          onClick={() => props.action("removeItem", props.item?.itemID)}
-        >
-          <PlusIcon />
-        </button>
+          </Col>
+          <Col xs={1}>
+          <button
+            className={`item-row-button`}
+            onClick={() => props.action("removeItem", props.item?.itemID)}
+          >
+            <CloseIcon />
+          </button>
+          </Col>
+        
+        </Row>
       </div>
       <div
         className={`column item-row-details ${
@@ -70,7 +80,7 @@ function ItemRow(props: {
           </div>
         ))}
       </div>
-    </li>
+    </Row>
   );
 }
 

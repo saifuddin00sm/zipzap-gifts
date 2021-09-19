@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Row, Col} from 'react-bootstrap'
+import {Container, Row, Col} from 'react-bootstrap'
 import { fetchRequest, UserContext } from "../../App";
 import { userGroupedItem, userItem, userMonthOrderList } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
@@ -8,12 +8,9 @@ import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow"
 import { Link } from "react-router-dom";
 import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
 import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
-// import { Console } from "node:console";
 
 const getEvents = async (user: any) => {
   let response = await fetchRequest(user, "campaigns", "GET");
-  console.log("this is the response")
-  console.log(user)
 
   if ("campaigns" in response) {
     return response.campaigns;
@@ -134,9 +131,8 @@ function EventDashboard() {
   const settingMonthOrders = async () => {
     let { dateOrders } = await getMonthOrders(user);
     setUserMonthOrders({ orders: dateOrders });
-    console.log(dateOrders);
   };
-  
+
   useEffect(() => {
     if (Object.keys(userEvents).length == 0) {
       settingEvents();
@@ -170,109 +166,123 @@ function EventDashboard() {
   };
 
   return (
-    <Col>
-      <Row>
-        <Col className="page-header justify-content-center">
-          <h3>Event Dashboard</h3>
-        </Col>
-      </Row>
+    <Container fluid className={`column center-column`} >
+      <header className={`column center page-header`}>
+        <h1>Event Dashboard</h1>
+      </header>
+      {loading ? <LoadingIcon /> : null}
 
-      <Row className="justify-content-center">
-        {loading ? <LoadingIcon /> : null}
-      </Row>
+      {/* holds 4 Containers */}
+      <main className={`full-width column center-column main-section`}>
+        <section
+          className={`row center-row full-width event-dashboard-top-row`}
+        >
+          {/* event list container */}
+          <section
+            className={`event-dashboard-half-column event-dashboard-half-column-left`}
+          >
+            <div
+              className={`event-dashboard-sub-title primary-black-light-header`}
+            >
+              <span>Event List</span>
+            </div>
 
-      <Row className="d-flex justify-content-center">
-        <Col>
-          <Row className="event-dashboard-sub-title primary-black-header mx-2">
-            <span>Event List</span>
-          </Row>
-          <Row className="mx-2 event-dashboard-events-list">
-                {userUsersLoaded ? 
-                (Object.keys(userUsers.activeUsers).length === 0 ? 
-                  (
-                    <div>
-                    No Recipients, upload a list now!
-                    <br></br>
-                    <div className={`column center event-dashboard-events-list`}>
-                      <Link
-                        to={"/people/upload"}
-                        className={`row center add-event-button add-event-button-black `}
-                      >
-                        <AddIcon />
-                      </Link>
-                    </div>
+            <ol className={`column center event-dashboard-events-list`}>
+              {userUsersLoaded &&
+              Object.keys(userUsers.activeUsers).length === 0 ? (
+                <div>
+                  No Recipients, upload a list now!
+                  <br></br>
+                  <div className={`column center event-dashboard-events-list`}>
+                    <Link
+                      to={"/people/upload"}
+                      className={`row center add-event-button add-event-button-black `}
+                    >
+                      <AddIcon />
+                    </Link>
                   </div>
-                  ) : Object.keys(userEvents).length > 1 ? (
-                    Object.keys(userEvents).map((event, eIndex) =>
-                      userEvents[event].name !== "onetime" ? (
-                        <EventDetailsRow
-                          key={eIndex}
-                          index={eIndex}
-                          event={userEvents[event]}
-                        />
-                      ) : null
-                    )
-                ) : 
-                (
-                  <div>
-                      No events, create one now!
-                      <br></br>
-                      <div className={`column center event-dashboard-events-list`}>
-                      <Link
-                        to={"/event/new"}
-                        className={`add-event-button-link`}
-                      >
-                        <AddIcon className="addIcon" />
-                      </Link>
-                      </div>
-                    </div>
+                </div>
+              ) : Object.keys(userEvents).length > 1 ? (
+                Object.keys(userEvents).map((event, eIndex) =>
+                  userEvents[event].name !== "onetime" ? (
+                    <EventDetailsRow
+                      key={eIndex}
+                      index={eIndex}
+                      event={userEvents[event]}
+                    />
+                  ) : null
                 )
-                ): null }
-          </Row>
-        </Col>
-        <Col> 
-            <Row className="event-dashboard-sub-title primary-black-header mx-2">
-              <span>Add an Event</span>
-            </Row>
-            <Row className="mx-2">
+              ) : (
+                <div>
+                  No events, create one now!
+                  <br></br>
+                  <div className={`column center event-dashboard-events-list`}>
+                    <Link
+                      to={"/event/new"}
+                      className={`row center add-event-button`}
+                    >
+                      <AddIcon />
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </ol>
+          </section>
+
+          {/* Add event container */}
+          <section
+            className={`event-dashboard-half-column event-dashboard-half-column-right`}
+          >
+            <div className={`full-width`}>
+              <div className={`event-dashboard-sub-title primary-green-header`}>
+                <span>Add an Event</span>
+              </div>
               <div className={`column center event-dashboard-events-list`}>
+                {/* <span>
+                  <i>1 event left</i>
+                </span>
+                <br></br> */}
                 <Link
                   to={"/event/new"}
-                  className={`add-event-button-link`}
+                  className={`row center add-event-button`}
                 >
-                  <AddIcon className="addIcon" />
+                  <AddIcon />
                 </Link>
               </div>
-            </Row>
-              
-              {/* <Row className="event-dashboard-sub-title primary-blue-header mx-2  mt-5">
-                <span>Send a One Time Gift</span>
-              </Row>
-              <Row className="mx-2">
-                <Col className={`column center event-dashboard-events-list`}>
-                  <Link
+            </div>
+
+            <br></br>
+            <div className={`full-width`}>
+              <div className={`event-dashboard-sub-title primary-blue-header`}>
+                <span>Send Special Gift</span>
+              </div>
+              <div className={`column center event-dashboard-events-list`}>
+                <br></br>
+                <Link
                   to={"/order/new"}
-                  className={` add-event-button-link add-event-button-link-blue`}
-                  >
-                    <AddIcon className="addIcon" />
-                  </Link>
-                </Col>
-            </Row> */}
-        </Col>
-      </Row>
-      <Row className="pt-4 mx-3">
-        <Col sm="4">
+                  className={`row center add-event-button add-event-button-blue`}
+                >
+                  <AddIcon />
+                </Link>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <br></br>
+        {/* upcoming events container */}
+        <section
+          className={`row center-row full-width event-dashboard-lower-row`}
+        >
           <CalendarSidebar orders={userMonthOrders} action={() => {}} />
-        </Col>
-        <Col>
           <CalendarMonth
-              userMonthOrders={userMonthOrders}
-              listOrders={false}
-              action={handleShowDayDetails}
-            />
-          </Col>
-      </Row>
-    </Col>
+            userMonthOrders={userMonthOrders}
+            listOrders={false}
+            action={handleShowDayDetails}
+          />
+        </section>
+      </main>
+    </Container>
   );
 }
 

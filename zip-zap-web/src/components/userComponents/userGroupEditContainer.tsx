@@ -20,6 +20,8 @@ function UserGroupEditContainer(props: {
   const [editing, setEditing] = useState(false);
 
   const handleReset = () => {
+    // this is the problem I think
+    console.log("edit reset is occuring")
     setEditing(false);
     setEditName(props.activeGroup !== "No Group" ? props.activeGroup : "");
   };
