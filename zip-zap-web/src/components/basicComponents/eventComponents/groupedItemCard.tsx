@@ -11,6 +11,7 @@ function GroupedItemCard(props: {
   index: number;
   action: Function;
   class?: string;
+  border?: string;
 }) {
   const { userItems } = useContext(UserContext);
 
@@ -36,9 +37,8 @@ function GroupedItemCard(props: {
   ) : (
     <Col md={3}>
       <Card
-        className={`event-item-card-container ${props.class}`}
-        onClick={() => props.action(props.item?.groupedID)}
-      >
+      className={`event-item-card-container ${props.class}`}
+      onClick={() => props.action(props.item?.groupedID)}>
         {props.item.mainPicture ? (
           <Card.Img
             src={`${appSettings.pictureURL}/${props.item.mainPicture}`}

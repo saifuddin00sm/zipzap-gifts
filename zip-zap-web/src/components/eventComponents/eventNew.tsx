@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
-import {Row, Col, Button, ButtonGroup,ToggleButton} from 'react-bootstrap'
+import {Row, Col, Button, ButtonGroup, ToggleButton, Modal} from 'react-bootstrap'
 import {
   adminItem,
   eventOrder,
@@ -303,7 +303,7 @@ const handleCalcShippingFee = async (user: userRecipient) => {
   return 0;
 };
 
-const getDateRestriction = (daysToAdd: number = 7) => {
+const getDateRestriction = (daysToAdd: number = 8) => {
   let date = new Date();
   date.setDate(date.getDate() + daysToAdd);
 
@@ -323,6 +323,11 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     setUserEvents,
     setUserUsersLoaded,
   } = useContext(UserContext);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -561,8 +566,11 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setError("Please enter an Event Start Date");
       return true;
     } 
-    // else if (!eventEndDate) {
-    //   setError("Please enter an Event End Date");
+    // var date1 = new Date(eventStartDate);
+    // var date2 = new Date();
+    // date2 = date2.getDate() + 7;
+    // if (date1 < date2) {
+    //   setError("Please enter an Event Start Date");
     //   return true;
     // } 
     else if (!activeItem.id) {
@@ -578,11 +586,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setError("");
       setLoading(true);
     }
-
     if (match.params.eventID) {
       handleEditEvent();
+      handleShow();
     } else {
       handleAddNewEvent();
+      handleShow();
     }
   };
 
@@ -636,6 +645,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       );
 
       console.log("o:", orders);
+      console.log("campaignID", createEventResponse);
 
       let orderCreationResponse = await fetchRequest(
         user,
@@ -643,6 +653,8 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         "POST",
         orders
       );
+
+      console.log(orderCreationResponse);
 
       if ("saved" in orderCreationResponse && orderCreationResponse.saved) {
         setSuccess(true);
@@ -1041,24 +1053,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           </Row> */}
         </Col>
       </Row>
-        {loading || success ? (
-          <ModalBox>
-            {success ? (
-              <div className={`column`}>
-                <span>
-                  {eventName} {match.params.eventID ? "updated" : "created"}{" "}
-                  sucessfully!
-                </span>
-                <br></br>
-                <Link to={"/dashboard"}>Back to Event Dashboard</Link>
-              </div>
-            ) : (
-              `${
-                match.params.eventID ? "Editing" : "Creating"
-              } event please wait...`
-            )}{" "}
-          </ModalBox>
-        ) : null}
             
         <Row className="event-dashboard-sub-title primary-black-header inner-row mt-3 mx-5">
                 <span>Choose a Gift</span>
@@ -1074,7 +1068,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   ></input>
               ) : null}
             </Col>
-            <Col className="align-items-right">
+            <Col className="align-items-right p-2">
               <button
                 className={`new-event-button`}
                 onClick={() => handleChangeGiftType("grouped")}
@@ -1125,6 +1119,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                             index={iIndex}
                             item={userGroupedItems[itemID]}
                             action={() => handleActiveItem("grouped", itemID)}
+                            border={activeItem.type === "grouped" &&
+                            activeItem.id.toString() === itemID.toString()
+                            ? `info`: `secondary`}
                             class={
                               activeItem.type === "grouped" &&
                               activeItem.id.toString() === itemID.toString()
@@ -1157,6 +1154,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               </Col>
             </Row>
           ) : (
+            <Row>
             <Col>
               <Row>
                   <Col className="mx-3" sm={4}>
@@ -1179,7 +1177,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                     }
                   ></textarea>
                 </Col>
-                <Col>
+                <Col className="p-2">
                 <span className={`row`}>Items: </span>
                   {customGift.items.map((itemID, iIndex) =>
                     itemID.id in userItems ? (
@@ -1195,18 +1193,19 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                     ) : null
                   )}
                   {showItemList ? (
-                    <div className={`event-item-list`}>
+                    <div className="event-item-list-container">
+                      <div className="event-item-list-sub-container m-3">
                       <input
-                        className={` general-input-fit new-event-input event-item-search-bar`}
+                        className={`general-input-fit new-event-input event-item-search-bar my-3`}
                         placeholder={"Search for an item"}
                         onChange={handleCustomGiftSearch}
                       ></input>
-
+                    <div className={`event-item-list`}>
                       <ul className={`event-item-list-list`}>
                         {searchItems.map((itemID, iIndex) => (
                           <li
                             key={iIndex}
-                            className={`row center space-between`}
+                            className={`mx-3`}
                             onClick={() =>
                               handleCustomGiftChange("addItem", {
                                 id: itemID,
@@ -1217,19 +1216,18 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                             {userItems[itemID].name}
                           </li>
                         ))}
-
-                        <li className={`row center space-between`}>
-                          Request an Item
-                        </li>
                       </ul>
-                      <button
-                        className={`new-event-button new-event-button-red`}
-                        onClick={() => setShowItemList(false)}
-                      >
-                        Close
-                      </button>
+                      </div>
+                      <div className="py-2">
+                        <button
+                          className={`new-event-button new-event-button-red`}
+                          onClick={() => setShowItemList(false)}
+                        >
+                          Close
+                        </button>
+                      </div>
                     </div>
-
+                  </div>
                   ) :                   
                   <button
                   className={`new-event-button new-event-button-blue`}
@@ -1259,15 +1257,16 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 </button>
               </Row>
             </Col>
+            </Row>
           )}
-
-          <div
-            className={`row center center-self width-90 event-item-description ${
+          
+          </Row>
+          <Row
+            className={`event-item-description mx-5 ${
               activeItemDetails.id ? "event-item-description-show" : ""
             }`}
           >
-            <div className={`column event-item-description-text`}>
-              <span className={`column`}>
+            <Col className="align-left item-description-box">
                 <strong>
                   {activeItemDetails.type === "item" &&
                   activeItemDetails.id in userItems
@@ -1277,10 +1276,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                     ? userGroupedItems[activeItemDetails.id].name
                     : null}
                 </strong>
-              </span>
-              <p className={`column`}>
+              <p className="m-1">
                 <span>
-                  <i>Details</i>
+                  <i>Details: </i>
                 </span>
                 {activeItemDetails.type === "item" &&
                 activeItemDetails.id in userItems
@@ -1292,8 +1290,8 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
                 {activeItemDetails.type === "grouped" &&
                 activeItemDetails.id in userGroupedItems ? (
-                  <div className={`margin-top-15`}>
-                    <span>Items Included</span>
+                  <div className={`margin-top-15 pt-3`}>
+                    <span className="items-included">Items Included</span>
                     <ol>
                       {userGroupedItems[activeItemDetails.id].itemsArray.map(
                         (itemID, iIndex) =>
@@ -1305,9 +1303,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   </div>
                 ) : null}
               </p>
-            </div>
+            </Col>
+            <Col xs="2">
+              <button onClick={() => handleActiveItem("grouped", activeItemDetails.id)} className={`x-button delete-button`}>x</button>
+            </Col>
             <div
-              className={`event-item-description-button-container row right-align-row`}
+              className={`event-item-description-button-container right-align-row`}
             >
               <button
                 className={`event-item-description-button`}
@@ -1319,7 +1320,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 Gift
               </button>
             </div>
-          </div>
         </Row>
 
         {/* Recipient List */}
@@ -1424,7 +1424,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           </Row>
         </Row>
         <Row className={"mt-3 mx-5"}>
-          {error ? error : ""}
+          <span className="error-message-text">{error ? error : ""}</span>
           <button
             className={`new-event-button new-event-button-blue`}
             onClick={handleEventCheck}
@@ -1433,6 +1433,31 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             {match.params.eventID ? "Edit" : "Create"} Event
           </button>
         </Row>
+        <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+          {success ? (
+                <h5>
+                  {eventName} has been {" "}
+                  {match.params.eventID ? "updated" : "created"}{" "}
+                  sucessfully!
+                </h5>
+            ) : (
+              `${
+                match.params.eventID ? "Editing" : "Creating"
+              } event`
+            )}{" "}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <button className="general-button gereral-button-green px-4 py-2" onClick={handleClose}>
+          <Link to={"/events"}>Back to Dashboard</Link>
+          </button>
+          <button className=" general-button gereral-button-blue px-4 py-2"  onClick={handleClose}>
+          <Link to={"/event/new"}>Close</Link>
+          </button>
+        </Modal.Footer>
+      </Modal>
     </Col>
 
   );

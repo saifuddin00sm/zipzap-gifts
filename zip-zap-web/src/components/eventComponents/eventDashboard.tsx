@@ -134,16 +134,11 @@ function EventDashboard() {
   const settingMonthOrders = async () => {
     let { dateOrders } = await getMonthOrders(user);
     setUserMonthOrders({ orders: dateOrders });
-    console.log(dateOrders);
+    console.log("Date orders")
+    console.log(userMonthOrders);
   };
   
   useEffect(() => {
-    if (Object.keys(userEvents).length == 0) {
-      settingEvents();
-    } else {
-      setLoading(false);
-    }
-
     if (Object.keys(userItems).length === 0) {
       settingItems();
     }
@@ -154,6 +149,11 @@ function EventDashboard() {
 
     if (Object.keys(userMonthOrders.orders).length === 0) {
       settingMonthOrders();
+    }
+    if (Object.keys(userEvents).length == 0) {
+      settingEvents();
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -186,7 +186,7 @@ function EventDashboard() {
           <Row className="event-dashboard-sub-title primary-black-header mx-2">
             <span>Event List</span>
           </Row>
-          <Row className="mx-2 event-dashboard-events-list">
+          <Row className="mx-2 p-2 event-dashboard-events-list event-dashboard-events-list-container">
                 {userUsersLoaded ? 
                 (Object.keys(userUsers.activeUsers).length === 0 ? 
                   (
@@ -212,6 +212,7 @@ function EventDashboard() {
                         />
                       ) : null
                     )
+
                 ) : 
                 (
                   <div>
@@ -260,7 +261,7 @@ function EventDashboard() {
             </Row> */}
         </Col>
       </Row>
-      <Row className="pt-4 mx-3">
+      <Row className="py-4 mx-3">
         <Col sm="4">
           <CalendarSidebar orders={userMonthOrders} action={() => {}} />
         </Col>

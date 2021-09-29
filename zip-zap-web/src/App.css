@@ -182,6 +182,28 @@ button {
   margin: 0px;
   padding: 0px;
 }
+.general-button a {
+  text-decoration: none;
+  color: var(--high-black);
+}
+.general-button :hover {
+  text-decoration: none;
+  color: black;
+}
+
+.gereral-button-green {
+  border: 1px solid transparent;
+  margin-top: auto;
+  border-radius: 5px;
+  background: var(--primary-button-green);
+}
+
+.gereral-button-blue {
+  border: 1px solid transparent;
+  margin-top: auto;
+  border-radius: 5px;
+  background: var(--primary-button-blue);
+}
 
 .general-input-fit {
   height: 30px;
@@ -196,18 +218,33 @@ button {
   margin: 2px 0px;
 }
 
-.admin-button,
-a.admin-button {
-  margin: 3px 3px;
+.admin-button-small {
+  margin-top: 10px;
   padding: 3px;
   text-decoration: none;
   color: var(--high-black);
+  background-color: var(--primary-green);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.admin-button,
+a.admin-button {
+  margin-top: 10px;
+  padding: 3px;
+  text-decoration: none;
+  color: var(--high-black);
+  background-color: var(--primary-button-blue);
   border-radius: 5px;
   cursor: pointer;
 }
 
+.back-button {
+  background-color: var(--primary-button-green);
+}
 .delete-button {
-  background: rgb(121, 37, 37);
+  background: var(--primary-red);
   color: white;
 }
 
@@ -216,14 +253,19 @@ a.admin-button {
   cursor: pointer;
 }
 
-.item-card-container,
 .admin-dashboard-card {
+  border: var(--primary-border);
+}
+
+.item-card-container {
   border: var(--primary-border);
   min-width: 270px;
   width: 80%;
   max-width: 80%;
   min-height: 200px;
   margin: 15px 0px;
+  align-content: center;
+  text-align: center;
 }
 
 .item-card-container {
@@ -248,13 +290,23 @@ a.admin-button {
 }
 
 .item-card-image-main {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.item-card-image-main-edit {
+  width: 200px;
+  height: 200px;
 }
 
 .item-card-image-small {
-  max-width: 20%;
-  max-height: 20%;
+  max-width: 100%;
+  border: var(--primary-border);
+  margin: 2px;
+}
+.item-card-image-small-edit {
+  width: 100px;
+  height: 100px;
   border: var(--primary-border);
   margin: 2px;
 }
@@ -286,8 +338,8 @@ a.admin-button {
 
 .item-card-row-container {
   border: var(--primary-border);
-  margin: 2px;
   padding: 2px;
+  width: 100%;
 }
 
 .item-card-row-title {
@@ -381,6 +433,10 @@ a.admin-button {
   background-color: var(--primary-grey-background);
 }
 
+.month-change-button {
+  width: 20rem;
+}
+
 .new-event-main-section {
   background: var(--primary-grey-background);
   margin-left: 5px;
@@ -465,6 +521,12 @@ a.admin-button {
   margin: 0px;
   background: rgba(229, 229, 229, 1);
 }
+
+.event-dashboard-events-list-container {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 300px;
+}
 .people-dashboard-events-list {
   margin: 0px;
   background: rgba(229, 229, 229, 1);
@@ -518,6 +580,14 @@ a.admin-button {
   transform: rotate(90deg);
 }
 
+.x-button {
+  border: 1px solid transparent;
+  margin-top: auto;
+  border-radius: 50%;
+  background: var(--primary-red);
+  height: 30px;
+  width: 30px;
+}
 .add-event-button {
   border: 1px solid transparent;
   margin: 0px auto;
@@ -633,6 +703,13 @@ a.admin-button {
   height: 80px;
 }
 
+.sign-in-button {
+  width: 200px;
+  color: var(--high-black);
+}
+.sign-in-button a {
+  color: var(--high-black);
+}
 .new-event-icon {
   width: 48px;
   height: 48px;
@@ -686,6 +763,8 @@ a.admin-button {
   margin-bottom: 16px;
   border-radius: 5px;
   font-size: 14px;
+  text-align: left;
+  align-items: left;
 }
 
 a.new-event-button {
@@ -1019,7 +1098,6 @@ a.new-event-button {
   margin: 2px 3px;
 }
 .event-item-description {
-  width: 88%;
   max-height: 0px;
   transition: max-height 0.2s;
   overflow: hidden;
@@ -1034,7 +1112,6 @@ a.new-event-button {
 }
 
 .event-item-description-text {
-  width: calc(80% - 8px);
   text-align: left;
 }
 
@@ -1047,11 +1124,12 @@ a.new-event-button {
 }
 
 .event-item-card-active {
-  /* border: 3px solid var(--primary-blue); */
+  border: 3px solid var(--primary-blue);
 }
 
 .event-item-card-inactive {
   background: var(--primary-grey);
+  border: 3px solid var(--primary-blue);
 }
 
 .event-user-list-title {
@@ -1111,7 +1189,6 @@ a.new-event-button {
 .event-user-list {
   overflow-y: scroll;
   max-height: 300px;
-  min-height: 300px;
   width: 90%;
   background: var(--primary-white);
 }
@@ -1172,19 +1249,26 @@ a.new-event-button {
   border: var(--primary-border);
 }
 
+.event-item-list-container {
+  background: var(--primary-blue);
+  padding: 10px;
+}
+
+.event-item-list-sub-container {
+  background: var(--primary-off-white);
+}
+
 .event-item-list {
   min-height: 150px;
   max-height: 250px;
-  /* overflow: scroll; */
-  overflow: hidden;
-  padding: 10px 0px;
-  background: var(--primary-white);
-  margin: 8px 0px;
+  overflow-y: scroll;
+  background: var(--primary-off-white);
+  border: 2px solid var(--primary-grey-background);
+  margin: 10px;
 }
 
 .event-item-list-list {
-  height: calc(85% - 50px);
-  overflow: scroll;
+  /* height: calc(85% - 50px); */
   margin: 0px;
   padding: 2.5% 16px;
   text-align: left;
@@ -1193,6 +1277,9 @@ a.new-event-button {
 .event-item-list-list li {
   padding: 4px 2px;
   cursor: pointer;
+  border: 1px solid var(--primary-grey);
+  list-style-type: none;
+  margin: 3px;
 }
 
 .event-item-list-list li:hover {
@@ -1451,9 +1538,16 @@ svg:hover.side-bar-container-link {
   padding: 0px;
 }
 
+.home-page-container {
+  background-color: #282c34;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
 .home-page-container a {
   text-decoration: none;
-  color: var(--primary-white);
   margin: 0px 8px;
   font-size: 20px;
 }
@@ -1547,13 +1641,21 @@ a.nav-bar-logo {
   height: 99%;
 }
 
+.align-left {
+  justify-content: left;
+  text-align: left;
+}
+
 .department-align-left {
   justify-content: left;
 }
+
 .user-list-container {
   margin-bottom: 10px;
 }
-
+.items-included {
+  font-weight: 600;
+}
 .user-group-edit-container {
   background: var(--primary-white);
   padding-bottom: 40px;
@@ -1623,7 +1725,7 @@ a.nav-bar-logo {
 
 .home-page-hr {
   margin: 8px;
-  width: 25%;
+  align-content: center;
 }
 
 .registration-half-column-1 {

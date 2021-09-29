@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../App";
+import {Row, Col} from 'react-bootstrap';
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import AdminMenuCard from "./adminMenuCard";
 import appSettings from "../../appSettings.json";
@@ -67,8 +68,12 @@ function AdminDashboard() {
       <Redirect to={""} />
     </section>
   ) : (
-    <section className={`column center`}>
-      <h1>Admin Dashboard</h1>
+    <Col>
+      <Row>
+        <Col className="page-header justify-content-center">
+          <h3>Admin Dashboard</h3>
+        </Col>
+      </Row>
 
       {AppUserFeatures.includes(appSettings.features.adminChargePayment) ? (
         <AdminMenuCard
@@ -104,7 +109,7 @@ function AdminDashboard() {
         title={"This Week's Orders"}
         buttons={[{ text: "View Orders", link: "/admin/orders" }]}
       />
-    </section>
+    </Col>
   );
 }
 

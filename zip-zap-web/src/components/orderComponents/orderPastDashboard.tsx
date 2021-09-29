@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
+import {Row, Col} from 'react-bootstrap';
 import {
   eventOrder,
   userGroupedItem,
@@ -186,18 +187,17 @@ function OrderPastDashboard({ location }: RouteComponentProps) {
   };
 
   return (
-    <section className={`column center-column full-height`}>
-      <header className={`column center page-header`}>
-        <h1>Recent Orders</h1>
-      </header>
+    <Col>
+      <Row>
+        <Col className="page-header justify-content-center ">
+          <h3>Gift Dashboard</h3>
+        </Col>
+      </Row>
       {loading ? <LoadingIcon /> : null}
 
-      <main className={`full-width column center-column main-section`}>
-        <section
-          className={`row center-self full-width previous-order-page-title`}
-        >
+      <Row className={`d-flex justify-content-center mx-3 py-3 main-content`}>
           {/* Current Month */}
-          <h2>
+          <h2 className={`previous-order-page-title p-2 mx-3 `}>
             {
               monthsOfTheYear[
                 monthQuery ? parseInt(monthQuery) : parseInt(todayMonth)
@@ -205,11 +205,9 @@ function OrderPastDashboard({ location }: RouteComponentProps) {
             }{" "}
             2021
           </h2>
-        </section>
-
-        <br></br>
+      </Row>
+      <Row className={`p-3 mx-3 main-content`}>
         {/* Order List Container */}
-        <section className={`column center-column full-width `}>
           {loading
             ? [...Array(5)].map((a, aIndex) => (
                 <OrderPastRowContainer
@@ -226,15 +224,12 @@ function OrderPastDashboard({ location }: RouteComponentProps) {
                   campaignOrders={campaignOrders[campaignID]}
                 />
               ))}
-        </section>
-
-        <br></br>
-        <section className={`row center full-width `}>
+        </Row>
+        <Row className={`p-5 mx-3 mb-3 main-content`}>
           {handleMonthChange("Previous")}
           {handleMonthChange("Next")}
-        </section>
-      </main>
-    </section>
+        </Row>
+    </Col>
   );
 }
 

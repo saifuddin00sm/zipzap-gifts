@@ -24,7 +24,12 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
         <p className="event-list-title"> {props.event.name} </p>
       </Accordion.Header>
       <Accordion.Body>
-        <Col></Col>
+        <p className={`row center`}>
+          {getIcon(
+            props.event.defaultDetails.eventIcon,
+            "event-dashboard-icon"
+          )}
+        </p>
         <p className="event-list-info">Start Date: {new Date(props.event.startDate).toDateString()}</p>
         {props.event.defaultItemID || props.event.defaultGroupedItemID ? (
           <p className="event-list-info">
@@ -37,12 +42,6 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
               : null}
           </p>
         ) : null}
-        <p className={`row center`}>
-          {getIcon(
-            props.event.defaultDetails.eventIcon,
-            "event-dashboard-icon"
-          )}
-        </p>
 
         <Link
           to={`/event/e/${props.event.campaignID}`}

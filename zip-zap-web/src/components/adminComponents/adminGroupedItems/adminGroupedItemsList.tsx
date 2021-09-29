@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
+import {Row, Col, Button} from 'react-bootstrap';
 import { fetchRequest, UserContext } from "../../../App";
 import { adminGroupedItem, adminItem } from "../../../classes";
 import AdminGroupedItemCard from "../../basicComponents/adminComponents/adminGroupedItemCard";
@@ -165,42 +166,51 @@ function AdminGroupedItemsList() {
   };
 
   return (
-    <section className={`column center`}>
+    <Col>
       {!loading && !admin ? <Redirect to={""} /> : null}
+      <Row>
+        <Col className="page-header justify-content-center">
+          <h3>Grouped Items</h3>
+        </Col>
+      </Row>
+      <Row className='m-2'>
+        <Col>
+          <Link className={`general-button admin-button`} to={`/admin/dashboard`}>
+            Back to Admin Dashboard
+          </Link>
+        </Col>
 
-      <Link className={`general-button admin-button`} to={`/admin/dashboard`}>
-        Back to Admin Dashboard
-      </Link>
-
-      <h1>Grouped Items</h1>
-
-      <div className={`column center width-90`}>
+        <Col>
+          <Link
+            className={`general-button admin-button m-2`}
+            to={`/admin/groupedItems/new`}
+          >
+            Add New Grouped Item
+          </Link>
+        </Col>
+      </Row>
+      <Row className="m-2">
         <input
           className={`general-input`}
           placeholder={`Search for Item`}
           onKeyPress={handleSearch}
         ></input>
-        <Link
-          className={`general-button admin-button`}
-          to={`/admin/groupedItems/new`}
-        >
-          Add New Grouped Item
-        </Link>
-      </div>
-
-      {loading ? (
-        <LoadingIcon />
-      ) : (
-        searchItems.map((item, iIndex) => (
-          <AdminGroupedItemCard
-            key={iIndex}
-            index={iIndex}
-            item={adminGroupedItems[item]}
-            action={handleItemAction}
-          />
-        ))
-      )}
-    </section>
+      </Row>
+      <Row className="m-4">
+        {loading ? (
+          <LoadingIcon />
+        ) : (
+          searchItems.map((item, iIndex) => (
+            <AdminGroupedItemCard
+              key={iIndex}
+              index={iIndex}
+              item={adminGroupedItems[item]}
+              action={handleItemAction}
+            />
+          ))
+        )}
+      </Row>
+    </Col>
   );
 }
 

@@ -25,7 +25,8 @@ function UserDashboard() {
     useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [redirect, setRedirect] = useState("");
-  const [userList, setUserList] = useState([] as Array<string>);
+  let userList = new Array<string>()
+  // const [userList, setUserList] = useState([] as Array<string>);
 
   const settingUsers = async () => {
     let users = await getUserList(user);
@@ -33,10 +34,13 @@ function UserDashboard() {
     setUserUsersLoaded(true);
 
     if ("activeUsers" in users) {
-      // setUserList(Object.keys(users.activeUsers));
-      userGroupSetup(users.activeUsers);
+      let userListTemp = new Array<string>();
+      for (const user1 in users.activeUsers) {
+        userListTemp.push(user1)
+      }
+      userList = userListTemp;
+      // userGroupSetup(users.activeUsers);
     }
-
     setLoading(false);
   };
 
@@ -59,7 +63,7 @@ function UserDashboard() {
       }
     });
 
-    setUserGroupList({ ...finalGroups });
+    // setUserGroupList({ ...finalGroups });
     setLoading(false);
   };
 
@@ -67,8 +71,14 @@ function UserDashboard() {
     if (Object.keys(userUsers.activeUsers).length == 0) {
       settingUsers();
     } else {
-      setUserList(Object.keys(userUsers.activeUsers));
-      userGroupSetup(userUsers.activeUsers);
+      let userListTemp = new Array<string>();
+      for (const user1 in userUsers.activeUsers) {
+        userListTemp.push(user1)
+      }
+      userList = userListTemp;
+      // setUserList(Object.keys(userUsers.activeUsers));
+      // userGroupSetup(userUsers.activeUsers);
+      setLoading(false);
     }
   }, []);
 
@@ -201,10 +211,17 @@ function UserDashboard() {
       setUserUsers({ ...userUsers });
 
       userGroupSetup(userUsers.activeUsers);
-      setUserList(Object.keys(userUsers.activeUsers));
+
+      let userListTemp = new Array<string>();
+      for (const user1 in userUsers.activeUsers) {
+        userListTemp.push(user1)
+      }
+      userList = userListTemp;
+      
       setSuccessMessage(`User ${editUser ? "Updated" : "Added"} Successfully`);
       setEditUser(undefined);
-    } else {
+    } 
+    else {
       setSuccessMessage("Whoops, please contact support");
     }
 

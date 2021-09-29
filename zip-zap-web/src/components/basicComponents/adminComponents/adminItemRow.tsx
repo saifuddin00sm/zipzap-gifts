@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { adminItem } from "../../../classes";
+import {Row, Col, Accordion} from 'react-bootstrap';
 import { ReactComponent as CloseIcon } from "../../../icons/close.svg";
 
 // props.action req = (type:string, item:adminItem, index:number)
@@ -10,24 +11,30 @@ function AdminItemRow(props: {
   type: string;
 }) {
   return props.item ? (
-    <div
-      className={`row center left-align-row full-width item-card-row-container`}
+    <Col
+      className={`item-card-row-container p-4`} sm="4"
     >
-      <span className={`item-card-row-title`}>{props.item.name}</span>
-
+      <Row>
+      <Col sm="4">
+        <span className={`item-card-row-title`}>{props.item.name}</span>
+      </Col>
+      <Col sm="2">
       <span className={`item-card-row-price-quant`}>${props.item.price}</span>
-
+      </Col>
+      <Col sm="2">
       <span className={`item-card-row-price-quant`}>
         Q:{props.item.quantity}
       </span>
-
+      </Col>
       {props.type === "remove" ? (
+        <Col>
         <span
           className={`row center right-align-row item-card-row-remove`}
           onClick={(e: any) => props.action("removeItem", props.index)}
         >
           <CloseIcon />
         </span>
+        </Col>
       ) : props.type === "add" ? (
         <span
           className={`row center right-align-row item-card-row-add`}
@@ -36,7 +43,9 @@ function AdminItemRow(props: {
           <CloseIcon />
         </span>
       ) : null}
-    </div>
+      
+      </Row>
+    </Col>
   ) : null;
 }
 

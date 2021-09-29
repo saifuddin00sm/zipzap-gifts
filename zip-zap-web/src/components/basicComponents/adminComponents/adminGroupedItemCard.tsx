@@ -3,6 +3,7 @@ import { UserContext } from "../../../App";
 import { adminGroupedItem, adminItem } from "../../../classes";
 import { ReactComponent as CloseIcon } from "../../../icons/close.svg";
 import AdminItemRow from "./adminItemRow";
+import {Row, Col, Accordion} from 'react-bootstrap';
 import appSettings from "../../../appSettings.json";
 
 // props.action req = (type:string, item:adminItem, index:number)
@@ -119,58 +120,61 @@ function AdminGroupedItemCard(props: {
   };
 
   return editing ? (
-    <div className={`column center item-card-container`}>
+    <Col className={`item-card-container`} xs="12">
+      <span className="p-4">Box Name:</span>
       <input
-        className={`item-card-container-name`}
+        className={`item-card-container-name m-2`}
         type={"text"}
         value={editableItem.name}
         onChange={(e: any) => handleEditItem("name", e)}
         placeholder={`Grouped Item Name`}
       ></input>
-
-      <div className={`column center`}>
-        <div className={`row center space-between`}>
-          <div className={`row center-column`}>
+          <Row>
+            <Col>
+          <div className={`center-column`}>
+            <span className="p-4">
+              {editableItem.mainPicture ? "Main Image" : "NO MAIN IMAGE"}:
+            </span>
             {editableItem.mainPicture ? (
               <img
                 // src={props.item.mainPicture}
                 src={`${appSettings.pictureURL}/${editableItem.mainPicture}`}
                 alt={`${editableItem.name}-main-picture`}
-                className={`item-card-image-small`}
+                className={`item-card-image-main-edit`}
               ></img>
             ) : null}
-
-            <span>
-              {editableItem.mainPicture ? "Main Image" : "NO MAIN IMAGE"}
-            </span>
           </div>
+          </Col>
+          <Col>
 
           {/* <div>
             <CloseIcon className={`delete-button-svg`} />
           </div> */}
-        </div>
 
-        {editableItem.pictures.map((pictureURL, pIndex) => (
-          <div key={pIndex} className={`row center space-between`}>
-            <div className={`row center-column`}>
-              <img
-                src={`${appSettings.pictureURL}/${pictureURL}`}
-                alt={`${editableItem.name}-alt-picture-${pIndex}`}
-                className={`item-card-image-small`}
-              ></img>
-              <button onClick={() => changeMainPicture(pIndex)}>
-                Make Main Image
-              </button>
-            </div>
-            <div>
-              <CloseIcon
-                className={`delete-button-svg`}
-                onClick={() => handleImageRemove(pIndex)}
-              />
-            </div>
-          </div>
-        ))}
-
+            <Row>
+            {editableItem.pictures.map((pictureURL, pIndex) => (
+              <Col sm="3" className="border">
+              <div key={pIndex} className={`space-between p-3`}>
+                  <CloseIcon
+                    className={`delete-button-svg`}
+                    onClick={() => handleImageRemove(pIndex)}
+                  />
+                  <img
+                    src={`${appSettings.pictureURL}/${pictureURL}`}
+                    alt={`${editableItem.name}-alt-picture-${pIndex}`}
+                    className={`item-card-image-small-edit`}
+                  ></img>
+                  <button  className="admin-button-small" onClick={() => changeMainPicture(pIndex)}>
+                    Make Main Image
+                  </button>
+                <div>
+                </div>
+              </div>
+              </Col>
+            ))}
+            </Row>
+        </Col>
+        </Row>
         {/* <button
           className={`general-button admin-button`}
           // onClick={() => setShowSearchContainer(!showSearchContainer)}
@@ -188,7 +192,6 @@ function AdminGroupedItemCard(props: {
         <span className={`item-picture-upload-message`}>
           Please Enter Item Name First
         </span>
-      </div>
 
       <div className={`item-card-body`}>
         <textarea
@@ -206,8 +209,21 @@ function AdminGroupedItemCard(props: {
             onChange={(e: any) => handleEditItem("price", e)}
           ></input>
         </p>
-        <div className={`column center`}>
-          <span>Items Included:</span>
+        <div className={`center`}>
+          <Row>
+            <Col>
+          <span>Items Included:  </span>
+          </Col>
+          <Col xs="2">
+          <button
+            className={`general-button admin-button`}
+            onClick={() => setShowSearchContainer(!showSearchContainer)}
+          >
+            {showSearchContainer ? "Cancel" : "Add Item"}
+          </button>
+          </Col>
+          </Row>
+          <Row>
           {editableItem.itemsArray.map((itemID, iIndex) => (
             <AdminItemRow
               key={iIndex}
@@ -218,6 +234,7 @@ function AdminGroupedItemCard(props: {
               action={handleEditItem}
             />
           ))}
+          </Row>
           <br></br>
           {showSearchContainer ? (
             <div className={`column center full-width`}>
@@ -241,21 +258,19 @@ function AdminGroupedItemCard(props: {
               ))}
             </div>
           ) : null}
-          <button
-            className={`general-button admin-button`}
-            onClick={() => setShowSearchContainer(!showSearchContainer)}
-          >
-            {showSearchContainer ? "Cancel" : "Add Item"}
-          </button>
         </div>
       </div>
       <br></br>
-      <div className={`row center`}>
-        <button className={`general-button admin-button`} onClick={handleSave}>
+      <Row>
+        <Col sm="4"></Col>
+        <Col sm="2">
+        <button className={`general-button admin-button p-2 px-4`} onClick={handleSave}>
           Save Item
         </button>
+        </Col>
+        <Col sm="2">
         <button
-          className={`general-button admin-button`}
+          className={`general-button admin-button p-2 px-4`}
           onClick={() => {
             setEditing(false);
             if (props.editing) {
@@ -265,7 +280,8 @@ function AdminGroupedItemCard(props: {
         >
           Cancel
         </button>
-      </div>
+        </Col>
+      </Row>
 
       {!props.editing ? (
         <button
@@ -275,60 +291,85 @@ function AdminGroupedItemCard(props: {
           Delete Item
         </button>
       ) : null}
-    </div>
+    </Col>
   ) : (
-    <div
-      className={`column center item-card-container ${
+    <Col md="4" sm="6"
+      className={`item-card-container p-4 ${
         !props.item.isActive ? "item-card-container-inactive" : ""
       }`}
     >
-      <h3>
-        {props.item.name} {!props.item.isActive ? ` - INACTIVE` : ""}
-      </h3>
-      <div className={`column center`}>
-        <img
-          src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
-          alt={`${props.item.name}-main-picture`}
-          className={`item-card-image-main`}
-        ></img>
-        <div className={`row center`}>
-          {props.item.pictures.slice(0, 4).map((pictureURL, pIndex) => (
+      <Row>
+        <Col>
+        <h3>
+          {props.item.name} {!props.item.isActive ? ` - INACTIVE` : ""}
+        </h3>
+        </Col>
+        <Col xs="3">
+        <button
+          className={`general-button admin-button`}
+          onClick={() => setEditing(true)}
+          disabled={!props.item.isActive}
+        >
+          Edit Item
+        </button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+        </Col>
+        <Col>
+            <img
+              src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
+              alt={`${props.item.name}-main-picture`}
+              className={`item-card-image-main`}
+            ></img>
+        </Col>
+        <Col>
+        </Col>
+        </Row>
+        <hr/>
+        <Row>
+        {props.item.pictures.slice(0, 4).map((pictureURL, pIndex) => (
+          <Col sm="3">
             <img
               key={pIndex}
               src={`${appSettings.pictureURL}/${pictureURL}`}
               alt={`${props.item.name}-alt-picture-${pIndex}`}
               className={`item-card-image-small`}
             ></img>
-          ))}
-        </div>
-      </div>
-
-      <div className={`item-card-body`}>
+          </Col>
+        ))}
+        </Row>
         <p>{props.item.description}</p>
+        <Accordion>
+          <Accordion.Item eventKey={props.item.name}>
+            <Accordion.Header>
+              <h4>Items</h4>
+            </Accordion.Header>
+            <Accordion.Body>
+            <Row>
+            <div className={`item-card-body`}>
+              <p>{props.item.description}</p>
 
-        <div className={`column center`}>
-          <span>Items Included:</span>
-          {props.item.itemsArray.map((itemID) => (
-            <AdminItemRow
-              key={itemID}
-              index={itemID}
-              item={adminItems[itemID]}
-              // item={adminItems.find((item, index) => item.itemID === itemIndex)}
-              type={""}
-              action={handleEditItem}
-            />
-          ))}
-        </div>
-      </div>
-
-      <button
-        className={`general-button admin-button`}
-        onClick={() => setEditing(true)}
-        disabled={!props.item.isActive}
-      >
-        Edit Item
-      </button>
-    </div>
+              <div className={`column center`}>
+                <span>Items Included:</span>
+                {props.item.itemsArray.map((itemID) => (
+                  <AdminItemRow
+                    key={itemID}
+                    index={itemID}
+                    item={adminItems[itemID]}
+                    // item={adminItems.find((item, index) => item.itemID === itemIndex)}
+                    type={""}
+                    action={handleEditItem}
+                  />
+                ))}
+              </div>
+            </div>
+            </Row>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+    </Col>
   );
 }
 

@@ -23,25 +23,26 @@ function HomePageComponent() {
   ] as Array<navButton>);
 
   return (
-    <Row className="App-header home-page-container">
+    <Row className="home-page-container">
       {/* <header>Zip Zap Gifts</header> */}
-      <br></br>
+      <Col>
       {guestNavButtons.map((button: navButton, bIndex: number) =>
         button.external ? (
-          <Button
-            href={button.link}
-            key={bIndex}
-            className={`row center px-3 p-2`}
-            variant="outline-light"
-            size="lg"
-            // onClick={() => setIsExpanded(false)}
-          >
-            {button.text}
-          </Button>
+    
+            <Button
+              href={button.link}
+              key={bIndex}
+              className={`sign-in-button`}
+              variant="light"
+              // onClick={() => setIsExpanded(false)}
+            >
+              {button.text}
+            </Button>
         ) : (
           <hr className={"home-page-hr"} key={bIndex}></hr>
         )
       )}
+      </Col>
     </Row>
   );
 }

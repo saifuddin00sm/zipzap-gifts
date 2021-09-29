@@ -33,7 +33,7 @@
     "eject": "react-scripts eject",
     "building": "GENERATE_SOURCEMAP=false react-scripts build",
     "deploy": "aws --profile zipzap s3 cp build s3://app.zipzapgifts.com --recursive",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build"
+    "build": " react-scripts build"
   },
   "eslintConfig": {
     "extends": [
