@@ -465,21 +465,15 @@ function App() {
         <Route exact path="/register" component={RegisterComponent} />
         <Route exact path="/logout" component={Logout} />
 
-        {user && "email" in user && user.email ? (
-          <Row>
-            <Col>
-              <Route exact path="/" component={EventDashboard} />
-            </Col>
-          </Row>
-        ) : (
-          <Route exact path="/" component={HomePageComponent} />
-        )}
-
-        {!user || !("email" in user) || !user.email ? null : ( // <Route exact path="/" component={HomePageComponent} /> // <Redirect to="/" />
+        {!user || !("email" in user) || !user.email ? <Route exact path="/" component={HomePageComponent} /> : (
           <Row className="main-section-row">
             <Col xs="2" className="side-bar-container">
               <SideBarComponent />
             </Col>
+
+            {/* Main Page  */}
+            <Route exact path="/" component={EventDashboard} />
+
             {/* Stripe Pages  */}
             <Route exact path="/checkout" component={CheckoutPage} />
 
