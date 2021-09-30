@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { Redirect, Route, Router } from "react-router-dom";
+import { Route, useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import appSettings from "./appSettings.json";
 import HomePageComponent from "./components/homePageComponent";
@@ -275,28 +275,18 @@ function App() {
     orders: {},
   } as userMonthOrderList);
 
+  let location = useLocation();
   useEffect(() => {
-    // if (
-    //   location.pathname.includes("/id/") ||
-    //   location.pathname.includes("/a/") ||
-    //   location.pathname.includes("/dashboard/") ||
-    //   location.pathname.includes("/present")
-    // ) {
-    //   setShowNavBar(false);
-    // } else {
-    //   setShowNavBar(true);
-    // }
-
-    if (window.location.pathname === "/callback") {
+    if (location.pathname === "/callback") {
       window.location.replace(
         `${window.location.origin}/#/callback${window.location.search}`
       );
-    } else if (window.location.pathname === "/callback/register") {
+    } else if (location.pathname === "/callback/register") {
       window.location.replace(
         `${window.location.origin}/#/callback${window.location.search}&type=register`
       );
     }
-  }, [window.location]);
+  }, [location]);
 
   const loadUser = async () => {
     let localUser;
