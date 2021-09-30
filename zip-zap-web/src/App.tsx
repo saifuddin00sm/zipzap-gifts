@@ -31,17 +31,14 @@ import OrderPastDashboard from "./components/orderComponents/orderPastDashboard"
 import UserDashboard from "./components/userComponents/userDashboard";
 import giftDashboard from "./components/giftComponents/giftDashboard";
 import profileDashboard from "./components/basicComponents/profileComponents/ProfileDashboard";
-import giftDetails from "./components/giftComponents/GiftDetails";
 import AuthCallback, {
   getRefreshToken,
   newUserInfo,
 } from "./components/basicComponents/accountComponents/authCallback";
 import LoadingIcon from "./components/basicComponents/LoadingIcon";
 import UserNewList from "./components/userComponents/userNewList";
-import ExampleNewCampaign from "./components/propsExample";
 import RegisterComponent from "./components/basicComponents/accountComponents/registerComponent";
 import Logout from "./components/basicComponents/accountComponents/logout";
-import StripeWrapper from "./components/stripeComponents/stripeWrapper";
 import CheckoutPage from "./components/stripeComponents/checkoutPage";
 import AdminPayments from "./components/adminComponents/adminPayments";
 import AdminDBOrders from "./components/adminComponents/adminDBOrders";
