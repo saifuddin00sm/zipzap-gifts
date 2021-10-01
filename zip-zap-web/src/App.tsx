@@ -390,7 +390,7 @@ function App() {
       <img
         src={`media/images/coming_soon.jpeg`}
         className={`item-card-image-main`}
-        alt={`Coming Soon Image`}
+        alt={`Coming Soon`}
       ></img>
       <hr></hr>
       <div>
