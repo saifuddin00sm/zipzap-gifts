@@ -288,60 +288,60 @@ function App() {
     }
   }, [location]);
 
-  const loadUser = async () => {
-    let localUser;
-    localUser = localStorage.getItem("user");
-    if (localUser) {
-      localUser = JSON.parse(localUser);
-      if (localUser.expiresIn) {
-        let now = new Date();
-        let expire = new Date(localUser.expiresIn);
-        // console.log("COMPARE: ", now, expire, expire < now);
-        if (expire < now) {
-          console.log("EXPIRED:", now, expire);
-          // logout(setAppUser);
-          // localUser = null;
-          // setLoading(false);
+  useEffect(() => {
+    const loadUser = async () => {
+      let localUser;
+      localUser = localStorage.getItem("user");
+      if (localUser) {
+        localUser = JSON.parse(localUser);
+        if (localUser.expiresIn) {
+          let now = new Date();
+          let expire = new Date(localUser.expiresIn);
+          // console.log("COMPARE: ", now, expire, expire < now);
+          if (expire < now) {
+            console.log("EXPIRED:", now, expire);
+            // logout(setAppUser);
+            // localUser = null;
+            // setLoading(false);
 
-          if ("refresh" in localUser) {
-            // console.log("GETTING REFRESH");
-            let refreshTokens = await getRefreshToken(localUser.refresh);
-            localUser = await newUserInfo(refreshTokens);
+            if ("refresh" in localUser) {
+              // console.log("GETTING REFRESH");
+              let refreshTokens = await getRefreshToken(localUser.refresh);
+              localUser = await newUserInfo(refreshTokens);
 
-            console.log("Expired Refresh", refreshTokens, localUser);
+              console.log("Expired Refresh", refreshTokens, localUser);
 
-            localStorage.setItem("user", JSON.stringify(localUser));
-          } else {
-            // console.log("NO REFRESH");
-            localUser = {};
-            localStorage.removeItem("user");
-            // setUser({} as any);
+              localStorage.setItem("user", JSON.stringify(localUser));
+            } else {
+              // console.log("NO REFRESH");
+              localUser = {};
+              localStorage.removeItem("user");
+              // setUser({} as any);
+            }
           }
         }
+        //  else {
+        //   localUser = null;
+        // }
+      } else {
+        localUser = null;
       }
-      //  else {
-      //   localUser = null;
-      // }
-    } else {
-      localUser = null;
-    }
-    return localUser;
-  };
+      return localUser;
+    };
 
-  const setAppUser = async () => {
-    let testUser = await loadUser();
-    // console.log("local user", testUser);
-    setUser(testUser);
-    setLoading(false);
-  };
+    const setAppUser = async () => {
+      let testUser = await loadUser();
+      // console.log("local user", testUser);
+      setUser(testUser);
+      setLoading(false);
+    };
 
-  // WILL BE REMOVED
-  const setBetaPasswordForApp = async () => {
-    let password = await getBetaPasswordFromLocalStorage();
-    setBetaPassword(password);
-  };
+    // WILL BE REMOVED
+    const setBetaPasswordForApp = async () => {
+      let password = await getBetaPasswordFromLocalStorage();
+      setBetaPassword(password);
+    };
 
-  useEffect(() => {
     if (!userRef.current || !("email" in userRef.current)) {
       setAppUser();
     } else {
@@ -351,7 +351,8 @@ function App() {
     if (!betaPassword) {
       setBetaPasswordForApp();
     }
-  }, []);
+    // When betaPassword is taken out for launch, this should only run on mount, so change the dependency array on the next line to empty []
+  }, [betaPassword]);
 
   const handleBetaChange = (e: any) => {
     if (e.key === "Enter" && tempBetaPassword === "ZipZapFlashBang") {
@@ -452,7 +453,9 @@ function App() {
         <Route exact path="/register" component={RegisterComponent} />
         <Route exact path="/logout" component={Logout} />
 
-        {!user || !("email" in user) || !user.email ? <Route exact path="/" component={HomePageComponent} /> : (
+        {!user || !("email" in user) || !user.email ? (
+          <Route exact path="/" component={HomePageComponent} />
+        ) : (
           <Row className="main-section-row">
             <Col xs="2" className="side-bar-container">
               <SideBarComponent />
