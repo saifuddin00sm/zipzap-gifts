@@ -1,12 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Link,
-  Redirect,
-  RouteComponentProps,
-  RouteProps,
-} from "react-router-dom";
+import { Link, Redirect, RouteComponentProps } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../../App";
-import { adminAccount, adminItem, adminOrder } from "../../../classes";
+import { adminAccount, adminOrder } from "../../../classes";
 import AdminOrderRow from "../../basicComponents/adminComponents/adminOrderRow";
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
@@ -54,7 +49,7 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
     if (!admin && "email" in user) {
       getAdminUser();
     } else if (admin) {
-      if (adminAccounts.length == 0) {
+      if (adminAccounts.length === 0) {
         getAdminAccounts();
       }
       if (Object.keys(adminItems).length === 0) {
@@ -73,7 +68,7 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
   }, [match.params.accountID, admin]);
 
   const [searchItems, setSearchItems] = useState([] as Array<adminOrder>);
-  const [weekDates, setWeekDates] = useState({
+  const [, setWeekDates] = useState({
     lastSunday: "",
     nextSunday: "",
   });
@@ -214,7 +209,7 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
 
             let found = false;
 
-            let itemSearch = groupedItem.itemsArray.filter((itemID, iIndex) => {
+            groupedItem.itemsArray.filter((itemID, iIndex) => {
               let item = adminItems[itemID];
               if (item.name.toLowerCase().includes(searchTerm)) {
                 found = true;
@@ -232,7 +227,7 @@ function AdminAccountOrders({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
-  const [allowMultiple, setAllowMultiple] = useState(false);
+  const allowMultiple = false;
   const [multipleSelect, setMultipleSelect] = useState([] as Array<number>);
 
   const handleMultipleClick = (index: number) => {

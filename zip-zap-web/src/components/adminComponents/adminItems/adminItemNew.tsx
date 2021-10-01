@@ -153,7 +153,7 @@ function AdminItemNew() {
     }
   };
 
-  const [item, setItem] = useState({
+  const item = {
     itemID: 0,
     name: "",
     description: "",
@@ -168,7 +168,7 @@ function AdminItemNew() {
     weight: 0,
     cost: 0,
     brandingAvailable: false,
-  } as adminItem);
+  } as adminItem;
 
   return (
     <section className={`column center`}>

@@ -1,20 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { fetchRequest, UserContext } from "../../App";
+import React from "react";
 import { adminAccountDetails } from "../../classes";
 
 function AdminAccountRow(props: {
   account: adminAccountDetails;
   action: Function;
 }) {
-  const { user } = useContext(UserContext);
-
-  // ${
-  //   props.order.shippingDetails &&
-  //   props.order.shippingDetails.fulfillmentDate
-  //     ? "admin-order-fulfilled"
-  //     : ""
-  // }
   return (
     <tr
       className={`

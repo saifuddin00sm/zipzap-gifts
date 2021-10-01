@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import { UserContext, log, fetchRequest } from "../../../App";
-import { Redirect, Link, RouteComponentProps } from "react-router-dom";
+import { UserContext, fetchRequest } from "../../../App";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 import { newUserInfo } from "./authCallback";
 import ModalBox from "../modalBox";
@@ -15,17 +15,6 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
   const [error, setError] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState("");
   const [redirect, setRedirect] = useState("");
-
-  function useQuery() {
-    return new URLSearchParams(location.search);
-  }
-
-  // let query = useQuery();
-  // let code = query.get("code");
-  // let type = query.get("type");
-  // let state = query.get("state");
-
-  // const [tempUser, setTempUser] = useState(JSON.parse(JSON.stringify(appUser)));
 
   const [editUser, setEditUser] = useState(
     {} as {

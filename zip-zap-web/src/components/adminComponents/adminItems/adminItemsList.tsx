@@ -90,7 +90,7 @@ function AdminItemsList() {
           }
         });
 
-        let fileUploadResult = await Promise.all(fileLoop);
+        await Promise.all(fileLoop);
       }
 
       updateResponse = await fetchRequest(

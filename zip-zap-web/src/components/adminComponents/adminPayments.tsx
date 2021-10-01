@@ -1,18 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../App";
-import { adminAccountDetails, adminMenuButton } from "../../classes";
+import { adminAccountDetails } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import AdminAccountRow from "./adminAccountRow";
 
 function AdminPayments() {
-  const {
-    user,
-    admin,
-    setAdmin,
-    setUserFeatures,
-    userFeatures: AppUserFeatures,
-  } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");

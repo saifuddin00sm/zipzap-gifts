@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../../App";
-import { adminGroupedItem, adminItem } from "../../../classes";
+import { adminGroupedItem } from "../../../classes";
 import AdminGroupedItemCard from "../../basicComponents/adminComponents/adminGroupedItemCard";
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
@@ -72,8 +72,6 @@ function AdminGroupedItemNew() {
     setUserFeatures,
     admin,
     setAdmin,
-    adminItems,
-    setAdminItems,
     adminGroupedItems,
     setAdminGroupedItems,
   } = useContext(UserContext);
@@ -140,7 +138,7 @@ function AdminGroupedItemNew() {
         }
       });
 
-      let fileUploadResult = await Promise.all(fileLoop);
+      await Promise.all(fileLoop);
     }
 
     // TO-DO - Show Errors
@@ -160,7 +158,7 @@ function AdminGroupedItemNew() {
     }
   };
 
-  const [item, setItem] = useState({
+  const item = {
     groupedID: 0,
     name: "",
     description: "",
@@ -170,7 +168,7 @@ function AdminGroupedItemNew() {
     isActive: true,
     itemsArray: [],
     priceOverride: 0,
-  } as adminGroupedItem);
+  } as adminGroupedItem;
 
   return (
     <section className={`column center`}>
