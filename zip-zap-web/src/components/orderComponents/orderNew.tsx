@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
-import { eventOrder, userEvent, userItem } from "../../classes";
+import { eventOrder } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
-import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
-import {Row, Col} from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { Link, RouteComponentProps } from "react-router-dom";
 import ForwardArrow from "../basicComponents/forwardArrow";
 import {
@@ -50,7 +49,6 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
   const [initalLoading, setInitialLoading] = useState(true);
 
   const [success, setSuccess] = useState(false);
-  const [redirect, setRedirect] = useState("");
 
   const settingEvents = async () => {
     let events = await getEvents(user);
@@ -267,7 +265,7 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
 
     let itemLoop = customGift.items.map((item) => items.push(item.id));
 
-    let itemResult = await Promise.all(itemLoop);
+    await Promise.all(itemLoop);
 
     let saveResponse = { error: "", itemsID: "" };
 
@@ -378,7 +376,7 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
   const handleNewOrder = async () => {
     let campaignID = "";
 
-    Object.keys(userEvents).filter((eventID) => {
+    Object.keys(userEvents).forEach((eventID) => {
       if (userEvents[eventID].name.toLowerCase() === "onetime") {
         campaignID = eventID;
       }
@@ -529,7 +527,7 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
     <Col>
       <Row>
         <Col className="page-header justify-content-center">
-        <h3>{match.params.orderID ? "Edit" : "Add a"} One-Time Gift</h3>
+          <h3>{match.params.orderID ? "Edit" : "Add a"} One-Time Gift</h3>
         </Col>
       </Row>
       {initalLoading ? <LoadingIcon /> : ""}
@@ -560,12 +558,11 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
           </ModalBox>
         ) : null}
 
-      <Row className="event-dashboard-sub-title primary-green-header mx-5">
+        <Row className="event-dashboard-sub-title primary-green-header mx-5">
           <span>Details</span>
-      </Row>
-      <Row className="new-event-main-section p-3 mx-5">
-
-        {/* name, event date */}
+        </Row>
+        <Row className="new-event-main-section p-3 mx-5">
+          {/* name, event date */}
           <Col sm="5">
             <div className={`column full-width`}>
               <span className={`row`}>
@@ -592,14 +589,13 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
             </div> */}
 
             {/* <br></br> */}
-              <span className={`row`}>Note</span>
-              <textarea
-                placeholder={"i.e. Thanks for being a great employee!"}
-                className={`note-input-fit full-width`}
-                value={eventNote}
-                onChange={(e: any) => setEventNote(e.target.value)}
-              ></textarea>
-            
+            <span className={`row`}>Note</span>
+            <textarea
+              placeholder={"i.e. Thanks for being a great employee!"}
+              className={`note-input-fit full-width`}
+              value={eventNote}
+              onChange={(e: any) => setEventNote(e.target.value)}
+            ></textarea>
           </Col>
           <Col>
             {/* <div className={`row center-column full-width space-between`}>
@@ -955,7 +951,7 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
           </button>
         </div>
       </Row>
-  </Col>
+    </Col>
   );
 }
 

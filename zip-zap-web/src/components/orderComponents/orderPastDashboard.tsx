@@ -1,20 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
-import {Row, Col} from 'react-bootstrap';
-import {
-  eventOrder,
-  userGroupedItem,
-  userItem,
-  userMonthOrderList,
-} from "../../classes";
+import { Row, Col } from "react-bootstrap";
+import { eventOrder } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
-import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
-import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link, RouteComponentProps } from "react-router-dom";
-import CalendarMonth, {
-  monthsOfTheYear,
-} from "../basicComponents/calendarComponents/calendarMonth";
-import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
+import { monthsOfTheYear } from "../basicComponents/calendarComponents/calendarMonth";
 import {
   getEvents,
   getItems,
@@ -27,7 +17,7 @@ import OrderPastRowContainer from "./orderPastRowContainer";
 const calcMonthPrice = (campaignOrders: { [key: string]: eventOrder }) => {
   let totalPrice = 0;
 
-  Object.keys(campaignOrders).filter((orderID) => {
+  Object.keys(campaignOrders).forEach((orderID) => {
     let order = campaignOrders[orderID];
 
     totalPrice += order.cost + order.shippingFee;
@@ -57,14 +47,12 @@ function OrderPastDashboard({ location }: RouteComponentProps) {
     setUserItems,
     userGroupedItems,
     setUserGroupedItems,
-    userMonthOrders,
     setUserMonthOrders,
     setUserUsers,
     userUsers,
     setUserUsersLoaded,
   } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
-  const [redirect, setRedirect] = useState("");
 
   const [campaignOrders, setCampaignOrders] = useState(
     {} as { [key: string]: { [key: string]: eventOrder } }
@@ -107,7 +95,7 @@ function OrderPastDashboard({ location }: RouteComponentProps) {
   };
 
   useEffect(() => {
-    if (Object.keys(userEvents).length == 0) {
+    if (Object.keys(userEvents).length === 0) {
       settingEvents();
     }
 
@@ -196,39 +184,39 @@ function OrderPastDashboard({ location }: RouteComponentProps) {
       {loading ? <LoadingIcon /> : null}
 
       <Row className={`d-flex justify-content-center mx-3 py-3 main-content`}>
-          {/* Current Month */}
-          <h2 className={`previous-order-page-title p-2 mx-3 `}>
-            {
-              monthsOfTheYear[
-                monthQuery ? parseInt(monthQuery) : parseInt(todayMonth)
-              ]
-            }{" "}
-            2021
-          </h2>
+        {/* Current Month */}
+        <h2 className={`previous-order-page-title p-2 mx-3 `}>
+          {
+            monthsOfTheYear[
+              monthQuery ? parseInt(monthQuery) : parseInt(todayMonth)
+            ]
+          }{" "}
+          2021
+        </h2>
       </Row>
       <Row className={`p-3 mx-3 main-content`}>
         {/* Order List Container */}
-          {loading
-            ? [...Array(5)].map((a, aIndex) => (
-                <OrderPastRowContainer
-                  key={aIndex}
-                  campaignID={"0"}
-                  campaignOrders={{}}
-                  loading={true}
-                />
-              ))
-            : Object.keys(campaignOrders).map((campaignID, cIndex) => (
-                <OrderPastRowContainer
-                  key={cIndex}
-                  campaignID={campaignID}
-                  campaignOrders={campaignOrders[campaignID]}
-                />
-              ))}
-        </Row>
-        <Row className={`p-5 mx-3 mb-3 main-content`}>
-          {handleMonthChange("Previous")}
-          {handleMonthChange("Next")}
-        </Row>
+        {loading
+          ? [...Array(5)].map((a, aIndex) => (
+              <OrderPastRowContainer
+                key={aIndex}
+                campaignID={"0"}
+                campaignOrders={{}}
+                loading={true}
+              />
+            ))
+          : Object.keys(campaignOrders).map((campaignID, cIndex) => (
+              <OrderPastRowContainer
+                key={cIndex}
+                campaignID={campaignID}
+                campaignOrders={campaignOrders[campaignID]}
+              />
+            ))}
+      </Row>
+      <Row className={`p-5 mx-3 mb-3 main-content`}>
+        {handleMonthChange("Previous")}
+        {handleMonthChange("Next")}
+      </Row>
     </Col>
   );
 }
