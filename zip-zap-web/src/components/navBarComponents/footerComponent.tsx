@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import {Col} from 'react-bootstrap'
-import { navButton } from "../../classes";
+import { Col } from "react-bootstrap";
 import { ReactComponent as LogoTextIcon } from "../../icons/logo-words.svg";
 
 function FooterComponent() {

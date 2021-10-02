@@ -1,6 +1,5 @@
 import React from "react";
 import { ReactComponent as ArrowRightIcon } from "../../icons/arrowHeadRight.svg";
-import {Button} from 'react-bootstrap'
 
 function ForwardArrow(props: {
   action: Function;

@@ -1,49 +1,14 @@
-    import React, { useContext, useEffect, useState } from "react";
-    import {Container, Row, Col, Popover} from 'react-bootstrap';
-    import { fetchRequest, UserContext } from "../../../App";
-    import { userGroupedItem } from "../../../classes";
-    import appSettings from "../../../appSettings.json";
-    import { ReactComponent as CloseIcon } from "../../icons/close.svg";
+import React, { useContext, useEffect } from "react";
+import { Row, Col } from "react-bootstrap";
+import { UserContext } from "../../../App";
 
-
-    const getGroupedItems = async (user: any) => {
-    let response = await fetchRequest(user, "groupedItems", "GET");
-
-    if ("items" in response) {
-        console.log("the items")
-        console.log(response.items)
-        return response.items;
-    }
-
-    return {};
-    };
-
-    const getItems = async (user: any) => {
-    let response = await fetchRequest(user, "items", "GET");
-
-    if ("items" in response) {
-        return response.items;
-    }
-
-    return {};
-    };
-
-
-
-    function ProfileDashboard() {
-    const {
-        user, 
-        userUsers, 
-        setUserUsers,
-        setUserUsersLoaded, 
-        userUsersLoaded,   
-    } = useContext(UserContext);
-    const [loading, setLoading] = useState(false);
+function ProfileDashboard() {
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
-        console.log("user is")
-        console.log(user)
-    }, []);
+        console.log("user is");
+        console.log(user);
+    }, [user]);
 
     return (
         <Col>
@@ -53,11 +18,13 @@
                 </Col>
             </Row>
             <Row className="mx-4 p-3 profile-main">
-                <p>NAME: {user.firstName} {user.lastName}</p>
+                <p>
+                    NAME: {user.firstName} {user.lastName}
+                </p>
                 <p>EMAIL: {user.email}</p>
             </Row>
         </Col>
     );
-    }
+}
 
-    export default ProfileDashboard;
+export default ProfileDashboard;

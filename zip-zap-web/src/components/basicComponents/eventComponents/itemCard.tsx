@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { userEvent, userItem } from "../../../classes";
-import {Card, Col} from 'react-bootstrap'
+import React from "react";
+import { userItem } from "../../../classes";
+import { Card, Col } from "react-bootstrap";
 import appSettings from "../../../appSettings.json";
 
 function ItemCard(props: {
@@ -9,12 +9,9 @@ function ItemCard(props: {
   action: Function;
   class?: string;
 }) {
-  const [showDetails, setShowDetails] = useState(false);
   return !props.item ? (
     <Col sm={3}>
-      <Card
-        className={`m-1 ${props.class}`}
-      >
+      <Card className={`m-1 ${props.class}`}>
         {/* <Card.Img className={`event-item-card-image-loading`}>
           <div className={`loading-skeleton`}></div>
         </Card.Img> */}
@@ -43,8 +40,12 @@ function ItemCard(props: {
         ) : null}
 
         <Card.Body>
-          <Card.Text className={`event-item-card-text`}>{props.item.name}</Card.Text>
-          <Card.Text className={`event-item-card-text`}>${props.item.price}</Card.Text>
+          <Card.Text className={`event-item-card-text`}>
+            {props.item.name}
+          </Card.Text>
+          <Card.Text className={`event-item-card-text`}>
+            ${props.item.price}
+          </Card.Text>
         </Card.Body>
       </Card>
     </Col>

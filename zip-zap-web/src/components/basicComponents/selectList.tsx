@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ReactComponent as ArrowRightIcon } from "../../icons/arrowHeadRight.svg";
-import {Col} from 'react-bootstrap'
 
 function SelectList(props: {
   action: Function;
