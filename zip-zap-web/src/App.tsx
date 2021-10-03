@@ -16,11 +16,14 @@ import {
   userMonthOrderList,
   userRecipient,
 } from "./classes";
+import AdminRoute from "./components/adminComponents/adminRoute";
 import AdminItemNew from "./components/adminComponents/adminItems/adminItemNew";
 import AdminGroupedItemsList from "./components/adminComponents/adminGroupedItems/adminGroupedItemsList";
 import AdminGroupedItemNew from "./components/adminComponents/adminGroupedItems/adminGroupedItemNew";
 import AdminOrders from "./components/adminComponents/adminOrders/adminOrders";
 import AdminAccountOrders from "./components/adminComponents/adminOrders/adminAccountOrders";
+import AdminPayments from "./components/adminComponents/adminPayments";
+import AdminDBOrders from "./components/adminComponents/adminDBOrders";
 import EventDashboard from "./components/eventComponents/eventDashboard";
 import EventNew from "./components/eventComponents/eventNew";
 import OrderNew from "./components/orderComponents/orderNew";
@@ -40,8 +43,6 @@ import UserNewList from "./components/userComponents/userNewList";
 import RegisterComponent from "./components/basicComponents/accountComponents/registerComponent";
 import Logout from "./components/basicComponents/accountComponents/logout";
 import CheckoutPage from "./components/stripeComponents/checkoutPage";
-import AdminPayments from "./components/adminComponents/adminPayments";
-import AdminDBOrders from "./components/adminComponents/adminDBOrders";
 import UserAddRecipientContainer from "./components/userComponents/userAddRecipientContainer";
 
 interface AppContext {
@@ -289,6 +290,49 @@ function App() {
   }, [location]);
 
   useEffect(() => {
+    const checkUserAdmin = async (user: any) => {
+      let functionResponse = { allowed: false, userFeatures: [] };
+      let response = await fetchRequest(user, "admin/userCheck", "GET");
+
+      if ("allowed" in response && response.allowed) {
+        functionResponse.allowed = true;
+      }
+
+      if (
+        "userFeatures" in response &&
+        response.userFeatures &&
+        response.userFeatures.length > 0
+      ) {
+        functionResponse.userFeatures = response.userFeatures;
+      }
+
+      return functionResponse;
+    };
+
+    const getAdminUser = async () => {
+      const { allowed, userFeatures } = await checkUserAdmin(user);
+
+      if (allowed) {
+        setAdmin(allowed);
+      }
+
+      if (userFeatures.length > 0) {
+        setUserFeatures(userFeatures);
+      }
+
+      setLoading(false);
+    };
+
+    if (!admin && "email" in user) {
+      getAdminUser();
+    } else if (admin) {
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  }, [admin, user]);
+
+  useEffect(() => {
     const loadUser = async () => {
       let localUser;
       localUser = localStorage.getItem("user");
@@ -493,7 +537,9 @@ function App() {
             <Route exact path="/profile" component={profileDashboard} />
 
             {/* ADMIN PAGES */}
-            <Route exact path="/admin/dashboard" component={AdminDashboard} />
+            <AdminRoute admin exact path="/admin/dashboard">
+              <AdminDashboard userFeatures={userFeatures} />
+            </AdminRoute>
             <Route exact path="/admin/items" component={AdminItemsList} />
             <Route exact path="/admin/items/new" component={AdminItemNew} />
             <Route
