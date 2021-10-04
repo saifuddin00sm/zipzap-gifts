@@ -537,7 +537,7 @@ function App() {
             <Route exact path="/profile" component={profileDashboard} />
 
             {/* ADMIN PAGES */}
-            <AdminRoute admin exact path="/admin/dashboard">
+            <AdminRoute isAdmin={admin} exact path="/admin/dashboard">
               <AdminDashboard userFeatures={userFeatures} />
             </AdminRoute>
             <Route exact path="/admin/items" component={AdminItemsList} />

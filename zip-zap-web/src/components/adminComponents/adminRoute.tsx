@@ -2,11 +2,14 @@ import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
 
 interface Props extends RouteProps {
-	admin: boolean;
+	isAdmin: boolean;
+	children: React.ReactNode;
 }
 
-const AdminRoute: React.FC<Props> = ({ admin, ...props }) => {
-	return !admin ? <Redirect to="" /> : <Route {...props} />;
+const AdminRoute: React.FC<Props> = ({ isAdmin, children, ...props }) => {
+	return (
+		<Route {...props}>{!isAdmin ? <Redirect to="/" /> : children}</Route>
+	);
 };
 
 export default AdminRoute;
