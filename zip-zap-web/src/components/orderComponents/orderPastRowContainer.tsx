@@ -1,23 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { fetchRequest, UserContext } from "../../App";
-import {
-  eventOrder,
-  userGroupedItem,
-  userItem,
-  userMonthOrderList,
-} from "../../classes";
-import LoadingIcon from "../basicComponents/LoadingIcon";
-import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
-import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
-import { Link, RouteComponentProps } from "react-router-dom";
-import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
-import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
-import {
-  getEvents,
-  getItems,
-  getGroupedItems,
-  getMonthOrders,
-} from "../eventComponents/eventDashboard";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../../App";
+import { eventOrder } from "../../classes";
 import OrderPastRowRow from "./orderPastRowRow";
 import { calcMonthPrice } from "./orderPastDashboard";
 

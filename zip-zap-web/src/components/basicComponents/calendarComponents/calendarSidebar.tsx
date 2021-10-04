@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../../App";
-import { userEvent, userMonthOrderList } from "../../../classes";
+import { userMonthOrderList } from "../../../classes";
 import { getIcon } from "../../eventComponents/eventNew";
 import { getDateMonthDay } from "./calendarMonth";
 
@@ -9,7 +9,7 @@ function CalendarSidebar(props: {
   action: Function;
   orders: userMonthOrderList;
 }) {
-  const { user, userEvents, userUsers, setUserUsers } = useContext(UserContext);
+  const { userEvents, userUsers } = useContext(UserContext);
 
   return (
     <div className={`calendar-side-bar`}>

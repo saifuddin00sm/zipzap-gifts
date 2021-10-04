@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { Redirect, Route, Router } from "react-router-dom";
-import {Container, Row, Col} from 'react-bootstrap';
+import { Route, useLocation } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
 import appSettings from "./appSettings.json";
 import HomePageComponent from "./components/homePageComponent";
 import AdminDashboard from "./components/adminComponents/adminDashboard";
@@ -31,17 +31,14 @@ import OrderPastDashboard from "./components/orderComponents/orderPastDashboard"
 import UserDashboard from "./components/userComponents/userDashboard";
 import giftDashboard from "./components/giftComponents/giftDashboard";
 import profileDashboard from "./components/basicComponents/profileComponents/ProfileDashboard";
-import giftDetails from "./components/giftComponents/GiftDetails";
 import AuthCallback, {
   getRefreshToken,
   newUserInfo,
 } from "./components/basicComponents/accountComponents/authCallback";
 import LoadingIcon from "./components/basicComponents/LoadingIcon";
 import UserNewList from "./components/userComponents/userNewList";
-import ExampleNewCampaign from "./components/propsExample";
 import RegisterComponent from "./components/basicComponents/accountComponents/registerComponent";
 import Logout from "./components/basicComponents/accountComponents/logout";
-import StripeWrapper from "./components/stripeComponents/stripeWrapper";
 import CheckoutPage from "./components/stripeComponents/checkoutPage";
 import AdminPayments from "./components/adminComponents/adminPayments";
 import AdminDBOrders from "./components/adminComponents/adminDBOrders";
@@ -278,83 +275,73 @@ function App() {
     orders: {},
   } as userMonthOrderList);
 
+  let location = useLocation();
   useEffect(() => {
-    // if (
-    //   location.pathname.includes("/id/") ||
-    //   location.pathname.includes("/a/") ||
-    //   location.pathname.includes("/dashboard/") ||
-    //   location.pathname.includes("/present")
-    // ) {
-    //   setShowNavBar(false);
-    // } else {
-    //   setShowNavBar(true);
-    // }
-
-    if (window.location.pathname === "/callback") {
+    if (location.pathname === "/callback") {
       window.location.replace(
         `${window.location.origin}/#/callback${window.location.search}`
       );
-    } else if (window.location.pathname === "/callback/register") {
+    } else if (location.pathname === "/callback/register") {
       window.location.replace(
         `${window.location.origin}/#/callback${window.location.search}&type=register`
       );
     }
-  }, [window.location]);
-
-  const loadUser = async () => {
-    let localUser;
-    localUser = localStorage.getItem("user");
-    if (localUser) {
-      localUser = JSON.parse(localUser);
-      if (localUser.expiresIn) {
-        let now = new Date();
-        let expire = new Date(localUser.expiresIn);
-        // console.log("COMPARE: ", now, expire, expire < now);
-        if (expire < now) {
-          console.log("EXPIRED:", now, expire);
-          // logout(setAppUser);
-          // localUser = null;
-          // setLoading(false);
-
-          if ("refresh" in localUser) {
-            // console.log("GETTING REFRESH");
-            let refreshTokens = await getRefreshToken(localUser.refresh);
-            localUser = await newUserInfo(refreshTokens);
-
-            console.log("Expired Refresh", refreshTokens, localUser);
-
-            localStorage.setItem("user", JSON.stringify(localUser));
-          } else {
-            // console.log("NO REFRESH");
-            localUser = {};
-            localStorage.removeItem("user");
-            // setUser({} as any);
-          }
-        }
-      }
-      //  else {
-      //   localUser = null;
-      // }
-    } else {
-      localUser = null;
-    }
-    return localUser;
-  };
-
-  const setAppUser = async () => {
-    let testUser = await loadUser();
-    // console.log("local user", testUser);
-    setUser(testUser);
-    setLoading(false);
-  };
-
-  // WILL BE REMOVED
-  const setBetaPasswordForApp = async () => {
-    let password = await getBetaPasswordFromLocalStorage();
-    setBetaPassword(password);
-  };
+  }, [location]);
 
   useEffect(() => {
+    const loadUser = async () => {
+      let localUser;
+      localUser = localStorage.getItem("user");
+      if (localUser) {
+        localUser = JSON.parse(localUser);
+        if (localUser.expiresIn) {
+          let now = new Date();
+          let expire = new Date(localUser.expiresIn);
+          // console.log("COMPARE: ", now, expire, expire < now);
+          if (expire < now) {
+            console.log("EXPIRED:", now, expire);
+            // logout(setAppUser);
+            // localUser = null;
+            // setLoading(false);
+
+            if ("refresh" in localUser) {
+              // console.log("GETTING REFRESH");
+              let refreshTokens = await getRefreshToken(localUser.refresh);
+              localUser = await newUserInfo(refreshTokens);
+
+              console.log("Expired Refresh", refreshTokens, localUser);
+
+              localStorage.setItem("user", JSON.stringify(localUser));
+            } else {
+              // console.log("NO REFRESH");
+              localUser = {};
+              localStorage.removeItem("user");
+              // setUser({} as any);
+            }
+          }
+        }
+        //  else {
+        //   localUser = null;
+        // }
+      } else {
+        localUser = null;
+      }
+      return localUser;
+    };
+
+    const setAppUser = async () => {
+      let testUser = await loadUser();
+      // console.log("local user", testUser);
+      setUser(testUser);
+      setLoading(false);
+    };
+
+    // WILL BE REMOVED
+    const setBetaPasswordForApp = async () => {
+      let password = await getBetaPasswordFromLocalStorage();
+      setBetaPassword(password);
+    };
+
     if (!userRef.current || !("email" in userRef.current)) {
       setAppUser();
     } else {
@@ -364,7 +351,8 @@ function App() {
     if (!betaPassword) {
       setBetaPasswordForApp();
     }
-  }, []);
+    // When betaPassword is taken out for launch, this should only run on mount, so change the dependency array on the next line to empty []
+  }, [betaPassword]);
 
   const handleBetaChange = (e: any) => {
     if (e.key === "Enter" && tempBetaPassword === "ZipZapFlashBang") {
@@ -402,7 +390,7 @@ function App() {
       <img
         src={`media/images/coming_soon.jpeg`}
         className={`item-card-image-main`}
-        alt={`Coming Soon Image`}
+        alt={`Coming Soon`}
       ></img>
       <hr></hr>
       <div>
@@ -428,7 +416,7 @@ function App() {
       </div>
     </div>
   ) : (
-      <Container fluid={true} className="min-vh-100 App">
+    <Container fluid={true} className="min-vh-100 App">
       <UserContext.Provider
         value={{
           user: userRef.current,
@@ -458,81 +446,81 @@ function App() {
         }}
       >
         {/* TO-DO - HANDLE ERRORS */}
-      <Row>
+        <Row>
           <NavBarComponent />
-      </Row>
-          <Route exact path="/callback" component={AuthCallback} />
-          <Route exact path="/register" component={RegisterComponent} />
-          <Route exact path="/logout" component={Logout} />
+        </Row>
+        <Route exact path="/callback" component={AuthCallback} />
+        <Route exact path="/register" component={RegisterComponent} />
+        <Route exact path="/logout" component={Logout} />
 
-          {user && "email" in user && user.email ? (
-            <Row>
-            <Col>
-            <Route exact path="/" component={EventDashboard} />
-            </Col>
-            </Row>
-          ) : (
-            <Route exact path="/" component={HomePageComponent} />
-          )}
-
-          {!user || !("email" in user) || !user.email ? null : ( // <Route exact path="/" component={HomePageComponent} /> // <Redirect to="/" /> 
-            <Row className="main-section-row">
+        {!user || !("email" in user) || !user.email ? (
+          <Route exact path="/" component={HomePageComponent} />
+        ) : (
+          <Row className="main-section-row">
             <Col xs="2" className="side-bar-container">
               <SideBarComponent />
             </Col>
-              {/* Stripe Pages  */}
-              <Route exact path="/checkout" component={CheckoutPage} />
 
-              {/* Event Pages  */}
-              <Route exact path="/event" component={EventDashboard} />
-              <Route exact path="/event/new" component={EventNew} />
-              <Route exact path="/event/e/:eventID" component={EventNew} />
+            {/* Main Page  */}
+            <Route exact path="/" component={EventDashboard} />
 
-              {/* User Pages  */}
-              <Route exact path="/recipients" component={UserDashboard} />
-              <Route exact path="/recipients/add" component={UserAddRecipientContainer} />
-              <Route exact path="/recipients/upload" component={UserNewList} />
+            {/* Stripe Pages  */}
+            <Route exact path="/checkout" component={CheckoutPage} />
 
-              {/* Order Pages */}
-              <Route exact path="/order/new" component={OrderNew} />
-              <Route exact path="/order/past" component={OrderPastDashboard} />
-              <Route exact path="/order/:eventID/:orderID" component={OrderNew} />
+            {/* Event Pages  */}
+            <Route exact path="/event" component={EventDashboard} />
+            <Route exact path="/event/new" component={EventNew} />
+            <Route exact path="/event/e/:eventID" component={EventNew} />
 
-              {/* Gift Pages */}
-              <Route exact path="/gifts" component={giftDashboard} />
+            {/* User Pages  */}
+            <Route exact path="/recipients" component={UserDashboard} />
+            <Route
+              exact
+              path="/recipients/add"
+              component={UserAddRecipientContainer}
+            />
+            <Route exact path="/recipients/upload" component={UserNewList} />
 
-              {/* Gift Pages */}
-              <Route exact path="/profile" component={profileDashboard} />
+            {/* Order Pages */}
+            <Route exact path="/order/new" component={OrderNew} />
+            <Route exact path="/order/past" component={OrderPastDashboard} />
+            <Route exact path="/order/:eventID/:orderID" component={OrderNew} />
 
-              {/* ADMIN PAGES */}
-              <Route exact path="/admin/dashboard" component={AdminDashboard} />
-              <Route exact path="/admin/items" component={AdminItemsList} />
-              <Route exact path="/admin/items/new" component={AdminItemNew} />
-              <Route
-                exact
-                path="/admin/groupedItems"
-                component={AdminGroupedItemsList}
-              />
-              <Route
-                exact
-                path="/admin/groupedItems/new"
-                component={AdminGroupedItemNew}
-              />
+            {/* Gift Pages */}
+            <Route exact path="/gifts" component={giftDashboard} />
 
-              <Route exact path="/admin/orders" component={AdminOrders} />
-              <Route
-                exact
-                path="/admin/orders/:accountID"
-                component={AdminAccountOrders}
-              />
-              <Route
-                exact
-                path="/admin/chargePayments"
-                component={AdminPayments}
-              />
-              <Route exact path="/admin/dbOrders" component={AdminDBOrders} />
-              </Row>
-            )}
+            {/* Gift Pages */}
+            <Route exact path="/profile" component={profileDashboard} />
+
+            {/* ADMIN PAGES */}
+            <Route exact path="/admin/dashboard" component={AdminDashboard} />
+            <Route exact path="/admin/items" component={AdminItemsList} />
+            <Route exact path="/admin/items/new" component={AdminItemNew} />
+            <Route
+              exact
+              path="/admin/groupedItems"
+              component={AdminGroupedItemsList}
+            />
+            <Route
+              exact
+              path="/admin/groupedItems/new"
+              component={AdminGroupedItemNew}
+            />
+
+            <Route exact path="/admin/orders" component={AdminOrders} />
+            <Route
+              exact
+              path="/admin/orders/:accountID"
+              component={AdminAccountOrders}
+            />
+            <Route
+              exact
+              path="/admin/chargePayments"
+              component={AdminPayments}
+            />
+            <Route exact path="/admin/dbOrders" component={AdminDBOrders} />
+          </Row>
+        )}
         <Row>
           <FooterComponent />
         </Row>

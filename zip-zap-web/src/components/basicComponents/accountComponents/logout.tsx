@@ -1,16 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { UserContext, log, fetchRequest } from "../../../App";
-import { Redirect, Link, RouteComponentProps } from "react-router-dom";
+import { UserContext } from "../../../App";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 
 const Logout: React.FC<RouteComponentProps> = ({ location, match }) => {
-  const { user: appUser, setUser: setAppUser } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
+  const { setUser: setAppUser } = useContext(UserContext);
+  const loading = true;
   const [redirect, setRedirect] = useState("");
-
-  function useQuery() {
-    return new URLSearchParams(location.search);
-  }
 
   // let query = useQuery();
   const logout = () => {

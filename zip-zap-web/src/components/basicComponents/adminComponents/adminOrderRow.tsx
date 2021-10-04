@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import { fetchRequest, UserContext } from "../../../App";
 import {
-  adminItem,
   adminOrder,
   shippoShipmentRate,
   userRecipient,
@@ -15,7 +13,6 @@ import LoadingIcon from "../LoadingIcon";
 // import { setegid } from "node:process";
 
 const boxSizes = [
-
   {
     type: "1",
     width: "12",
@@ -96,7 +93,6 @@ function AdminOrderRow(props: {
         return false;
       }
 
-      let account = accounts[0];
       let giftee = props.giftee;
       let gift = adminGroupedItems[props.order.groupedID];
       let box =
@@ -401,6 +397,7 @@ function AdminOrderRow(props: {
               className={`general-button admin-button`}
               href={props.order.shippingDetails.labelURL}
               target={"_blank"}
+              rel="noreferrer"
               // disabled={!props.item.isActive}
             >
               Print Shipment Label
@@ -547,6 +544,7 @@ function AdminOrderRow(props: {
                 className={`general-button admin-button`}
                 href={shipmentTransaction.labelURL}
                 target={"_blank"}
+                rel="noreferrer"
                 // disabled={!props.item.isActive}
               >
                 Print Shipment Label

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
-import {Row, Col, Button, ButtonGroup, ToggleButton, Modal} from 'react-bootstrap'
+import { Row, Col, Modal } from "react-bootstrap";
 import {
   adminItem,
   eventOrder,
@@ -10,8 +10,6 @@ import {
   userItem,
   userRecipient,
 } from "../../classes";
-import LoadingIcon from "../basicComponents/LoadingIcon";
-import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link, Redirect, RouteComponentProps } from "react-router-dom";
 import ForwardArrow from "../basicComponents/forwardArrow";
 import {
@@ -23,9 +21,7 @@ import {
 } from "./eventDashboard";
 import ItemCard from "../basicComponents/eventComponents/itemCard";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
-import ModalBox from "../basicComponents/modalBox";
 import GroupedItemCard from "../basicComponents/eventComponents/groupedItemCard";
-import AdminItemRow from "../basicComponents/adminComponents/adminItemRow";
 import ItemRow from "../basicComponents/eventComponents/itemRow";
 
 import { ReactComponent as BoltIcon } from "../../icons/bolt.svg";
@@ -38,7 +34,6 @@ import { ReactComponent as WorldIcon } from "../../icons/world.svg";
 import { ReactComponent as PiggyBankIcon } from "../../icons/piggyBank.svg";
 import { ReactComponent as SmileyFaceIcon } from "../../icons/smileyFace.svg";
 import { ReactComponent as SoccerBallIcon } from "../../icons/soccerBall.svg";
-import SelectList from "../basicComponents/selectList";
 
 type TParams = { eventID?: string };
 
@@ -88,9 +83,6 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const compareOrderList = (a: Array<any>, b: Array<any>) =>
-  a.length === b.length && a.every((v, i) => v === b[i]);
-
 const getDifferenceInArrays = (arr1: Array<any>, arr2: Array<any>) => {
   return arr1.filter((x) => !arr2.includes(x));
 };
@@ -100,10 +92,9 @@ const calcGiftPackagePrice = (
   individualItems: { [key: string]: userItem }
 ) => {
   let totalPrice = 0;
-  let itemError = "";
-  let totalLoop = gift.itemsArray.map((iGiftID: number) => {
+  gift.itemsArray.forEach((iGiftID: number) => {
     if (!(iGiftID in individualItems)) {
-      itemError = `Missing Item - ${iGiftID}`;
+      console.log(`Missing Item - ${iGiftID}`);
     } else {
       totalPrice += individualItems[iGiftID].price;
     }
@@ -120,11 +111,10 @@ const calcGiftPackageWeight = (
   individualItems: { [key: string]: adminItem }
 ) => {
   let totalPrice = 0;
-  let itemError = "";
   console.log("looing");
-  let totalLoop = gift.itemsArray.map((iGiftID: number) => {
+  gift.itemsArray.forEach((iGiftID: number) => {
     if (!(iGiftID in individualItems)) {
-      itemError = `Missing Item - ${iGiftID}`;
+      console.log(`Missing Item - ${iGiftID}`);
     } else {
       console.log("Adding", [individualItems[iGiftID].weight]);
       totalPrice += parseFloat(individualItems[iGiftID].weight.toString());
@@ -143,7 +133,7 @@ const orderUserList = async (orders: { [key: string]: eventOrder }) => {
     userList.push(orders[orderID].giftee.toString());
   });
 
-  let orderResult = await Promise.all(orderMap);
+  await Promise.all(orderMap);
   return userList;
 };
 
@@ -202,7 +192,7 @@ const createOrders = async (
     } as eventOrder;
   });
 
-  let ordersResult = await Promise.all(orderCreation);
+  await Promise.all(orderCreation);
 
   // TO-DO - currentOrderList & Shipping Date
   orderData.currentOrderList = await getCurrentOrders(orderData.orders);
@@ -251,7 +241,7 @@ const editOrderList = async (
     }
   });
 
-  let orderResult = await Promise.all(orderUpdate);
+  await Promise.all(orderUpdate);
 
   orderData.orders = campaignOrders;
 
@@ -273,6 +263,7 @@ const getCurrentOrders = async (orders: { [key: string]: eventOrder }) => {
   return orderSort;
 };
 
+/*
 const handleCalcShippingDate = async (
   criteria: { [key: string]: any },
   campaignStartDate: string,
@@ -295,9 +286,10 @@ const handleCalcShippingDate = async (
     }
   });
 
-  let keyResult = await Promise.all(keyCheck);
+  await Promise.all(keyCheck);
   return shippingDate;
 };
+*/
 
 const handleCalcShippingFee = async (user: userRecipient) => {
   return 0;
@@ -490,7 +482,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [eventNote, setEventNote] = useState("");
   const [eventIcon, setEventIcon] = useState(1);
   const [activeCard, setActiveCard] = useState("");
-  const [radioValue, setRadioValue] = useState('1');
 
   const [itemPaginationStart, setItemPaginationStart] = useState(0);
   const [activeItemDetails, setActiveItemDetails] = useState({
@@ -565,14 +556,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     } else if (!eventStartDate) {
       setError("Please enter an Event Start Date");
       return true;
-    } 
+    }
     // var date1 = new Date(eventStartDate);
     // var date2 = new Date();
     // date2 = date2.getDate() + 7;
     // if (date1 < date2) {
     //   setError("Please enter an Event Start Date");
     //   return true;
-    // } 
+    // }
     else if (!activeItem.id) {
       setError("Please select a gift");
       return true;
@@ -846,7 +837,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
     let itemLoop = customGift.items.map((item) => items.push(item.id));
 
-    let itemResult = await Promise.all(itemLoop);
+    await Promise.all(itemLoop);
 
     let saveResponse = { error: "", itemsID: "" };
 
@@ -910,7 +901,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
-  const addItemButton = () => {}
   const handleGroupedItemSearch = (e: any) => {
     if (e.target.value) {
       let searchResults = Object.keys(userGroupedItems).filter((itemID) => {
@@ -1004,43 +994,42 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
       {/* holds 4 Containers */}
       <Row className="event-dashboard-sub-title primary-green-header mx-5">
-          <span>{completedEvent ? completedEvent.name : "Event"} Details</span>
+        <span>{completedEvent ? completedEvent.name : "Event"} Details</span>
       </Row>
       <Row className="new-event-main-section p-3 mx-5">
-        <Col className="mx-3"> 
+        <Col className="mx-3">
           <Row>
-              <span>Event Name</span>
-              <input
-                placeholder={"Birthdays"}
-                className={`general-input-fit new-event-input`}
-                value={eventName}
-                onChange={(e: any) => setEventName(e.target.value)}
-              ></input>
-              </Row>
-              <Row>
-              <span>Custom Note</span>
-              <textarea
-                placeholder={"i.e. Thanks for being a great employee!"}
-                className={`note-input-fit full-width`}
-                value={eventNote}
-                onChange={(e: any) => setEventNote(e.target.value)}
-              ></textarea>
-              </Row>
+            <span>Event Name</span>
+            <input
+              placeholder={"Birthdays"}
+              className={`general-input-fit new-event-input`}
+              value={eventName}
+              onChange={(e: any) => setEventName(e.target.value)}
+            ></input>
+          </Row>
+          <Row>
+            <span>Custom Note</span>
+            <textarea
+              placeholder={"i.e. Thanks for being a great employee!"}
+              className={`note-input-fit full-width`}
+              value={eventNote}
+              onChange={(e: any) => setEventNote(e.target.value)}
+            ></textarea>
+          </Row>
         </Col>
-        <Col  className="px-3">
+        <Col className="px-3">
           <Row className="new-event-main-section">
-          <span >Event Date</span>
-                <input
-                  type={"date"}
-                  placeholder={"From"}
-                  className={`general-input-fit new-event-date-input`}
-                  value={eventStartDate}
-                  onChange={(e: any) => setEventStartDate(e.target.value)}
-                  min={formatDate(getDateRestriction().toString())}
-                ></input>{" "}
-                {/* <input type="checkbox" id="birthday1" name="birthday" value="birthday"></input>
+            <span>Event Date</span>
+            <input
+              type={"date"}
+              placeholder={"From"}
+              className={`general-input-fit new-event-date-input`}
+              value={eventStartDate}
+              onChange={(e: any) => setEventStartDate(e.target.value)}
+              min={formatDate(getDateRestriction().toString())}
+            ></input>{" "}
+            {/* <input type="checkbox" id="birthday1" name="birthday" value="birthday"></input>
                 <label for="birthday1">Date is Birthday</label> */}
-
           </Row>
           {/* <Row className="px-3">
             <span>Icon to Represent Event</span>
@@ -1053,112 +1042,115 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           </Row> */}
         </Col>
       </Row>
-            
-        <Row className="event-dashboard-sub-title primary-black-header inner-row mt-3 mx-5">
-                <span>Choose a Gift</span>
-        </Row>
-        <Row className="new-event-main-section pt-3 mx-5">
+
+      <Row className="event-dashboard-sub-title primary-black-header inner-row mt-3 mx-5">
+        <span>Choose a Gift</span>
+      </Row>
+      <Row className="new-event-main-section pt-3 mx-5">
         <Row>
-            <Col sm={6}>
+          <Col sm={6}>
             {giftType !== "custom" ? (
-                  <input
-                    className={`general-input-fit full-width`}
-                    placeholder={"Search for an item"}
-                    onChange={handleGroupedItemSearch}
-                  ></input>
+              <input
+                className={`general-input-fit full-width`}
+                placeholder={"Search for an item"}
+                onChange={handleGroupedItemSearch}
+              ></input>
+            ) : null}
+          </Col>
+          <Col className="align-items-right p-2">
+            <button
+              className={`new-event-button`}
+              onClick={() => handleChangeGiftType("grouped")}
+            >
+              Gift Package
+            </button>
+            <button
+              className={`new-event-button`}
+              onClick={() => handleChangeGiftType("custom")}
+            >
+              Custom Gift
+            </button>
+          </Col>
+        </Row>
+
+        {giftType !== "custom" ? (
+          <Row className="p-3">
+            <Col xs={1} className="align-self-center">
+              {itemPaginationStart > 0 ? (
+                <ForwardArrow
+                  action={() =>
+                    setItemPaginationStart(
+                      itemPaginationStart - 4 < 0 ? 0 : itemPaginationStart - 4
+                    )
+                  }
+                  class={`forward-arrow-grey backward-arrow-svg`}
+                />
               ) : null}
             </Col>
-            <Col className="align-items-right p-2">
-              <button
-                className={`new-event-button`}
-                onClick={() => handleChangeGiftType("grouped")}
-              >
-                Gift Package
-              </button>
-              <button
-                className={`new-event-button`}
-                onClick={() => handleChangeGiftType("custom")}
-              >
-                Custom Gift
-              </button>
-            </Col>
-          </Row>
-
-          {giftType !== "custom" ? (
-            <Row className="p-3">
-              <Col xs={1} className="align-self-center">
-                {itemPaginationStart > 0 ? (
-                  <ForwardArrow
-                    action={() =>
-                      setItemPaginationStart(
-                        itemPaginationStart - 4 < 0 ? 0 : itemPaginationStart - 4
-                      )
-                    }
-                    class={`forward-arrow-grey backward-arrow-svg`}
-                  />
-                ) : null}
-              </Col>
-              <Col>
-                <Row>
-                  {itemsLoading || groupedItemsLoading
-                    ? [...Array(4)].map((item, iIndex) => (
-                        <ItemCard
-                          key={iIndex}
-                          index={iIndex}
-                          action={() => null}
-                        />
-                      ))
-                    : null}
-
-                  {!itemsLoading && giftType === "grouped"
-                    ? searchGroupedItems
-                        .slice(itemPaginationStart, itemPaginationStart + 4)
-                        .map((itemID, iIndex) => (
-                          <GroupedItemCard
-                            key={iIndex}
-                            index={iIndex}
-                            item={userGroupedItems[itemID]}
-                            action={() => handleActiveItem("grouped", itemID)}
-                            border={activeItem.type === "grouped" &&
-                            activeItem.id.toString() === itemID.toString()
-                            ? `info`: `secondary`}
-                            class={
-                              activeItem.type === "grouped" &&
-                              activeItem.id.toString() === itemID.toString()
-                                ? `event-item-card-active`
-                                : activeItem.type === "grouped" &&
-                                  activeItem.id.toString() !== itemID.toString()
-                                ? "event-item-card-inactive"
-                                : ``
-                            }
-                          />
-                        ))
-                    : null}
-                </Row>
-              </Col>
-
-              <Col xs={1} className="align-self-center">
-                <ForwardArrow
-                  action={() => setItemPaginationStart(itemPaginationStart + 4)}
-                  class={`forward-arrow-grey`}
-                  disabled={
-                    giftType === "grouped" &&
-                    itemPaginationStart + 5 > Object.keys(userGroupedItems).length
-                      ? true
-                      : giftType === "item" &&
-                        itemPaginationStart + 5 > Object.keys(userItems).length
-                      ? true
-                      : false
-                  }
-                />
-              </Col>
-            </Row>
-          ) : (
-            <Row>
             <Col>
               <Row>
-                  <Col className="mx-3" sm={4}>
-                  <span className={`row`} >Gift Name</span>
+                {itemsLoading || groupedItemsLoading
+                  ? [...Array(4)].map((item, iIndex) => (
+                      <ItemCard
+                        key={iIndex}
+                        index={iIndex}
+                        action={() => null}
+                      />
+                    ))
+                  : null}
+
+                {!itemsLoading && giftType === "grouped"
+                  ? searchGroupedItems
+                      .slice(itemPaginationStart, itemPaginationStart + 4)
+                      .map((itemID, iIndex) => (
+                        <GroupedItemCard
+                          key={iIndex}
+                          index={iIndex}
+                          item={userGroupedItems[itemID]}
+                          action={() => handleActiveItem("grouped", itemID)}
+                          border={
+                            activeItem.type === "grouped" &&
+                            activeItem.id.toString() === itemID.toString()
+                              ? `info`
+                              : `secondary`
+                          }
+                          class={
+                            activeItem.type === "grouped" &&
+                            activeItem.id.toString() === itemID.toString()
+                              ? `event-item-card-active`
+                              : activeItem.type === "grouped" &&
+                                activeItem.id.toString() !== itemID.toString()
+                              ? "event-item-card-inactive"
+                              : ``
+                          }
+                        />
+                      ))
+                  : null}
+              </Row>
+            </Col>
+
+            <Col xs={1} className="align-self-center">
+              <ForwardArrow
+                action={() => setItemPaginationStart(itemPaginationStart + 4)}
+                class={`forward-arrow-grey`}
+                disabled={
+                  giftType === "grouped" &&
+                  itemPaginationStart + 5 > Object.keys(userGroupedItems).length
+                    ? true
+                    : giftType === "item" &&
+                      itemPaginationStart + 5 > Object.keys(userItems).length
+                    ? true
+                    : false
+                }
+              />
+            </Col>
+          </Row>
+        ) : (
+          <Row>
+            <Col>
+              <Row>
+                <Col className="mx-3" sm={4}>
+                  <span className={`row`}>Gift Name</span>
                   <input
                     placeholder={"i.e. Welcome Box"}
                     className={`general-input-fit new-event-input`}
@@ -1178,7 +1170,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   ></textarea>
                 </Col>
                 <Col className="p-2">
-                <span className={`row`}>Items: </span>
+                  <span className={`row`}>Items: </span>
                   {customGift.items.map((itemID, iIndex) =>
                     itemID.id in userItems ? (
                       <ItemRow
@@ -1195,46 +1187,47 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   {showItemList ? (
                     <div className="event-item-list-container">
                       <div className="event-item-list-sub-container m-3">
-                      <input
-                        className={`general-input-fit new-event-input event-item-search-bar my-3`}
-                        placeholder={"Search for an item"}
-                        onChange={handleCustomGiftSearch}
-                      ></input>
-                    <div className={`event-item-list`}>
-                      <ul className={`event-item-list-list`}>
-                        {searchItems.map((itemID, iIndex) => (
-                          <li
-                            key={iIndex}
-                            className={`mx-3`}
-                            onClick={() =>
-                              handleCustomGiftChange("addItem", {
-                                id: itemID,
-                                details: {},
-                              })
-                            }
+                        <input
+                          className={`general-input-fit new-event-input event-item-search-bar my-3`}
+                          placeholder={"Search for an item"}
+                          onChange={handleCustomGiftSearch}
+                        ></input>
+                        <div className={`event-item-list`}>
+                          <ul className={`event-item-list-list`}>
+                            {searchItems.map((itemID, iIndex) => (
+                              <li
+                                key={iIndex}
+                                className={`mx-3`}
+                                onClick={() =>
+                                  handleCustomGiftChange("addItem", {
+                                    id: itemID,
+                                    details: {},
+                                  })
+                                }
+                              >
+                                {userItems[itemID].name}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="py-2">
+                          <button
+                            className={`new-event-button new-event-button-red`}
+                            onClick={() => setShowItemList(false)}
                           >
-                            {userItems[itemID].name}
-                          </li>
-                        ))}
-                      </ul>
-                      </div>
-                      <div className="py-2">
-                        <button
-                          className={`new-event-button new-event-button-red`}
-                          onClick={() => setShowItemList(false)}
-                        >
-                          Close
-                        </button>
+                            Close
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  ) :                   
-                  <button
-                  className={`new-event-button new-event-button-blue`}
-                  onClick={() => setShowItemList(true)}
-                  >
-                    Add Item
-                  </button>}
+                  ) : (
+                    <button
+                      className={`new-event-button new-event-button-blue`}
+                      onClick={() => setShowItemList(true)}
+                    >
+                      Add Item
+                    </button>
+                  )}
                 </Col>
                 {/* <button
                     className={`new-event-button new-event-button-blue`}
@@ -1245,9 +1238,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               </Row>
 
               <Row>
-                <p className="error-message-text">
-                {error ? error : ""}
-                </p>
+                <p className="error-message-text">{error ? error : ""}</p>
                 <button
                   className={`new-event-button`}
                   onClick={handleCustomGiftSave}
@@ -1257,209 +1248,210 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 </button>
               </Row>
             </Col>
-            </Row>
-          )}
-          
           </Row>
-          <Row
-            className={`event-item-description mx-5 ${
-              activeItemDetails.id ? "event-item-description-show" : ""
-            }`}
+        )}
+      </Row>
+      <Row
+        className={`event-item-description mx-5 ${
+          activeItemDetails.id ? "event-item-description-show" : ""
+        }`}
+      >
+        <Col className="align-left item-description-box">
+          <strong>
+            {activeItemDetails.type === "item" &&
+            activeItemDetails.id in userItems
+              ? userItems[activeItemDetails.id].name
+              : activeItemDetails.type === "grouped" &&
+                activeItemDetails.id in userGroupedItems
+              ? userGroupedItems[activeItemDetails.id].name
+              : null}
+          </strong>
+          <p className="m-1">
+            <span>
+              <i>Details: </i>
+            </span>
+            {activeItemDetails.type === "item" &&
+            activeItemDetails.id in userItems
+              ? userItems[activeItemDetails.id].description
+              : activeItemDetails.type === "grouped" &&
+                activeItemDetails.id in userGroupedItems
+              ? userGroupedItems[activeItemDetails.id].description
+              : null}
+
+            {activeItemDetails.type === "grouped" &&
+            activeItemDetails.id in userGroupedItems ? (
+              <div className={`margin-top-15 pt-3`}>
+                <span className="items-included">Items Included</span>
+                <ol>
+                  {userGroupedItems[activeItemDetails.id].itemsArray.map(
+                    (itemID, iIndex) =>
+                      itemID in userItems ? (
+                        <li key={iIndex}>{userItems[itemID].name}</li>
+                      ) : null
+                  )}
+                </ol>
+              </div>
+            ) : null}
+          </p>
+        </Col>
+        <Col xs="2">
+          <button
+            onClick={() => handleActiveItem("grouped", activeItemDetails.id)}
+            className={`x-button delete-button`}
           >
-            <Col className="align-left item-description-box">
-                <strong>
-                  {activeItemDetails.type === "item" &&
-                  activeItemDetails.id in userItems
-                    ? userItems[activeItemDetails.id].name
-                    : activeItemDetails.type === "grouped" &&
-                      activeItemDetails.id in userGroupedItems
-                    ? userGroupedItems[activeItemDetails.id].name
-                    : null}
-                </strong>
-              <p className="m-1">
-                <span>
-                  <i>Details: </i>
-                </span>
-                {activeItemDetails.type === "item" &&
-                activeItemDetails.id in userItems
-                  ? userItems[activeItemDetails.id].description
-                  : activeItemDetails.type === "grouped" &&
-                    activeItemDetails.id in userGroupedItems
-                  ? userGroupedItems[activeItemDetails.id].description
-                  : null}
+            x
+          </button>
+        </Col>
+        <div
+          className={`event-item-description-button-container right-align-row`}
+        >
+          <button
+            className={`event-item-description-button`}
+            onClick={handleChooseItem}
+          >
+            {activeItem.id && activeItemDetails.id === activeItem.id
+              ? "Deselect"
+              : "Select"}{" "}
+            Gift
+          </button>
+        </div>
+      </Row>
 
-                {activeItemDetails.type === "grouped" &&
-                activeItemDetails.id in userGroupedItems ? (
-                  <div className={`margin-top-15 pt-3`}>
-                    <span className="items-included">Items Included</span>
-                    <ol>
-                      {userGroupedItems[activeItemDetails.id].itemsArray.map(
-                        (itemID, iIndex) =>
-                          itemID in userItems ? (
-                            <li key={iIndex}>{userItems[itemID].name}</li>
-                          ) : null
-                      )}
-                    </ol>
-                  </div>
-                ) : null}
-              </p>
-            </Col>
-            <Col xs="2">
-              <button onClick={() => handleActiveItem("grouped", activeItemDetails.id)} className={`x-button delete-button`}>x</button>
-            </Col>
-            <div
-              className={`event-item-description-button-container right-align-row`}
-            >
-              <button
-                className={`event-item-description-button`}
-                onClick={handleChooseItem}
-              >
-                {activeItem.id && activeItemDetails.id === activeItem.id
-                  ? "Deselect"
-                  : "Select"}{" "}
-                Gift
-              </button>
-            </div>
-        </Row>
-
-        {/* Recipient List */}
-        {/* <section
+      {/* Recipient List */}
+      {/* <section
           className={`column center-column event-dashboard-full-column new-event-lower-row`}
         > */}
-          <Row className="event-dashboard-sub-title primary-black-header mt-3 mx-5">
-                <span>Recipient List</span>
-          </Row>
-          <Row className="new-event-main-section p-3 mx-5 ">
-              <UserListContainer
-                users={userUsers.activeUsers}
-                userList={userList}
-                loading={usersLoading}
-                action={handleEditUserList}
-              />
-              <UserListContainer
-                users={userUsers.activeUsers}
-                userList={userSelectedList}
-                loading={usersLoading}
-                action={handleEditUserList}
-                buttonType={"remove"}
-                title={"Users on Event List"}
-              />
-        </Row>
+      <Row className="event-dashboard-sub-title primary-black-header mt-3 mx-5">
+        <span>Recipient List</span>
+      </Row>
+      <Row className="new-event-main-section p-3 mx-5 ">
+        <UserListContainer
+          users={userUsers.activeUsers}
+          userList={userList}
+          loading={usersLoading}
+          action={handleEditUserList}
+        />
+        <UserListContainer
+          users={userUsers.activeUsers}
+          userList={userSelectedList}
+          loading={usersLoading}
+          action={handleEditUserList}
+          buttonType={"remove"}
+          title={"Users on Event List"}
+        />
+      </Row>
 
-        {/* checkout confirmation  */}
-        <Row className="event-dashboard-sub-title primary-black-header mt-3 mx-5">
-                <span>Checkout</span>
-        </Row>
+      {/* checkout confirmation  */}
+      <Row className="event-dashboard-sub-title primary-black-header mt-3 mx-5">
+        <span>Checkout</span>
+      </Row>
 
-          <Row className={`new-event-main-section p-3 mx-5`}>
-            {/* total price details  */}
-            {/* <div
+      <Row className={`new-event-main-section p-3 mx-5`}>
+        {/* total price details  */}
+        {/* <div
               className={`event-dashboard-half-column column left-align-column`}
             > */}
-              <Col>
-                <Row className="border-bottom">
-                  <Col>
-                    <Row className="border-bottom">
-                      Total Gift Price Per Person: 
-                    </Row>
-                    <Row>
-                      Shipping: TBD per person
-                    </Row>
-                  </Col>
-                  <Col>
-                    $
-                    {activeItem.type === "grouped" &&
-                    activeItem.id in userGroupedItems
-                      ? userGroupedItems[activeItem.id].priceOverride
-                        ? userGroupedItems[activeItem.id].priceOverride
-                        : calcGiftPackagePrice(
-                            userGroupedItems[activeItem.id],
-                            userItems
-                          )
-                      : 0}
-                  </Col>
-                </Row>
-
-              </Col>
-            {/* </div>
+        <Col>
+          <Row className="border-bottom">
+            <Col>
+              <Row className="border-bottom">Total Gift Price Per Person:</Row>
+              <Row>Shipping: TBD per person</Row>
+            </Col>
+            <Col>
+              $
+              {activeItem.type === "grouped" &&
+              activeItem.id in userGroupedItems
+                ? userGroupedItems[activeItem.id].priceOverride
+                  ? userGroupedItems[activeItem.id].priceOverride
+                  : calcGiftPackagePrice(
+                      userGroupedItems[activeItem.id],
+                      userItems
+                    )
+                : 0}
+            </Col>
+          </Row>
+        </Col>
+        {/* </div>
             <div
               className={`event-dashboard-half-column column left-align-column`}
             ></div> */}
 
-          {/* credit card details  */}
-          <Row className={`mt-3`}>
-            <Col sm={8}>
-              <p className="bold align-left">Choose a Saved Payment Method</p>
-              {userCards.map((card, cIndex) => (
-                <button
-                  key={cIndex}
-                  className={`column stripe-saved-card-button ${
-                    activeCard === card.id ? "active-stripe-card" : ""
-                  }`}
-                  onClick={() => setActiveCard(card.id)}
-                >
-                  <span>Credit Card Ending In: **** {card.card.last4}</span>
-                  <span>
-                    Exp. MM/YY: {card.card.exp_month} / {card.card.exp_year}
-                  </span>
-                  <span>Name on Card: {card.billing_details.name}</span>
-                </button>
-              ))}
-            </Col>
-            <Col>
-              <div className={`event-dashboard-sub-title`}>
-                <span></span>
-              </div>
-              <br></br>
+        {/* credit card details  */}
+        <Row className={`mt-3`}>
+          <Col sm={8}>
+            <p className="bold align-left">Choose a Saved Payment Method</p>
+            {userCards.map((card, cIndex) => (
               <button
-                className={`new-event-button new-event-button-blue new-event-button-no-margin`}
-                onClick={handleSaveDetailsToLocalStorage}
-                // disabled={userSelectedList.length === 0 || !activeItem.id}
+                key={cIndex}
+                className={`column stripe-saved-card-button ${
+                  activeCard === card.id ? "active-stripe-card" : ""
+                }`}
+                onClick={() => setActiveCard(card.id)}
               >
-                Add New Card
+                <span>Credit Card Ending In: **** {card.card.last4}</span>
+                <span>
+                  Exp. MM/YY: {card.card.exp_month} / {card.card.exp_year}
+                </span>
+                <span>Name on Card: {card.billing_details.name}</span>
               </button>
-            </Col>
+            ))}
+          </Col>
+          <Col>
+            <div className={`event-dashboard-sub-title`}>
+              <span></span>
+            </div>
+            <br></br>
+            <button
+              className={`new-event-button new-event-button-blue new-event-button-no-margin`}
+              onClick={handleSaveDetailsToLocalStorage}
+              // disabled={userSelectedList.length === 0 || !activeItem.id}
+            >
+              Add New Card
+            </button>
+          </Col>
 
-            {/* credit card details  */}
-          </Row>
+          {/* credit card details  */}
         </Row>
-        <Row className={"mt-3 mx-5"}>
-          <span className="error-message-text">{error ? error : ""}</span>
-          <button
-            className={`new-event-button new-event-button-blue`}
-            onClick={handleEventCheck}
-            disabled={userSelectedList.length === 0 || !activeItem.id}
-          >
-            {match.params.eventID ? "Edit" : "Create"} Event
-          </button>
-        </Row>
-        <Modal show={show} onHide={handleClose}>
+      </Row>
+      <Row className={"mt-3 mx-5"}>
+        <span className="error-message-text">{error ? error : ""}</span>
+        <button
+          className={`new-event-button new-event-button-blue`}
+          onClick={handleEventCheck}
+          disabled={userSelectedList.length === 0 || !activeItem.id}
+        >
+          {match.params.eventID ? "Edit" : "Create"} Event
+        </button>
+      </Row>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-          {success ? (
-                <h5>
-                  {eventName} has been {" "}
-                  {match.params.eventID ? "updated" : "created"}{" "}
-                  sucessfully!
-                </h5>
+            {success ? (
+              <h5>
+                {eventName} has been{" "}
+                {match.params.eventID ? "updated" : "created"} sucessfully!
+              </h5>
             ) : (
-              `${
-                match.params.eventID ? "Editing" : "Creating"
-              } event`
+              `${match.params.eventID ? "Editing" : "Creating"} event`
             )}{" "}
           </Modal.Title>
         </Modal.Header>
         <Modal.Footer>
-          <button className="general-button gereral-button-green px-4 py-2" onClick={handleClose}>
-          <Link to={"/events"}>Back to Dashboard</Link>
+          <button
+            className="general-button gereral-button-green px-4 py-2"
+            onClick={handleClose}
+          >
+            <Link to={"/events"}>Back to Dashboard</Link>
           </button>
-          <button className=" general-button gereral-button-blue px-4 py-2"  onClick={handleClose}>
-          <Link to={"/event/new"}>Close</Link>
+          <button
+            className=" general-button gereral-button-blue px-4 py-2"
+            onClick={handleClose}
+          >
+            <Link to={"/event/new"}>Close</Link>
           </button>
         </Modal.Footer>
       </Modal>
     </Col>
-
   );
 }
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Row, Col} from 'react-bootstrap'
+import { Row, Col } from "react-bootstrap";
 import { fetchRequest, UserContext } from "../../App";
-import { userGroupedItem, userItem, userMonthOrderList } from "../../classes";
+import { userGroupedItem, userItem } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
 import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
@@ -12,8 +12,8 @@ import CalendarSidebar from "../basicComponents/calendarComponents/calendarSideb
 
 const getEvents = async (user: any) => {
   let response = await fetchRequest(user, "campaigns", "GET");
-  console.log("this is the response")
-  console.log(user)
+  console.log("this is the response");
+  console.log(user);
 
   if ("campaigns" in response) {
     return response.campaigns;
@@ -90,7 +90,7 @@ const getGroupedGiftPrice = (
   allItems: { [key: string]: userItem }
 ) => {
   let total = 0;
-  let itemPricePromise = item.itemsArray.filter((itemID) =>
+  item.itemsArray.filter((itemID) =>
     itemID in allItems ? (total += allItems[itemID].price) : 0
   );
 
@@ -112,11 +112,10 @@ function EventDashboard() {
     userUsers,
   } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
-  const [redirect, setRedirect] = useState("");
 
   const settingEvents = async () => {
     let events = await getEvents(user);
-    
+
     setUserEvents(events);
     setLoading(false);
   };
@@ -134,10 +133,10 @@ function EventDashboard() {
   const settingMonthOrders = async () => {
     let { dateOrders } = await getMonthOrders(user);
     setUserMonthOrders({ orders: dateOrders });
-    console.log("Date orders")
+    console.log("Date orders");
     console.log(userMonthOrders);
   };
-  
+
   useEffect(() => {
     if (Object.keys(userItems).length === 0) {
       settingItems();
@@ -150,7 +149,7 @@ function EventDashboard() {
     if (Object.keys(userMonthOrders.orders).length === 0) {
       settingMonthOrders();
     }
-    if (Object.keys(userEvents).length == 0) {
+    if (Object.keys(userEvents).length === 0) {
       settingEvents();
     } else {
       setLoading(false);
@@ -187,66 +186,57 @@ function EventDashboard() {
             <span>Event List</span>
           </Row>
           <Row className="mx-2 p-2 event-dashboard-events-list event-dashboard-events-list-container">
-                {userUsersLoaded ? 
-                (Object.keys(userUsers.activeUsers).length === 0 ? 
-                  (
-                    <div>
-                    No Recipients, upload a list now!
-                    <br></br>
-                    <div className={`column center event-dashboard-events-list`}>
-                      <Link
-                        to={"/people/upload"}
-                        className={`row center add-event-button add-event-button-black `}
-                      >
-                        <AddIcon />
-                      </Link>
-                    </div>
+            {userUsersLoaded ? (
+              Object.keys(userUsers.activeUsers).length === 0 ? (
+                <div>
+                  No Recipients, upload a list now!
+                  <br></br>
+                  <div className={`column center event-dashboard-events-list`}>
+                    <Link
+                      to={"/people/upload"}
+                      className={`row center add-event-button add-event-button-black `}
+                    >
+                      <AddIcon />
+                    </Link>
                   </div>
-                  ) : Object.keys(userEvents).length > 1 ? (
-                    Object.keys(userEvents).map((event, eIndex) =>
-                      userEvents[event].name !== "onetime" ? (
-                        <EventDetailsRow
-                          key={eIndex}
-                          index={eIndex}
-                          event={userEvents[event]}
-                        />
-                      ) : null
-                    )
-
-                ) : 
-                (
-                  <div>
-                      No events, create one now!
-                      <br></br>
-                      <div className={`column center event-dashboard-events-list`}>
-                      <Link
-                        to={"/event/new"}
-                        className={`add-event-button-link`}
-                      >
-                        <AddIcon className="addIcon" />
-                      </Link>
-                      </div>
-                    </div>
+                </div>
+              ) : Object.keys(userEvents).length > 1 ? (
+                Object.keys(userEvents).map((event, eIndex) =>
+                  userEvents[event].name !== "onetime" ? (
+                    <EventDetailsRow
+                      key={eIndex}
+                      index={eIndex}
+                      event={userEvents[event]}
+                    />
+                  ) : null
                 )
-                ): null }
+              ) : (
+                <div>
+                  No events, create one now!
+                  <br></br>
+                  <div className={`column center event-dashboard-events-list`}>
+                    <Link to={"/event/new"} className={`add-event-button-link`}>
+                      <AddIcon className="addIcon" />
+                    </Link>
+                  </div>
+                </div>
+              )
+            ) : null}
           </Row>
         </Col>
-        <Col> 
-            <Row className="event-dashboard-sub-title primary-black-header mx-2">
-              <span>Add an Event</span>
-            </Row>
-            <Row className="mx-2">
-              <div className={`column center event-dashboard-events-list`}>
-                <Link
-                  to={"/event/new"}
-                  className={`add-event-button-link`}
-                >
-                  <AddIcon className="addIcon" />
-                </Link>
-              </div>
-            </Row>
-              
-              {/* <Row className="event-dashboard-sub-title primary-blue-header mx-2  mt-5">
+        <Col>
+          <Row className="event-dashboard-sub-title primary-black-header mx-2">
+            <span>Add an Event</span>
+          </Row>
+          <Row className="mx-2">
+            <div className={`column center event-dashboard-events-list`}>
+              <Link to={"/event/new"} className={`add-event-button-link`}>
+                <AddIcon className="addIcon" />
+              </Link>
+            </div>
+          </Row>
+
+          {/* <Row className="event-dashboard-sub-title primary-blue-header mx-2  mt-5">
                 <span>Send a One Time Gift</span>
               </Row>
               <Row className="mx-2">
@@ -267,11 +257,11 @@ function EventDashboard() {
         </Col>
         <Col>
           <CalendarMonth
-              userMonthOrders={userMonthOrders}
-              listOrders={false}
-              action={handleShowDayDetails}
-            />
-          </Col>
+            userMonthOrders={userMonthOrders}
+            listOrders={false}
+            action={handleShowDayDetails}
+          />
+        </Col>
       </Row>
     </Col>
   );

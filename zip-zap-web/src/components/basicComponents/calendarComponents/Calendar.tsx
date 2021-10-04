@@ -1,22 +1,24 @@
 import React from "react";
-import { subMonths, addMonths, startOfWeek, endOfWeek, format, addDays, startOfMonth, endOfMonth, isSameDay, isSameMonth } from "date-fns";
+import {
+  subMonths,
+  addMonths,
+  startOfWeek,
+  endOfWeek,
+  format,
+  addDays,
+  startOfMonth,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+} from "date-fns";
 
-const daysOfTheWeek = [
-  "Sun",
-  "Mon",
-  "Tues",
-  "Wed",
-  "Thurs",
-  "Fri",
-  "Sat",
-];
+const daysOfTheWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
 class Calendar extends React.Component {
   state = {
     currentMonth: new Date(),
-    selectedDate: new Date()
+    selectedDate: new Date(),
   };
-  
 
   renderHeader() {
     const dateFormat = "MMMM yyyy";
@@ -36,17 +38,16 @@ class Calendar extends React.Component {
   }
 
   renderDays() {
-    const dateFormat = "d";
     const days = [];
-
-    let startDate = startOfWeek(this.state.currentMonth);
 
     for (let i = 0; i < 7; i++) {
       days.push(
-        <div className="calendar-col calendar-col-center" key={i}> {daysOfTheWeek[i]} </div>
+        <div className="calendar-col calendar-col-center" key={i}>
+          {" "}
+          {daysOfTheWeek[i]}{" "}
+        </div>
       );
     }
-    
 
     return <div className="calendar-days calendar-row">{days}</div>;
   }
@@ -68,15 +69,16 @@ class Calendar extends React.Component {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = format(day, dateFormat);
-        const cloneDay = day;
         days.push(
           <div
             className={`calendar-col calendar-cell ${
               !isSameMonth(day, monthStart)
                 ? "disabled"
-                : isSameDay(day, selectedDate) ? "selected" : ""
+                : isSameDay(day, selectedDate)
+                ? "selected"
+                : ""
             }`}
-            
+            key={formattedDate}
           >
             <span className="calendar-number">{formattedDate}</span>
             <span className="bg">{formattedDate}</span>
@@ -84,11 +86,7 @@ class Calendar extends React.Component {
         );
         day = addDays(day, 1);
       }
-      rows.push(
-        <div className="calendar-row">
-          {days}
-        </div>
-      );
+      rows.push(<div className="calendar-row" key={`row-${formattedDate}`}>{days}</div>);
       days = [];
     }
     return <div className="calendar-body">{rows}</div>;
@@ -96,13 +94,13 @@ class Calendar extends React.Component {
 
   nextMonth = () => {
     this.setState({
-      currentMonth: addMonths(this.state.currentMonth, 1)
+      currentMonth: addMonths(this.state.currentMonth, 1),
     });
   };
 
   prevMonth = () => {
     this.setState({
-      currentMonth: subMonths(this.state.currentMonth, 1)
+      currentMonth: subMonths(this.state.currentMonth, 1),
     });
   };
 

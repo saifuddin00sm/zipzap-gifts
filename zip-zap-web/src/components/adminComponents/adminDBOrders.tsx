@@ -1,17 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../App";
-import { adminMenuButton } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 
 function AdminDBOrders() {
-  const {
-    user,
-    admin,
-    setAdmin,
-    setUserFeatures,
-    userFeatures: AppUserFeatures,
-  } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [errorLog, setErrorLog] = useState(
     [] as Array<{

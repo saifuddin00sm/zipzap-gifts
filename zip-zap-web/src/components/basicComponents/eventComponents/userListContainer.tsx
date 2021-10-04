@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { userEvent, userItem, userRecipient } from "../../../classes";
-import {Row, Col, Button, Dropdown} from 'react-bootstrap'
+import { userRecipient } from "../../../classes";
+import { Row, Col } from "react-bootstrap";
 import { ReactComponent as PlusIcon } from "../../../icons/plusSign.svg";
 import { ReactComponent as EditIcon } from "../../../icons/edit.svg";
-import { defaultMaxListeners } from "stream";
 
 function UserListContainer(props: {
   users: { [key: string]: userRecipient };
@@ -26,14 +25,14 @@ function UserListContainer(props: {
     setSearchList([...JSON.parse(JSON.stringify(props.userList))]);
   };
 
-  var departments = new Array();
-  departments.push('')
+  var departments = [];
+  departments.push("");
 
-  for (const [key, value] of Object.entries(props.users)) {
+  for (const [, value] of Object.entries(props.users)) {
     if (!departments.includes(value.Department) && value.Department != " ") {
       departments.push(value.Department);
     }
-  };
+  }
 
   const handleSearch = (e: any) => {
     if (e.target.value) {
@@ -102,13 +101,7 @@ function UserListContainer(props: {
   }, [props.userList.length]);
 
   return props.loading ? (
-    <Col
-      className={`${
-        props.class
-          ? props.class
-          : "user-list-container"
-      }`}
-    >
+    <Col className={`${props.class ? props.class : "user-list-container"}`}>
       {props.hideTitle ? null : (
         <div
           className={`event-user-list-title full-width ${
@@ -165,17 +158,17 @@ function UserListContainer(props: {
         }`}
       >
         <Row>
-          <Col md={4} > Filter by Department </Col>
-          <Col md={4}> 
+          <Col md={4}> Filter by Department </Col>
+          <Col md={4}>
             <select id="departmentSelect" onChange={handleSearch}>
               {/* <Dropdown.Toggle variant="light" id="dropdown-basic" >
                 Department
               </Dropdown.Toggle>
 
               <Dropdown.Menu> */}
-                {departments.map((item) => (
-                  <option value={item}>{item}</option>
-                ))}
+              {departments.map((item) => (
+                <option value={item}>{item}</option>
+              ))}
               {/* </Dropdown.Menu> */}
             </select>
           </Col>
@@ -188,9 +181,7 @@ function UserListContainer(props: {
           ></input>
         </Row>
         <Row className={`event-user-list`}>
-        
-
-        {/* <table className={`column event-user-list-list previous-order-table`}>
+          {/* <table className={`column event-user-list-list previous-order-table`}>
           {props.showDetails ? (
             <thead className={`row center space-bewteen`}>
               {false ? <th scope="col">Select</th> : null}
@@ -203,28 +194,29 @@ function UserListContainer(props: {
             </thead>
           ) : null} */}
           {/* <tbody className={`${props.showDetails ? "" : "table-full-height"}`}> */}
-            {searchList.map((userID, uIndex) =>
-              props.showDetails ? (
-                // <tr
-                //   key={uIndex}
-                //   className={`space-between user-list-detail-row`}
-                //   onClick={() => props.action(userID)}
-                // >
-                //   <td data-label="Recipient">
-                //     {props.users[userID]["First Name"]}{" "}
-                //     {props.users[userID]["Last Name"]}
-                //   </td>
-                //   <td data-label="Birthday">{props.users[userID].Birthday}</td>
-                //   <td data-label="Address">{props.users[userID].Address}</td>
-                //   <td data-label="Title">{props.users[userID]["Title"]}</td>
-                //   <td data-label="Date Started">
-                //     {props.users[userID]["Date Started"]}
-                //   </td>
-                //   <td data-label="Department">
-                //     {props.users[userID].Department}
-                //   </td>
+          {searchList.map((userID, uIndex) =>
+            props.showDetails ? (
+              // <tr
+              //   key={uIndex}
+              //   className={`space-between user-list-detail-row`}
+              //   onClick={() => props.action(userID)}
+              // >
+              //   <td data-label="Recipient">
+              //     {props.users[userID]["First Name"]}{" "}
+              //     {props.users[userID]["Last Name"]}
+              //   </td>
+              //   <td data-label="Birthday">{props.users[userID].Birthday}</td>
+              //   <td data-label="Address">{props.users[userID].Address}</td>
+              //   <td data-label="Title">{props.users[userID]["Title"]}</td>
+              //   <td data-label="Date Started">
+              //     {props.users[userID]["Date Started"]}
+              //   </td>
+              //   <td data-label="Department">
+              //     {props.users[userID].Department}
+              //   </td>
 
-                  {/* <button
+              {
+                /* <button
                     className={`event-user-list-button ${
                       props.buttonType === "remove"
                         ? "event-user-list-button-remove"
@@ -233,29 +225,32 @@ function UserListContainer(props: {
                     onClick={() => props.action(userID)}
                   >
                     <PlusIcon />
-                  </button> */}
-              ) : (
-                <Row key={uIndex} className={`p-1 border-bottom event-user-list-list`}>
-                    <Col>
-                      <button
-                        className={`event-user-list-button ${
-                          props.buttonType === "remove"
-                            ? "event-user-list-button-remove"
-                            : ""
-                        }`}
-                        onClick={() => props.action(userID)}
-                      >
-                        {props.buttonType === "edit" ? <EditIcon /> : <PlusIcon />}
-                      </button>
-                    </Col>
-                  <Col sm={10}>
-                    {props.users[userID]["First Name"]}{" "}
-                    {props.users[userID]["Last Name"]}
-                    </Col>
-
-                </Row>
-              )
-            )}
+                  </button> */
+              }
+            ) : (
+              <Row
+                key={uIndex}
+                className={`p-1 border-bottom event-user-list-list`}
+              >
+                <Col>
+                  <button
+                    className={`event-user-list-button ${
+                      props.buttonType === "remove"
+                        ? "event-user-list-button-remove"
+                        : ""
+                    }`}
+                    onClick={() => props.action(userID)}
+                  >
+                    {props.buttonType === "edit" ? <EditIcon /> : <PlusIcon />}
+                  </button>
+                </Col>
+                <Col sm={10}>
+                  {props.users[userID]["First Name"]}{" "}
+                  {props.users[userID]["Last Name"]}
+                </Col>
+              </Row>
+            )
+          )}
         </Row>
         {props.showDetails ||
         props.buttonType === "none" ||

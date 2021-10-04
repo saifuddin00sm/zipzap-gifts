@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext, log, fetchRequest } from "../../../App";
-import { Redirect, Link, RouteComponentProps } from "react-router-dom";
+import { Redirect, RouteComponentProps } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import LoadingIcon from "../LoadingIcon";
 
@@ -85,7 +85,7 @@ const newUserInfo = (response: {
 
 const AuthCallback: React.FC<RouteComponentProps> = ({ location, match }) => {
   const { user: appUser, setUser: setAppUser } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
+  const loading = true;
   const [redirect, setRedirect] = useState("");
 
   function useQuery() {
@@ -95,7 +95,6 @@ const AuthCallback: React.FC<RouteComponentProps> = ({ location, match }) => {
   let query = useQuery();
   let code = query.get("code");
   let type = query.get("type");
-  let state = query.get("state");
 
   const getTokens = async (code: string) => {
     console.log("CODE", code, window.location.origin, type);
@@ -142,6 +141,7 @@ const AuthCallback: React.FC<RouteComponentProps> = ({ location, match }) => {
       setRedirect("/register");
       return true;
 
+      /*
       let registerUser = await fetchRequest(appUser, "registerUser", "POST", {
         firstName: appUser.firstName,
         lastName: appUser.lastName,
@@ -159,6 +159,7 @@ const AuthCallback: React.FC<RouteComponentProps> = ({ location, match }) => {
       setRedirect("/");
       setAppUser();
       return true;
+      */
     }
 
     if (

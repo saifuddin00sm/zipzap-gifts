@@ -1,24 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { fetchRequest, log, UserContext } from "../../App";
-import {
-  userGroupedItem,
-  userItem,
-  userMonthOrderList,
-  userRecipient,
-} from "../../classes";
-import LoadingIcon from "../basicComponents/LoadingIcon";
-import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
-import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
+import { userRecipient } from "../../classes";
 import { Link } from "react-router-dom";
-import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
-import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
-import { getUserList } from "../eventComponents/eventDashboard";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
-import UserGroupRow from "../basicComponents/userComponents/userGroupRow";
-import UserGroupEditContainer from "./userGroupEditContainer";
 import UserAddRecipientContainer from "./userAddRecipientContainer";
 import ModalBox from "../basicComponents/modalBox";
-import {Row, Col, Button} from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 
 function UserNewList() {
   const { user, userUsers, setUserUsers, setUserUsersLoaded } =
@@ -34,12 +21,12 @@ function UserNewList() {
 
   const [editUserID, setEditUserID] = useState("");
   const [editUser, setEditUser] = useState({
-    ["First Name"]: "",
-    ["Last Name"]: "",
+    "First Name": "",
+    "Last Name": "",
     Department: "",
-    ["Title"]: "",
+    Title: "",
     Birthday: "",
-    ["Date Started"]: "",
+    "Date Started": "",
     Address: "",
     City: "",
     State: "",
@@ -49,12 +36,12 @@ function UserNewList() {
   const resetEditUser = () => {
     setEditUser({
       ...{
-        ["First Name"]: "",
-        ["Last Name"]: "",
+        "First Name": "",
+        "Last Name": "",
         Department: "",
-        ["Title"]: "",
+        Title: "",
         Birthday: "",
-        ["Date Started"]: "",
+        "Date Started": "",
         Address: "",
         City: "",
         State: "",
@@ -220,40 +207,42 @@ function UserNewList() {
         {/* instructions */}
         {newUploads.length === 0 ? (
           <Col className={`m-4`}>
-          <Row>
-                <p><b>
+            <Row>
+              <p>
+                <b>
                   Step 1: Format an csv document with a person on each row and
                   the following attributes (see example above):
-                  </b>
-                </p>
-          </Row>
-          <Row>
-            <Col md="4">
-                  <ul className={`new-recipient-list-fields`}>
-                    {Object.keys(editUser).map(
-                      (key: string, kIndex: number) => (
-                        <li key={kIndex}>{key}</li>
-                      )
-                    )}
-                  </ul>
+                </b>
+              </p>
+            </Row>
+            <Row>
+              <Col md="4">
+                <ul className={`new-recipient-list-fields`}>
+                  {Object.keys(editUser).map((key: string, kIndex: number) => (
+                    <li key={kIndex}>{key}</li>
+                  ))}
+                </ul>
               </Col>
               <Col md="8">
-              <img
-                src={`/media/images/new-list-example.png`}
-                alt={`New List Example`}
-                className={`item-card-image-main mb-3`}
-              ></img>
-              <a
+                <img
+                  src={`/media/images/new-list-example.png`}
+                  alt={`New List Example`}
+                  className={`item-card-image-main mb-3`}
+                ></img>
+                <a
                   href={"/media/files/zipzap-template.csv"}
                   className={`new-event-button new-event-button mt-3 px-3`}
                 >
                   Download Template
                 </a>
-            </Col>
-          </Row>
-          <Row>
+              </Col>
+            </Row>
+            <Row>
               <div className={`column full-width`}>
-                <p> <b>Step 2: Choose a File </b> </p>
+                <p>
+                  {" "}
+                  <b>Step 2: Choose a File </b>{" "}
+                </p>
                 <div className={`row center space-between`}>
                   <input
                     accept=".csv"
@@ -262,8 +251,8 @@ function UserNewList() {
                   ></input>
                 </div>
               </div>
-          </Row>
-        </Col>
+            </Row>
+          </Col>
         ) : (
           <Row>
             <div
@@ -329,6 +318,3 @@ function UserNewList() {
 }
 
 export default UserNewList;
-function userGroupSetup(activeUsers: { [key: string]: userRecipient }) {
-  throw new Error("Function not implemented.");
-}

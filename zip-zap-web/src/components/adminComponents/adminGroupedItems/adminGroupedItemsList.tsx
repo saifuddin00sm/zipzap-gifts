@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import {Row, Col, Button} from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { fetchRequest, UserContext } from "../../../App";
-import { adminGroupedItem, adminItem } from "../../../classes";
+import { adminGroupedItem } from "../../../classes";
 import AdminGroupedItemCard from "../../basicComponents/adminComponents/adminGroupedItemCard";
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
@@ -117,7 +117,7 @@ function AdminGroupedItemsList() {
           }
         });
 
-        let fileUploadResult = await Promise.all(fileLoop);
+        await Promise.all(fileLoop);
       }
 
       updateResponse = await fetchRequest(
@@ -173,9 +173,12 @@ function AdminGroupedItemsList() {
           <h3>Grouped Items</h3>
         </Col>
       </Row>
-      <Row className='m-2'>
+      <Row className="m-2">
         <Col>
-          <Link className={`general-button admin-button`} to={`/admin/dashboard`}>
+          <Link
+            className={`general-button admin-button`}
+            to={`/admin/dashboard`}
+          >
             Back to Admin Dashboard
           </Link>
         </Col>

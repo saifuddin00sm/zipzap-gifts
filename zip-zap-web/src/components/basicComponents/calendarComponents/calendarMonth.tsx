@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../../App";
-import {Container, Row, Col, Table} from 'react-bootstrap'
-import { userEvent, userMonthOrderList } from "../../../classes";
+import { Row, Col } from "react-bootstrap";
+import { userMonthOrderList } from "../../../classes";
 import { getUserList } from "../../eventComponents/eventDashboard";
-import { getIcon, getRandomInt } from "../../eventComponents/eventNew";
-import CalendarDay from "./calendarDay";
 import Calendar from "./Calendar";
 import ModalBox from "../modalBox";
 
@@ -36,8 +34,6 @@ const monthsOfTheYear = [
 
 const colorList = ["--primary-blue", "--primary-pink", "--primary-green"];
 
-let dayRowCount = 0;
-
 const getMonthSunday = (startingDate?: string) => {
   let date = startingDate ? new Date(startingDate) : new Date();
 
@@ -62,7 +58,6 @@ const getMonthSunday = (startingDate?: string) => {
   let firstDayOfTheWeek = new Date(firstDate).getDay();
   let lastDayOfTheWeek = new Date(lastDate).getDay();
 
-
   return {
     month,
     firstDate,
@@ -73,7 +68,6 @@ const getMonthSunday = (startingDate?: string) => {
     lastDayOfTheWeek,
   };
 };
-
 
 const compareCurrentDate = (date: string, month: number, day: number) => {
   let eventDate = new Date(date);
@@ -109,8 +103,6 @@ const getDateMonthDay = (date: string) => {
 //     numDays++;
 //   }
 
-
-
 //   return{__html:
 //   // [...Array(7 - firstDayOfTheWeek)].map((d, dIndex) => (
 //   //   <td>
@@ -127,25 +119,13 @@ const getDateMonthDay = (date: string) => {
 // }
 // }
 
-
 function CalendarMonth(props: {
   userMonthOrders: userMonthOrderList;
   listOrders?: boolean;
   action: Function;
 }) {
-  const { user, userEvents, userUsers, setUserUsers, setUserUsersLoaded } =
+  const { user, userUsers, setUserUsers, setUserUsersLoaded } =
     useContext(UserContext);
-
-  const today = new Date();
-  let {
-    month,
-    firstDate,
-    lastDate,
-    firstDay,
-    lastDay,
-    firstDayOfTheWeek,
-    lastDayOfTheWeek,
-  } = getMonthSunday();
 
   const settingUsers = async () => {
     let users = await getUserList(user);
@@ -163,11 +143,17 @@ function CalendarMonth(props: {
     }
   }, []);
 
+  const showDateDetails = {
+    eventID: "",
+    date: "",
+  };
+
+  /*
   const [showDateDetails, setShowDateDetails] = useState({
     eventID: "",
     date: "",
   });
-
+  
   const handleDateClick = (type: string, eventID: string, date: string) => {
     if (type === "show") {
       console.log("t", type, [eventID], [date]);
@@ -182,86 +168,85 @@ function CalendarMonth(props: {
 
     // props.action("show", eventID, date)
   };
+  */
 
   return (
     <Col>
       {/* <h2>
         {monthsOfTheYear[today.getMonth()]} {today.getFullYear()}
       </h2> */}
-          {showDateDetails.eventID ? (
-          <ModalBox>
-            <div className={`column calendar-orders`}>
-              <h3>Orders on {showDateDetails.date}:</h3>
-              <ul>
-                {Object.keys(
-                  props.userMonthOrders.orders[showDateDetails.eventID][
-                    showDateDetails.date
-                  ]
-                ).map((orderID, oIndex) => (
-                  // <li key={oIndex} className={`column`}>
-                  //   <span>
-                  //     {props.userMonthOrders.orders[showDateDetails.eventID][
-                  //       showDateDetails.date
-                  //     ][orderID].giftee in userUsers.activeUsers
-                  //       ? userUsers.activeUsers[
-                  //           props.userMonthOrders.orders[
-                  //             showDateDetails.eventID
-                  //           ][showDateDetails.date][orderID].giftee
-                  //         ].Name
-                  //       : `... ${
-                  //           props.userMonthOrders.orders[
-                  //             showDateDetails.eventID
-                  //           ][showDateDetails.date][orderID].giftee
-                  //         }`}
-                  //   </span>
+      {showDateDetails.eventID ? (
+        <ModalBox>
+          <div className={`column calendar-orders`}>
+            <h3>Orders on {showDateDetails.date}:</h3>
+            <ul>
+              {Object.keys(
+                props.userMonthOrders.orders[showDateDetails.eventID][
+                  showDateDetails.date
+                ]
+              ).map((orderID, oIndex) => (
+                // <li key={oIndex} className={`column`}>
+                //   <span>
+                //     {props.userMonthOrders.orders[showDateDetails.eventID][
+                //       showDateDetails.date
+                //     ][orderID].giftee in userUsers.activeUsers
+                //       ? userUsers.activeUsers[
+                //           props.userMonthOrders.orders[
+                //             showDateDetails.eventID
+                //           ][showDateDetails.date][orderID].giftee
+                //         ].Name
+                //       : `... ${
+                //           props.userMonthOrders.orders[
+                //             showDateDetails.eventID
+                //           ][showDateDetails.date][orderID].giftee
+                //         }`}
+                //   </span>
 
-                  //   <Link to={`/order/${showDateDetails.eventID}/${orderID}`}>
-                  //     Edit Order
-                  //   </Link>
-                  // </li>
-                  <li key={oIndex} className={`column`}>
-                    <span>
-                      {props.userMonthOrders.orders[showDateDetails.date][
-                        orderID
-                      ].giftee in userUsers.activeUsers
-                        ? `${
-                            userUsers.activeUsers[
-                              props.userMonthOrders.orders[
-                                showDateDetails.date
-                              ][orderID].giftee
-                            ]["First Name"]
-                          } ${
-                            userUsers.activeUsers[
-                              props.userMonthOrders.orders[
-                                showDateDetails.date
-                              ][orderID].giftee
-                            ]["Last Name"]
-                          }`
-                        : `... ${
+                //   <Link to={`/order/${showDateDetails.eventID}/${orderID}`}>
+                //     Edit Order
+                //   </Link>
+                // </li>
+                <li key={oIndex} className={`column`}>
+                  <span>
+                    {props.userMonthOrders.orders[showDateDetails.date][orderID]
+                      .giftee in userUsers.activeUsers
+                      ? `${
+                          userUsers.activeUsers[
                             props.userMonthOrders.orders[showDateDetails.date][
                               orderID
                             ].giftee
-                          }`}
-                    </span>
+                          ]["First Name"]
+                        } ${
+                          userUsers.activeUsers[
+                            props.userMonthOrders.orders[showDateDetails.date][
+                              orderID
+                            ].giftee
+                          ]["Last Name"]
+                        }`
+                      : `... ${
+                          props.userMonthOrders.orders[showDateDetails.date][
+                            orderID
+                          ].giftee
+                        }`}
+                  </span>
 
-                    <Link to={`/order/${showDateDetails.eventID}/${orderID}`}>
-                      Edit Order
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </ModalBox>
-        ) : null}
+                  <Link to={`/order/${showDateDetails.eventID}/${orderID}`}>
+                    Edit Order
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </ModalBox>
+      ) : null}
       <Row>
         {/* {daysOfTheWeek.map((day, dIndex) => (
           <Col xs="2" className={`calendar-week-days`} key={dIndex}>
             {day.slice(0, 3)}
           </Col>
         ))} */}
-        
 
-      {/* <ul className={`row center-column row-wrap calendar-days`}> */}
+        {/* <ul className={`row center-column row-wrap calendar-days`}> */}
 
         {/* put empty dates to line up the first */}
         {/* {[...Array(firstDayOfTheWeek)].map((d, dIndex) => (
@@ -288,9 +273,8 @@ function CalendarMonth(props: {
           </td>
         ))} */}
 
-
-          {/* put empty box for end of the month to line up dates  */}
-          {/* {[...Array(6 - lastDayOfTheWeek)].map((d, dIndex) => (
+        {/* put empty box for end of the month to line up dates  */}
+        {/* {[...Array(6 - lastDayOfTheWeek)].map((d, dIndex) => (
             <td
               key={dIndex}
               style={{
@@ -303,11 +287,9 @@ function CalendarMonth(props: {
             </td>
           ))}
       </Row> */}
-      <Calendar />
+        <Calendar />
       </Row>
-            
     </Col>
-
   );
 }
 

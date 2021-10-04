@@ -1,31 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Row, Col} from 'react-bootstrap';
+import { Row, Col } from "react-bootstrap";
 import { fetchRequest, UserContext } from "../../App";
-import {
-  userGroupedItem,
-  userItem,
-  userMonthOrderList,
-  userRecipient,
-} from "../../classes";
+import { userRecipient } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
-import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link } from "react-router-dom";
-import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
-import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
 import { getUserList } from "../eventComponents/eventDashboard";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
-import UserGroupRow from "../basicComponents/userComponents/userGroupRow";
 import UserGroupEditContainer from "./userGroupEditContainer";
 import UserAddRecipientContainer from "./userAddRecipientContainer";
 import ModalBox from "../basicComponents/modalBox";
 
 function UserDashboard() {
-  const { user, userUsers, setUserUsers, setUserUsersLoaded, userUsersLoaded } =
+  const { user, userUsers, setUserUsers, setUserUsersLoaded } =
     useContext(UserContext);
   const [loading, setLoading] = useState(true);
-  const [redirect, setRedirect] = useState("");
-  let userList = new Array<string>()
+  let userList = new Array<string>();
   // const [userList, setUserList] = useState([] as Array<string>);
 
   const settingUsers = async () => {
@@ -36,7 +26,7 @@ function UserDashboard() {
     if ("activeUsers" in users) {
       let userListTemp = new Array<string>();
       for (const user1 in users.activeUsers) {
-        userListTemp.push(user1)
+        userListTemp.push(user1);
       }
       userList = userListTemp;
       // userGroupSetup(users.activeUsers);
@@ -49,10 +39,9 @@ function UserDashboard() {
   );
 
   const userGroupSetup = async (userList: { [key: string]: userRecipient }) => {
-    let groups = [] as Array<string>;
     let finalGroups = {} as { [key: string]: { group: string; count: number } };
 
-    Object.keys(userList).filter((userID) => {
+    Object.keys(userList).forEach((userID) => {
       if (!(userList[userID].Department in finalGroups)) {
         finalGroups[userList[userID].Department] = {
           group: userList[userID].Department,
@@ -68,12 +57,12 @@ function UserDashboard() {
   };
 
   useEffect(() => {
-    if (Object.keys(userUsers.activeUsers).length == 0) {
+    if (Object.keys(userUsers.activeUsers).length === 0) {
       settingUsers();
     } else {
       let userListTemp = new Array<string>();
       for (const user1 in userUsers.activeUsers) {
-        userListTemp.push(user1)
+        userListTemp.push(user1);
       }
       userList = userListTemp;
       // setUserList(Object.keys(userUsers.activeUsers));
@@ -83,10 +72,8 @@ function UserDashboard() {
   }, []);
 
   const [activeGroup, setActiveGroup] = useState("");
-  const [activeGroupPeople, setActiveGroupPeople] = useState(
-    [] as Array<string>
-  );
-
+  const activeGroupPeople = [] as Array<string>;
+  /*
   const handleActivateGroup = (group: string) => {
     if (activeGroup === group) {
       setActiveGroup("");
@@ -105,6 +92,7 @@ function UserDashboard() {
       setActiveGroupPeople(filtered);
     }
   };
+  */
 
   const handelEditGroup = async (oldGroup: string, newGroup: string) => {
     setLoading(true);
@@ -143,7 +131,7 @@ function UserDashboard() {
         }
       });
 
-      let newListResult = await Promise.all(newList);
+      await Promise.all(newList);
 
       setUserUsers({ ...userUsers });
 
@@ -170,11 +158,6 @@ function UserDashboard() {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleAddNewUser = async (newUser: userRecipient) => {
-    // if (editUser) {
-    //   handleEditUser(newUser);
-    //   return;
-    // }
-
     setLoading(true);
     let newUserID = editUser
       ? newUser.userID
@@ -214,14 +197,13 @@ function UserDashboard() {
 
       let userListTemp = new Array<string>();
       for (const user1 in userUsers.activeUsers) {
-        userListTemp.push(user1)
+        userListTemp.push(user1);
       }
       userList = userListTemp;
-      
+
       setSuccessMessage(`User ${editUser ? "Updated" : "Added"} Successfully`);
       setEditUser(undefined);
-    } 
-    else {
+    } else {
       setSuccessMessage("Whoops, please contact support");
     }
 
@@ -240,10 +222,6 @@ function UserDashboard() {
     }
   };
 
-  const handleEditUser = (newUser: userRecipient) => {
-    console.log("EDIT", newUser);
-  };
-
   return (
     <Col>
       <Row>
@@ -254,9 +232,7 @@ function UserDashboard() {
       {/* <header className={`column center page-header`}>
         <h1>People Dashboard</h1>
       </header> */}
-      <Row>
-      {loading ? <LoadingIcon /> : null}
-      </Row>
+      <Row>{loading ? <LoadingIcon /> : null}</Row>
 
       {/* holds 4 Containers */}
       <Row className="d-flex justify-content-center mb-3">
@@ -303,8 +279,8 @@ function UserDashboard() {
         {/* <section
           className={`row center-row full-width event-dashboard-top-row`}
         > */}
-          {/* event list container */}
-          {/* <Col sm="6">
+        {/* event list container */}
+        {/* <Col sm="6">
             <Row className="event-dashboard-sub-title primary-black-header mx-2">
               <span>Groups</span>
             </Row>
@@ -340,44 +316,44 @@ function UserDashboard() {
             </Row>
           </Col> */}
 
-          {/* Add List/Recipient container */}
-          <Col sm="6">
-            <div className={`full-width`}>
-              <div className={`event-dashboard-sub-title primary-black-header`}>
-                <span>Upload a List</span>
-              </div>
-              <div className={`column center event-dashboard-events-list`}>
-                <Link
-                  to={"/recipients/upload"}
-                  className={`add-event-button-link`}
-                >
-                  <AddIcon className="addIcon" />
-                </Link>
-              </div>
+        {/* Add List/Recipient container */}
+        <Col sm="6">
+          <div className={`full-width`}>
+            <div className={`event-dashboard-sub-title primary-black-header`}>
+              <span>Upload a List</span>
             </div>
-            </Col>
-            <Col sm="6">
-            <div className={`full-width`}>
-              <div className={`event-dashboard-sub-title primary-black-header`}>
-                <span>Add a Recipient</span>
-              </div>
-              <div className={`column center event-dashboard-events-list`}>
-                <button
-                  className={`add-event-button add-event-button-blue`}
-                  onClick={() => setAddNewUser(true)}
-                >
-                  <AddIcon className="addIcon" />
-                </button>
-              </div>
+            <div className={`column center event-dashboard-events-list`}>
+              <Link
+                to={"/recipients/upload"}
+                className={`add-event-button-link`}
+              >
+                <AddIcon className="addIcon" />
+              </Link>
             </div>
-            </Col>
-          </Row>
-        <Row>
+          </div>
+        </Col>
+        <Col sm="6">
+          <div className={`full-width`}>
+            <div className={`event-dashboard-sub-title primary-black-header`}>
+              <span>Add a Recipient</span>
+            </div>
+            <div className={`column center event-dashboard-events-list`}>
+              <button
+                className={`add-event-button add-event-button-blue`}
+                onClick={() => setAddNewUser(true)}
+              >
+                <AddIcon className="addIcon" />
+              </button>
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <Row>
         <Col>
           <div className={`event-dashboard-sub-title primary-black-header`}>
             <span>List of Recipients</span>
           </div>
-          
+
           <UserListContainer
             users={userUsers.activeUsers}
             userList={userList}

@@ -126,7 +126,7 @@ function AdminItemCard(props: {
             {editableItem.mainPicture ? (
               <img
                 src={`${appSettings.pictureURL}/${editableItem.mainPicture}`}
-                alt={`${editableItem.name}-main-picture`}
+                alt={`${editableItem.name}-main`}
                 className={`item-card-image-small`}
               ></img>
             ) : null}
@@ -146,7 +146,7 @@ function AdminItemCard(props: {
             <div className={`row center-column`}>
               <img
                 src={`${appSettings.pictureURL}/${pictureURL}`}
-                alt={`${editableItem.name}-alt-picture-${pIndex}`}
+                alt={`${editableItem.name}-alt-${pIndex}`}
                 className={`item-card-image-small`}
               ></img>
               <button onClick={() => changeMainPicture(pIndex)}>
@@ -301,7 +301,7 @@ function AdminItemCard(props: {
         {props.item.mainPicture ? (
           <img
             src={`${appSettings.pictureURL}/${props.item.mainPicture}`}
-            alt={`${props.item.name}-main-picture`}
+            alt={`${props.item.name}-main`}
             className={`item-card-image-main`}
           ></img>
         ) : (
@@ -313,7 +313,7 @@ function AdminItemCard(props: {
             <img
               key={pIndex}
               src={`${appSettings.pictureURL}/${pictureURL}`}
-              alt={`${props.item.name}-alt-picture-${pIndex}`}
+              alt={`${props.item.name}-alt-${pIndex}`}
               className={`item-card-image-small`}
             ></img>
           ))}

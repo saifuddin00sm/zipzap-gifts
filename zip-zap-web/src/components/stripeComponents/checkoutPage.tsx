@@ -1,17 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import appSettings from "../../appSettings.json";
-import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from "./checkoutForm";
-import { Link, Redirect, RouteComponentProps } from "react-router-dom";
-import ModalBox from "../basicComponents/modalBox";
-import { calcGiftPackagePrice } from "../eventComponents/eventNew";
+import { Link, RouteComponentProps } from "react-router-dom";
 import StripeWrapper from "./stripeWrapper";
 import StripeFullCardForm from "./stripeFullCardForm";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(appSettings.stripeKey);
+// TODO: Is there a better place to put this function?
+loadStripe(appSettings.stripeKey);
 
 function CheckoutPage({ match, location }: RouteComponentProps) {
   function useQuery() {
@@ -22,13 +19,8 @@ function CheckoutPage({ match, location }: RouteComponentProps) {
   let redirectURL = query.get("redirectURL");
   let checkoutType = query.get("checkoutType");
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [redirect, setRedirect] = useState("");
-
   return (
     <section className={`column center-column full-height`}>
-      {redirect ? <Redirect to={redirect} /> : null}
       <header className={`column center page-header page-header-black`}>
         <h1>Check Out</h1>
       </header>
@@ -45,8 +37,6 @@ function CheckoutPage({ match, location }: RouteComponentProps) {
       <main
         className={` column center-column main-section main-section-white-bg`}
       >
-        {loading || success ? <ModalBox></ModalBox> : null}
-
         {/* <div className={`event-dashboard-sub-title primary-green-header`}>
           <span>{completedEvent ? completedEvent.name : "Event"} Details</span>
         </div> */}

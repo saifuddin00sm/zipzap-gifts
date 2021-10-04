@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  CardElement,
   useStripe,
   useElements,
   CardNumberElement,

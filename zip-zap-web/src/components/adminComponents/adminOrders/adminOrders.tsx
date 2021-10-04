@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { fetchRequest, UserContext } from "../../../App";
-import { adminAccount, adminItem } from "../../../classes";
+import { adminAccount } from "../../../classes";
 import AdminAccountCard from "../../basicComponents/adminComponents/adminAccountCard";
-import AdminItemCard from "../../basicComponents/adminComponents/adminItemCard";
 import LoadingIcon from "../../basicComponents/LoadingIcon";
 import { checkUserAdmin } from "../adminDashboard";
 
