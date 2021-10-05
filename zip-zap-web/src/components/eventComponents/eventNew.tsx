@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
-import { Row, Col, Modal } from "react-bootstrap";
+import { Row, Col, Modal, DropdownButton, Dropdown } from "react-bootstrap";
 import {
   adminItem,
   eventOrder,
@@ -493,6 +493,8 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [userSelectedList, setUserSelectedList] = useState([] as Array<string>);
 
   const [giftType, setGiftType] = useState("grouped");
+  const [dateType, setDateType] = useState("onetime");
+  const [reoccuringType, setreoccuringType] = useState("none")
 
   const handleActiveItem = (type: string, id: string) => {
     if (activeItem.id) {
@@ -504,6 +506,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setActiveItemDetails({ type: type, id: id });
     }
   };
+
+  const handleSetReocccuringType = (type: string) => {
+    setreoccuringType(type);
+  }
 
   const handleChooseItem = () => {
     if (activeItem.id === activeItemDetails.id) {
@@ -781,6 +787,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     });
   };
 
+  const handleChangeDateType = (type: string) => {
+    setDateType(type);
+  }
+
   const [customGift, setCustomGift] = useState({
     id: "",
     name: "",
@@ -981,7 +991,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       {redirect ? <Redirect to={redirect} /> : null}
       <Row>
         <Col className="page-header justify-content-center ">
-          <h3>{match.params.eventID ? "Edit" : "Add an"} Event</h3>
+          <h3>{match.params.eventID ? "Edit" : "Add a"} Gift</h3>
         </Col>
       </Row>
       {/* <Row>
@@ -994,12 +1004,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
       {/* holds 4 Containers */}
       <Row className="event-dashboard-sub-title primary-green-header mx-5">
-        <span>{completedEvent ? completedEvent.name : "Event"} Details</span>
+        <span>{completedEvent ? completedEvent.name : "Gift"} Details</span>
       </Row>
       <Row className="new-event-main-section p-3 mx-5">
         <Col className="mx-3">
           <Row>
-            <span>Event Name</span>
+            <span>Gift Name</span>
             <input
               placeholder={"Birthdays"}
               className={`general-input-fit new-event-input`}
@@ -1018,8 +1028,25 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           </Row>
         </Col>
         <Col className="px-3">
-          <Row className="new-event-main-section">
-            <span>Event Date</span>
+          <Row>
+          <Col className="align-items-right p-2 m-1">
+            <button
+              className={`new-event-button`}
+              onClick={() => handleChangeDateType("onetime")}
+            >
+              One Time
+            </button>
+            <button
+              className={`new-event-button`}
+              onClick={() => handleChangeDateType("reoccuring")}
+            >
+              Reoccuring
+            </button>
+          </Col>
+          </Row>
+          {!itemsLoading && dateType === "onetime" ? (
+            <Row>
+            <span>Gift Date</span>
             <input
               type={"date"}
               placeholder={"From"}
@@ -1028,9 +1055,37 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               onChange={(e: any) => setEventStartDate(e.target.value)}
               min={formatDate(getDateRestriction().toString())}
             ></input>{" "}
-            {/* <input type="checkbox" id="birthday1" name="birthday" value="birthday"></input>
-                <label for="birthday1">Date is Birthday</label> */}
-          </Row>
+            </Row>
+          ) : (
+            <Row>
+              <Col sm="6">
+              <span>Start Date</span>
+              <input
+                type={"date"}
+                placeholder={"From"}
+                className={`general-input-fit new-event-date-input`}
+                value={eventStartDate}
+                onChange={(e: any) => setEventStartDate(e.target.value)}
+                min={formatDate(getDateRestriction().toString())}
+              ></input>{" "}
+              </Col>
+              <Col sm="6">
+              <span>End Date</span>
+              <input
+                type={"date"}
+                placeholder={"From"}
+                className={`general-input-fit new-event-date-input`}
+                value={eventStartDate}
+                onChange={(e: any) => setEventStartDate(e.target.value)}
+                min={formatDate(getDateRestriction().toString())}
+              ></input>{" "}
+              </Col>
+              <DropdownButton id="dropdown-basic-button" title="Pull Date from">
+                <Dropdown.Item onClick={() =>handleSetReocccuringType("birthday")}>Birthday</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleSetReocccuringType("jobAnniversary")}>Job anniversary</Dropdown.Item>
+              </DropdownButton>
+            </Row>
+          )}
           {/* <Row className="px-3">
             <span>Icon to Represent Event</span>
                 <SelectList
@@ -1420,7 +1475,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           onClick={handleEventCheck}
           disabled={userSelectedList.length === 0 || !activeItem.id}
         >
-          {match.params.eventID ? "Edit" : "Create"} Event
+          {match.params.eventID ? "Edit" : "Create"} Gift
         </button>
       </Row>
       <Modal show={show} onHide={handleClose}>
@@ -1432,7 +1487,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 {match.params.eventID ? "updated" : "created"} sucessfully!
               </h5>
             ) : (
-              `${match.params.eventID ? "Editing" : "Creating"} event`
+              `${match.params.eventID ? "Editing" : "Creating"} gift`
             )}{" "}
           </Modal.Title>
         </Modal.Header>

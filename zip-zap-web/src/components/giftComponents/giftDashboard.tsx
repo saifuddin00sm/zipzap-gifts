@@ -91,7 +91,7 @@ function GiftDashboard() {
     <Col>
       <Row>
         <Col className="page-header justify-content-center ">
-          <h3>Gift Dashboard</h3>
+          <h3>Gift Catalog</h3>
         </Col>
       </Row>
       {seeDetails ? (

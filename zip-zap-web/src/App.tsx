@@ -277,7 +277,7 @@ function App() {
 
   let location = useLocation();
   useEffect(() => {
-    if (location.pathname === "/callback") {
+    if (window.location.pathname === "/callback") {
       window.location.replace(
         `${window.location.origin}/#/callback${window.location.search}`
       );

@@ -128,6 +128,7 @@ const AuthCallback: React.FC<RouteComponentProps> = ({ location, match }) => {
       // setAppUser();
       localStorage.removeItem("user");
       setRedirect("/register");
+      console.log("LOGIN");
       return true;
     }
 

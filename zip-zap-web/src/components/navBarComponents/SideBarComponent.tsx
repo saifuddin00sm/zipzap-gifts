@@ -11,14 +11,7 @@ function SideBarComponent() {
                         className="side-bar-container-link "
                     >
                         {" "}
-                        Events
-                    </Nav.Link>
-                    <Nav.Link
-                        href="#/order/past"
-                        className="side-bar-container-link"
-                    >
-                        {" "}
-                        Orders
+                        Gift Dashboard
                     </Nav.Link>
                     <Nav.Link
                         href="#/recipients"
@@ -28,10 +21,17 @@ function SideBarComponent() {
                         Recipients
                     </Nav.Link>
                     <Nav.Link
+                        href="#/order/past"
+                        className="side-bar-container-link"
+                    >
+                        {" "}
+                        Orders
+                    </Nav.Link>
+                    <Nav.Link
                         href="#/gifts"
                         className="side-bar-container-link"
                     >
-                        Gifts
+                        Gift Catalog
                     </Nav.Link>
                 </Nav>
             </Navbar>

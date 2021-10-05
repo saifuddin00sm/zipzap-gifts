@@ -172,7 +172,7 @@ function EventDashboard() {
     <Col>
       <Row>
         <Col className="page-header justify-content-center">
-          <h3>Event Dashboard</h3>
+          <h3>Gift Dashboard</h3>
         </Col>
       </Row>
 
@@ -183,7 +183,7 @@ function EventDashboard() {
       <Row className="d-flex justify-content-center">
         <Col>
           <Row className="event-dashboard-sub-title primary-black-header mx-2">
-            <span>Event List</span>
+            <span>Current Gifts</span>
           </Row>
           <Row className="mx-2 p-2 event-dashboard-events-list event-dashboard-events-list-container">
             {userUsersLoaded ? (
@@ -212,7 +212,7 @@ function EventDashboard() {
                 )
               ) : (
                 <div>
-                  No events, create one now!
+                  No Gifts, create one now!
                   <br></br>
                   <div className={`column center event-dashboard-events-list`}>
                     <Link to={"/event/new"} className={`add-event-button-link`}>
@@ -226,7 +226,7 @@ function EventDashboard() {
         </Col>
         <Col>
           <Row className="event-dashboard-sub-title primary-black-header mx-2">
-            <span>Add an Event</span>
+            <span>Add a Gift</span>
           </Row>
           <Row className="mx-2">
             <div className={`column center event-dashboard-events-list`}>
