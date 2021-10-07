@@ -125,7 +125,7 @@ function UserListContainer(props: {
       >
         <div className={`full-width column center`}>
           <div className={` event-user-search-bar-loading`}>
-            <div className={`loading-skeleton row center`}>Loading Users</div>
+            <div className={`loading-skeleton row center`}>Loading Recipients</div>
           </div>
         </div>
 
