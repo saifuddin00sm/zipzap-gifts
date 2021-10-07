@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
+import './App.scss'
 import { Route, useLocation } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import appSettings from "./appSettings.json";

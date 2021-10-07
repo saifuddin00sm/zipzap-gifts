@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { userRecipient } from "../../../classes";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
 import { ReactComponent as PlusIcon } from "../../../icons/plusSign.svg";
 import { ReactComponent as EditIcon } from "../../../icons/edit.svg";
 
@@ -19,11 +19,17 @@ function UserListContainer(props: {
     JSON.parse(JSON.stringify(props.userList)) as Array<string>
   );
 
+  const [department, setDepartment] = useState("Filter By Department");
+
   const [searchValue, setSearchValue] = useState("");
 
   const resetList = () => {
     setSearchList([...JSON.parse(JSON.stringify(props.userList))]);
   };
+
+  const handleSetDepartment = (type: string) => {
+    setDepartment(type);
+  }
 
   var departments = [];
   departments.push("");
@@ -157,21 +163,12 @@ function UserListContainer(props: {
           props.buttonType === "remove" ? "event-user-list-blue" : ""
         }`}
       >
-        <Row>
-          <Col md={4}> Filter by Department </Col>
-          <Col md={4}>
-            <select id="departmentSelect" onChange={handleSearch}>
-              {/* <Dropdown.Toggle variant="light" id="dropdown-basic" >
-                Department
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu> */}
+        <Row className="m-2">
+            <DropdownButton id="dropdown-basic-button" title={department} variant="light">
               {departments.map((item) => (
-                <option value={item}>{item}</option>
+                  <Dropdown.Item onClick={() => handleSetDepartment(item)}>{item}</Dropdown.Item>
               ))}
-              {/* </Dropdown.Menu> */}
-            </select>
-          </Col>
+              </DropdownButton>
         </Row>
         <Row>
           <input

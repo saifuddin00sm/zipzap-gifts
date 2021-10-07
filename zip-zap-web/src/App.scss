@@ -1,0 +1,21 @@
+@import "./node_modules/bootstrap/scss/functions";
+@import "./node_modules/bootstrap/scss/variables";
+@import "./node_modules/bootstrap/scss/mixins";
+
+.btn-zipBlue {
+  background-color: rgb(143, 169, 187) !important;
+  border-color: rgb(143, 169, 187) !important;
+}
+.btn-zipBlue:hover {
+  background-color: rgb(141, 162, 177) !important;
+  border-color: rgb(141, 162, 177) !important;
+}
+.btn-zapGreen {
+  background-color: rgb(154, 179, 170) !important;
+  border-color: rgb(154, 179, 170) !important;
+}
+.btn-zapGreen:hover {
+  background-color: rgb(147, 168, 161) !important;
+  border-color: rgb(147, 168, 161) !important;
+}
+@import "./node_modules/bootstrap/scss/bootstrap.scss";

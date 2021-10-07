@@ -4,7 +4,7 @@
   --light-black: rgba(0, 0, 0, 0.38);
   --medium-black: rgba(0, 0, 0, 0.6);
   --high-black: rgba(0, 0, 0, 0.87);
-
+  --bs-primary: #8da2b1;
   --primary-white: rgba(255, 255, 255, 1);
   --primary-off-white: rgba(251, 251, 251, 1);
   --primary-black: rgba(109, 110, 112, 1);
@@ -71,7 +71,6 @@
     transform: rotate(360deg);
   }
 }
-
 .full-width {
   width: 100%;
 }
@@ -175,6 +174,10 @@ button {
 
 .margin-top-5 {
   margin-top: 15px;
+}
+
+.btn-blue {
+  background-color: var(--primary-button-blue);
 }
 
 .general-button {
