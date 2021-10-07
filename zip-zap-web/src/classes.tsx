@@ -380,7 +380,7 @@ class userRecipient {
   ["First Name"]: string;
   ["Last Name"]: string;
   Department: string;
-  Title: string;
+  ["Job Title"]: string;
   Birthday: string;
   ["Date Started"]: string;
   Address: string;
@@ -392,7 +392,7 @@ class userRecipient {
 
   constructor(
     Department: string,
-    Title: string,
+    JobTitle: string,
     Birthday: string,
     Address: string,
     City: string,
@@ -401,7 +401,7 @@ class userRecipient {
   ) {
     this.Birthday = Birthday;
     this.Department = Department;
-    this.Title = Title;
+    this["Job Title"] = JobTitle;
     this.Address = Address;
     this.City = City;
     this.State = State;
