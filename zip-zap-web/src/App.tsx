@@ -323,7 +323,7 @@ function App() {
       setLoading(false);
     };
 
-    if (!admin && "email" in user) {
+    if (user && !admin && "email" in user) {
       getAdminUser();
     } else if (admin) {
       setLoading(false);
