@@ -495,7 +495,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const [giftType, setGiftType] = useState("grouped");
   const [dateType, setDateType] = useState("onetime");
-  const [reoccuringType, setreoccuringType] = useState("Select")
+  const [recurringType, setrecurringType] = useState("Select")
 
   const handleActiveItem = (type: string, id: string) => {
     if (activeItem.id) {
@@ -509,7 +509,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   };
 
   const handleSetReocccuringType = (type: string) => {
-    setreoccuringType(type);
+    setrecurringType(type);
   }
 
   const handleChooseItem = () => {
@@ -1041,9 +1041,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             <Button
               className={`new-event-button`}
               variant="zipBlue"
-              onClick={() => handleChangeDateType("reoccuring")}
+              onClick={() => handleChangeDateType("recurring")}
             >
-              Reoccuring
+              Recurring
             </Button>
           </Col>
           </Row>
@@ -1098,8 +1098,8 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               ></input>{" "}
               </Col>
               <Col sm="4" className="my-2">
-                <p>Select reocurring Type: </p>
-              <DropdownButton id="dropdown-basic-button" title={reoccuringType} variant="zapGreen">
+                <p>Select Recurring Type: </p>
+              <DropdownButton id="dropdown-basic-button" title={recurringType} variant="zapGreen">
                 <Dropdown.Item onClick={() =>handleSetReocccuringType("Birthday")}>Birthday</Dropdown.Item>
                 <Dropdown.Item onClick={() => handleSetReocccuringType("Job Anniversary")}>Job anniversary</Dropdown.Item>
               </DropdownButton>
