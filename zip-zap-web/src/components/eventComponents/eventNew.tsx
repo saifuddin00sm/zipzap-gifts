@@ -1033,14 +1033,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           <Col className="align-items-right p-2 m-1">
             <Button
               className={`new-event-button`}
-              variant="zipBlue"
+              variant={dateType === "onetime" ? "zipBlue" : "outline-secondary"}
               onClick={() => handleChangeDateType("onetime")}
             >
               One Time
             </Button>
             <Button
               className={`new-event-button`}
-              variant="zipBlue"
+              variant={dateType === "recurring" ? "zipBlue" : "outline-secondary"}
               onClick={() => handleChangeDateType("recurring")}
             >
               Recurring
@@ -1126,14 +1126,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           <Col className="align-items-right p-2">
             <Button
               className={`new-event-button`}
-              variant="zapGreen"
+              variant={giftType === "grouped" ? "zipBlue" : "outline-secondary"}
               onClick={() => handleChangeGiftType("grouped")}
             >
               Gift Package
             </Button>
             <Button
               className={`new-event-button`}
-              variant="zapGreen"
+              variant={giftType === "custom" ? "zipBlue" : "outline-secondary"}
               onClick={() => handleChangeGiftType("custom")}
             >
               Custom Gift
