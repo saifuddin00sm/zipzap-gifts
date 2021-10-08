@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Redirect } from "react-router-dom";
-import { fetchRequest, UserContext } from "../../App";
-import {Row, Col} from 'react-bootstrap';
-import LoadingIcon from "../basicComponents/LoadingIcon";
+import React from "react";
+import { Row, Col } from "react-bootstrap";
+import { fetchRequest } from "../../App";
 import AdminMenuCard from "./adminMenuCard";
 import appSettings from "../../appSettings.json";
 
@@ -25,49 +23,8 @@ const checkUserAdmin = async (user: any) => {
   return functionResponse;
 };
 
-function AdminDashboard() {
-  const {
-    user,
-    admin,
-    setAdmin,
-    setUserFeatures,
-    userFeatures: AppUserFeatures,
-  } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
-
-  const getAdminUser = async () => {
-    const { allowed, userFeatures } = await checkUserAdmin(user);
-
-    if (allowed) {
-      setAdmin(allowed);
-    }
-
-    if (userFeatures.length > 0) {
-      setUserFeatures(userFeatures);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (!admin && "email" in user) {
-      getAdminUser();
-    } else if (admin) {
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  return loading ? (
-    <section>
-      <LoadingIcon />
-    </section>
-  ) : !admin ? (
-    <section>
-      <Redirect to={""} />
-    </section>
-  ) : (
+function AdminDashboard({ userFeatures }: { userFeatures: Array<string> }) {
+  return (
     <Col>
       <Row>
         <Col className="page-header justify-content-center">
@@ -75,14 +32,14 @@ function AdminDashboard() {
         </Col>
       </Row>
 
-      {AppUserFeatures.includes(appSettings.features.adminChargePayment) ? (
+      {userFeatures.includes(appSettings.features.adminChargePayment) ? (
         <AdminMenuCard
           title={"Payments"}
           buttons={[{ text: "Charge Payments", link: "/admin/chargePayments" }]}
         />
       ) : null}
 
-      {AppUserFeatures.includes(appSettings.features.adminUpdateDBOrders) ? (
+      {userFeatures.includes(appSettings.features.adminUpdateDBOrders) ? (
         <AdminMenuCard
           title={"Import This Months Orders"}
           buttons={[{ text: "Import Orders", link: "/admin/dbOrders" }]}
