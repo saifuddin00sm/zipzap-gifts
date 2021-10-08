@@ -1405,7 +1405,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           loading={usersLoading}
           action={handleEditUserList}
           buttonType={"remove"}
-          title={"Users on Event List"}
+          title={"Recipients on Gift List"}
         />
       </Row>
 
