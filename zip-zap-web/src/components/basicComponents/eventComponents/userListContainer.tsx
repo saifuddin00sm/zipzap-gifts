@@ -66,8 +66,8 @@ function UserListContainer(props: {
           ) {
             return true;
           } else if (
-            "Title" in user &&
-            user["Title"].toLowerCase().includes(e.target.value.toLowerCase())
+            "Job Title" in user &&
+            user["Job Title"].toLowerCase().includes(e.target.value.toLowerCase())
           ) {
             return true;
           } else if (

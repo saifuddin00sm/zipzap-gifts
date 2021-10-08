@@ -29,7 +29,7 @@ function UserAddRecipientContainer(props: {
           "Last Name": "",
           Birthday: "",
           Address: "",
-          Title: "",
+          "Job Title": "",
           "Date Started": "",
           Department: "",
           City: "",
@@ -62,8 +62,8 @@ function UserAddRecipientContainer(props: {
     } else if (!editUser.Zip) {
       setError("Please Enter a Valid Zip Code");
       return false;
-    } else if (!editUser["Title"]) {
-      setError("Please Enter a Title");
+    } else if (!editUser["Job Title"]) {
+      setError("Please Enter a Job Title");
       return false;
     } else if (!editUser["Date Started"]) {
       setError("Please Enter a Date Started");
@@ -93,8 +93,8 @@ function UserAddRecipientContainer(props: {
       editUser.State = event.target.value;
     } else if (type === "Zip") {
       editUser.Zip = event.target.value;
-    } else if (type === "Title") {
-      editUser["Title"] = event.target.value;
+    } else if (type === "Job Title") {
+      editUser["Job Title"] = event.target.value;
     } else if (type === "Date Started") {
       editUser["Date Started"] = event.target.value;
     } else if (type === "Department") {
@@ -206,11 +206,11 @@ function UserAddRecipientContainer(props: {
           </div>
 
           <div className={`width-60 row left-align-column user-add-field-row`}>
-            <label>Title:</label>
+            <label>Job Title:</label>
             <input
-              value={editUser["Title"]}
-              onChange={(e: any) => handleNewEdit("Title", e)}
-              placeholder={`Title`}
+              value={editUser["Job Title"]}
+              onChange={(e: any) => handleNewEdit("Job Title", e)}
+              placeholder={`Job Title`}
               className={`general-input-fit new-event-input`}
             ></input>
           </div>
