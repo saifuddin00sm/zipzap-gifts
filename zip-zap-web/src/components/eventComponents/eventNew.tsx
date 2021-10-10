@@ -324,10 +324,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     setUserUsersLoaded,
   } = useContext(UserContext);
 
-  const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -1536,10 +1536,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           onClick={handleEventCheck}
           disabled={userSelectedList.length === 0 || !activeItem.id}
         >
-          {match.params.eventID ? "Edit" : "Create"} Gift
+          {match.params.eventID ? "Save" : "Create"} Gift
         </button>
       </Row>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
             {success ? (
