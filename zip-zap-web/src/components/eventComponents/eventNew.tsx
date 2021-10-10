@@ -1394,7 +1394,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               ? userGroupedItems[activeItemDetails.id].name
               : null}
           </strong>
-          <p className="m-1">
+          <div className="m-1">
             <span>
               <i>Details: </i>
             </span>
@@ -1420,7 +1420,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 </ol>
               </div>
             ) : null}
-          </p>
+          </div>
         </Col>
         <Col xs="2">
           <button
