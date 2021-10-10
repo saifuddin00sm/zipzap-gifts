@@ -12,8 +12,6 @@ import CalendarSidebar from "../basicComponents/calendarComponents/calendarSideb
 
 const getEvents = async (user: any) => {
   let response = await fetchRequest(user, "campaigns", "GET");
-  console.log("this is the response");
-  console.log(user);
 
   if ("campaigns" in response) {
     return response.campaigns;
@@ -133,8 +131,6 @@ function EventDashboard() {
   const settingMonthOrders = async () => {
     let { dateOrders } = await getMonthOrders(user);
     setUserMonthOrders({ orders: dateOrders });
-    console.log("Date orders");
-    console.log(userMonthOrders);
   };
 
   useEffect(() => {
@@ -162,7 +158,6 @@ function EventDashboard() {
     date: string
   ) => {
     if (type === "show") {
-      console.log("t", type, [eventID], [date]);
       // setRedirect("/")
       // TO-DO - show order details
     }

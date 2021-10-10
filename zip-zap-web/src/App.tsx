@@ -126,7 +126,7 @@ const UserContext = React.createContext(context);
 
 const log = (...other: any) => {
   if (appSettings.debug) {
-    console.log(other);
+    console.log(...other);
   }
 };
 
@@ -184,7 +184,7 @@ const fetchRequest = async (
       return res.json();
     })
     .then((suc) => {
-      console.log("RES JSON: ", suc);
+      log("RES JSON: ", suc);
       // return suc.body;
       if ("message" in suc) {
         return { error: suc.message };
@@ -342,23 +342,23 @@ function App() {
         if (localUser.expiresIn) {
           let now = new Date();
           let expire = new Date(localUser.expiresIn);
-          // console.log("COMPARE: ", now, expire, expire < now);
+          // log("COMPARE: ", now, expire, expire < now);
           if (expire < now) {
-            console.log("EXPIRED:", now, expire);
+            log("EXPIRED:", now, expire);
             // logout(setAppUser);
             // localUser = null;
             // setLoading(false);
 
             if ("refresh" in localUser) {
-              // console.log("GETTING REFRESH");
+              // log("GETTING REFRESH");
               let refreshTokens = await getRefreshToken(localUser.refresh);
               localUser = await newUserInfo(refreshTokens);
 
-              console.log("Expired Refresh", refreshTokens, localUser);
+              log("Expired Refresh", refreshTokens, localUser);
 
               localStorage.setItem("user", JSON.stringify(localUser));
             } else {
-              // console.log("NO REFRESH");
+              // log("NO REFRESH");
               localUser = {};
               localStorage.removeItem("user");
               // setUser({} as any);
@@ -376,7 +376,7 @@ function App() {
 
     const setAppUser = async () => {
       let testUser = await loadUser();
-      // console.log("local user", testUser);
+      // log("local user", testUser);
       setUser(testUser);
       setLoading(false);
     };
