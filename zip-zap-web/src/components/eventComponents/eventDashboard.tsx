@@ -198,15 +198,13 @@ function EventDashboard() {
                   </div>
                 </div>
               ) : Object.keys(userEvents).length >= 1 ? (
-                Object.keys(userEvents).map((event, eIndex) =>
-                  userEvents[event].name !== "onetime" ? (
-                    <EventDetailsRow
-                      key={eIndex}
-                      index={eIndex}
-                      event={userEvents[event]}
-                    />
-                  ) : null
-                )
+                Object.keys(userEvents).map((event, eIndex) => (
+                  <EventDetailsRow
+                    key={eIndex}
+                    index={eIndex}
+                    event={userEvents[event]}
+                  />
+                ))
               ) : (
                 <div>
                   No Gifts, create one now!
