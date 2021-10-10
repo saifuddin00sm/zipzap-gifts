@@ -197,7 +197,7 @@ function EventDashboard() {
                     </Link>
                   </div>
                 </div>
-              ) : Object.keys(userEvents).length > 1 ? (
+              ) : Object.keys(userEvents).length >= 1 ? (
                 Object.keys(userEvents).map((event, eIndex) =>
                   userEvents[event].name !== "onetime" ? (
                     <EventDetailsRow
