@@ -1178,7 +1178,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               ></input>
             ) : null}
           </Col>
-          <Col className="align-items-right p-2">
+          <Col className="p-2 d-flex flex-row justify-content-end">
             <Button
               className={`new-event-button`}
               variant={giftType === "grouped" ? "zipBlue" : "outline-secondary"}
@@ -1193,6 +1193,11 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             >
               Custom Gift
             </Button>
+            <ToolTip>
+              Choose from some of our curated gift boxes, or create your own
+              from our store! A Gift Expert will be in touch after you submit
+              your order to collect branding information.
+            </ToolTip>
           </Col>
         </Row>
 
