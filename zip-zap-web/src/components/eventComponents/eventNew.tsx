@@ -1120,7 +1120,17 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 ></input>{" "}
               </Col>
               <Col md="4" sm="6">
-                <span>End Date</span>
+                <span className={"d-flex justify-content-center"}>
+                  End Date&nbsp;
+                  <ToolTip>
+                    This is the recurring gift time frame.
+                    <br />
+                    <em>
+                      E.g., Send all employees this Gift on their Birthday from
+                      1/1/2022 to 12/31/2022
+                    </em>
+                  </ToolTip>
+                </span>
                 <input
                   type={"date"}
                   placeholder={"From"}
