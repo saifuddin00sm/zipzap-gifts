@@ -260,9 +260,7 @@ const getCurrentOrders = async (orders: { [key: string]: eventOrder }) => {
   let today = new Date();
 
   let orderSort = Object.keys(orders).filter((order) => {
-    if (today.getMonth() === new Date(orders[order].shippingDate).getMonth()) {
-      return order;
-    }
+    return today.getMonth() === new Date(orders[order].shippingDate).getMonth();
   });
 
   return orderSort;
@@ -892,10 +890,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     if (e.target.value) {
       let searchResults = Object.keys(userItems).filter((itemID) => {
         let item = userItems[itemID];
-
-        if (item.name.toLowerCase().includes(e.target.value)) {
-          return true;
-        }
+        return item.name.toLowerCase().includes(e.target.value);
       });
 
       setSearchItems([...searchResults]);
@@ -908,10 +903,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     if (e.target.value) {
       let searchResults = Object.keys(userGroupedItems).filter((itemID) => {
         let item = userGroupedItems[itemID];
-
-        if (item.name.toLowerCase().includes(e.target.value)) {
-          return true;
-        }
+        return item.name.toLowerCase().includes(e.target.value);
       });
 
       setSearchGroupedItems([...searchResults]);
