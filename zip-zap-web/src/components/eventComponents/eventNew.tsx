@@ -1069,7 +1069,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   <hr />A <strong>Recurring Gift</strong> is a gift that happens
                   multiple times during a set time frame, for different people.
                   <br />
-                  <em>E.g.:, Job Anniversaries or Birthdays.</em>
+                  <em>E.g., Job Anniversaries or Birthdays.</em>
                 </>
               </ToolTip>
             </Col>
@@ -1089,7 +1089,13 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         <hr />
         {dateType === "onetime" ? (
           <Col md="6">
-            <span>Gift Date</span>
+            <span className={"d-flex justify-content-center"}>
+              Gift Date&nbsp;
+              <ToolTip>
+                This date will be the day the package should arrive to the
+                recipient. (Give or take a day for any postal delay.)
+              </ToolTip>
+            </span>
             <input
               type={"date"}
               placeholder={"From"}
