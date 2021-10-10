@@ -324,7 +324,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [redirect, setRedirect] = useState("");
 
@@ -332,7 +331,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     let events = await getEvents(user);
 
     setUserEvents(events);
-    setLoading(false);
   };
 
   const settingItems = async () => {
@@ -583,7 +581,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       return true;
     } else {
       setError("");
-      setLoading(true);
     }
     if (match.params.eventID) {
       handleEditEvent();
