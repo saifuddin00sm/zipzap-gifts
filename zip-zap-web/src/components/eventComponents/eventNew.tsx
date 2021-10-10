@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { fetchRequest, UserContext } from "../../App";
+import { fetchRequest, UserContext, log } from "../../App";
 import {
   Row,
   Col,
@@ -103,7 +103,7 @@ const calcGiftPackagePrice = (
   let totalPrice = 0;
   gift.itemsArray.forEach((iGiftID: number) => {
     if (!(iGiftID in individualItems)) {
-      console.log(`Missing Item - ${iGiftID}`);
+      log(`Missing Item - ${iGiftID}`);
     } else {
       totalPrice += individualItems[iGiftID].price;
     }
@@ -120,12 +120,11 @@ const calcGiftPackageWeight = (
   individualItems: { [key: string]: adminItem }
 ) => {
   let totalPrice = 0;
-  console.log("looing");
   gift.itemsArray.forEach((iGiftID: number) => {
     if (!(iGiftID in individualItems)) {
-      console.log(`Missing Item - ${iGiftID}`);
+      log(`Missing Item - ${iGiftID}`);
     } else {
-      console.log("Adding", [individualItems[iGiftID].weight]);
+      log("Adding", [individualItems[iGiftID].weight]);
       totalPrice += parseFloat(individualItems[iGiftID].weight.toString());
     }
   });
@@ -281,7 +280,7 @@ const handleCalcShippingDate = async (
   let shippingDate = "";
 
   let keyCheck = Object.keys(criteria).map((key) => {
-    console.log("TYPE", key, [typeof criteria[key]]);
+    log("TYPE", key, [typeof criteria[key]]);
     if (typeof criteria[key] === "boolean" && key in person) {
       // shippingDate = campaignStartDate;
       shippingDate = person[key];
@@ -442,7 +441,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         return event;
       }
 
-      console.log(event.name);
       setCompletedEvent(event);
       setEventName(event.name);
       setEventStartDate(formatDate(event.startDate));
@@ -650,17 +648,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         eventNote
       );
 
-      console.log("o:", orders);
-      console.log("campaignID", createEventResponse);
-
       let orderCreationResponse = await fetchRequest(
         user,
         `orders/${createEventResponse.campaignID}`,
         "POST",
         orders
       );
-
-      console.log(orderCreationResponse);
 
       if ("saved" in orderCreationResponse && orderCreationResponse.saved) {
         setSuccess(true);
@@ -696,8 +689,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       }
     );
 
-    // console.log("df", createEventResponse);
-
     if ("campaignID" in createEventResponse) {
       // TO-DO - get total price
 
@@ -707,7 +698,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         "GET"
       );
 
-      // console.log("df 2", allCampaignOrders);
       if ("campaignOrders" in allCampaignOrders && match.params.eventID) {
         let event = handleInitialEventSetup(match.params.eventID, true);
 
@@ -755,8 +745,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             eventNote
           );
 
-          // console.log("t", updatedOrders);
-
           let orderCreationResponse = await fetchRequest(
             user,
             `orders/${match.params.eventID}`,
@@ -764,7 +752,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             updatedOrders
           );
 
-          // console.log("df as ", orderCreationResponse);
           if ("saved" in orderCreationResponse) {
             setSuccess(true);
             setUserEvents([]);
