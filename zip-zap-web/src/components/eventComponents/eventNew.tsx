@@ -137,11 +137,10 @@ const calcGiftPackageWeight = (
 
 const orderUserList = async (orders: { [key: string]: eventOrder }) => {
   let userList = [] as Array<string>;
-  let orderMap = Object.keys(orders).map((orderID) => {
+  Object.keys(orders).forEach((orderID) => {
     userList.push(orders[orderID].giftee.toString());
   });
 
-  await Promise.all(orderMap);
   return userList;
 };
 
@@ -223,7 +222,7 @@ const editOrderList = async (
 
   let ordersToRemove = [] as Array<any>;
 
-  let orderUpdate = Object.keys(campaignOrders).map((orderID) => {
+  Object.keys(campaignOrders).forEach((orderID) => {
     let order = campaignOrders[orderID];
     if (order.groupedID === oldGiftID && !order.shippingDetails) {
       order.groupedID = newGiftID;
@@ -248,8 +247,6 @@ const editOrderList = async (
       campaignOrders[orderID] = order;
     }
   });
-
-  await Promise.all(orderUpdate);
 
   orderData.orders = campaignOrders;
 
