@@ -1,7 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
-import { Row, Col, Modal, DropdownButton, Dropdown, Button} from "react-bootstrap";
-import '../../App.scss'
+import {
+  Row,
+  Col,
+  Modal,
+  DropdownButton,
+  Dropdown,
+  Button,
+} from "react-bootstrap";
+import "../../App.scss";
 import {
   adminItem,
   eventOrder,
@@ -13,6 +20,7 @@ import {
 } from "../../classes";
 import { Link, Redirect, RouteComponentProps } from "react-router-dom";
 import ForwardArrow from "../basicComponents/forwardArrow";
+import ToolTip from "../basicComponents/ToolTip";
 import {
   getItems,
   getGroupedItems,
@@ -495,7 +503,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const [giftType, setGiftType] = useState("grouped");
   const [dateType, setDateType] = useState("onetime");
-  const [recurringType, setrecurringType] = useState("Select")
+  const [recurringType, setrecurringType] = useState("Select");
 
   const handleActiveItem = (type: string, id: string) => {
     if (activeItem.id) {
@@ -510,7 +518,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const handleSetReocccuringType = (type: string) => {
     setrecurringType(type);
-  }
+  };
 
   const handleChooseItem = () => {
     if (activeItem.id === activeItemDetails.id) {
@@ -790,7 +798,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const handleChangeDateType = (type: string) => {
     setDateType(type);
-  }
+  };
 
   const [customGift, setCustomGift] = useState({
     id: "",
@@ -1030,22 +1038,41 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         </Col>
         <Col className="px-3">
           <Row>
-          <Col className="align-items-right p-2 m-1">
-            <Button
-              className={`new-event-button`}
-              variant={dateType === "onetime" ? "zipBlue" : "outline-secondary"}
-              onClick={() => handleChangeDateType("onetime")}
-            >
-              One Time
-            </Button>
-            <Button
-              className={`new-event-button`}
-              variant={dateType === "recurring" ? "zipBlue" : "outline-secondary"}
-              onClick={() => handleChangeDateType("recurring")}
-            >
-              Recurring
-            </Button>
-          </Col>
+            <Col className="p-2 m-1 d-flex flex-row justify-content-end">
+              <Button
+                className={`new-event-button`}
+                variant={
+                  dateType === "onetime" ? "zipBlue" : "outline-secondary"
+                }
+                onClick={() => handleChangeDateType("onetime")}
+              >
+                One Time
+              </Button>
+              <Button
+                className={`new-event-button`}
+                variant={
+                  dateType === "recurring" ? "zipBlue" : "outline-secondary"
+                }
+                onClick={() => handleChangeDateType("recurring")}
+              >
+                Recurring
+              </Button>
+              <ToolTip placement="left" title="Gift Types">
+                <>
+                  A <strong>One Time Gift</strong> is a gift that goes out once!
+                  <br />
+                  <em>
+                    E.g., A Get Well Soon Box, A Sympathy Gift, a Welcome Little
+                    One Box; things that are not necessarily planned on a
+                    specific day.
+                  </em>
+                  <hr />A <strong>Recurring Gift</strong> is a gift that happens
+                  multiple times during a set time frame, for different people.
+                  <br />
+                  <em>E.g.:, Job Anniversaries or Birthdays.</em>
+                </>
+              </ToolTip>
+            </Col>
           </Row>
           {/* <Row className="px-3">
             <span>Icon to Represent Event</span>
@@ -1059,7 +1086,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         </Col>
       </Row>
       <Row className="new-event-main-section p-3 mx-5">
-      <hr/>
+        <hr />
         {dateType === "onetime" ? (
           <Col md="6">
             <span>Gift Date</span>
@@ -1071,43 +1098,55 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               onChange={(e: any) => setEventStartDate(e.target.value)}
               min={formatDate(getDateRestriction().toString())}
             ></input>{" "}
-            </Col>
-          ) : (
-            <Col>
+          </Col>
+        ) : (
+          <Col>
             <Row>
               <Col md="4" sm="6">
-              <span>Start Date</span>
-              <input
-                type={"date"}
-                placeholder={"From"}
-                className={`general-input-fit new-event-date-input`}
-                value={eventStartDate}
-                onChange={(e: any) => setEventStartDate(e.target.value)}
-                min={formatDate(getDateRestriction().toString())}
-              ></input>{" "}
+                <span>Start Date</span>
+                <input
+                  type={"date"}
+                  placeholder={"From"}
+                  className={`general-input-fit new-event-date-input`}
+                  value={eventStartDate}
+                  onChange={(e: any) => setEventStartDate(e.target.value)}
+                  min={formatDate(getDateRestriction().toString())}
+                ></input>{" "}
               </Col>
               <Col md="4" sm="6">
-              <span>End Date</span>
-              <input
-                type={"date"}
-                placeholder={"From"}
-                className={`general-input-fit new-event-date-input`}
-                value={eventStartDate}
-                onChange={(e: any) => setEventStartDate(e.target.value)}
-                min={formatDate(getDateRestriction().toString())}
-              ></input>{" "}
+                <span>End Date</span>
+                <input
+                  type={"date"}
+                  placeholder={"From"}
+                  className={`general-input-fit new-event-date-input`}
+                  value={eventStartDate}
+                  onChange={(e: any) => setEventStartDate(e.target.value)}
+                  min={formatDate(getDateRestriction().toString())}
+                ></input>{" "}
               </Col>
               <Col sm="4" className="my-2">
                 <p>Select Recurring Type: </p>
-              <DropdownButton id="dropdown-basic-button" title={recurringType} variant="zapGreen">
-                <Dropdown.Item onClick={() =>handleSetReocccuringType("Birthday")}>Birthday</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleSetReocccuringType("Job Anniversary")}>Job anniversary</Dropdown.Item>
-              </DropdownButton>
+                <DropdownButton
+                  id="dropdown-basic-button"
+                  title={recurringType}
+                  variant="zapGreen"
+                >
+                  <Dropdown.Item
+                    onClick={() => handleSetReocccuringType("Birthday")}
+                  >
+                    Birthday
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => handleSetReocccuringType("Job Anniversary")}
+                  >
+                    Job anniversary
+                  </Dropdown.Item>
+                </DropdownButton>
               </Col>
             </Row>
-            </Col>
-          )}
-          </Row>
+          </Col>
+        )}
+      </Row>
 
       <Row className="event-dashboard-sub-title primary-black-header inner-row mt-3 mx-5">
         <span>Choose a Gift</span>
