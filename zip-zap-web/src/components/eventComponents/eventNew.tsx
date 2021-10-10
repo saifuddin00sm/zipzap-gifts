@@ -1570,7 +1570,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             className="general-button gereral-button-green px-4 py-2"
             onClick={handleClose}
           >
-            <Link to={"/events"}>Back to Dashboard</Link>
+            <Link to={"/event"}>Back to Dashboard</Link>
           </button>
           <button
             className=" general-button gereral-button-blue px-4 py-2"
