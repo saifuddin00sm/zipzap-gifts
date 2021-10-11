@@ -1079,8 +1079,8 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             <span className={"d-flex justify-content-center"}>
               Gift Date&nbsp;
               <ToolTip>
-                This date will be the day the package should arrive to the
-                recipient. (Give or take a day for any postal delay.)
+                This date is the day the package should arrive to the recipient.
+                (Give or take a day for any postal delay.)
               </ToolTip>
             </span>
             <input
