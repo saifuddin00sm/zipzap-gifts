@@ -327,75 +327,127 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [success, setSuccess] = useState(false);
   const [redirect, setRedirect] = useState("");
 
-  const settingEvents = async () => {
-    let events = await getEvents(user);
-
-    setUserEvents(events);
-  };
-
-  const settingItems = async () => {
-    let items = await getItems(user);
-    setUserItems(items);
-    setSearchItems([...Object.keys(items)]);
-    setItemsLoading(false);
-  };
-
-  const settingGroupedItems = async () => {
-    let items = await getGroupedItems(user);
-    setUserGroupedItems(items);
-    setSearchGroupedItems([...Object.keys(items)]);
-    setGroupedItemsLoading(false);
-  };
-
-  const settingUsers = async () => {
-    let users = await getUserList(user);
-    setUserUsers(users);
-    setUserUsersLoaded(true);
-
-    if ("activeUsers" in users) {
-      setUserList(Object.keys(users.activeUsers));
-    }
-
-    setUsersLoading(false);
-  };
-
   const [itemsLoading, setItemsLoading] = useState(true);
   const [groupedItemsLoading, setGroupedItemsLoading] = useState(true);
   const [usersLoading, setUsersLoading] = useState(true);
   const [userCards, setUserCards] = useState([] as Array<stripeCard>);
 
+  const [eventName, setEventName] = useState("");
+  const [eventStartDate, setEventStartDate] = useState("");
+  // const [eventEndDate, setEventEndDate] = useState("");
+  const [eventNote, setEventNote] = useState("");
+  const [eventIcon, setEventIcon] = useState(1);
+  const [activeCard, setActiveCard] = useState("");
+
+  const [itemPaginationStart, setItemPaginationStart] = useState(0);
+  const [activeItemDetails, setActiveItemDetails] = useState({
+    type: "",
+    id: "",
+  });
+  const [activeItem, setActiveItem] = useState({ type: "", id: "" });
+  const [userList, setUserList] = useState([] as Array<string>);
+  const [userSelectedList, setUserSelectedList] = useState([] as Array<string>);
+
+  const [giftType, setGiftType] = useState("grouped");
+  const [dateType, setDateType] = useState("onetime");
+  const [recurringType, setrecurringType] = useState("Select");
+
+  const needSettingEvents = Object.keys(userEvents).length === 0;
   useEffect(() => {
-    if (Object.keys(userEvents).length === 0) {
+    const settingEvents = async () => {
+      let events = await getEvents(user);
+
+      setUserEvents(events);
+    };
+
+    if (needSettingEvents) {
       settingEvents();
     }
+  }, [user, setUserEvents, needSettingEvents]);
 
-    if (Object.keys(userItems).length === 0) {
+  const needSearchItems = Object.keys(userItems).length === 0;
+  useEffect(() => {
+    const settingItems = async () => {
+      let items = await getItems(user);
+      setUserItems(items);
+      setSearchItems([...Object.keys(items)]);
+      setItemsLoading(false);
+    };
+
+    if (needSearchItems) {
       settingItems();
     } else {
       setItemsLoading(false);
       setSearchItems([...Object.keys(userItems)]);
     }
+  }, [user, userItems, setUserItems, needSearchItems]);
 
-    if (Object.keys(userGroupedItems).length === 0) {
+  const needGroupedItems = Object.keys(userGroupedItems).length === 0;
+  useEffect(() => {
+    const settingGroupedItems = async () => {
+      let items = await getGroupedItems(user);
+      setUserGroupedItems(items);
+      setSearchGroupedItems([...Object.keys(items)]);
+      setGroupedItemsLoading(false);
+    };
+
+    if (needGroupedItems) {
       settingGroupedItems();
     } else {
       setGroupedItemsLoading(false);
       setSearchGroupedItems([...Object.keys(userGroupedItems)]);
     }
+  }, [user, userGroupedItems, setUserGroupedItems, needGroupedItems]);
 
-    if (Object.keys(userUsers.activeUsers).length === 0) {
+  const needActiveUsers = Object.keys(userUsers.activeUsers).length === 0;
+  useEffect(() => {
+    const settingUsers = async () => {
+      let users = await getUserList(user);
+      setUserUsers(users);
+      setUserUsersLoaded(true);
+
+      if ("activeUsers" in users) {
+        setUserList(Object.keys(users.activeUsers));
+      }
+
+      setUsersLoading(false);
+    };
+
+    if (needActiveUsers) {
       settingUsers();
     } else {
       setUserList(Object.keys(userUsers.activeUsers));
       setUsersLoading(false);
     }
+  }, [
+    user,
+    userUsers.activeUsers,
+    setUserUsers,
+    setUserUsersLoaded,
+    needActiveUsers,
+  ]);
 
-    if (userCards.length === 0) {
+  const needCards = userCards.length === 0;
+  useEffect(() => {
+    const handleGetSavedCards = async () => {
+      let cardResponse = await fetchRequest(user, "payment/listCards", "GET");
+
+      if (cardResponse.error) {
+        // TO-DO - Handle Errors
+        return;
+      }
+
+      if (cardResponse.cards) {
+        setUserCards(cardResponse.cards);
+      }
+    };
+
+    if (needCards) {
       handleGetSavedCards();
     }
 
     handleLoadDetailsFromLocalStorage();
-  }, []);
+  }, [user, needCards]);
 
   useEffect(() => {
     if (
@@ -475,26 +527,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setActiveCard(event.defaultDetails.eventCard);
     }
   };
-
-  const [eventName, setEventName] = useState("");
-  const [eventStartDate, setEventStartDate] = useState("");
-  // const [eventEndDate, setEventEndDate] = useState("");
-  const [eventNote, setEventNote] = useState("");
-  const [eventIcon, setEventIcon] = useState(1);
-  const [activeCard, setActiveCard] = useState("");
-
-  const [itemPaginationStart, setItemPaginationStart] = useState(0);
-  const [activeItemDetails, setActiveItemDetails] = useState({
-    type: "",
-    id: "",
-  });
-  const [activeItem, setActiveItem] = useState({ type: "", id: "" });
-  const [userList, setUserList] = useState([] as Array<string>);
-  const [userSelectedList, setUserSelectedList] = useState([] as Array<string>);
-
-  const [giftType, setGiftType] = useState("grouped");
-  const [dateType, setDateType] = useState("onetime");
-  const [recurringType, setrecurringType] = useState("Select");
 
   const handleActiveItem = (type: string, id: string) => {
     if (activeItem.id) {
@@ -952,19 +984,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setActiveCard(tempEventJSON.defaultDetails.eventCard);
 
       localStorage.removeItem("newEventTemp");
-    }
-  };
-
-  const handleGetSavedCards = async () => {
-    let cardResponse = await fetchRequest(user, "payment/listCards", "GET");
-
-    if (cardResponse.error) {
-      // TO-DO - Handle Errors
-      return;
-    }
-
-    if (cardResponse.cards) {
-      setUserCards(cardResponse.cards);
     }
   };
 
