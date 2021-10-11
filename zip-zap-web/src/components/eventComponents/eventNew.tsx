@@ -352,6 +352,19 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [dateType, setDateType] = useState("onetime");
   const [recurringType, setrecurringType] = useState("Select");
 
+  const [completedEvent, setCompletedEvent] = useState(
+    null as null | userEvent
+  );
+
+  const [error, setError] = useState("");
+  const [customGift, setCustomGift] = useState({
+    id: "",
+    name: "",
+    items: [] as Array<{ id: number; details: { [key: string]: any } }>,
+    instructions: "",
+  });
+  const [showItemList, setShowItemList] = useState(false);
+
   const needSettingEvents = Object.keys(userEvents).length === 0;
   useEffect(() => {
     const settingEvents = async () => {
@@ -450,6 +463,61 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   }, [user, needCards]);
 
   useEffect(() => {
+    const handleInitialEventSetup = (
+      paramsID: string,
+      returnResult?: boolean
+    ) => {
+      if (paramsID !== null && paramsID in userEvents) {
+        let event = userEvents[paramsID];
+
+        if (returnResult) {
+          return event;
+        }
+
+        setCompletedEvent(event);
+        setEventName(event.name);
+        setEventStartDate(formatDate(event.startDate));
+        // setEventEndDate(formatDate(event.endDate));
+
+        setUserList(
+          Object.keys(userUsers.activeUsers).filter(
+            (userID) => !event.userList.includes(userID)
+          )
+        );
+        setUserSelectedList(JSON.parse(JSON.stringify(event.userList)));
+
+        let item = {
+          type: event.defaultItemID
+            ? "item"
+            : event.defaultDetails.customGift.id
+            ? "custom"
+            : "grouped",
+          id: event.defaultItemID
+            ? event.defaultItemID.toString()
+            : event.defaultDetails.customGift.id
+            ? event.defaultDetails.customGift.id.toString()
+            : event.defaultGroupedItemID
+            ? event.defaultGroupedItemID.toString()
+            : "",
+        };
+        setActiveItemDetails(item);
+        setActiveItem(item);
+        setGiftType(
+          event.defaultItemID
+            ? "item"
+            : event.defaultDetails.customGift.id
+            ? "custom"
+            : "grouped"
+        );
+        setEventNote(
+          event.defaultDetails.note ? event.defaultDetails.note : ""
+        );
+        setCustomGift(event.defaultDetails.customGift);
+        setEventIcon(event.defaultDetails.eventIcon);
+        setActiveCard(event.defaultDetails.eventCard);
+      }
+    };
+
     if (
       match.params.eventID &&
       match.params.eventID !== "new" &&
@@ -458,75 +526,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     ) {
       handleInitialEventSetup(match.params.eventID);
     }
-  }, [
-    match.params.eventID,
-    Object.keys(userEvents).length,
-    Object.keys(userUsers.activeUsers).length,
-  ]);
-
-  const [completedEvent, setCompletedEvent] = useState(
-    null as null | userEvent
-  );
-
-  const handleInitialEventSetup = (
-    paramsID: string,
-    returnResult?: boolean
-  ) => {
-    // let eventIndex = null as null | number;
-    // Object.keys(userEvents).some((event, eIndex) => {
-    //   if (userEvents[event].campaignID.toString() === paramsID) {
-    //     eventIndex = eIndex;
-    //   }
-    // });
-
-    if (paramsID !== null && paramsID in userEvents) {
-      let event = userEvents[paramsID];
-
-      if (returnResult) {
-        return event;
-      }
-
-      setCompletedEvent(event);
-      setEventName(event.name);
-      setEventStartDate(formatDate(event.startDate));
-      // setEventEndDate(formatDate(event.endDate));
-
-      setUserList(
-        Object.keys(userUsers.activeUsers).filter(
-          (userID) => !event.userList.includes(userID)
-        )
-      );
-      setUserSelectedList(JSON.parse(JSON.stringify(event.userList)));
-
-      let item = {
-        type: event.defaultItemID
-          ? "item"
-          : event.defaultDetails.customGift.id
-          ? "custom"
-          : "grouped",
-        id: event.defaultItemID
-          ? event.defaultItemID.toString()
-          : event.defaultDetails.customGift.id
-          ? event.defaultDetails.customGift.id.toString()
-          : event.defaultGroupedItemID
-          ? event.defaultGroupedItemID.toString()
-          : "",
-      };
-      setActiveItemDetails(item);
-      setActiveItem(item);
-      setGiftType(
-        event.defaultItemID
-          ? "item"
-          : event.defaultDetails.customGift.id
-          ? "custom"
-          : "grouped"
-      );
-      setEventNote(event.defaultDetails.note ? event.defaultDetails.note : "");
-      setCustomGift(event.defaultDetails.customGift);
-      setEventIcon(event.defaultDetails.eventIcon);
-      setActiveCard(event.defaultDetails.eventCard);
-    }
-  };
+  }, [match.params.eventID, userEvents, userUsers.activeUsers]);
 
   const handleActiveItem = (type: string, id: string) => {
     if (activeItem.id) {
@@ -586,7 +586,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
-  const [error, setError] = useState("");
   const handleEventCheck = () => {
     if (!eventName) {
       setError("Please enter an Event Name");
@@ -723,7 +722,11 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       );
 
       if ("campaignOrders" in allCampaignOrders && match.params.eventID) {
-        let event = handleInitialEventSetup(match.params.eventID, true);
+        let event;
+        const paramsID = match.params.eventID;
+        if (paramsID !== null && paramsID in userEvents) {
+          event = userEvents[paramsID];
+        }
 
         if (event) {
           // scenarios:
@@ -810,14 +813,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const handleChangeDateType = (type: string) => {
     setDateType(type);
   };
-
-  const [customGift, setCustomGift] = useState({
-    id: "",
-    name: "",
-    items: [] as Array<{ id: number; details: { [key: string]: any } }>,
-    instructions: "",
-  });
-  const [showItemList, setShowItemList] = useState(false);
 
   const handleCustomGiftChange = (
     type: string,
