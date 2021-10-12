@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { fetchRequest, UserContext } from "../../App";
+import { fetchRequest, UserContext, log } from "../../App";
 import {
   Row,
   Col,
@@ -103,7 +103,7 @@ const calcGiftPackagePrice = (
   let totalPrice = 0;
   gift.itemsArray.forEach((iGiftID: number) => {
     if (!(iGiftID in individualItems)) {
-      console.log(`Missing Item - ${iGiftID}`);
+      log(`Missing Item - ${iGiftID}`);
     } else {
       totalPrice += individualItems[iGiftID].price;
     }
@@ -120,12 +120,11 @@ const calcGiftPackageWeight = (
   individualItems: { [key: string]: adminItem }
 ) => {
   let totalPrice = 0;
-  console.log("looing");
   gift.itemsArray.forEach((iGiftID: number) => {
     if (!(iGiftID in individualItems)) {
-      console.log(`Missing Item - ${iGiftID}`);
+      log(`Missing Item - ${iGiftID}`);
     } else {
-      console.log("Adding", [individualItems[iGiftID].weight]);
+      log("Adding", [individualItems[iGiftID].weight]);
       totalPrice += parseFloat(individualItems[iGiftID].weight.toString());
     }
   });
@@ -138,11 +137,10 @@ const calcGiftPackageWeight = (
 
 const orderUserList = async (orders: { [key: string]: eventOrder }) => {
   let userList = [] as Array<string>;
-  let orderMap = Object.keys(orders).map((orderID) => {
+  Object.keys(orders).forEach((orderID) => {
     userList.push(orders[orderID].giftee.toString());
   });
 
-  await Promise.all(orderMap);
   return userList;
 };
 
@@ -224,7 +222,7 @@ const editOrderList = async (
 
   let ordersToRemove = [] as Array<any>;
 
-  let orderUpdate = Object.keys(campaignOrders).map((orderID) => {
+  Object.keys(campaignOrders).forEach((orderID) => {
     let order = campaignOrders[orderID];
     if (order.groupedID === oldGiftID && !order.shippingDetails) {
       order.groupedID = newGiftID;
@@ -250,8 +248,6 @@ const editOrderList = async (
     }
   });
 
-  await Promise.all(orderUpdate);
-
   orderData.orders = campaignOrders;
 
   // TO-DO - currentOrderList & Shipping Date
@@ -264,9 +260,7 @@ const getCurrentOrders = async (orders: { [key: string]: eventOrder }) => {
   let today = new Date();
 
   let orderSort = Object.keys(orders).filter((order) => {
-    if (today.getMonth() === new Date(orders[order].shippingDate).getMonth()) {
-      return order;
-    }
+    return today.getMonth() === new Date(orders[order].shippingDate).getMonth();
   });
 
   return orderSort;
@@ -281,7 +275,7 @@ const handleCalcShippingDate = async (
   let shippingDate = "";
 
   let keyCheck = Object.keys(criteria).map((key) => {
-    console.log("TYPE", key, [typeof criteria[key]]);
+    log("TYPE", key, [typeof criteria[key]]);
     if (typeof criteria[key] === "boolean" && key in person) {
       // shippingDate = campaignStartDate;
       shippingDate = person[key];
@@ -325,165 +319,18 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     setUserUsersLoaded,
   } = useContext(UserContext);
 
-  const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [redirect, setRedirect] = useState("");
-
-  const settingEvents = async () => {
-    let events = await getEvents(user);
-
-    setUserEvents(events);
-    setLoading(false);
-  };
-
-  const settingItems = async () => {
-    let items = await getItems(user);
-    setUserItems(items);
-    setSearchItems([...Object.keys(items)]);
-    setItemsLoading(false);
-  };
-
-  const settingGroupedItems = async () => {
-    let items = await getGroupedItems(user);
-    setUserGroupedItems(items);
-    setSearchGroupedItems([...Object.keys(items)]);
-    setGroupedItemsLoading(false);
-  };
-
-  const settingUsers = async () => {
-    let users = await getUserList(user);
-    setUserUsers(users);
-    setUserUsersLoaded(true);
-
-    if ("activeUsers" in users) {
-      setUserList(Object.keys(users.activeUsers));
-    }
-
-    setUsersLoading(false);
-  };
 
   const [itemsLoading, setItemsLoading] = useState(true);
   const [groupedItemsLoading, setGroupedItemsLoading] = useState(true);
   const [usersLoading, setUsersLoading] = useState(true);
   const [userCards, setUserCards] = useState([] as Array<stripeCard>);
-
-  useEffect(() => {
-    if (Object.keys(userEvents).length === 0) {
-      settingEvents();
-    }
-
-    if (Object.keys(userItems).length === 0) {
-      settingItems();
-    } else {
-      setItemsLoading(false);
-      setSearchItems([...Object.keys(userItems)]);
-    }
-
-    if (Object.keys(userGroupedItems).length === 0) {
-      settingGroupedItems();
-    } else {
-      setGroupedItemsLoading(false);
-      setSearchGroupedItems([...Object.keys(userGroupedItems)]);
-    }
-
-    if (Object.keys(userUsers.activeUsers).length === 0) {
-      settingUsers();
-    } else {
-      setUserList(Object.keys(userUsers.activeUsers));
-      setUsersLoading(false);
-    }
-
-    if (userCards.length === 0) {
-      handleGetSavedCards();
-    }
-
-    handleLoadDetailsFromLocalStorage();
-  }, []);
-
-  useEffect(() => {
-    if (
-      match.params.eventID &&
-      match.params.eventID !== "new" &&
-      Object.keys(userEvents).length > 0 &&
-      Object.keys(userUsers.activeUsers).length > 0
-    ) {
-      handleInitialEventSetup(match.params.eventID);
-    }
-  }, [
-    match.params.eventID,
-    Object.keys(userEvents).length,
-    Object.keys(userUsers.activeUsers).length,
-  ]);
-
-  const [completedEvent, setCompletedEvent] = useState(
-    null as null | userEvent
-  );
-
-  const handleInitialEventSetup = (
-    paramsID: string,
-    returnResult?: boolean
-  ) => {
-    // let eventIndex = null as null | number;
-    // Object.keys(userEvents).some((event, eIndex) => {
-    //   if (userEvents[event].campaignID.toString() === paramsID) {
-    //     eventIndex = eIndex;
-    //   }
-    // });
-
-    if (paramsID !== null && paramsID in userEvents) {
-      let event = userEvents[paramsID];
-
-      if (returnResult) {
-        return event;
-      }
-
-      console.log(event.name);
-      setCompletedEvent(event);
-      setEventName(event.name);
-      setEventStartDate(formatDate(event.startDate));
-      // setEventEndDate(formatDate(event.endDate));
-
-      setUserList(
-        Object.keys(userUsers.activeUsers).filter(
-          (userID) => !event.userList.includes(userID)
-        )
-      );
-      setUserSelectedList(JSON.parse(JSON.stringify(event.userList)));
-
-      let item = {
-        type: event.defaultItemID
-          ? "item"
-          : event.defaultDetails.customGift.id
-          ? "custom"
-          : "grouped",
-        id: event.defaultItemID
-          ? event.defaultItemID.toString()
-          : event.defaultDetails.customGift.id
-          ? event.defaultDetails.customGift.id.toString()
-          : event.defaultGroupedItemID
-          ? event.defaultGroupedItemID.toString()
-          : "",
-      };
-      setActiveItemDetails(item);
-      setActiveItem(item);
-      setGiftType(
-        event.defaultItemID
-          ? "item"
-          : event.defaultDetails.customGift.id
-          ? "custom"
-          : "grouped"
-      );
-      setEventNote(event.defaultDetails.note ? event.defaultDetails.note : "");
-      setCustomGift(event.defaultDetails.customGift);
-      setEventIcon(event.defaultDetails.eventIcon);
-      setActiveCard(event.defaultDetails.eventCard);
-    }
-  };
 
   const [eventName, setEventName] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
@@ -504,6 +351,182 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [giftType, setGiftType] = useState("grouped");
   const [dateType, setDateType] = useState("onetime");
   const [recurringType, setrecurringType] = useState("Select");
+
+  const [completedEvent, setCompletedEvent] = useState(
+    null as null | userEvent
+  );
+
+  const [error, setError] = useState("");
+  const [customGift, setCustomGift] = useState({
+    id: "",
+    name: "",
+    items: [] as Array<{ id: number; details: { [key: string]: any } }>,
+    instructions: "",
+  });
+  const [showItemList, setShowItemList] = useState(false);
+
+  const needSettingEvents = Object.keys(userEvents).length === 0;
+  useEffect(() => {
+    const settingEvents = async () => {
+      let events = await getEvents(user);
+
+      setUserEvents(events);
+    };
+
+    if (needSettingEvents) {
+      settingEvents();
+    }
+  }, [user, setUserEvents, needSettingEvents]);
+
+  const needSearchItems = Object.keys(userItems).length === 0;
+  useEffect(() => {
+    const settingItems = async () => {
+      let items = await getItems(user);
+      setUserItems(items);
+      setSearchItems([...Object.keys(items)]);
+      setItemsLoading(false);
+    };
+
+    if (needSearchItems) {
+      settingItems();
+    } else {
+      setItemsLoading(false);
+      setSearchItems([...Object.keys(userItems)]);
+    }
+  }, [user, userItems, setUserItems, needSearchItems]);
+
+  const needGroupedItems = Object.keys(userGroupedItems).length === 0;
+  useEffect(() => {
+    const settingGroupedItems = async () => {
+      let items = await getGroupedItems(user);
+      setUserGroupedItems(items);
+      setSearchGroupedItems([...Object.keys(items)]);
+      setGroupedItemsLoading(false);
+    };
+
+    if (needGroupedItems) {
+      settingGroupedItems();
+    } else {
+      setGroupedItemsLoading(false);
+      setSearchGroupedItems([...Object.keys(userGroupedItems)]);
+    }
+  }, [user, userGroupedItems, setUserGroupedItems, needGroupedItems]);
+
+  const needActiveUsers = Object.keys(userUsers.activeUsers).length === 0;
+  useEffect(() => {
+    const settingUsers = async () => {
+      let users = await getUserList(user);
+      setUserUsers(users);
+      setUserUsersLoaded(true);
+
+      if ("activeUsers" in users) {
+        setUserList(Object.keys(users.activeUsers));
+      }
+
+      setUsersLoading(false);
+    };
+
+    if (needActiveUsers) {
+      settingUsers();
+    } else {
+      setUserList(Object.keys(userUsers.activeUsers));
+      setUsersLoading(false);
+    }
+  }, [
+    user,
+    userUsers.activeUsers,
+    setUserUsers,
+    setUserUsersLoaded,
+    needActiveUsers,
+  ]);
+
+  const needCards = userCards.length === 0;
+  useEffect(() => {
+    const handleGetSavedCards = async () => {
+      let cardResponse = await fetchRequest(user, "payment/listCards", "GET");
+
+      if (cardResponse.error) {
+        // TO-DO - Handle Errors
+        return;
+      }
+
+      if (cardResponse.cards) {
+        setUserCards(cardResponse.cards);
+      }
+    };
+
+    if (needCards) {
+      handleGetSavedCards();
+    }
+
+    handleLoadDetailsFromLocalStorage();
+  }, [user, needCards]);
+
+  useEffect(() => {
+    const handleInitialEventSetup = (
+      paramsID: string,
+      returnResult?: boolean
+    ) => {
+      if (paramsID !== null && paramsID in userEvents) {
+        let event = userEvents[paramsID];
+
+        if (returnResult) {
+          return event;
+        }
+
+        setCompletedEvent(event);
+        setEventName(event.name);
+        setEventStartDate(formatDate(event.startDate));
+        // setEventEndDate(formatDate(event.endDate));
+
+        setUserList(
+          Object.keys(userUsers.activeUsers).filter(
+            (userID) => !event.userList.includes(userID)
+          )
+        );
+        setUserSelectedList(JSON.parse(JSON.stringify(event.userList)));
+
+        let item = {
+          type: event.defaultItemID
+            ? "item"
+            : event.defaultDetails.customGift.id
+            ? "custom"
+            : "grouped",
+          id: event.defaultItemID
+            ? event.defaultItemID.toString()
+            : event.defaultDetails.customGift.id
+            ? event.defaultDetails.customGift.id.toString()
+            : event.defaultGroupedItemID
+            ? event.defaultGroupedItemID.toString()
+            : "",
+        };
+        setActiveItemDetails(item);
+        setActiveItem(item);
+        setGiftType(
+          event.defaultItemID
+            ? "item"
+            : event.defaultDetails.customGift.id
+            ? "custom"
+            : "grouped"
+        );
+        setEventNote(
+          event.defaultDetails.note ? event.defaultDetails.note : ""
+        );
+        setCustomGift(event.defaultDetails.customGift);
+        setEventIcon(event.defaultDetails.eventIcon);
+        setActiveCard(event.defaultDetails.eventCard);
+      }
+    };
+
+    if (
+      match.params.eventID &&
+      match.params.eventID !== "new" &&
+      Object.keys(userEvents).length > 0 &&
+      Object.keys(userUsers.activeUsers).length > 0
+    ) {
+      handleInitialEventSetup(match.params.eventID);
+    }
+  }, [match.params.eventID, userEvents, userUsers.activeUsers]);
 
   const handleActiveItem = (type: string, id: string) => {
     if (activeItem.id) {
@@ -563,7 +586,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
-  const [error, setError] = useState("");
   const handleEventCheck = () => {
     if (!eventName) {
       setError("Please enter an Event Name");
@@ -590,7 +612,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       return true;
     } else {
       setError("");
-      setLoading(true);
     }
     if (match.params.eventID) {
       handleEditEvent();
@@ -650,17 +671,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         eventNote
       );
 
-      console.log("o:", orders);
-      console.log("campaignID", createEventResponse);
-
       let orderCreationResponse = await fetchRequest(
         user,
         `orders/${createEventResponse.campaignID}`,
         "POST",
         orders
       );
-
-      console.log(orderCreationResponse);
 
       if ("saved" in orderCreationResponse && orderCreationResponse.saved) {
         setSuccess(true);
@@ -696,8 +712,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       }
     );
 
-    // console.log("df", createEventResponse);
-
     if ("campaignID" in createEventResponse) {
       // TO-DO - get total price
 
@@ -707,9 +721,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         "GET"
       );
 
-      // console.log("df 2", allCampaignOrders);
       if ("campaignOrders" in allCampaignOrders && match.params.eventID) {
-        let event = handleInitialEventSetup(match.params.eventID, true);
+        let event;
+        const paramsID = match.params.eventID;
+        if (paramsID !== null && paramsID in userEvents) {
+          event = userEvents[paramsID];
+        }
 
         if (event) {
           // scenarios:
@@ -755,8 +772,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             eventNote
           );
 
-          // console.log("t", updatedOrders);
-
           let orderCreationResponse = await fetchRequest(
             user,
             `orders/${match.params.eventID}`,
@@ -764,7 +779,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             updatedOrders
           );
 
-          // console.log("df as ", orderCreationResponse);
           if ("saved" in orderCreationResponse) {
             setSuccess(true);
             setUserEvents([]);
@@ -799,14 +813,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const handleChangeDateType = (type: string) => {
     setDateType(type);
   };
-
-  const [customGift, setCustomGift] = useState({
-    id: "",
-    name: "",
-    items: [] as Array<{ id: number; details: { [key: string]: any } }>,
-    instructions: "",
-  });
-  const [showItemList, setShowItemList] = useState(false);
 
   const handleCustomGiftChange = (
     type: string,
@@ -908,10 +914,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     if (e.target.value) {
       let searchResults = Object.keys(userItems).filter((itemID) => {
         let item = userItems[itemID];
-
-        if (item.name.toLowerCase().includes(e.target.value)) {
-          return true;
-        }
+        return item.name.toLowerCase().includes(e.target.value);
       });
 
       setSearchItems([...searchResults]);
@@ -924,10 +927,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     if (e.target.value) {
       let searchResults = Object.keys(userGroupedItems).filter((itemID) => {
         let item = userGroupedItems[itemID];
-
-        if (item.name.toLowerCase().includes(e.target.value)) {
-          return true;
-        }
+        return item.name.toLowerCase().includes(e.target.value);
       });
 
       setSearchGroupedItems([...searchResults]);
@@ -979,19 +979,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setActiveCard(tempEventJSON.defaultDetails.eventCard);
 
       localStorage.removeItem("newEventTemp");
-    }
-  };
-
-  const handleGetSavedCards = async () => {
-    let cardResponse = await fetchRequest(user, "payment/listCards", "GET");
-
-    if (cardResponse.error) {
-      // TO-DO - Handle Errors
-      return;
-    }
-
-    if (cardResponse.cards) {
-      setUserCards(cardResponse.cards);
     }
   };
 
@@ -1394,7 +1381,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               ? userGroupedItems[activeItemDetails.id].name
               : null}
           </strong>
-          <p className="m-1">
+          <div className="m-1">
             <span>
               <i>Details: </i>
             </span>
@@ -1420,7 +1407,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 </ol>
               </div>
             ) : null}
-          </p>
+          </div>
         </Col>
         <Col xs="2">
           <button
@@ -1549,10 +1536,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           onClick={handleEventCheck}
           disabled={userSelectedList.length === 0 || !activeItem.id}
         >
-          {match.params.eventID ? "Edit" : "Create"} Gift
+          {match.params.eventID ? "Save" : "Create"} Gift
         </button>
       </Row>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
             {success ? (
@@ -1570,7 +1557,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             className="general-button gereral-button-green px-4 py-2"
             onClick={handleClose}
           >
-            <Link to={"/events"}>Back to Dashboard</Link>
+            <Link to={"/event"}>Back to Dashboard</Link>
           </button>
           <button
             className=" general-button gereral-button-blue px-4 py-2"

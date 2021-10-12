@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { fetchRequest, UserContext } from "../../App";
 import { userGroupedItem, userItem } from "../../classes";
-import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
 import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link } from "react-router-dom";
@@ -12,8 +11,6 @@ import CalendarSidebar from "../basicComponents/calendarComponents/calendarSideb
 
 const getEvents = async (user: any) => {
   let response = await fetchRequest(user, "campaigns", "GET");
-  console.log("this is the response");
-  console.log(user);
 
   if ("campaigns" in response) {
     return response.campaigns;
@@ -111,50 +108,55 @@ function EventDashboard() {
     userUsersLoaded,
     userUsers,
   } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
 
-  const settingEvents = async () => {
-    let events = await getEvents(user);
-
-    setUserEvents(events);
-    setLoading(false);
-  };
-
-  const settingItems = async () => {
-    let items = await getItems(user);
-    setUserItems(items);
-  };
-
-  const settingGroupedItems = async () => {
-    let items = await getGroupedItems(user);
-    setUserGroupedItems(items);
-  };
-
-  const settingMonthOrders = async () => {
-    let { dateOrders } = await getMonthOrders(user);
-    setUserMonthOrders({ orders: dateOrders });
-    console.log("Date orders");
-    console.log(userMonthOrders);
-  };
-
+  const needItems = Object.keys(userItems).length === 0;
   useEffect(() => {
-    if (Object.keys(userItems).length === 0) {
+    const settingItems = async () => {
+      let items = await getItems(user);
+      setUserItems(items);
+    };
+
+    if (needItems) {
       settingItems();
     }
+  }, [user, setUserItems, needItems]);
 
-    if (Object.keys(userGroupedItems).length === 0) {
+  const needGroupedItems = Object.keys(userGroupedItems).length === 0;
+  useEffect(() => {
+    const settingGroupedItems = async () => {
+      let items = await getGroupedItems(user);
+      setUserGroupedItems(items);
+    };
+
+    if (needGroupedItems) {
       settingGroupedItems();
     }
+  }, [user, setUserGroupedItems, needGroupedItems]);
 
-    if (Object.keys(userMonthOrders.orders).length === 0) {
+  const needMonthOrders = Object.keys(userMonthOrders.orders).length === 0;
+  useEffect(() => {
+    const settingMonthOrders = async () => {
+      let { dateOrders } = await getMonthOrders(user);
+      setUserMonthOrders({ orders: dateOrders });
+    };
+
+    if (needMonthOrders) {
       settingMonthOrders();
     }
-    if (Object.keys(userEvents).length === 0) {
+  }, [user, setUserMonthOrders, needMonthOrders]);
+
+  const needEvents = Object.keys(userEvents).length === 0;
+  useEffect(() => {
+    const settingEvents = async () => {
+      let events = await getEvents(user);
+
+      setUserEvents(events);
+    };
+
+    if (needEvents) {
       settingEvents();
-    } else {
-      setLoading(false);
     }
-  }, []);
+  }, [user, setUserEvents, needEvents]);
 
   const handleShowDayDetails = (
     type: string,
@@ -162,7 +164,6 @@ function EventDashboard() {
     date: string
   ) => {
     if (type === "show") {
-      console.log("t", type, [eventID], [date]);
       // setRedirect("/")
       // TO-DO - show order details
     }
@@ -174,10 +175,6 @@ function EventDashboard() {
         <Col className="page-header justify-content-center">
           <h3>Gift Dashboard</h3>
         </Col>
-      </Row>
-
-      <Row className="justify-content-center">
-        {loading ? <LoadingIcon /> : null}
       </Row>
 
       <Row className="d-flex justify-content-center">
@@ -200,16 +197,14 @@ function EventDashboard() {
                     </Link>
                   </div>
                 </div>
-              ) : Object.keys(userEvents).length > 1 ? (
-                Object.keys(userEvents).map((event, eIndex) =>
-                  userEvents[event].name !== "onetime" ? (
-                    <EventDetailsRow
-                      key={eIndex}
-                      index={eIndex}
-                      event={userEvents[event]}
-                    />
-                  ) : null
-                )
+              ) : Object.keys(userEvents).length >= 1 ? (
+                Object.keys(userEvents).map((event, eIndex) => (
+                  <EventDetailsRow
+                    key={eIndex}
+                    index={eIndex}
+                    event={userEvents[event]}
+                  />
+                ))
               ) : (
                 <div>
                   No Gifts, create one now!

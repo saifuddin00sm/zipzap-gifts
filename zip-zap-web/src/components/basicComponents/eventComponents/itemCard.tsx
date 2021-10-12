@@ -17,10 +17,10 @@ function ItemCard(props: {
         </Card.Img> */}
         <Card.Body>
           <Card.Text className={`event-item-card-text-loading`}>
-            <div className={`loading-skeleton`}></div>
+            <span className={`loading-skeleton`}></span>
           </Card.Text>
           <Card.Text className={`event-item-card-text-loading`}>
-            <div className={`loading-skeleton`}></div>
+            <span className={`loading-skeleton`}></span>
           </Card.Text>
         </Card.Body>
       </Card>

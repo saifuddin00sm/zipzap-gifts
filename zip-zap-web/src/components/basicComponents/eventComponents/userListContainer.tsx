@@ -166,7 +166,7 @@ function UserListContainer(props: {
         <Row className="m-2">
             <DropdownButton id="dropdown-basic-button" title={department} variant="light">
               {departments.map((item) => (
-                  <Dropdown.Item onClick={() => handleSetDepartment(item)}>{item}</Dropdown.Item>
+                  <Dropdown.Item key={item} onClick={() => handleSetDepartment(item)}>{item}</Dropdown.Item>
               ))}
               </DropdownButton>
         </Row>
