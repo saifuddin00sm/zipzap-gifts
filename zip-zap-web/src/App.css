@@ -364,6 +364,10 @@ a.admin-button {
   transform: rotate(45deg);
 }
 
+.tableInfo {
+  font-size: 12px;
+}
+
 .previous-order-table,
 .admin-order-table {
   /* border: 1px solid #ccc; */
@@ -1160,7 +1164,6 @@ a.new-event-button {
   border: none;
   padding: 4px 4px;
   margin: 8px 0px;
-  width: 90%;
   border-radius: 5px;
 }
 
@@ -1192,7 +1195,6 @@ a.new-event-button {
 .event-user-list {
   overflow-y: scroll;
   max-height: 300px;
-  width: 90%;
   background: var(--primary-white);
 }
 

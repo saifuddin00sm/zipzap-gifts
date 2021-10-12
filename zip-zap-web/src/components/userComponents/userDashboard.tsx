@@ -1,178 +1,186 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import {Row, Col} from 'react-bootstrap';
 import { fetchRequest, UserContext } from "../../App";
-import { userRecipient } from "../../classes";
+import {
+userGroupedItem,
+userItem,
+userMonthOrderList,
+userRecipient,
+} from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
+import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow";
 import { Link } from "react-router-dom";
+import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
+import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
 import { getUserList } from "../eventComponents/eventDashboard";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
+import UserGroupRow from "../basicComponents/userComponents/userGroupRow";
 import UserGroupEditContainer from "./userGroupEditContainer";
 import UserAddRecipientContainer from "./userAddRecipientContainer";
 import ModalBox from "../basicComponents/modalBox";
 
 function UserDashboard() {
-  const { user, userUsers, setUserUsers, setUserUsersLoaded } =
+const { user, userUsers, setUserUsers, setUserUsersLoaded, userUsersLoaded } =
     useContext(UserContext);
-  const [loading, setLoading] = useState(true);
-  let userList = new Array<string>();
-  // const [userList, setUserList] = useState([] as Array<string>);
+const [loading, setLoading] = useState(true);
+const [redirect, setRedirect] = useState("");
+const [userList, setUserList] = useState([] as Array<string>);
 
-  const settingUsers = async () => {
+const settingUsers = async () => {
     let users = await getUserList(user);
     setUserUsers(users);
     setUserUsersLoaded(true);
 
     if ("activeUsers" in users) {
-      let userListTemp = new Array<string>();
-      for (const user1 in users.activeUsers) {
-        userListTemp.push(user1);
-      }
-      userList = userListTemp;
-      // userGroupSetup(users.activeUsers);
+    setUserList(Object.keys(users.activeUsers));
+    userGroupSetup(users.activeUsers);
+    return;
     }
+
     setLoading(false);
-  };
+};
 
-  const [userGroupList, setUserGroupList] = useState(
+const [userGroupList, setUserGroupList] = useState(
     {} as { [key: string]: { group: string; count: number } }
-  );
+);
 
-  const userGroupSetup = async (userList: { [key: string]: userRecipient }) => {
+const userGroupSetup = async (userList: { [key: string]: userRecipient }) => {
+    let groups = [] as Array<string>;
     let finalGroups = {} as { [key: string]: { group: string; count: number } };
 
-    Object.keys(userList).forEach((userID) => {
-      if (!(userList[userID].Department in finalGroups)) {
+    Object.keys(userList).filter((userID) => {
+    if (!(userList[userID].Department in finalGroups)) {
         finalGroups[userList[userID].Department] = {
-          group: userList[userID].Department,
-          count: 1,
+        group: userList[userID].Department,
+        count: 1,
         };
-      } else {
+    } else {
         finalGroups[userList[userID].Department].count += 1;
-      }
+    }
     });
 
-    // setUserGroupList({ ...finalGroups });
+    setUserGroupList({ ...finalGroups });
     setLoading(false);
-  };
+};
 
-  useEffect(() => {
-    if (Object.keys(userUsers.activeUsers).length === 0) {
-      settingUsers();
+useEffect(() => {
+    if (Object.keys(userUsers.activeUsers).length == 0) {
+    settingUsers();
     } else {
-      let userListTemp = new Array<string>();
-      for (const user1 in userUsers.activeUsers) {
-        userListTemp.push(user1);
-      }
-      userList = userListTemp;
-      // setUserList(Object.keys(userUsers.activeUsers));
-      // userGroupSetup(userUsers.activeUsers);
-      setLoading(false);
+    setUserList(Object.keys(userUsers.activeUsers));
+    // userGroupSetup(userUsers.activeUsers);
     }
-  }, []);
+}, []);
 
-  const [activeGroup, setActiveGroup] = useState("");
-  const activeGroupPeople = [] as Array<string>;
-  /*
-  const handleActivateGroup = (group: string) => {
+const [activeGroup, setActiveGroup] = useState("");
+const [activeGroupPeople, setActiveGroupPeople] = useState(
+    [] as Array<string>
+);
+
+const handleActivateGroup = (group: string) => {
     if (activeGroup === group) {
-      setActiveGroup("");
-      setActiveGroupPeople([]);
+    setActiveGroup("");
+    setActiveGroupPeople([]);
     } else {
-      setActiveGroup(group);
-      if (group === "No Group") {
+    setActiveGroup(group);
+    if (group === "No Group") {
         group = "";
-      }
-      console.log("G", group);
-
-      let filtered = Object.keys(userUsers.activeUsers).filter((userID) =>
-        userUsers.activeUsers[userID].Department === group ? userID : null
-      );
-
-      setActiveGroupPeople(filtered);
     }
-  };
-  */
+    console.log("G", group);
 
-  const handelEditGroup = async (oldGroup: string, newGroup: string) => {
+    let filtered = Object.keys(userUsers.activeUsers).filter((userID) =>
+        userUsers.activeUsers[userID].Department === group ? userID : null
+    );
+
+    setActiveGroupPeople(filtered);
+    }
+};
+
+const handelEditGroup = async (oldGroup: string, newGroup: string) => {
     setLoading(true);
     if (oldGroup === "No Group") {
-      oldGroup = "";
+    oldGroup = "";
     }
 
     let updateResponse = await fetchRequest(user, "userList", "PUT", {
-      users: activeGroupPeople,
-      type: "group",
-      old: oldGroup,
-      new: newGroup,
+    users: activeGroupPeople,
+    type: "group",
+    old: oldGroup,
+    new: newGroup,
     });
 
     console.log("UPDATED", updateResponse, [oldGroup], [newGroup]);
 
     if (updateResponse.updated) {
-      let newList = activeGroupPeople.map((userID) => {
+    let newList = activeGroupPeople.map((userID) => {
         if (userID in userUsers.activeUsers) {
-          let user = userUsers.activeUsers[userID];
+        let user = userUsers.activeUsers[userID];
 
-          if (user.Department === oldGroup) {
+        if (user.Department === oldGroup) {
             user.Department = newGroup;
-          } else {
+        } else {
             console.log(
-              "DIDN'T Match? ",
-              user["First Name"],
-              user["Last Name"],
-              user.Department,
-              oldGroup,
-              newGroup
+            "DIDN'T Match? ",
+            user["First Name"],
+            user["Last Name"],
+            user.Department,
+            oldGroup,
+            newGroup
             );
-          }
-
-          userUsers.activeUsers[userID] = user;
         }
-      });
 
-      await Promise.all(newList);
+        userUsers.activeUsers[userID] = user;
+        }
+    });
 
-      setUserUsers({ ...userUsers });
+    let newListResult = await Promise.all(newList);
 
-      let oldDict = userGroupList[oldGroup];
-      oldDict.group = newGroup;
-      userGroupList[newGroup] = oldDict;
+    setUserUsers({ ...userUsers });
 
-      delete userGroupList[oldGroup];
+    let oldDict = userGroupList[oldGroup];
+    oldDict.group = newGroup;
+    userGroupList[newGroup] = oldDict;
 
-      setUserGroupList({ ...userGroupList });
-      setActiveGroup(newGroup);
-      userGroupSetup(userUsers.activeUsers);
+    delete userGroupList[oldGroup];
+
+    setUserGroupList({ ...userGroupList });
+    setActiveGroup(newGroup);
+    userGroupSetup(userUsers.activeUsers);
     } else {
-      // TO-DO - SHOW ERROR
+    // TO-DO - SHOW ERROR
     }
 
     setLoading(false);
-  };
+};
 
-  const [addNewUser, setAddNewUser] = useState(false);
-  const [editUser, setEditUser] = useState(
+const [addNewUser, setAddNewUser] = useState(false);
+const [editUser, setEditUser] = useState(
     undefined as undefined | userRecipient
-  );
-  const [successMessage, setSuccessMessage] = useState("");
+);
+const [successMessage, setSuccessMessage] = useState("");
 
-  const handleAddNewUser = async (newUser: userRecipient) => {
+const handleAddNewUser = async (newUser: userRecipient) => {
+    // if (editUser) {
+    //   handleEditUser(newUser);
+    //   return;
+    // }
+
     setLoading(true);
     let newUserID = editUser
-      ? newUser.userID
-      : (
-          Object.keys(userUsers.activeUsers).length +
-          Object.keys(userUsers.inActiveUsers).length +
-          1
-        ).toString();
-
-    if (!newUserID) {
-      newUserID = (
+    ? newUser.userID
+    : (
         Object.keys(userUsers.activeUsers).length +
         Object.keys(userUsers.inActiveUsers).length +
         1
-      ).toString();
+        ).toString();
+
+    if (!newUserID) {
+    newUserID = (
+        Object.keys(userUsers.activeUsers).length +
+        Object.keys(userUsers.inActiveUsers).length +
+        1
+    ).toString();
     }
 
     newUser.Birthday = new Date(newUser.Birthday).toISOString();
@@ -183,71 +191,71 @@ function UserDashboard() {
     body.userID = newUserID;
 
     let addUserResponse = await fetchRequest(
-      user,
-      "userList/user",
-      editUser ? "PUT" : "POST",
-      body
+    user,
+    "userList/user",
+    editUser ? "PUT" : "POST",
+    body
     );
     // console.log("ADD", addUserResponse);
     if (addUserResponse.saved) {
-      userUsers.activeUsers[newUserID] = newUser;
-      setUserUsers({ ...userUsers });
+    userUsers.activeUsers[newUserID] = newUser;
+    setUserUsers({ ...userUsers });
 
-      userGroupSetup(userUsers.activeUsers);
-
-      let userListTemp = new Array<string>();
-      for (const user1 in userUsers.activeUsers) {
-        userListTemp.push(user1);
-      }
-      userList = userListTemp;
-
-      setSuccessMessage(`User ${editUser ? "Updated" : "Added"} Successfully`);
-      setEditUser(undefined);
+    userGroupSetup(userUsers.activeUsers);
+    setUserList(Object.keys(userUsers.activeUsers));
+    setSuccessMessage(`User ${editUser ? "Updated" : "Added"} Successfully`);
+    setEditUser(undefined);
     } else {
-      setSuccessMessage("Whoops, please contact support");
+    setSuccessMessage("Whoops, please contact support");
     }
 
     setLoading(false);
-  };
+};
 
-  const clearSuccessfulMessage = () => {
+const clearSuccessfulMessage = () => {
     setSuccessMessage("");
-  };
+};
 
-  const selectUserToEdit = (userID: string) => {
+const selectUserToEdit = (userID: string) => {
     if (userID in userUsers.activeUsers) {
-      userUsers.activeUsers[userID].userID = userID;
-      setEditUser(userUsers.activeUsers[userID]);
-      setAddNewUser(true);
+    userUsers.activeUsers[userID].userID = userID;
+    setEditUser(userUsers.activeUsers[userID]);
+    setAddNewUser(true);
     }
-  };
+};
 
-  return (
+const handleEditUser = (newUser: userRecipient) => {
+    console.log("EDIT", newUser);
+};
+
+return (
     <Col>
-      <Row>
+    <Row>
         <Col className="page-header justify-content-center">
-          <h3>Recipient Dashboard</h3>
+        <h3>Recipient Dashboard</h3>
         </Col>
-      </Row>
-      {/* <header className={`column center page-header`}>
+    </Row>
+    {/* <header className={`column center page-header`}>
         <h1>People Dashboard</h1>
-      </header> */}
-      <Row>{loading ? <LoadingIcon /> : null}</Row>
+    </header> */}
+    <Row>
+    {loading ? <LoadingIcon /> : null}
+    </Row>
 
-      {/* holds 4 Containers */}
-      <Row className="d-flex justify-content-center mb-3">
+    {/* holds 4 Containers */}
+    <Row className="d-flex justify-content-center mb-3">
         {addNewUser ? (
-          <UserAddRecipientContainer
+        <UserAddRecipientContainer
             saveAction={handleAddNewUser}
             closeAction={setAddNewUser}
             loading={loading}
             user={editUser}
-          />
+        />
         ) : activeGroup ? (
-          <UserGroupEditContainer
+        <UserGroupEditContainer
             activeGroup={activeGroup}
             activeGroupCount={
-              activeGroup in userGroupList
+            activeGroup in userGroupList
                 ? userGroupList[activeGroup].count
                 : 0
             }
@@ -256,105 +264,105 @@ function UserDashboard() {
             closeAction={setActiveGroup}
             selectUser={selectUserToEdit}
             loading={loading}
-          />
+        />
         ) : successMessage ? (
-          <ModalBox>
+        <ModalBox>
             {successMessage ? (
-              <div className={`column`}>
+            <div className={`column`}>
                 <span>{successMessage}</span>
                 <br></br>
                 <button
-                  className={`new-event-button new-event-button-grey`}
-                  onClick={clearSuccessfulMessage}
+                className={`new-event-button new-event-button-grey`}
+                onClick={clearSuccessfulMessage}
                 >
-                  Close
+                Close
                 </button>
-              </div>
+            </div>
             ) : (
-              `Please wait...`
+            `Please wait...`
             )}{" "}
-          </ModalBox>
+        </ModalBox>
         ) : null}
 
         {/* <section
-          className={`row center-row full-width event-dashboard-top-row`}
+        className={`row center-row full-width event-dashboard-top-row`}
         > */}
         {/* event list container */}
         {/* <Col sm="6">
             <Row className="event-dashboard-sub-title primary-black-header mx-2">
-              <span>Groups</span>
+            <span>Groups</span>
             </Row>
             <Row className="mx-2">
-              <ol className={`column center event-dashboard-events-list`}>
+            <ol className={`column center event-dashboard-events-list`}>
                 {userUsersLoaded &&
                 Object.keys(userUsers.activeUsers).length === 0 ? (
-                  <div>
+                <div>
                     No Recipients, upload a list now!
                     <br></br>
                     <div className={`column center event-dashboard-events-list`}>
-                      <Link
+                    <Link
                         to={"/people/upload"}
                         className={`row center add-event-button add-event-button-black `}
-                      >
+                    >
                         <AddIcon />
-                      </Link>
+                    </Link>
                     </div>
-                  </div>
+                </div>
                 ) : (
-                  Object.keys(userGroupList)
+                Object.keys(userGroupList)
                     .sort()
                     .map((group, gIndex) => (
-                      <UserGroupRow
+                    <UserGroupRow
                         group={group === "" ? "No Group" : group}
                         index={userGroupList[group].count}
                         key={gIndex}
                         action={handleActivateGroup}
-                      />
+                    />
                     ))
                 )}
-              </ol>
+            </ol>
             </Row>
-          </Col> */}
+        </Col> */}
 
         {/* Add List/Recipient container */}
         <Col sm="6">
-          <div className={`full-width`}>
+            <div className={`full-width`}>
             <div className={`event-dashboard-sub-title primary-black-header`}>
-              <span>Upload a List</span>
+                <span>Upload a List</span>
             </div>
             <div className={`column center event-dashboard-events-list`}>
-              <Link
+                <Link
                 to={"/recipients/upload"}
                 className={`add-event-button-link`}
-              >
+                >
                 <AddIcon className="addIcon" />
-              </Link>
+                </Link>
             </div>
-          </div>
-        </Col>
-        <Col sm="6">
-          <div className={`full-width`}>
+            </div>
+            </Col>
+            <Col sm="6">
+            <div className={`full-width`}>
             <div className={`event-dashboard-sub-title primary-black-header`}>
-              <span>Add a Recipient</span>
+                <span>Add a Recipient</span>
             </div>
             <div className={`column center event-dashboard-events-list`}>
-              <button
+                <button
                 className={`add-event-button add-event-button-blue`}
                 onClick={() => setAddNewUser(true)}
-              >
+                >
                 <AddIcon className="addIcon" />
-              </button>
+                </button>
             </div>
-          </div>
-        </Col>
-      </Row>
-      <Row>
+            </div>
+            </Col>
+        </Row>
+        <Row>
         <Col>
-          <div className={`event-dashboard-sub-title primary-black-header`}>
+        <div className={`event-dashboard-sub-title primary-black-header`}>
             <span>List of Recipients</span>
-          </div>
+        </div>
 
-          <UserListContainer
+        <UserListContainer
             users={userUsers.activeUsers}
             userList={userList}
             loading={loading}
@@ -362,11 +370,11 @@ function UserDashboard() {
             class={`full-width center-self pb-2`}
             hideTitle={true}
             showDetails={true}
-          />
+        />
         </Col>
-      </Row>
+    </Row>
     </Col>
-  );
+);
 }
 
 export default UserDashboard;

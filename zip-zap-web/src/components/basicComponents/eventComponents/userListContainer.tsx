@@ -19,7 +19,7 @@ function UserListContainer(props: {
     JSON.parse(JSON.stringify(props.userList)) as Array<string>
   );
 
-  const [department, setDepartment] = useState("Filter By Department");
+  // const [department, setDepartment] = useState("Filter By Department");
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -27,9 +27,9 @@ function UserListContainer(props: {
     setSearchList([...JSON.parse(JSON.stringify(props.userList))]);
   };
 
-  const handleSetDepartment = (type: string) => {
-    setDepartment(type);
-  }
+  // const handleSetDepartment = (type: string) => {
+  //   setDepartment(type);
+  // }
 
   var departments = [];
   departments.push("");
@@ -159,18 +159,18 @@ function UserListContainer(props: {
         </div>
       )}
       <Col
-        className={`full-width event-user-list-column column center-column ${
+        className={`full-width event-user-list-column center-column p-4 ${
           props.buttonType === "remove" ? "event-user-list-blue" : ""
         }`}
       >
-        <Row className="m-2">
+        {/* <Row className="m-2">
             <DropdownButton id="dropdown-basic-button" title={department} variant="light">
               {departments.map((item) => (
                   <Dropdown.Item onClick={() => handleSetDepartment(item)}>{item}</Dropdown.Item>
               ))}
               </DropdownButton>
-        </Row>
-        <Row>
+        </Row> */}
+        <Row className="align-left">
           <input
             className={`event-user-search-bar`}
             placeholder={`Search for a Recipient`}
@@ -178,52 +178,39 @@ function UserListContainer(props: {
           ></input>
         </Row>
         <Row className={`event-user-list`}>
-          {/* <table className={`column event-user-list-list previous-order-table`}>
           {props.showDetails ? (
-            <thead className={`row center space-bewteen`}>
-              {false ? <th scope="col">Select</th> : null}
-              <th scope="col">Name</th>
-              <th scope="col">Birthday</th>
-              <th scope="col">Address</th>
-              <th scope="col">Title</th>
-              <th scope="col">Date Started</th>
-              <th scope="col">Department</th>
-            </thead>
-          ) : null} */}
+            <Row className={`space-bewteen border-bottom border-dark align-left`}>
+              <Col>Name</Col>
+              <Col>Birthday</Col>
+              <Col>Address</Col>
+              <Col>Job Title</Col>
+              <Col>Date Started</Col>
+              <Col>Department</Col>
+            </Row>
+          ) : null}
           {/* <tbody className={`${props.showDetails ? "" : "table-full-height"}`}> */}
           {searchList.map((userID, uIndex) =>
             props.showDetails ? (
-              // <tr
-              //   key={uIndex}
-              //   className={`space-between user-list-detail-row`}
-              //   onClick={() => props.action(userID)}
-              // >
-              //   <td data-label="Recipient">
-              //     {props.users[userID]["First Name"]}{" "}
-              //     {props.users[userID]["Last Name"]}
-              //   </td>
-              //   <td data-label="Birthday">{props.users[userID].Birthday}</td>
-              //   <td data-label="Address">{props.users[userID].Address}</td>
-              //   <td data-label="Title">{props.users[userID]["Title"]}</td>
-              //   <td data-label="Date Started">
-              //     {props.users[userID]["Date Started"]}
-              //   </td>
-              //   <td data-label="Department">
-              //     {props.users[userID].Department}
-              //   </td>
-
-              {
-                /* <button
-                    className={`event-user-list-button ${
-                      props.buttonType === "remove"
-                        ? "event-user-list-button-remove"
-                        : ""
-                    }`}
-                    onClick={() => props.action(userID)}
-                  >
-                    <PlusIcon />
-                  </button> */
-              }
+                <Row className={`space-bewteen align-left border-bottom tableInfo`} key={uIndex} onClick={() => props.action(userID)}>
+                  <Col>{props.users[userID]["First Name"]} {props.users[userID]["Last Name"]}</Col>
+                  <Col>{props.users[userID].Birthday}</Col>
+                  <Col>{props.users[userID].Address}</Col>
+                  <Col>{props.users[userID]["Job Title"]}</Col>
+                  <Col>{props.users[userID]["Date Started"]}</Col>
+                  <Col>{props.users[userID].Department}</Col>
+                </Row>
+              // {
+                // <button
+                //     className={`event-user-list-button ${
+                //       props.buttonType === "remove"
+                //         ? "event-user-list-button-remove"
+                //         : ""
+                //     }`}
+                //     onClick={() => props.action(userID)}
+                //   >
+                //     <PlusIcon />
+                //   </button>
+              // }
             ) : (
               <Row
                 key={uIndex}
@@ -248,7 +235,8 @@ function UserListContainer(props: {
               </Row>
             )
           )}
-        </Row>
+          
+          </Row>
         {props.showDetails ||
         props.buttonType === "none" ||
         props.buttonType === "edit" ? null : (
