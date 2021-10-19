@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
 import UserAddRecipientContainer from "./userAddRecipientContainer";
 import ModalBox from "../basicComponents/modalBox";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button, Modal } from "react-bootstrap";
 
 function UserNewList() {
   const { user, userUsers, setUserUsers, setUserUsersLoaded } =
@@ -18,6 +18,9 @@ function UserNewList() {
   const [success, setSuccess] = useState(false);
   const [reload, setReload] = useState(false);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   const [editUserID, setEditUserID] = useState("");
   const [editUser, setEditUser] = useState({
@@ -68,8 +71,12 @@ function UserNewList() {
   };
 
   const uploadFileCheck = async () => {
-    if (uploadedFile === null) {
+    if (uploadedFile == null) {
       setError("Please Choose a File");
+      return {
+        uploaded: false,
+        error: "Please Choose a File"
+      };
     } else {
       setError("");
     }
@@ -179,35 +186,51 @@ function UserNewList() {
           Back to People Dashboard
         </Link>
       </Row>
-
-      {/* holds 4 Containers */}
       <Row className={`mx-2 people-dashboard-events-list`}>
-        <div className={`event-dashboard-sub-title primary-black-header`}>
-          <span>Upload List</span>
-        </div>
+      {/* holds 4 Containers */}
         {loading ? (
-          <ModalBox>
-            {success ? (
-              <div className={`column`}>
-                <span>list created sucessfully!</span>
-                <br></br>
-                <button
+          <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>
+                  {success ? (
+                    <h5>list created sucessfully!
+                    </h5>
+                  ) : (
+                    <h5>List uploading now</h5>
+                  )}{" "}
+                </Modal.Title>
+              </Modal.Header>
+                {/* <button
                   className={`new-event-button new-event-button-grey`}
                   onClick={() => setLoading(false)}
                 >
                   Close
                 </button>
-              </div>
-            ) : (
-              `uploading list please wait...`
-            )}{" "}
-          </ModalBox>
+              </div> */}
+                <Modal.Footer>
+                  <button
+                    className="general-button gereral-button-green px-4 py-2"
+                    onClick={handleClose}
+                  >
+                    <Link to={"/recipients"}>Back to Dashboard</Link>
+                  </button>
+                  <button
+                    className=" general-button gereral-button-blue px-4 py-2"
+                    onClick={handleClose}
+                  >
+                    <Link to={"/recipients/upload"}>Close</Link>
+                  </button>
+                </Modal.Footer>
+          </Modal>
         ) : null}
 
         {/* instructions */}
         {newUploads.length === 0 ? (
           <Col className={`m-4`}>
-            <Row>
+            <div className={`event-dashboard-sub-title primary-black-header mb-4`}>
+              <span>Upload List</span>
+            </div>
+            <Row className="align-left">
               <p>
                 <b>
                   Step 1: Format an csv document with a person on each row and
@@ -215,7 +238,7 @@ function UserNewList() {
                 </b>
               </p>
             </Row>
-            <Row>
+            <Row className="my-2">
               <Col md="4">
                 <ul className={`new-recipient-list-fields`}>
                   {Object.keys(editUser).map((key: string, kIndex: number) => (
@@ -224,53 +247,47 @@ function UserNewList() {
                 </ul>
               </Col>
               <Col md="8">
+                <Row>
                 <img
                   src={`/media/images/new-list-example.png`}
                   alt={`New List Example`}
                   className={`item-card-image-main mb-3`}
                 ></img>
-                <a
-                  href={"/media/files/zipzap-template.csv"}
-                  className={`new-event-button new-event-button mt-3 px-3`}
-                >
-                  Download Template
-                </a>
+                </Row>
+                <Row className="center">
+                  <Button variant="zapGreen" className="general-button small-button" >
+                  <a
+                    href={"/media/files/zipzap-template.csv"}
+                  >
+                    Download Template
+                  </a>
+                  </Button>
+                </Row>
               </Col>
             </Row>
-            <Row>
-              <div className={`column full-width`}>
-                <p>
-                  {" "}
-                  <b>Step 2: Choose a File </b>{" "}
-                </p>
-                <div className={`row center space-between`}>
+            <Row className="align-left my-2">
+                  <span className="my-4"><b>Step 2: Choose a File</b></span>
                   <input
                     accept=".csv"
                     type={`file`}
                     onChange={uploadFileChange}
+                    name="upload a file"
                   ></input>
-                </div>
-              </div>
             </Row>
           </Col>
         ) : (
-          <Row>
-            <div
-              className={`event-dashboard-full-column  column left-align-column`}
-            >
-              <div className={`column full-width`}>
+          <Row className={`event-dashboard-full-column  column left-align-column `}>
                 <UserListContainer
                   users={userUsers.activeUsers}
                   userList={newUploads}
                   loading={reload}
                   action={loadEditUser}
                   buttonType={"edit"}
-                  title={"New Upload List"}
+                  title={"New Uploaded List"}
+                  showDetails={true}
                   // hideTitle={true}
-                  class={`full-width center-self full-height`}
+                  class={`m-3 full-height`}
                 />
-              </div>
-            </div>
           </Row>
         )}
 
@@ -286,30 +303,36 @@ function UserNewList() {
           <div className={`column center full-width`}>
             {error ? error : ""}
 
-            <button
-              className={`new-event-button new-event-button-blue`}
+            <Button
+              className={`new-event-button new-event-button-blue m-4`}
               onClick={uploadFileCheck}
+              variant="zipBlue"
             >
               Upload List
-            </button>
+            </Button>
           </div>
         ) : (
-          <div className={`row center full-width`}>
+          <Row>
             {error ? error : ""}
-
-            <button
+            <Col className={`full-width`}>
+            <Button
               className={`new-event-button new-event-button-blue`}
               onClick={uploadFileCheck}
+              variant="zipBlue"
             >
               Edit List
-            </button>
-            <button
+            </Button>
+            </Col>
+            <Col>
+            <Button
               className={`new-event-button new-event-button-blue`}
               onClick={uploadFileCheck}
+              variant="zipBlue"
             >
               Upload Another List
-            </button>
-          </div>
+            </Button>
+            </Col>
+          </Row>
         )}
         {/* Upload Button */}
       </Row>

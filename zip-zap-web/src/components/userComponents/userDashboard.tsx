@@ -69,6 +69,7 @@ useEffect(() => {
     settingUsers();
     } else {
     setUserList(Object.keys(userUsers.activeUsers));
+    setLoading(false);
     // userGroupSetup(userUsers.activeUsers);
     }
 }, []);

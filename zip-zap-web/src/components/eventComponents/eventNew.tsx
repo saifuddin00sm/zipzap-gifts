@@ -1336,12 +1336,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                       </div>
                     </div>
                   ) : (
-                    <button
+                    <Button
                       className={`new-event-button new-event-button-blue`}
                       onClick={() => setShowItemList(true)}
+                      variant="zipBlue"
+                      size="sm"
                     >
                       Add Item
-                    </button>
+                    </Button>
                   )}
                 </Col>
                 {/* <button
@@ -1353,14 +1355,17 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               </Row>
 
               <Row>
+                <Col>
                 <p className="error-message-text">{error ? error : ""}</p>
-                <button
+                <Button
                   className={`new-event-button`}
                   onClick={handleCustomGiftSave}
                   disabled={customGiftLoading}
+                  variant="zapGreen"
                 >
                   Save Gift Package
-                </button>
+                </Button>
+                </Col>
               </Row>
             </Col>
           </Row>
@@ -1420,15 +1425,17 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         <div
           className={`event-item-description-button-container right-align-row`}
         >
-          <button
+          <Button
             className={`event-item-description-button`}
             onClick={handleChooseItem}
+            size="sm"
+            variant="zapGreen"
           >
             {activeItem.id && activeItemDetails.id === activeItem.id
               ? "Deselect"
               : "Select"}{" "}
             Gift
-          </button>
+          </Button>
         </div>
       </Row>
 

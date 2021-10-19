@@ -179,6 +179,9 @@ button {
 .btn-blue {
   background-color: var(--primary-button-blue);
 }
+.small-button {
+  width: 50% !important;
+}
 
 .general-button {
   border: var(--primary-border);
@@ -189,6 +192,7 @@ button {
   text-decoration: none;
   color: var(--high-black);
 }
+
 .general-button :hover {
   text-decoration: none;
   color: black;
