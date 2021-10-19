@@ -9,22 +9,6 @@ import { UserContext } from "../../App";
 function NavBarComponent() {
   const { user } = useContext(UserContext);
 
-  const [navButtons, setNavButtons] = useState([
-    // { text: "Events", link: "/dashboard" },
-    // { text: "Orders", link: "/order/past" },
-
-    // { text: "People", link: "/people" },
-    // { text: "Gifts", link: "/" },
-    {
-      text: "Profile",
-      link: `/`,
-    },
-    {
-      text: "Logout",
-      link: `/logout`,
-    },
-  ] as Array<navButton>);
-
   const guestNavButtons = [
     {
       text: "Login",
@@ -33,7 +17,7 @@ function NavBarComponent() {
     },
   ] as Array<navButton>;
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [, setIsExpanded] = useState(false);
 
   return (
     <Navbar expand="md" className="nav-bar-container p-3" variant="dark">
@@ -58,7 +42,7 @@ function NavBarComponent() {
             >
               <Usericon className={`nav-bar-icon`} />
             </Link>
-            <Nav.Link href="/logout">
+            <Nav.Link href="/#/logout">
               <Button variant="light" size="sm">
                 Log Out
               </Button>
