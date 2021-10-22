@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button, Modal} from "react-bootstrap";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
 import { userRecipient } from "../../classes";
 
@@ -39,7 +39,7 @@ function UserAddRecipientContainer(props: {
   );
 
   const [error, setError] = useState("");
-
+  
   const handleEdit = () => {
     if (!editUser["First Name"]) {
       setError("Please Enter a Name");
@@ -108,7 +108,7 @@ function UserAddRecipientContainer(props: {
     if (props.user) {
       let newEditUser = JSON.parse(JSON.stringify(props.user)) as userRecipient;
 
-      newEditUser.Birthday = convertDateToInput(newEditUser.Birthday);
+      newEditUser.Birthday = convertDateToInput(newEditUser.Birthday)
       newEditUser["Date Started"] = convertDateToInput(
         newEditUser["Date Started"]
       );
@@ -117,26 +117,27 @@ function UserAddRecipientContainer(props: {
       setEditUser({ ...newEditUser });
     }
   }, [props.user]);
-
   return (
-    <Row>
-      <Row className={`user-group-edit-container m-3`}>
+    <Modal show={true}>
+      <div className={`user-group-edit-container p-3`}>
+        <Modal.Header>
         <Col>
-          <h3 className="m-3">{props.user ? "Edit" : "New"} Recipient</h3>
+          <h3 className="m-1">{props.user ? "Edit" : "New"} Recipient</h3>
         </Col>
         <Col xs="1">
           <div className={`space-between m-3`}>
             <button
-              onClick={() => props.closeAction("")}
+              onClick={() => props.closeAction(false)}
               className={`user-group-edit-close`}
             >
               <CloseIcon />
             </button>
           </div>
         </Col>
-
-        <div className={`column center full-width`}>
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+        </Modal.Header>
+        <Modal.Body>
+        <div className={`column full-width`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>First Name:</label>
             <input
               value={editUser["First Name"]}
@@ -146,7 +147,7 @@ function UserAddRecipientContainer(props: {
             ></input>
           </div>
 
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>Last Name:</label>
             <input
               value={editUser["Last Name"]}
@@ -156,7 +157,7 @@ function UserAddRecipientContainer(props: {
             ></input>
           </div>
 
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>Birthday:</label>
             <input
               value={editUser.Birthday}
@@ -167,7 +168,7 @@ function UserAddRecipientContainer(props: {
             ></input>
           </div>
 
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>Address:</label>
             <input
               value={editUser.Address}
@@ -176,7 +177,7 @@ function UserAddRecipientContainer(props: {
               className={`general-input-fit new-event-input`}
             ></input>
           </div>
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>City:</label>
             <input
               value={editUser.City}
@@ -185,7 +186,7 @@ function UserAddRecipientContainer(props: {
               className={`general-input-fit new-event-input`}
             ></input>
           </div>
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>State (i.e. UT):</label>
             <input
               value={editUser.State}
@@ -195,7 +196,7 @@ function UserAddRecipientContainer(props: {
               className={`general-input-fit new-event-input`}
             ></input>
           </div>
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>Zip Code:</label>
             <input
               value={editUser.Zip}
@@ -205,7 +206,7 @@ function UserAddRecipientContainer(props: {
             ></input>
           </div>
 
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>Job Title:</label>
             <input
               value={editUser["Job Title"]}
@@ -215,7 +216,7 @@ function UserAddRecipientContainer(props: {
             ></input>
           </div>
 
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>Date Started:</label>
             <input
               value={editUser["Date Started"]}
@@ -226,7 +227,7 @@ function UserAddRecipientContainer(props: {
             ></input>
           </div>
 
-          <div className={`width-60 row left-align-column user-add-field-row`}>
+          <div className={`left-align-column user-add-field-row`}>
             <label>Department (optional):</label>
             <input
               value={editUser.Department}
@@ -236,18 +237,24 @@ function UserAddRecipientContainer(props: {
             ></input>
           </div>
         </div>
-        <div className={`column width-60 center mt-3`}>
+        <div className={`center mt-3 text-center`}>
+          <Row>
           {error ? <span className={`error-message-text`}>{error}</span> : null}
-          <button
+          </Row>
+          <Row>
+          <Button
             className={`event-item-description-button new-event-button user-add-button`}
             onClick={handleEdit}
+            variant="zapGreen"
           >
             {props.user ? "Edit " : "Create New "}
             Recipient
-          </button>
+          </Button>
+          </Row>
         </div>
-      </Row>
-    </Row>
+      </Modal.Body>
+      </div>
+    </Modal>
   );
 }
 

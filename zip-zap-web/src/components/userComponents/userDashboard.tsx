@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Modal} from 'react-bootstrap';
 import { fetchRequest, UserContext } from "../../App";
 import {
 userGroupedItem,
@@ -159,6 +159,11 @@ const [addNewUser, setAddNewUser] = useState(false);
 const [editUser, setEditUser] = useState(
     undefined as undefined | userRecipient
 );
+const [showModal, setShowModal] = useState(false);
+
+const handleClose = () => setShowModal(false);
+const handleShow = () => setShowModal(true);
+
 const [successMessage, setSuccessMessage] = useState("");
 
 const handleAddNewUser = async (newUser: userRecipient) => {
@@ -197,7 +202,6 @@ const handleAddNewUser = async (newUser: userRecipient) => {
     editUser ? "PUT" : "POST",
     body
     );
-    // console.log("ADD", addUserResponse);
     if (addUserResponse.saved) {
     userUsers.activeUsers[newUserID] = newUser;
     setUserUsers({ ...userUsers });
@@ -206,11 +210,15 @@ const handleAddNewUser = async (newUser: userRecipient) => {
     setUserList(Object.keys(userUsers.activeUsers));
     setSuccessMessage(`User ${editUser ? "Updated" : "Added"} Successfully`);
     setEditUser(undefined);
+    setAddNewUser(false);
+    setShowModal(true)
+
     } else {
     setSuccessMessage("Whoops, please contact support");
     }
 
     setLoading(false);
+    console.log("It is done");
 };
 
 const clearSuccessfulMessage = () => {
@@ -267,22 +275,29 @@ return (
             loading={loading}
         />
         ) : successMessage ? (
-        <ModalBox>
-            {successMessage ? (
-            <div className={`column`}>
+            <Modal show={successMessage} onHide={clearSuccessfulMessage}>
+            <Modal.Header closeButton>
+                <Modal.Title>
                 <span>{successMessage}</span>
-                <br></br>
-                <button
-                className={`new-event-button new-event-button-grey`}
-                onClick={clearSuccessfulMessage}
-                >
-                Close
-                </button>
-            </div>
-            ) : (
-            `Please wait...`
-            )}{" "}
-        </ModalBox>
+                </Modal.Title>
+            </Modal.Header>
+            </Modal>
+        // {/* <Modal>
+        //     {successMessage ? (
+        //     <div className={`column`}>
+        //         <span>{successMessage}</span>
+        //         <br></br>
+        //         <button
+        //         className={`new-event-button new-event-button-grey`}
+        //         onClick={clearSuccessfulMessage}
+        //         >
+        //         Close
+        //         </button>
+        //     </div>
+        //     ) : (
+        //     `Please wait...`
+        //     )}{" "}
+        // </Modal> */}
         ) : null}
 
         {/* <section

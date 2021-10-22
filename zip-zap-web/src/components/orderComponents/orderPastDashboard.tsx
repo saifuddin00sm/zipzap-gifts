@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchRequest, UserContext } from "../../App";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import { eventOrder } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import { Link, RouteComponentProps } from "react-router-dom";
@@ -165,12 +165,18 @@ function OrderPastDashboard({ location }: RouteComponentProps) {
     }
 
     return (
+      <Col>
+      <Button className={`row center new-event-button previous-order-button`}
+      variant="zapGreen"
+      >
       <Link
         to={url}
-        className={`row center new-event-button previous-order-button`}
+        className="edit-button-link"
       >
-        {type} Month
+        {type}
       </Link>
+      </Button>
+      </Col>
     );
   };
 

@@ -18,4 +18,15 @@
   background-color: rgb(147, 168, 161) !important;
   border-color: rgb(147, 168, 161) !important;
 }
+
+.btn-zapRed {
+  background-color: rgb(185, 82, 51) !important;
+  border-color: rgb(185, 82, 51) !important;
+  color: black;
+}
+.btn-zapRed:hover {
+  background-color: rgb(177, 68, 34) !important;
+  border-color: rgb(177, 68, 34) !important;
+}
+
 @import "./node_modules/bootstrap/scss/bootstrap.scss";

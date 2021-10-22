@@ -10,6 +10,7 @@ function OrderPastRowContainer(props: {
   loading?: boolean;
 }) {
   const { userEvents } = useContext(UserContext);
+  
 
   const [expanded, setExpanded] = useState(false);
   return props.loading ? (
@@ -64,7 +65,7 @@ function OrderPastRowContainer(props: {
                 </th>
               ) : null} */}
         </thead>
-        <tbody>
+        <tbody className="orderTable">
           {Object.keys(props.campaignOrders).map((orderID, oIndex) => (
             <OrderPastRowRow
               key={oIndex}

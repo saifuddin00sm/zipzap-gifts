@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../App";
 import { eventOrder } from "../../classes";
+import { Row} from "react-bootstrap";
 
 function OrderPastRowRow(props: { campaignID: string; order: eventOrder }) {
   const { userUsers, userGroupedItems } = useContext(UserContext);

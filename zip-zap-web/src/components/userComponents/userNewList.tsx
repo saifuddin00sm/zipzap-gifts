@@ -315,22 +315,7 @@ function UserNewList() {
           <Row>
             {error ? error : ""}
             <Col className={`full-width`}>
-            <Button
-              className={`new-event-button new-event-button-blue`}
-              onClick={uploadFileCheck}
-              variant="zipBlue"
-            >
-              Edit List
-            </Button>
-            </Col>
-            <Col>
-            <Button
-              className={`new-event-button new-event-button-blue`}
-              onClick={uploadFileCheck}
-              variant="zipBlue"
-            >
-              Upload Another List
-            </Button>
+              <p>Successfully uploaded list</p>
             </Col>
           </Row>
         )}

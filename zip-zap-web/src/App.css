@@ -11,7 +11,7 @@
   --primary-black-dark: rgba(109, 110, 112, 1);
   --primary-blue: rgba(171, 196, 214, 1);
   --primary-button-blue: rgb(141, 162, 177);
-  --primary-pink: rgb(177, 68, 34);
+  --primary-pink: rgb(185, 82, 51);
   --primary-green: rgba(171, 198, 189, 1);
   --primary-button-green: rgb(147, 168, 161);
   --primary-grey: rgba(216, 216, 216, 1);
@@ -20,7 +20,7 @@
   --primary-white-background: rgba(239, 239, 239, 1);
 
   --primary-text-grey: rgba(52, 52, 54, 1);
-  --primary-red: rgb(163, 1, 1);
+  --primary-red: rgb(185, 82, 51);
 
   --main-color: rgb(141, 162, 177);
   --text-color: rgba(0, 0, 0, 0.6);
@@ -381,13 +381,22 @@ a.admin-button {
   table-layout: fixed;
   width: 90%;
 }
+.previous-order-table tbody {
+  /* border: 1px solid #ccc; */
+  overflow-x: visible !important;
+  overflow-y: scroll;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  width: 90%;
+}
 
 .previous-order-table tr,
 .admin-order-table tr {
   background-color: #f8f8f8;
-  border: 1px solid #ddd;
   padding: 0.35em;
   margin: 8px 0px;
+  border-bottom: 1px solid #cccaca;
+  width: 100%;
 }
 
 .previous-order-table th,
@@ -828,6 +837,15 @@ a.new-event-button {
   /* height: 30px; */
   padding: 8px;
   margin: 8px 0px;
+}
+
+.edit-button-link {
+  color: var(--primary-text-grey);
+  text-decoration: none;
+}
+.edit-button-link:hover {
+  color: black;
+  text-decoration: none;
 }
 
 .back-link-blue {
@@ -1667,7 +1685,6 @@ a.nav-bar-logo {
 }
 .user-group-edit-container {
   background: var(--primary-white);
-  padding-bottom: 40px;
   border: 20px solid var(--primary-blue);
 }
 
@@ -1691,10 +1708,6 @@ a.nav-bar-logo {
 
 .user-group-edit-container .user-group-edit-close svg {
   fill: var(--primary-white);
-}
-
-.user-group-edit-container h2 {
-  width: 100%;
 }
 
 .error-message-text {
@@ -1912,6 +1925,11 @@ a.nav-bar-logo {
   .previous-order-table th,
   .previous-order-table td {
     width: 95%;
+  }
+
+  .orderTable {
+    overflow-y: scroll;
+    overflow-x: visible;
   }
 
   .admin-order-table .admin-order-button {

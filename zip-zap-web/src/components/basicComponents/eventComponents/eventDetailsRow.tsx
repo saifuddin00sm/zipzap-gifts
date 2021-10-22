@@ -1,13 +1,21 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Accordion } from "react-bootstrap";
-import { UserContext } from "../../../App";
+import { Accordion, Button } from "react-bootstrap";
+import { fetchRequest, UserContext } from "../../../App";
 import { userEvent } from "../../../classes";
 import { getIcon } from "../../eventComponents/eventNew";
 
 function EventDetailsRow(props: { event: userEvent; index: number }) {
-  const { userItems, userGroupedItems } = useContext(UserContext);
-
+  const { user, userItems, userGroupedItems } = useContext(UserContext);
+  const handleDelete = async() => {
+    let updateResponse = {} as any;
+    updateResponse = await fetchRequest(
+      user,
+      `groupedItems/${props.event.campaignID}`,
+      "DELETE",
+      props.event
+      );
+  };
   var campaignKey = "1";
   if (props.event.campaignID) {
     campaignKey = "" + props.event.campaignID;
@@ -40,13 +48,20 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
                 : null}
             </p>
           ) : null}
-
+          <Button className="m-2" size="sm" variant="zipBlue">
           <Link
             to={`/event/e/${props.event.campaignID}`}
-            className={`back-link back-link-blue`}
+            className={`edit-button-link`}
           >
-            Edit Event
+            Edit Gift
           </Link>
+          </Button>
+          <Button className="m-2" 
+          size="sm" 
+          variant="zapRed"
+          onClick={handleDelete}>
+            Delete Gift
+          </Button>
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
