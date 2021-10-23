@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { userRecipient } from "../../../classes";
-import { Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { ReactComponent as PlusIcon } from "../../../icons/plusSign.svg";
 import { ReactComponent as EditIcon } from "../../../icons/edit.svg";
 
@@ -35,7 +35,7 @@ function UserListContainer(props: {
   departments.push("");
 
   for (const [, value] of Object.entries(props.users)) {
-    if (!departments.includes(value.Department) && value.Department != " ") {
+    if (!departments.includes(value.Department) && value.Department !== " ") {
       departments.push(value.Department);
     }
   }
@@ -67,7 +67,9 @@ function UserListContainer(props: {
             return true;
           } else if (
             "Job Title" in user &&
-            user["Job Title"].toLowerCase().includes(e.target.value.toLowerCase())
+            user["Job Title"]
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase())
           ) {
             return true;
           } else if (
@@ -77,6 +79,7 @@ function UserListContainer(props: {
             return true;
           }
         }
+        return false;
       });
 
       setSearchValue(e.target.value);
@@ -125,7 +128,9 @@ function UserListContainer(props: {
       >
         <div className={`full-width column center`}>
           <div className={` event-user-search-bar-loading`}>
-            <div className={`loading-skeleton row center`}>Loading Recipients</div>
+            <div className={`loading-skeleton row center`}>
+              Loading Recipients
+            </div>
           </div>
         </div>
 
@@ -179,7 +184,9 @@ function UserListContainer(props: {
         </Row>
         <Row className={`event-user-list`}>
           {props.showDetails ? (
-            <Row className={`space-bewteen border-bottom border-dark align-left`}>
+            <Row
+              className={`space-bewteen border-bottom border-dark align-left`}
+            >
               <Col>Name</Col>
               <Col>Birthday</Col>
               <Col>Address</Col>
@@ -191,27 +198,34 @@ function UserListContainer(props: {
           {/* <tbody className={`${props.showDetails ? "" : "table-full-height"}`}> */}
           {searchList.map((userID, uIndex) =>
             props.showDetails ? (
-                <Row className={`space-bewteen align-left border-bottom tableInfo`} key={uIndex} onClick={() => props.action(userID)}>
-                  <Col>{props.users[userID]["First Name"]} {props.users[userID]["Last Name"]}</Col>
-                  <Col>{props.users[userID].Birthday}</Col>
-                  <Col>{props.users[userID].Address}</Col>
-                  <Col>{props.users[userID]["Job Title"]}</Col>
-                  <Col>{props.users[userID]["Date Started"]}</Col>
-                  <Col>{props.users[userID].Department}</Col>
-                </Row>
-              // {
-                // <button
-                //     className={`event-user-list-button ${
-                //       props.buttonType === "remove"
-                //         ? "event-user-list-button-remove"
-                //         : ""
-                //     }`}
-                //     onClick={() => props.action(userID)}
-                //   >
-                //     <PlusIcon />
-                //   </button>
-              // }
+              <Row
+                className={`space-bewteen align-left border-bottom tableInfo`}
+                key={uIndex}
+                onClick={() => props.action(userID)}
+              >
+                <Col>
+                  {props.users[userID]["First Name"]}{" "}
+                  {props.users[userID]["Last Name"]}
+                </Col>
+                <Col>{props.users[userID].Birthday}</Col>
+                <Col>{props.users[userID].Address}</Col>
+                <Col>{props.users[userID]["Job Title"]}</Col>
+                <Col>{props.users[userID]["Date Started"]}</Col>
+                <Col>{props.users[userID].Department}</Col>
+              </Row>
             ) : (
+              // {
+              // <button
+              //     className={`event-user-list-button ${
+              //       props.buttonType === "remove"
+              //         ? "event-user-list-button-remove"
+              //         : ""
+              //     }`}
+              //     onClick={() => props.action(userID)}
+              //   >
+              //     <PlusIcon />
+              //   </button>
+              // }
               <Row
                 key={uIndex}
                 className={`p-1 border-bottom event-user-list-list`}
@@ -235,8 +249,7 @@ function UserListContainer(props: {
               </Row>
             )
           )}
-          
-          </Row>
+        </Row>
         {props.showDetails ||
         props.buttonType === "none" ||
         props.buttonType === "edit" ? null : (
