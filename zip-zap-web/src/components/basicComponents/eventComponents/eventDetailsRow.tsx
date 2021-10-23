@@ -34,7 +34,7 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
             )}
           </p>
           <p className="event-list-info">
-            Start Date: {new Date(props.event.startDate.replace(/-/g, '\/').replace(/T.+/, '')).toDateString()}
+            Date: {new Date(props.event.startDate.replace(/-/g, '\/').replace(/T.+/, '')).toDateString()}
           </p>
           {props.event.defaultItemID || props.event.defaultGroupedItemID ? (
             <p className="event-list-info">
