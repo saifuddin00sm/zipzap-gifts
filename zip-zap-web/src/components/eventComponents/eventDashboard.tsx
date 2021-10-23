@@ -7,6 +7,7 @@ import EventDetailsRow from "../basicComponents/eventComponents/eventDetailsRow"
 import { Link } from "react-router-dom";
 import CalendarMonth from "../basicComponents/calendarComponents/calendarMonth";
 import CalendarSidebar from "../basicComponents/calendarComponents/calendarSidebar";
+import { cpuUsage } from "process";
 // import { Console } from "node:console";
 
 const getEvents = async (user: any) => {
@@ -50,7 +51,7 @@ const getUserList = async (user: any) => {
 
 const getMonthOrders = async (user: any) => {
   let response = await fetchRequest(user, `orders/all`, "GET");
-
+  
   let dateOrders = {};
   let campaignOrders = {};
 

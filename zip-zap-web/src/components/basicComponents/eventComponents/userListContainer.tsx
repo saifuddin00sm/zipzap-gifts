@@ -14,6 +14,7 @@ function UserListContainer(props: {
   title?: string;
   hideTitle?: boolean;
   showDetails?: boolean;
+  recurringType?: string
 }) {
   const [searchList, setSearchList] = useState(
     JSON.parse(JSON.stringify(props.userList)) as Array<string>

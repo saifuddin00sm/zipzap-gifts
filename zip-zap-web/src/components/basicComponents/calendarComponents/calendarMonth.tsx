@@ -1,21 +1,25 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,  useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../../App";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Image } from "react-bootstrap";
 import { userMonthOrderList } from "../../../classes";
 import { getUserList } from "../../eventComponents/eventDashboard";
-import Calendar from "./Calendar";
+import logo from "../../../icons/Icon_One_Time.png";
 import ModalBox from "../modalBox";
+import {
+  subMonths,
+  addMonths,
+  startOfWeek,
+  endOfWeek,
+  format,
+  addDays,
+  startOfMonth,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+} from "date-fns";
 
-const daysOfTheWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const daysOfTheWeek = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
 const monthsOfTheYear = [
   "January",
@@ -44,6 +48,8 @@ const getMonthSunday = (startingDate?: string) => {
     date.getMonth(),
     1
   ).toDateString();
+
+  
 
   let firstDay = new Date(firstDate).getDate();
 
@@ -124,7 +130,7 @@ function CalendarMonth(props: {
   listOrders?: boolean;
   action: Function;
 }) {
-  const { user, userUsers, setUserUsers, setUserUsersLoaded } =
+  const { user, userEvents, userUsers, setUserUsers, setUserUsersLoaded } =
     useContext(UserContext);
 
   const settingUsers = async () => {
@@ -132,7 +138,90 @@ function CalendarMonth(props: {
     setUserUsers(users);
     setUserUsersLoaded(true);
   };
+  const currentMonth = new Date();
+  const selectedDate = new Date();
+  const dateFormat = "MMMM";
+  const dayDateFormat = "d";
+  const monthDayFormat = "MM/dd/";
+  const monthStart = startOfMonth(currentMonth);
+  const monthEnd = endOfMonth(monthStart);
+  const startDate = startOfWeek(monthStart);
+  const endDate = endOfWeek(monthEnd);
+  const dayRows = [];
 
+  var date = new Date();
+  var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+  var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const daysTitle = [];
+
+  for (let i = 0; i < 7; i++) {
+    daysTitle.push(
+      <div className="calendar-col calendar-col-center" key={i}>
+        {" "}
+        {daysOfTheWeek[i]}{" "}
+      </div>
+    );
+  }
+
+  var eventDates = new Array(format(new Date(), monthDayFormat));
+  eventDates.pop()
+  Object.entries(userEvents).forEach(([key, value]) => {
+    eventDates.push(format(new Date(value.startDate.replace(/-/g, '\/').replace(/T.+/, '')), monthDayFormat))
+  });
+
+
+
+  let days = [];
+  let day = startDate;
+  let formattedDate = "";
+  let testFormattedDate = "";
+  while (day <= endDate) {
+    for (let i = 0; i < 7; i++) {
+      formattedDate = format(day, dayDateFormat);
+      testFormattedDate = format(day, monthDayFormat);
+
+      if (eventDates.includes(testFormattedDate)) {
+        days.push(
+          <div
+            className={`calendar-col calendar-cell ${
+              !isSameMonth(day, monthStart)
+                ? "disabled"
+                : isSameDay(day, selectedDate)
+                ? "selected"
+                : ""
+            }`}
+            key={formattedDate}
+          >
+            <span className="calendar-number">{formattedDate}</span>
+            <Image src={logo} alt="gift-image" className="bg-image" roundedCircle/>
+          </div>
+        );
+      }
+      else {
+        days.push(
+          <div
+            className={`calendar-col calendar-cell ${
+              !isSameMonth(day, monthStart)
+                ? "disabled"
+                : isSameDay(day, selectedDate)
+                ? "selected"
+                : ""
+            }`}
+            key={formattedDate}
+          >
+            <span className="calendar-number">{formattedDate}</span>
+          </div>
+        );
+      }
+      day = addDays(day, 1);
+    }
+    dayRows.push(<div className="calendar-row" key={`row-${formattedDate}`}>{days}</div>);
+    days = [];
+  }
+  
+
+
+  console.log(userEvents)
   // const settingDays = days => {
 
   // }
@@ -240,6 +329,15 @@ function CalendarMonth(props: {
         </ModalBox>
       ) : null}
       <Row>
+      <div className="calendar">
+        <div className="header calendar-row flex-middle">
+        <div className="col col-center">
+          <h2>{format(currentMonth, dateFormat)}</h2>
+        </div>
+        </div>
+        <div className="calendar-days calendar-row">{daysTitle}</div>
+        <div className="calendar-body">{dayRows}</div>
+      </div>
         {/* {daysOfTheWeek.map((day, dIndex) => (
           <Col xs="2" className={`calendar-week-days`} key={dIndex}>
             {day.slice(0, 3)}
@@ -272,22 +370,6 @@ function CalendarMonth(props: {
           />
           </td>
         ))} */}
-
-        {/* put empty box for end of the month to line up dates  */}
-        {/* {[...Array(6 - lastDayOfTheWeek)].map((d, dIndex) => (
-            <td
-              key={dIndex}
-              style={{
-                background: "inherit",
-                border: "1px solid transparent",
-                boxShadow: "none",
-              }}
-            >
-              {" "}
-            </td>
-          ))}
-      </Row> */}
-        <Calendar />
       </Row>
     </Col>
   );

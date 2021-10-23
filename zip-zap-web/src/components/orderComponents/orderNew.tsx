@@ -365,6 +365,8 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
       setError("");
       setLoading(true);
     }
+    console.log("the start date")
+    console.log(eventStartDate)
 
     if (match.params.orderID) {
       handleEditOrder();
