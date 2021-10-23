@@ -982,6 +982,22 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
+  let pricePerPerson = 0;
+  if (activeItem.type === "grouped" && activeItem.id in userGroupedItems) {
+    if (userGroupedItems[activeItem.id].priceOverride) {
+      pricePerPerson = userGroupedItems[activeItem.id].priceOverride;
+    } else {
+      pricePerPerson = calcGiftPackagePrice(
+        userGroupedItems[activeItem.id],
+        userItems
+      );
+    }
+  } else if (activeItem.type === "custom") {
+    pricePerPerson = customGift.items.reduce((total, { id }) => {
+      return total + userItems[id].price;
+    }, 0);
+  }
+
   return (
     <Col>
       {redirect ? <Redirect to={redirect} /> : null}
@@ -1356,15 +1372,15 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
               <Row>
                 <Col>
-                <p className="error-message-text">{error ? error : ""}</p>
-                <Button
-                  className={`new-event-button`}
-                  onClick={handleCustomGiftSave}
-                  disabled={customGiftLoading}
-                  variant="zapGreen"
-                >
-                  Save Gift Package
-                </Button>
+                  <p className="error-message-text">{error ? error : ""}</p>
+                  <Button
+                    className={`new-event-button`}
+                    onClick={handleCustomGiftSave}
+                    disabled={customGiftLoading}
+                    variant="zapGreen"
+                  >
+                    Save Gift Package
+                  </Button>
                 </Col>
               </Row>
             </Col>
@@ -1479,18 +1495,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               <Row className="border-bottom">Total Gift Price Per Person:</Row>
               <Row>Shipping: TBD per person</Row>
             </Col>
-            <Col>
-              $
-              {activeItem.type === "grouped" &&
-              activeItem.id in userGroupedItems
-                ? userGroupedItems[activeItem.id].priceOverride
-                  ? userGroupedItems[activeItem.id].priceOverride
-                  : calcGiftPackagePrice(
-                      userGroupedItems[activeItem.id],
-                      userItems
-                    )
-                : 0}
-            </Col>
+            <Col>${pricePerPerson}</Col>
           </Row>
         </Col>
         {/* </div>
@@ -1536,23 +1541,23 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           {/* credit card details  */}
         </Row>
       </Row>
-      <Row className={"mt-3 mx-5 mb-5" }>
-        
+      <Row className={"mt-3 mx-5 mb-5"}>
         <span className="error-message-text">{error ? error : ""}</span>
         <Col>
           <Button
-              className={`new-event-button new-event-button-blue`}
-              onClick={handleEventCheck}
-              disabled={userSelectedList.length === 0 || !activeItem.id}
-              variant=
-              {
-                userSelectedList.length === 0 || !activeItem.id ?  "secondary" : "zipBlue" 
-              }
-              size="lg"
-            >
-              {match.params.eventID ? "Save" : "Create"} Gift
-            </Button>
-        </Col>  
+            className={`new-event-button new-event-button-blue`}
+            onClick={handleEventCheck}
+            disabled={userSelectedList.length === 0 || !activeItem.id}
+            variant={
+              userSelectedList.length === 0 || !activeItem.id
+                ? "secondary"
+                : "zipBlue"
+            }
+            size="lg"
+          >
+            {match.params.eventID ? "Save" : "Create"} Gift
+          </Button>
+        </Col>
       </Row>
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
