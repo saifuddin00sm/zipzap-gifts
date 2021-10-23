@@ -982,6 +982,22 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   };
 
+  let pricePerPerson = 0;
+  if (activeItem.type === "grouped" && activeItem.id in userGroupedItems) {
+    if (userGroupedItems[activeItem.id].priceOverride) {
+      pricePerPerson = userGroupedItems[activeItem.id].priceOverride;
+    } else {
+      pricePerPerson = calcGiftPackagePrice(
+        userGroupedItems[activeItem.id],
+        userItems
+      );
+    }
+  } else if (activeItem.type === "custom") {
+    pricePerPerson = customGift.items.reduce((total, { id }) => {
+      return total + userItems[id].price;
+    }, 0);
+  }
+
   return (
     <Col>
       {redirect ? <Redirect to={redirect} /> : null}
@@ -1479,18 +1495,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               <Row className="border-bottom">Total Gift Price Per Person:</Row>
               <Row>Shipping: TBD per person</Row>
             </Col>
-            <Col>
-              $
-              {activeItem.type === "grouped" &&
-              activeItem.id in userGroupedItems
-                ? userGroupedItems[activeItem.id].priceOverride
-                  ? userGroupedItems[activeItem.id].priceOverride
-                  : calcGiftPackagePrice(
-                      userGroupedItems[activeItem.id],
-                      userItems
-                    )
-                : 0}
-            </Col>
+            <Col>${pricePerPerson}</Col>
           </Row>
         </Col>
         {/* </div>
