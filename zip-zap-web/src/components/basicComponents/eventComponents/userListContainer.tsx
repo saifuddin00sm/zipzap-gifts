@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { parseISO, parse, isValid } from "date-fns";
 import { userRecipient } from "../../../classes";
 import { Row, Col } from "react-bootstrap";
 import { ReactComponent as PlusIcon } from "../../../icons/plusSign.svg";
@@ -196,22 +197,33 @@ function UserListContainer(props: {
             </Row>
           ) : null}
           {/* <tbody className={`${props.showDetails ? "" : "table-full-height"}`}> */}
-          {searchList.map((userID, uIndex) =>
-            props.showDetails ? (
+          {searchList.map((userID, uIndex) => {
+            const user = props.users[userID];
+
+            // Dates should be UTC ISO strings, but some are local MM/dd/yyyy dates
+            let birthday = parseISO(user.Birthday);
+            if (!isValid(birthday)) {
+              birthday = new Date(user.Birthday);
+            }
+            let dateStarted = parseISO(user["Date Started"]);
+            if (!isValid(dateStarted)) {
+              dateStarted = new Date(user["Date Started"]);
+            }
+
+            return props.showDetails ? (
               <Row
                 className={`space-bewteen align-left border-bottom tableInfo`}
                 key={uIndex}
                 onClick={() => props.action(userID)}
               >
                 <Col>
-                  {props.users[userID]["First Name"]}{" "}
-                  {props.users[userID]["Last Name"]}
+                  {user["First Name"]} {user["Last Name"]}
                 </Col>
-                <Col>{props.users[userID].Birthday}</Col>
-                <Col>{props.users[userID].Address}</Col>
-                <Col>{props.users[userID]["Job Title"]}</Col>
-                <Col>{props.users[userID]["Date Started"]}</Col>
-                <Col>{props.users[userID].Department}</Col>
+                <Col>{birthday.toLocaleDateString()}</Col>
+                <Col>{user.Address}</Col>
+                <Col>{user["Job Title"]}</Col>
+                <Col>{dateStarted.toLocaleDateString()}</Col>
+                <Col>{user.Department}</Col>
               </Row>
             ) : (
               // {
@@ -243,12 +255,11 @@ function UserListContainer(props: {
                   </button>
                 </Col>
                 <Col sm={10}>
-                  {props.users[userID]["First Name"]}{" "}
-                  {props.users[userID]["Last Name"]}
+                  {user["First Name"]} {user["Last Name"]}
                 </Col>
               </Row>
-            )
-          )}
+            );
+          })}
         </Row>
         {props.showDetails ||
         props.buttonType === "none" ||
