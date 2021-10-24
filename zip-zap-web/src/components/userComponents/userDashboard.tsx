@@ -153,8 +153,8 @@ function UserDashboard() {
         // A helper function to take a date string that's possibly local and convert it to UTC ISO string
         const convertDate = (dateString: string) => {
           let date;
-          if (isMatch(dateString, "yyyy-mm-dd")) {
-            date = parse(dateString, "yyyy-mm-dd", new Date());
+          if (isMatch(dateString, "yyyy-MM-dd")) {
+            date = parse(dateString, "yyyy-MM-dd", new Date());
           } else if (isMatch(dateString, "yyyy-MM-dd'T'HH:mm:ss'Z'")) {
             date = parseISO(dateString);
           } else {
