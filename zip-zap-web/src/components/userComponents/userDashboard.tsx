@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, Modal } from "react-bootstrap";
+import { isMatch, parse, parseISO } from "date-fns";
 import { fetchRequest, UserContext, log } from "../../App";
 import { userRecipient } from "../../classes";
 import LoadingIcon from "../basicComponents/LoadingIcon";
@@ -149,10 +150,21 @@ function UserDashboard() {
             ).toString();
         }
 
-        newUser.Birthday = new Date(newUser.Birthday).toISOString();
-        newUser["Date Started"] = new Date(
-            newUser["Date Started"]
-        ).toISOString();
+        // A helper function to take a date string that's possibly local and convert it to UTC ISO string
+        const convertDate = (dateString: string) => {
+          let date;
+          if (isMatch(dateString, "yyyy-mm-dd")) {
+            date = parse(dateString, "yyyy-mm-dd", new Date());
+          } else if (isMatch(dateString, "yyyy-MM-dd'T'HH:mm:ss'Z'")) {
+            date = parseISO(dateString);
+          } else {
+            date = new Date(dateString);
+          }
+          return date.toISOString();
+        };
+
+        newUser.Birthday = convertDate(newUser.Birthday);
+        newUser["Date Started"] = convertDate(newUser["Date Started"]);
         let body: any;
 
         body = newUser;

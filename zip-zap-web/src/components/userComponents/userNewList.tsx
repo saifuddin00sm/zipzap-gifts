@@ -1,10 +1,10 @@
 import React, { useContext, useRef, useState } from "react";
+import { isMatch, parse, parseISO } from "date-fns";
 import { fetchRequest, log, UserContext } from "../../App";
 import { userRecipient } from "../../classes";
 import { Link } from "react-router-dom";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
 import UserAddRecipientContainer from "./userAddRecipientContainer";
-import ModalBox from "../basicComponents/modalBox";
 import { Row, Col, Button, Modal } from "react-bootstrap";
 
 function UserNewList() {
@@ -20,7 +20,6 @@ function UserNewList() {
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
 
   const [editUserID, setEditUserID] = useState("");
   const [editUser, setEditUser] = useState({
@@ -144,10 +143,21 @@ function UserNewList() {
     setLoading(true);
     setReload(true);
 
-    editedUser.Birthday = new Date(editedUser.Birthday).toISOString();
-    editedUser["Date Started"] = new Date(
-      editedUser["Date Started"]
-    ).toISOString();
+    // A helper function to take a date string that's possibly local and convert it to UTC ISO string
+    const convertDate = (dateString: string) => {
+      let date;
+      if (isMatch(dateString, "yyyy-mm-dd")) {
+        date = parse(dateString, "yyyy-mm-dd", new Date());
+      } else if (isMatch(dateString, "yyyy-MM-dd'T'HH:mm:ss'Z'")) {
+        date = parseISO(dateString);
+      } else {
+        date = new Date(dateString);
+      }
+      return date.toISOString();
+    };
+
+    editedUser.Birthday = convertDate(editedUser.Birthday);
+    editedUser["Date Started"] = convertDate(editedUser["Date Started"]);
     let body: any;
 
     body = editedUser;
