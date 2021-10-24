@@ -3,6 +3,7 @@ import { Row, Col, Modal } from "react-bootstrap";
 import { isMatch, parse, parseISO } from "date-fns";
 import { fetchRequest, UserContext, log } from "../../App";
 import { userRecipient } from "../../classes";
+import ToolTip from "../basicComponents/ToolTip";
 import LoadingIcon from "../basicComponents/LoadingIcon";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
 import { Link } from "react-router-dom";
@@ -152,15 +153,15 @@ function UserDashboard() {
 
         // A helper function to take a date string that's possibly local and convert it to UTC ISO string
         const convertDate = (dateString: string) => {
-          let date;
-          if (isMatch(dateString, "yyyy-MM-dd")) {
-            date = parse(dateString, "yyyy-MM-dd", new Date());
-          } else if (isMatch(dateString, "yyyy-MM-dd'T'HH:mm:ss'Z'")) {
-            date = parseISO(dateString);
-          } else {
-            date = new Date(dateString);
-          }
-          return date.toISOString();
+            let date;
+            if (isMatch(dateString, "yyyy-MM-dd")) {
+                date = parse(dateString, "yyyy-MM-dd", new Date());
+            } else if (isMatch(dateString, "yyyy-MM-dd'T'HH:mm:ss'Z'")) {
+                date = parseISO(dateString);
+            } else {
+                date = new Date(dateString);
+            }
+            return date.toISOString();
         };
 
         newUser.Birthday = convertDate(newUser.Birthday);
@@ -295,9 +296,12 @@ function UserDashboard() {
             <Row>
                 <Col>
                     <div
-                        className={`event-dashboard-sub-title primary-black-header`}
+                        className={`event-dashboard-sub-title primary-black-header d-flex justify-content-center`}
                     >
-                        <span>List of Recipients</span>
+                        <span>List of Recipients</span>&nbsp;
+                        <ToolTip placement="bottom">
+                            Click to edit a Recipient
+                        </ToolTip>
                     </div>
 
                     <UserListContainer
