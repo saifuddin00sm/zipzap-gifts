@@ -213,9 +213,10 @@ function UserListContainer(props: {
 
             return props.showDetails ? (
               <Row
-                className={`space-bewteen align-left border-bottom tableInfo`}
+                className={`space-bewteen align-left border-bottom tableInfo user-detail-row`}
                 key={uIndex}
                 onClick={() => props.action(userID)}
+                role="button"
               >
                 <Col>
                   {user["First Name"]} {user["Last Name"]}
