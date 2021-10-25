@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Modal} from "react-bootstrap";
+import { parseISO, isValid, format } from "date-fns";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
 import { userRecipient } from "../../classes";
-
-const convertDateToInput = (date: string) => {
-  let newDate = new Date(date);
-
-  let month = newDate.getMonth();
-  month += 1;
-  let dayDate = newDate.getDate();
-
-  return `${newDate.getFullYear()}-${month < 10 ? `0${month}` : month}-${
-    dayDate < 10 ? `0${dayDate}` : dayDate
-  }`;
-};
 
 function UserAddRecipientContainer(props: {
   saveAction: Function;
@@ -108,12 +97,19 @@ function UserAddRecipientContainer(props: {
     if (props.user) {
       let newEditUser = JSON.parse(JSON.stringify(props.user)) as userRecipient;
 
-      newEditUser.Birthday = convertDateToInput(newEditUser.Birthday)
-      newEditUser["Date Started"] = convertDateToInput(
-        newEditUser["Date Started"]
-      );
+      // Dates should be UTC ISO strings, but some are local MM/dd/yyyy dates
+      let birthday = parseISO(newEditUser.Birthday);
+      if (!isValid(birthday)) {
+        birthday = new Date(newEditUser.Birthday);
+      }
+      let dateStarted = parseISO(newEditUser["Date Started"]);
+      if (!isValid(dateStarted)) {
+        dateStarted = new Date(newEditUser["Date Started"]);
+      }
 
-      // console.log("yo", newEditUser);
+      newEditUser.Birthday = format(birthday, 'yyyy-MM-dd');
+      newEditUser["Date Started"] = format(dateStarted, 'yyyy-MM-dd');
+
       setEditUser({ ...newEditUser });
     }
   }, [props.user]);
@@ -258,5 +254,4 @@ function UserAddRecipientContainer(props: {
   );
 }
 
-export { convertDateToInput };
 export default UserAddRecipientContainer;
