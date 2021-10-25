@@ -219,9 +219,6 @@ function CalendarMonth(props: {
     days = [];
   }
   
-
-
-  console.log(userEvents)
   // const settingDays = days => {
 
   // }

@@ -110,6 +110,7 @@ function EventDashboard() {
     userUsers,
   } = useContext(UserContext);
 
+
   const needItems = Object.keys(userItems).length === 0;
   useEffect(() => {
     const settingItems = async () => {
@@ -146,11 +147,10 @@ function EventDashboard() {
     }
   }, [user, setUserMonthOrders, needMonthOrders]);
 
-  const needEvents = Object.keys(userEvents).length === 0;
+  var needEvents = Object.keys(userEvents).length === 0;
   useEffect(() => {
     const settingEvents = async () => {
       let events = await getEvents(user);
-
       setUserEvents(events);
     };
 
@@ -173,7 +173,15 @@ function EventDashboard() {
   const [showModal, setShowModal] = useState(false);
 
   const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
+
+  const handleShow = () => {
+    const settingEvents = async () => {
+      let events = await getEvents(user);
+      setUserEvents(events);
+    }
+    setShowModal(true);
+    settingEvents();
+  }
 
   return (
     <Col>
@@ -210,7 +218,7 @@ function EventDashboard() {
                     key={eIndex}
                     index={eIndex}
                     event={userEvents[event]}
-                    confirmation={setShowModal}
+                    confirmation={handleShow}
                   />
 
                   </span>
