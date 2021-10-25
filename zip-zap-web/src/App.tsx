@@ -381,7 +381,7 @@ function App() {
       setLoading(false);
     };
 
-    // WILL BE REMOVED
+    //WILL BE REMOVED
     const setBetaPasswordForApp = async () => {
       let password = await getBetaPasswordFromLocalStorage();
       setBetaPassword(password);
@@ -419,48 +419,7 @@ function App() {
       <LoadingIcon />
       <FooterComponent />
     </div>
-  ) : !betaPassword ? (
-    <div
-      className="App"
-      style={{
-        color: `var(--primary-text-grey)`,
-        background: `var(--primary-white)`,
-      }}
-    >
-      <h2>
-        Welcome to Zip Zap, we are not quite ready for you, please check back
-        soon!
-      </h2>
-      <br></br>
-      <img
-        src={`media/images/coming_soon.jpeg`}
-        className={`item-card-image-main`}
-        alt={`Coming Soon`}
-      ></img>
-      <hr></hr>
-      <div>
-        <label>
-          If you have the super secret beta password enter it now to preview the
-          website
-        </label>
-        <br></br>
-        <br></br>
-        <input
-          type="password"
-          value={tempBetaPassword}
-          onChange={handleBetaChange}
-          onKeyPress={handleBetaChange}
-        ></input>
-        <br></br>
-        <button
-          className="general-button back-link"
-          onClick={() => handleBetaChange({ key: "Enter" })}
-        >
-          Submit
-        </button>
-      </div>
-    </div>
-  ) : (
+  ) : 
     <Container fluid={true} className="min-vh-100 App">
       <UserContext.Provider
         value={{
@@ -570,10 +529,9 @@ function App() {
         )}
         <Row>
           <FooterComponent />
-        </Row>
+        </Row> 
       </UserContext.Provider>
     </Container>
-  );
 }
 
 export { UserContext, log, fetchRequest };

@@ -813,6 +813,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const handleChangeDateType = (type: string) => {
     setDateType(type);
   };
+  const dateIsOneTime = (): boolean => {
+    if (dateType === "onetime") {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 
   const handleCustomGiftChange = (
     type: string,
