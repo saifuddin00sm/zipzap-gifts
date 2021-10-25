@@ -8,18 +8,22 @@ import { getIcon } from "../../eventComponents/eventNew";
 function EventDetailsRow(props: { event: userEvent; index: number }) {
   const { user, userItems, userGroupedItems } = useContext(UserContext);
   const handleDelete = async() => {
+    console.log("trying to delete campaign")
+    console.log(props.event.campaignID)
     let updateResponse = {} as any;
     updateResponse = await fetchRequest(
       user,
-      `groupedItems/${props.event.campaignID}`,
+      `campaigns/${props.event.campaignID}`,
       "DELETE",
       props.event
       );
+      
   };
   var campaignKey = "1";
   if (props.event.campaignID) {
     campaignKey = "" + props.event.campaignID;
   }
+  console.log(props.event)
   return (
     <Accordion className="m-1">
       <Accordion.Item eventKey={campaignKey}>
@@ -65,7 +69,8 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
-  );
+  )
+  
 }
 
 export default EventDetailsRow;

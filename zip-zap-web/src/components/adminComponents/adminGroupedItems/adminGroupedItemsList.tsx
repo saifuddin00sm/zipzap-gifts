@@ -122,14 +122,14 @@ function AdminGroupedItemsList() {
 
       updateResponse = await fetchRequest(
         user,
-        `admin/groupedItems/${item.groupedID}`,
+        `groupedItems/${item.groupedID}`,
         "PUT",
         item
       );
     } else if (type === "delete") {
       updateResponse = await fetchRequest(
         user,
-        `admin/groupedItems/${item.groupedID}`,
+        `groupedItems/${item.groupedID}`,
         "DELETE",
         item
       );

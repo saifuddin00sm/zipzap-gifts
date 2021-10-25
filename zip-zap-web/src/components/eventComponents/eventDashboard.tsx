@@ -157,7 +157,7 @@ function EventDashboard() {
     if (needEvents) {
       settingEvents();
     }
-  }, [user, setUserEvents, needEvents]);
+  }, [user, userEvents, setUserEvents, needEvents]);
 
   const handleShowDayDetails = (
     type: string,
@@ -200,11 +200,14 @@ function EventDashboard() {
                 </div>
               ) : Object.keys(userEvents).length >= 1 ? (
                 Object.keys(userEvents).map((event, eIndex) => (
+                  <span>
                   <EventDetailsRow
                     key={eIndex}
                     index={eIndex}
                     event={userEvents[event]}
                   />
+
+                  </span>
                 ))
               ) : (
                 <div>
