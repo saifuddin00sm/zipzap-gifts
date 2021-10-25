@@ -1177,6 +1177,7 @@ a.new-event-button {
 .event-item-card-inactive {
   background: var(--primary-grey);
   border: 3px solid var(--primary-blue);
+  opacity: .4;
 }
 
 .event-user-list-title {

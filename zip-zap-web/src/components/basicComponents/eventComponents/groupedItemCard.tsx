@@ -13,6 +13,7 @@ function GroupedItemCard(props: {
   border?: string;
 }) {
   const { userItems } = useContext(UserContext);
+  const borderClass = props.border ? `border-${props.border}` : '';
 
   return !props.item ? (
     <Col md={3}>
@@ -34,7 +35,7 @@ function GroupedItemCard(props: {
   ) : (
     <Col md={3}>
       <Card
-        className={`event-item-card-container ${props.class}`}
+        className={`event-item-card-container ${props.class} ${borderClass}`}
         onClick={() => props.action(props.item?.groupedID)}
       >
         {props.item.mainPicture ? (

@@ -623,8 +623,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   };
 
   const handleAddNewEvent = async () => {
-    console.log("userList")
-    console.log(userSelectedList)
     let createEventResponse = await fetchRequest(
       user,
       "campaigns",
@@ -646,8 +644,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         },
       }
     );
-    console.log("createEventResponse")
-    console.log(createEventResponse)
 
     if ("campaignID" in createEventResponse) {
       // TO-DO - get total price
@@ -1244,17 +1240,20 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                           item={userGroupedItems[itemID]}
                           action={() => handleActiveItem("grouped", itemID)}
                           border={
-                            activeItem.type === "grouped" &&
-                            activeItem.id.toString() === itemID.toString()
+                            activeItemDetails.type === "grouped" &&
+                            activeItemDetails.id.toString() ===
+                              itemID.toString()
                               ? `info`
-                              : `secondary`
+                              : ``
                           }
                           class={
-                            activeItem.type === "grouped" &&
-                            activeItem.id.toString() === itemID.toString()
+                            activeItemDetails.type === "grouped" &&
+                            activeItemDetails.id.toString() ===
+                              itemID.toString()
                               ? `event-item-card-active`
-                              : activeItem.type === "grouped" &&
-                                activeItem.id.toString() !== itemID.toString()
+                              : activeItemDetails.type === "grouped" &&
+                                activeItemDetails.id.toString() !==
+                                  itemID.toString()
                               ? "event-item-card-inactive"
                               : ``
                           }
