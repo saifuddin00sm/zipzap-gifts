@@ -1576,20 +1576,22 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             )}{" "}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Footer>
-          <button
-            className="general-button gereral-button-green px-4 py-2"
-            onClick={handleClose}
-          >
-            <Link to={"/event"}>Back to Dashboard</Link>
-          </button>
-          <button
-            className=" general-button gereral-button-blue px-4 py-2"
-            onClick={handleClose}
-          >
-            <Link to={"/event/new"}>Close</Link>
-          </button>
-        </Modal.Footer>
+          {success ? (
+            <Modal.Footer>
+              <button
+              className="general-button gereral-button-green px-4 py-2"
+              onClick={handleClose}
+            >
+              <Link to={"/event"}>Back to Dashboard</Link>
+            </button>
+            <button
+              className=" general-button gereral-button-blue px-4 py-2"
+              onClick={handleClose}
+            >
+              <Link to={"/event/new"}>Close</Link>
+            </button>
+            </Modal.Footer>
+          ) : null}
       </Modal>
     </Col>
   );

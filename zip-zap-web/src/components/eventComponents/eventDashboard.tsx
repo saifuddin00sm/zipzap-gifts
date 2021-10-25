@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { Row, Col, Modal } from "react-bootstrap";
 import { fetchRequest, UserContext } from "../../App";
 import { userGroupedItem, userItem } from "../../classes";
 import { ReactComponent as AddIcon } from "../../icons/plusSign.svg";
@@ -170,6 +170,11 @@ function EventDashboard() {
     }
   };
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
+
   return (
     <Col>
       <Row>
@@ -205,6 +210,7 @@ function EventDashboard() {
                     key={eIndex}
                     index={eIndex}
                     event={userEvents[event]}
+                    confirmation={setShowModal}
                   />
 
                   </span>
@@ -262,6 +268,21 @@ function EventDashboard() {
           />
         </Col>
       </Row>
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+              <h5>Successfully Deleted the Event</h5>
+          </Modal.Title>
+        </Modal.Header>
+            <Modal.Footer>
+              <button
+              className="general-button gereral-button-green px-4 py-2"
+              onClick={handleClose}
+            >
+              <Link to={"/"}>Back to Dashboard</Link>
+            </button>
+            </Modal.Footer>
+      </Modal>
     </Col>
   );
 }

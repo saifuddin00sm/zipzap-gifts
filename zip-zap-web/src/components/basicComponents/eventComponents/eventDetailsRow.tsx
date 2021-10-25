@@ -5,7 +5,7 @@ import { fetchRequest, UserContext } from "../../../App";
 import { userEvent } from "../../../classes";
 import { getIcon } from "../../eventComponents/eventNew";
 
-function EventDetailsRow(props: { event: userEvent; index: number }) {
+function EventDetailsRow(props: { event: userEvent; index: number; confirmation: Function }) {
   const { user, userItems, userGroupedItems } = useContext(UserContext);
   const handleDelete = async() => {
     console.log("trying to delete campaign")
@@ -17,6 +17,7 @@ function EventDetailsRow(props: { event: userEvent; index: number }) {
       "DELETE",
       props.event
       );
+    props.confirmation(true)
       
   };
   var campaignKey = "1";
