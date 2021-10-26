@@ -403,7 +403,7 @@ function OrderNew({ match, location }: RouteComponentProps<TParams>) {
         : 0,
       eventNote,
       undefined,
-      true,
+      'onetime',
       eventStartDate
     );
 

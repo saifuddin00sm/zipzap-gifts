@@ -158,8 +158,9 @@ const createOrders = async (
   price: number,
   eventNote: string,
   startingNumber: number = 0,
-  oneTime: boolean = false,
-  oneTimeDate: string = ""
+  oneTime: string = "",
+  oneTimeDate: string = "",
+  recuringType: string = "",
 ) => {
   let orderData = {
     orders: {} as any,
@@ -172,6 +173,8 @@ const createOrders = async (
     }
 
     let shippingFee = await handleCalcShippingFee(userUsers.activeUsers[user]);
+    console.log("looking at thee creating an event for an active user")
+    console.log(userUsers.activeUsers[user])
 
     orderData.orders[uIndex + startingNumber] = {
       orderID: uIndex + startingNumber,
@@ -321,7 +324,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const [showModal, setShowModal] = useState(false);
 
-  const handleClose = () => setShowModal(false);
+  const handleClose = () => {
+    setShowModal(false);
+
+  }
   const handleShow = () => setShowModal(true);
 
   const [success, setSuccess] = useState(false);
@@ -746,7 +752,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           let newOrders = await createOrders(
             userUsers,
             event.campaignID,
-            missingOrders,
+            missingOrders,  // what is currentOrderUsers maybe just userSelectedList
             activeItem,
             activeItem.type === "item" && activeItem.id in userItems
               ? userItems[activeItem.id].price
@@ -755,7 +761,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               ? userGroupedItems[activeItem.id].priceOverride
               : 0,
             eventNote,
-            Object.keys(allCampaignOrders.campaignOrders).length
+            Object.keys(allCampaignOrders.campaignOrders).length,
+            dateType,
+            eventStartDate,
+            recurringType,
           );
 
           let mergedOrders = Object.assign(
@@ -1572,19 +1581,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         </Col>
       </Row>
       <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>
-            {success ? (
               <h5>
                 {eventName} has been{" "}
                 {match.params.eventID ? "updated" : "created"} sucessfully!
               </h5>
-            ) : (
-              `${match.params.eventID ? "Editing" : "Creating"} gift`
-            )}{" "}
           </Modal.Title>
         </Modal.Header>
-          {success ? (
             <Modal.Footer>
               <button
               className="general-button gereral-button-green px-4 py-2"
@@ -1592,14 +1596,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             >
               <Link to={"/event"}>Back to Dashboard</Link>
             </button>
-            <button
-              className=" general-button gereral-button-blue px-4 py-2"
-              onClick={handleClose}
-            >
-              <Link to={"/event/new"}>Close</Link>
-            </button>
             </Modal.Footer>
-          ) : null}
       </Modal>
     </Col>
   );
