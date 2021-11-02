@@ -50,6 +50,7 @@ function UserDashboard() {
             setUserUsers(users);
             setUserUsersLoaded(true);
 
+            console.log(user)
             if ("activeUsers" in users) {
                 setUserList(Object.keys(users.activeUsers));
                 userGroupSetup(users.activeUsers);
@@ -60,7 +61,7 @@ function UserDashboard() {
         };
 
         if (Object.keys(userUsers.activeUsers).length === 0) {
-            settingUsers();
+            setLoading(false);
         } else {
             setUserList(Object.keys(userUsers.activeUsers));
             setLoading(false);
@@ -151,6 +152,9 @@ function UserDashboard() {
             ).toString();
         }
 
+        console.log("the user ID is")
+        console.log(newUserID)
+
         // A helper function to take a date string that's possibly local and convert it to UTC ISO string
         const convertDate = (dateString: string) => {
             let date;
@@ -177,6 +181,7 @@ function UserDashboard() {
             editUser ? "PUT" : "POST",
             body
         );
+
         if (addUserResponse.saved) {
             userUsers.activeUsers[newUserID] = newUser;
             setUserUsers({ ...userUsers });

@@ -4,6 +4,14 @@ import { Redirect, RouteComponentProps } from "react-router-dom";
 import LoadingIcon from "../LoadingIcon";
 import { newUserInfo } from "./authCallback";
 import ModalBox from "../modalBox";
+import {
+  Row,
+  Col,
+  Modal,
+  Button,
+  Card
+} from "react-bootstrap";
+import { Link} from "react-router-dom";
 
 const RegisterComponent: React.FC<RouteComponentProps> = ({
   location,
@@ -13,7 +21,7 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
   const [loading, setLoading] = useState(true);
   const [editPersonal, setEditPersonal] = useState(true);
   const [error, setError] = useState("");
-  const [registrationSuccess, setRegistrationSuccess] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [redirect, setRedirect] = useState("");
 
   const [editUser, setEditUser] = useState(
@@ -61,6 +69,7 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
       setLoading(false);
     }
   }, []);
+  
 
   const handleNewEdit = (type: string, event: any) => {
     if (type === "Email") {
@@ -139,57 +148,69 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
 
       localStorage.setItem("user", JSON.stringify(user));
     }
-    setRegistrationSuccess("created");
+    setRegistrationSuccess(true);
   };
 
   const confirmationSubmit = () => {
     // TO-DO - Show confirmation message or just take?
     setRedirect("/");
-    setRegistrationSuccess("");
+    setRegistrationSuccess(true);
     setLoading(false);
   };
 
   return (
-    <section className={`column center-column full-height`}>
-      <header className={`column center page-header page-header-black`}>
+    <Col>
+  {/* </Col><section className={`column center-column full-height`}> */}
+      <Row>
+        <Col className="page-header justify-content-center">
+          <h3>Complete Registration</h3>
+        </Col>
+      </Row>
+      {/* <header className={`column center page-header page-header-black`}>
         <h1>Complete Registration</h1>
-      </header>
+      </header> */}
       {loading ? <LoadingIcon /> : null}
       {redirect ? <Redirect to={redirect} /> : null}
 
-      <main className={`full-width column center-column main-section`}>
-        {loading || registrationSuccess ? (
-          <ModalBox>
-            {registrationSuccess ? (
-              <div className={`column`}>
-                <span>Account created sucessfully!</span>
-                <br></br>
-                <button
-                  className={`new-event-button new-event-button-grey`}
-                  onClick={confirmationSubmit}
-                >
-                  View Event Dashboard
-                </button>
-              </div>
-            ) : (
-              `Creating account please wait...`
-            )}{" "}
-          </ModalBox>
-        ) : null}
+      {/* <main className={`full-width column center-column main-section`}> */}
+        {/* {loading || registrationSuccess ? ( */}
+          <Modal show={registrationSuccess}>
+                <Modal.Header>
+                  <Modal.Title>
+                    <h2>
+                    Welcome to Zip Zap Gifts!
+                    </h2>
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                
+                To get started, add some people to your recipient dashboard, then you can start creating gifts for them!
+                <Button
+                    className={`new-event-button new-event-button-grey general-button `}
+                    onClick={confirmationSubmit}
+                    variant="zapGreen"
+                  >
+                    {/* <Link to={"/recipients"}>Go to Recipient Dashboard</Link> */}
+                    Go to Recipient Dashboard
+                  </Button>
+                    </Modal.Footer>
+          </Modal>
+        {/* ) : null} */}
 
-        <section className={`full-width row center`}>
-          <section
+        {/* <section className={`full-width row center`}> */}
+        {/* <section
             className={`event-dashboard-half-column event-dashboard-half-column-left registration-half-column-1`}
-          >
-            <div className={`event-dashboard-sub-title primary-black-header`}>
+          > */}
+            {/* <div className="column center column-left-align"> */}
+          <Row className="d-flex justify-content-center m-3 border registration-half-column-1">         
+            <div className={`event-dashboard-sub-title primary-black-header p-3`}>
               <span>Personal Information</span>
             </div>
-
-            <div className="column center column-left-align">
               <div
-                className={`width-90 row left-align-column user-add-field-row`}
+                className={`width-90 row left-align-column user-add-field-row p-3`}
               >
-                {/* <label>Email:</label> */}
+                <label>Email:</label>
+                {/* Email: */}
                 <input
                   value={editUser.Email}
                   onChange={(e: any) => handleNewEdit("Email", e)}
@@ -202,7 +223,8 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
               <div
                 className={`width-90 row left-align-column user-add-field-row`}
               >
-                {/* <label>Email:</label> */}
+                <label>Name:</label>
+                {/* First Name: */}
                 <input
                   value={editUser["First Name"]}
                   onChange={(e: any) => handleNewEdit("First Name", e)}
@@ -210,7 +232,6 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
                   className={`general-input-fit new-event-input`}
                   disabled={!editPersonal}
                 ></input>
-
                 <input
                   value={editUser["Last Name"]}
                   onChange={(e: any) => handleNewEdit("Last Name", e)}
@@ -219,11 +240,11 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
                   disabled={!editPersonal}
                 ></input>
               </div>
+          </Row>
 
-              <br></br>
+          <Row className="d-flex justify-content-center m-3 border registration-half-column-1">
               {/* COMPANY INFO  */}
-
-              <div className={`event-dashboard-sub-title primary-black-header`}>
+              <div className={`event-dashboard-sub-title primary-black-header p-3`}>
                 <span>Company Information</span>
               </div>
               <div
@@ -281,17 +302,18 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
                   className={`general-input-fit new-event-input`}
                 ></input>
               </div>
-            </div>
-          </section>
-
+          </Row>
+          {/* </div> */}
+          {/* </section> */}
           {/* Second Column  */}
-          <section
-            className={`event-dashboard-half-column event-dashboard-half-column-right registration-half-column-2 center-column`}
-          >
-            <div className={`column  registration-half-column-2-content`}>
+
+          <Card className="m-3">
+            <Card.Header>
               <div className={`event-dashboard-sub-title `}>
                 <span>Payment Details</span>
               </div>
+            </Card.Header>
+            <Card.Body>
               <div>
                 <i>First three months will have no monthly payments</i>
                 <br></br>
@@ -299,22 +321,19 @@ const RegisterComponent: React.FC<RouteComponentProps> = ({
                 <br></br>
                 <strong>Payment Date: </strong> 1st of every month
               </div>
-            </div>
-          </section>
-        </section>
+            </Card.Body>
+          </Card>
 
-        <br></br>
-        <div className={`column width-60 center`}>
+        <Row className="m-5">
           {error ? <span className={`error-message-text`}>{error}</span> : null}
-          <button
-            className={`event-item-description-button new-event-button-grey user-add-button`}
-            onClick={handleRegister}
-          >
+          <Button onClick={handleRegister} variant="zapGreen" >
             Register
-          </button>
-        </div>
-      </main>
-    </section>
+          </Button>
+        </Row>
+
+      {/* </main> */}
+    {/* </section> */}
+    </Col>
   );
 };
 

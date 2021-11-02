@@ -1177,7 +1177,7 @@ a.new-event-button {
 .event-item-card-inactive {
   background: var(--primary-grey);
   border: 3px solid var(--primary-blue);
-  opacity: .4;
+  opacity: 0.4;
 }
 
 .event-user-list-title {
@@ -1777,10 +1777,6 @@ a.nav-bar-logo {
 .registration-half-column-1 .user-add-field-row input {
   margin: 14px 2px;
   width: 100%;
-}
-
-.registration-half-column-1 .user-add-field-row input:hover {
-  background: var(--primary-off-white);
 }
 
 .registration-half-column-2 {

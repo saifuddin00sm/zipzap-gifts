@@ -468,6 +468,9 @@ function App() {
             {/* Main Page  */}
             <Route exact path="/" component={EventDashboard} />
 
+            {/* Register Page  */}
+            <Route exact path="/register" component={RegisterComponent} />
+
             {/* Stripe Pages  */}
             <Route exact path="/checkout" component={CheckoutPage} />
 

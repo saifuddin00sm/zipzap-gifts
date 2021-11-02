@@ -204,10 +204,10 @@ function EventDashboard() {
                   <br></br>
                   <div className={`column center event-dashboard-events-list`}>
                     <Link
-                      to={"/people/upload"}
-                      className={`row center add-event-button add-event-button-black `}
+                      to={"/recipients"}
+                      className={`column center add-event-button add-event-button-blue`}
                     >
-                      <AddIcon />
+                      <AddIcon className="addIcon" />
                     </Link>
                   </div>
                 </div>

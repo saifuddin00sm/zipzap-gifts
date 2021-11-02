@@ -190,12 +190,11 @@ const createOrders = async (
       notes: eventNote,
       shippingFee: shippingFee,
       shippingDate:
-        oneTime && oneTimeDate
+        oneTime === "onetime" && oneTimeDate
           ? oneTimeDate
-          : `${getRandomInt(new Date().getMonth() + 1, 12)}/${getRandomInt(
-              1,
-              28
-            )}/21`,
+          : recuringType === "Birthday" 
+          ? userUsers.activeUsers[user].Birthday
+          : userUsers.activeUsers[user]["Date Started"],
       // TO-DO - handleCalcShippingDate
       shippingDetails: null,
       isActive: true,
@@ -340,7 +339,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const [eventName, setEventName] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
-  // const [eventEndDate, setEventEndDate] = useState("");
+  const [eventEndDate, setEventEndDate] = useState("");
   const [eventNote, setEventNote] = useState("");
   const [eventIcon, setEventIcon] = useState(1);
   const [activeCard, setActiveCard] = useState("");
@@ -483,7 +482,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         setCompletedEvent(event);
         setEventName(event.name);
         setEventStartDate(formatDate(event.startDate));
-        // setEventEndDate(formatDate(event.endDate));
+        setEventEndDate(formatDate(event.endDate));
 
         setUserList(
           Object.keys(userUsers.activeUsers).filter(
@@ -1153,10 +1152,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                 </span>
                 <input
                   type={"date"}
-                  placeholder={"From"}
+                  placeholder={"To"}
                   className={`general-input-fit new-event-date-input`}
-                  value={eventStartDate}
-                  onChange={(e: any) => setEventStartDate(e.target.value)}
+                  value={eventEndDate}
+                  onChange={(e: any) => setEventEndDate(e.target.value)}
                   min={formatDate(getDateRestriction().toString())}
                 ></input>{" "}
               </Col>
