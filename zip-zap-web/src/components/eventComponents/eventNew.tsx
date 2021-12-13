@@ -1146,7 +1146,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                     <br />
                     <em>
                       E.g., Send all employees this Gift on their Birthday from
-                      1/1/2022 to 12/31/2022
+                      1/1/2022 to 12/31/2022. You can choose a timeframe of one year or less.
                     </em>
                   </ToolTip>
                 </span>
