@@ -1509,9 +1509,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           <Row className="border-bottom">
             <Col>
               <Row className="border-bottom">Total Gift Price Per Person:</Row>
-              <Row>Shipping: TBD per person</Row>
+              <Row>Shipping to Recipient's Home Address:</Row>
             </Col>
-            <Col>${pricePerPerson}</Col>
+            <Col>
+              <Row>${pricePerPerson}</Row>
+              <Row>TBD per person</Row>
+            </Col>
           </Row>
         </Col>
         {/* </div>
