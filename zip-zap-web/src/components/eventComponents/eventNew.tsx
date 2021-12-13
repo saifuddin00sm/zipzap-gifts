@@ -160,7 +160,7 @@ const createOrders = async (
   startingNumber: number = 0,
   oneTime: string = "",
   oneTimeDate: string = "",
-  recuringType: string = "",
+  recuringType: string = ""
 ) => {
   let orderData = {
     orders: {} as any,
@@ -173,8 +173,6 @@ const createOrders = async (
     }
 
     let shippingFee = await handleCalcShippingFee(userUsers.activeUsers[user]);
-    console.log("looking at thee creating an event for an active user")
-    console.log(userUsers.activeUsers[user])
 
     orderData.orders[uIndex + startingNumber] = {
       orderID: uIndex + startingNumber,
@@ -192,7 +190,7 @@ const createOrders = async (
       shippingDate:
         oneTime === "onetime" && oneTimeDate
           ? oneTimeDate
-          : recuringType === "Birthday" 
+          : recuringType === "Birthday"
           ? userUsers.activeUsers[user].Birthday
           : userUsers.activeUsers[user]["Date Started"],
       // TO-DO - handleCalcShippingDate
@@ -325,8 +323,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const handleClose = () => {
     setShowModal(false);
-
-  }
+  };
   const handleShow = () => setShowModal(true);
 
   const [success, setSuccess] = useState(false);
@@ -751,7 +748,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           let newOrders = await createOrders(
             userUsers,
             event.campaignID,
-            missingOrders,  // what is currentOrderUsers maybe just userSelectedList
+            missingOrders, // what is currentOrderUsers maybe just userSelectedList
             activeItem,
             activeItem.type === "item" && activeItem.id in userItems
               ? userItems[activeItem.id].price
@@ -763,7 +760,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             Object.keys(allCampaignOrders.campaignOrders).length,
             dateType,
             eventStartDate,
-            recurringType,
+            recurringType
           );
 
           let mergedOrders = Object.assign(
@@ -824,11 +821,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const dateIsOneTime = (): boolean => {
     if (dateType === "onetime") {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-  }
+  };
 
   const handleCustomGiftChange = (
     type: string,
@@ -1582,20 +1578,20 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>
-              <h5>
-                {eventName} has been{" "}
-                {match.params.eventID ? "updated" : "created"} sucessfully!
-              </h5>
+            <h5>
+              {eventName} has been{" "}
+              {match.params.eventID ? "updated" : "created"} sucessfully!
+            </h5>
           </Modal.Title>
         </Modal.Header>
-            <Modal.Footer>
-              <button
-              className="general-button gereral-button-green px-4 py-2"
-              onClick={handleClose}
-            >
-              <Link to={"/event"}>Back to Dashboard</Link>
-            </button>
-            </Modal.Footer>
+        <Modal.Footer>
+          <button
+            className="general-button gereral-button-green px-4 py-2"
+            onClick={handleClose}
+          >
+            <Link to={"/event"}>Back to Dashboard</Link>
+          </button>
+        </Modal.Footer>
       </Modal>
     </Col>
   );
