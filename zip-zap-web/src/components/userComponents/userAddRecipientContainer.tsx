@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Modal} from "react-bootstrap";
+import { Row, Col, Button, Modal } from "react-bootstrap";
 import { parseISO, isValid, format } from "date-fns";
 import { ReactComponent as CloseIcon } from "../../icons/close.svg";
 import { userRecipient } from "../../classes";
@@ -28,7 +28,7 @@ function UserAddRecipientContainer(props: {
   );
 
   const [error, setError] = useState("");
-  
+
   const handleEdit = () => {
     if (!editUser["First Name"]) {
       setError("Please Enter a Name");
@@ -107,8 +107,8 @@ function UserAddRecipientContainer(props: {
         dateStarted = new Date(newEditUser["Date Started"]);
       }
 
-      newEditUser.Birthday = format(birthday, 'yyyy-MM-dd');
-      newEditUser["Date Started"] = format(dateStarted, 'yyyy-MM-dd');
+      newEditUser.Birthday = format(birthday, "yyyy-MM-dd");
+      newEditUser["Date Started"] = format(dateStarted, "yyyy-MM-dd");
 
       setEditUser({ ...newEditUser });
     }
@@ -117,138 +117,139 @@ function UserAddRecipientContainer(props: {
     <Modal show={true}>
       <div className={`user-group-edit-container p-3`}>
         <Modal.Header>
-        <Col>
-          <h3 className="m-1">{props.user ? "Edit" : "New"} Recipient</h3>
-        </Col>
-        <Col xs="1">
-          <div className={`space-between m-3`}>
-            <button
-              onClick={() => props.closeAction(false)}
-              className={`user-group-edit-close`}
-            >
-              <CloseIcon />
-            </button>
-          </div>
-        </Col>
+          <Col>
+            <h3 className="m-1">{props.user ? "Edit" : "New"} Recipient</h3>
+          </Col>
+          <Col xs="1">
+            <div className={`space-between m-3`}>
+              <button
+                onClick={() => props.closeAction(false)}
+                className={`user-group-edit-close`}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+          </Col>
         </Modal.Header>
         <Modal.Body>
-        <div className={`column full-width`}>
-          <div className={`left-align-column user-add-field-row`}>
-            <label>First Name:</label>
-            <input
-              value={editUser["First Name"]}
-              onChange={(e: any) => handleNewEdit("First Name", e)}
-              placeholder={`First Name`}
-              className={`general-input-fit new-event-input`}
-            ></input>
-          </div>
+          <div className={`column full-width`}>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>First Name:</label>
+              <input
+                value={editUser["First Name"]}
+                onChange={(e: any) => handleNewEdit("First Name", e)}
+                placeholder={`First Name`}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
 
-          <div className={`left-align-column user-add-field-row`}>
-            <label>Last Name:</label>
-            <input
-              value={editUser["Last Name"]}
-              onChange={(e: any) => handleNewEdit("Last Name", e)}
-              placeholder={`Last Name`}
-              className={`general-input-fit new-event-input`}
-            ></input>
-          </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>Last Name:</label>
+              <input
+                value={editUser["Last Name"]}
+                onChange={(e: any) => handleNewEdit("Last Name", e)}
+                placeholder={`Last Name`}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
 
-          <div className={`left-align-column user-add-field-row`}>
-            <label>Birthday:</label>
-            <input
-              value={editUser.Birthday}
-              onChange={(e: any) => handleNewEdit("Birthday", e)}
-              placeholder={`Birthday`}
-              className={`general-input-fit new-event-input`}
-              type={`date`}
-            ></input>
-          </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>Birthday:</label>
+              <input
+                value={editUser.Birthday}
+                onChange={(e: any) => handleNewEdit("Birthday", e)}
+                placeholder={`Birthday`}
+                className={`general-input-fit new-event-input`}
+                type={`date`}
+              ></input>
+            </div>
 
-          <div className={`left-align-column user-add-field-row`}>
-            <label>Address:</label>
-            <input
-              value={editUser.Address}
-              onChange={(e: any) => handleNewEdit("Address", e)}
-              placeholder={`Address`}
-              className={`general-input-fit new-event-input`}
-            ></input>
-          </div>
-          <div className={`left-align-column user-add-field-row`}>
-            <label>City:</label>
-            <input
-              value={editUser.City}
-              onChange={(e: any) => handleNewEdit("City", e)}
-              placeholder={`City`}
-              className={`general-input-fit new-event-input`}
-            ></input>
-          </div>
-          <div className={`left-align-column user-add-field-row`}>
-            <label>State (i.e. UT):</label>
-            <input
-              value={editUser.State}
-              onChange={(e: any) => handleNewEdit("State", e)}
-              placeholder={`State`}
-              maxLength={2}
-              className={`general-input-fit new-event-input`}
-            ></input>
-          </div>
-          <div className={`left-align-column user-add-field-row`}>
-            <label>Zip Code:</label>
-            <input
-              value={editUser.Zip}
-              onChange={(e: any) => handleNewEdit("Zip", e)}
-              placeholder={`Zip`}
-              className={`general-input-fit new-event-input`}
-            ></input>
-          </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>Address:</label>
+              <input
+                value={editUser.Address}
+                onChange={(e: any) => handleNewEdit("Address", e)}
+                placeholder={`Address`}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>City:</label>
+              <input
+                value={editUser.City}
+                onChange={(e: any) => handleNewEdit("City", e)}
+                placeholder={`City`}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>State (i.e. UT):</label>
+              <input
+                value={editUser.State}
+                onChange={(e: any) => handleNewEdit("State", e)}
+                placeholder={`State`}
+                maxLength={2}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>Zip Code:</label>
+              <input
+                value={editUser.Zip}
+                onChange={(e: any) => handleNewEdit("Zip", e)}
+                placeholder={`Zip`}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
 
-          <div className={`left-align-column user-add-field-row`}>
-            <label>Job Title:</label>
-            <input
-              value={editUser["Job Title"]}
-              onChange={(e: any) => handleNewEdit("Job Title", e)}
-              placeholder={`Job Title`}
-              className={`general-input-fit new-event-input`}
-            ></input>
-          </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>Job Title:</label>
+              <input
+                value={editUser["Job Title"]}
+                onChange={(e: any) => handleNewEdit("Job Title", e)}
+                placeholder={`Job Title`}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
 
-          <div className={`left-align-column user-add-field-row`}>
-            <label>Date Started:</label>
-            <input
-              value={editUser["Date Started"]}
-              onChange={(e: any) => handleNewEdit("Date Started", e)}
-              placeholder={`Date Started`}
-              className={`general-input-fit new-event-input`}
-              type={`date`}
-            ></input>
-          </div>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>Date Started:</label>
+              <input
+                value={editUser["Date Started"]}
+                onChange={(e: any) => handleNewEdit("Date Started", e)}
+                placeholder={`Date Started`}
+                className={`general-input-fit new-event-input`}
+                type={`date`}
+              ></input>
+            </div>
 
-          <div className={`left-align-column user-add-field-row`}>
-            <label>Department (optional):</label>
-            <input
-              value={editUser.Department}
-              onChange={(e: any) => handleNewEdit("Department", e)}
-              placeholder={`Department`}
-              className={`general-input-fit new-event-input`}
-            ></input>
+            <div className={`left-align-column user-add-field-row`}>
+              <label>Department (optional):</label>
+              <input
+                value={editUser.Department}
+                onChange={(e: any) => handleNewEdit("Department", e)}
+                placeholder={`Department`}
+                className={`general-input-fit new-event-input`}
+              ></input>
+            </div>
           </div>
-        </div>
-        <div className={`center mt-3 text-center`}>
-          <Row>
-          {error ? <span className={`error-message-text`}>{error}</span> : null}
-          </Row>
-          <Row>
-          <Button
-            className={`event-item-description-button new-event-button user-add-button`}
-            onClick={handleEdit}
-            variant="zapGreen"
-          >
-            {props.user ? "Edit " : "Create New "}
-            Recipient
-          </Button>
-          </Row>
-        </div>
-      </Modal.Body>
+          <div className={`center mt-3 text-center`}>
+            <Row>
+              {error ? (
+                <span className={`error-message-text`}>{error}</span>
+              ) : null}
+            </Row>
+            <Row>
+              <Button
+                className={`event-item-description-button new-event-button user-add-button`}
+                onClick={handleEdit}
+                variant="zapGreen"
+              >
+                {props.user ? "Save Changes" : "Create New Recipient"}
+              </Button>
+            </Row>
+          </div>
+        </Modal.Body>
       </div>
     </Modal>
   );

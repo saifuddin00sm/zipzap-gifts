@@ -147,9 +147,11 @@ const createOrders = async (
   eventNote: string,
   startingNumber: number = 0,
   oneTime: string = "",
+
   startDate: string = "",
   endDate: string = "",
   recuringType: string = "",
+
 ) => {
   let orderData = {
     orders: {} as any,
@@ -164,6 +166,7 @@ const createOrders = async (
     }
 
     let shippingFee = await handleCalcShippingFee(userUsers.activeUsers[user]);
+
     let activeDate = null;
 
 
@@ -212,6 +215,7 @@ const createOrders = async (
     // else {
     //   activeDate = userUsers.activeUsers[user]["Date Started"]
     // } 
+
 
     orderData.orders[uIndex + startingNumber] = {
       orderID: uIndex + startingNumber,
@@ -355,8 +359,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const handleClose = () => {
     setShowModal(false);
-
-  }
+  };
   const handleShow = () => setShowModal(true);
 
   const [success, setSuccess] = useState(false);
@@ -933,7 +936,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           let newOrders = await createOrders(
             userUsers,
             event.campaignID,
-            missingOrders,  // what is currentOrderUsers maybe just userSelectedList
+            missingOrders, // what is currentOrderUsers maybe just userSelectedList
             activeItem,
             activeItem.type === "item" && activeItem.id in userItems
               ? userItems[activeItem.id].price
@@ -945,7 +948,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
             Object.keys(allCampaignOrders.campaignOrders).length,
             dateType,
             eventStartDate,
-            recurringType,
+            recurringType
           );
 
           let mergedOrders = Object.assign(
@@ -1006,11 +1009,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const dateIsOneTime = (): boolean => {
     if (dateType === "onetime") {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-  }
+  };
 
   const handleCustomGiftChange = (
     type: string,
@@ -1328,7 +1330,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                     <br />
                     <em>
                       E.g., Send all employees this Gift on their Birthday from
-                      1/1/2022 to 12/31/2022
+                      1/1/2022 to 12/31/2022. You can choose a timeframe of one year or less.
                     </em>
                   </ToolTip>
                 </span>
@@ -1796,9 +1798,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           <Row className="border-bottom">
             <Col>
               <Row className="border-bottom">Total Gift Price Per Person:</Row>
-              <Row>Shipping: TBD per person</Row>
+              <Row>Shipping to Recipient's Home Address:</Row>
             </Col>
-            <Col>${pricePerPerson}</Col>
+            <Col>
+              <Row>${pricePerPerson}</Row>
+              <Row>TBD per person</Row>
+            </Col>
           </Row>
         </Col>
         {/* </div>
@@ -1865,20 +1870,20 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>
-              <h5>
-                {eventName} has been{" "}
-                {match.params.eventID ? "updated" : "created"} sucessfully!
-              </h5>
+            <h5>
+              {eventName} has been{" "}
+              {match.params.eventID ? "updated" : "created"} sucessfully!
+            </h5>
           </Modal.Title>
         </Modal.Header>
-            <Modal.Footer>
-              <button
-              className="general-button gereral-button-green px-4 py-2"
-              onClick={handleClose}
-            >
-              <Link to={"/event"}>Back to Dashboard</Link>
-            </button>
-            </Modal.Footer>
+        <Modal.Footer>
+          <button
+            className="general-button gereral-button-green px-4 py-2"
+            onClick={handleClose}
+          >
+            <Link to={"/event"}>Back to Dashboard</Link>
+          </button>
+        </Modal.Footer>
       </Modal>
     </Col>
   );
