@@ -4,6 +4,9 @@ import { userRecipient } from "../../../classes";
 import { Row, Col } from "react-bootstrap";
 import { ReactComponent as PlusIcon } from "../../../icons/plusSign.svg";
 import { ReactComponent as EditIcon } from "../../../icons/edit.svg";
+import {
+  formatDate
+} from "../../eventComponents/eventDashboard";
 
 function UserListContainer(props: {
   users: { [key: string]: userRecipient };
@@ -15,13 +18,20 @@ function UserListContainer(props: {
   title?: string;
   hideTitle?: boolean;
   showDetails?: boolean;
-  recurringType?: string
+  dateType?: string;
+  recurringType?: string;
+  eventStartDate?: string;
+  eventEndDate?: string;
 }) {
   const [searchList, setSearchList] = useState(
     JSON.parse(JSON.stringify(props.userList)) as Array<string>
   );
 
   // const [department, setDepartment] = useState("Filter By Department");
+
+  // if (props.userList && props.buttonType == 'remove') {
+  //   console.log(searchList)
+  // }
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -31,7 +41,8 @@ function UserListContainer(props: {
 
   // const handleSetDepartment = (type: string) => {
   //   setDepartment(type);
-  // }
+  // 
+  var invalidDatePeople: Array<userRecipient> = [];
 
   var departments = [];
   departments.push("");
@@ -185,6 +196,18 @@ function UserListContainer(props: {
           ></input>
         </Row>
         <Row className={`event-user-list`}>
+          {props.recurringType == "Birthday" ? (            
+            <Row className={`space-bewteen border-bottom border-dark align-left`}>
+              <Col>Name</Col>
+              <Col>Birthday</Col>
+            </Row>
+          ) : null}
+          {props.recurringType == "Job Anniversary" ? (            
+            <Row className={`space-bewteen border-bottom border-dark align-left`}>
+              <Col>Name</Col>
+              <Col>Date Started</Col>
+            </Row>
+          ) : null}
           {props.showDetails ? (
             <Row
               className={`space-bewteen border-bottom border-dark align-left`}
@@ -202,6 +225,8 @@ function UserListContainer(props: {
             const user = props.users[userID];
 
             // Dates should be UTC ISO strings, but some are local MM/dd/yyyy dates
+            let validDate = true;
+            
             let birthday = parseISO(user.Birthday);
             if (!isValid(birthday)) {
               birthday = new Date(user.Birthday);
@@ -210,6 +235,58 @@ function UserListContainer(props: {
             if (!isValid(dateStarted)) {
               dateStarted = new Date(user["Date Started"]);
             }
+
+            if (props.dateType == "recurring") {
+              let validDate = false;
+
+              // let birthday = parseISO(user.Birthday);
+              // if (!isValid(birthday)) {
+              //   birthday = new Date(user.Birthday);
+              // }
+              // let dateStarted = parseISO(user["Date Started"]);
+              // if (!isValid(dateStarted)) {
+              //   dateStarted = new Date(user["Date Started"]);
+              // }
+
+              if(props.recurringType && props.eventStartDate && props.eventEndDate) {
+                const startDateArray = props.eventStartDate.split("-")
+                const startDateCheck = new Date(parseInt(startDateArray[0]), parseInt(startDateArray[1]) + 1, parseInt(startDateArray[2]))
+                const endDateArray = props.eventEndDate.split("-")
+                const endDateCheck = new Date(parseInt(endDateArray[0]), parseInt(endDateArray[1]) + 1, parseInt(endDateArray[2]))
+                var compareDateArray = []
+                if (props.recurringType == "Birthday") {
+                  compareDateArray = formatDate(user.Birthday).split("-")
+                }
+                else {
+                  compareDateArray = formatDate(user["Date Started"]).split("-")
+                }
+
+                const firstYearDate = new Date(parseInt(startDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
+                const secondYearDate = new Date(parseInt(endDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
+
+                if ( firstYearDate >= startDateCheck && firstYearDate <= endDateCheck || secondYearDate  >= startDateCheck && secondYearDate  <= endDateCheck ) {
+                  validDate = true
+                }
+                else {
+                  validDate = false
+                }
+              // else if ( newDateArray[1] == startDateArray[1] && newDateArray[2] > startDateArray[2]) {
+              //   validDate = true
+              //   // if it is the same month as the start date, check that the day number is higher than start date
+              // }
+              // else if (newDateArray[1] == endDateArray[1] && newDateArray[2] < endDateArray[2]) {
+              //   validDate = true
+              //   // if it is the same month as the start date, check that the day number is lower than end date
+              // }
+              // else {
+              //   console.log("invalid date")
+                // invalidDatePeople.push(user)
+                // console.log("person with invalid date")
+              // }
+              }
+            }
+
+
 
             return props.showDetails ? (
               <Row
@@ -221,6 +298,7 @@ function UserListContainer(props: {
                 <Col>
                   {user["First Name"]} {user["Last Name"]}
                 </Col>
+                {/* { props.dateType ? (<Col>{birthday.toLocaleDateString()}</Col>) : null} */}
                 <Col>{birthday.toLocaleDateString()}</Col>
                 <Col>{user.Address}</Col>
                 <Col>{user["Job Title"]}</Col>
@@ -228,24 +306,24 @@ function UserListContainer(props: {
                 <Col>{user.Department}</Col>
               </Row>
             ) : (
-              // {
-              // <button
-              //     className={`event-user-list-button ${
-              //       props.buttonType === "remove"
-              //         ? "event-user-list-button-remove"
-              //         : ""
-              //     }`}
-              //     onClick={() => props.action(userID)}
-              //   >
-              //     <PlusIcon />
-              //   </button>
-              // }
+              <div>
+              {validDate ? (
               <Row
                 key={uIndex}
                 className={`p-1 border-bottom event-user-list-list`}
               >
                 <Col>
-                  <button
+                  {user["First Name"]} {user["Last Name"]}
+                </Col>
+                {props.recurringType == "Birthday" ? (            
+                  <Col>{birthday.toLocaleDateString()}</Col>
+                ) : null}
+                {props.recurringType == "Job Anniversary" ? (           
+                    <Col>{dateStarted.toLocaleDateString()}</Col>
+                ) : null}
+                <Col className="closeButton" sm="1">
+                  
+                    <button
                     className={`event-user-list-button ${
                       props.buttonType === "remove"
                         ? "event-user-list-button-remove"
@@ -256,12 +334,18 @@ function UserListContainer(props: {
                     {props.buttonType === "edit" ? <EditIcon /> : <PlusIcon />}
                   </button>
                 </Col>
-                <Col sm={10}>
-                  {user["First Name"]} {user["Last Name"]}
-                </Col>
               </Row>
+              ) : null}   
+              </div>
             );
           })}
+
+
+        {/* {invalidDatePeople.map((user, uIndex) => {
+          <Row>Name</Row>
+        })} */}
+
+      
         </Row>
         {props.showDetails ||
         props.buttonType === "none" ||

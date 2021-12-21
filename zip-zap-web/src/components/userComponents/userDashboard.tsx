@@ -60,7 +60,8 @@ function UserDashboard() {
             setLoading(false);
         };
 
-        if (Object.keys(userUsers.activeUsers).length === 0) {
+
+        if (userUsers && Object.keys(userUsers.activeUsers).length === 0) {
             setLoading(false);
         } else {
             setUserList(Object.keys(userUsers.activeUsers));
@@ -308,8 +309,8 @@ function UserDashboard() {
                             Click to edit a Recipient
                         </ToolTip>
                     </div>
-
-                    <UserListContainer
+                    { userUsers ? (
+                        <UserListContainer
                         users={userUsers.activeUsers}
                         userList={userList}
                         loading={loading}
@@ -317,7 +318,10 @@ function UserDashboard() {
                         class={`full-width center-self pb-2`}
                         hideTitle={true}
                         showDetails={true}
-                    />
+                        />
+                    ): null
+                    }
+
                 </Col>
             </Row>
         </Col>

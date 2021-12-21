@@ -224,7 +224,7 @@ function CalendarMonth(props: {
   // }
 
   useEffect(() => {
-    if (Object.keys(userUsers.activeUsers).length === 0) {
+    if (userUsers && Object.keys(userUsers.activeUsers).length === 0) {
       settingUsers();
     }
   }, []);

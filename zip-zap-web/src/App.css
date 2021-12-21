@@ -260,6 +260,9 @@ a.admin-button {
   cursor: pointer;
 }
 
+.closeButton {
+  align-items: right;
+}
 .admin-dashboard-card {
   border: var(--primary-border);
 }
@@ -1092,6 +1095,13 @@ a.new-event-button {
   margin-bottom: 5px;
   align-self: center;
 }
+
+.event-item-modal-image {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 5px;
+  align-self: center;
+}
 .gift-item-card-image {
   max-width: 200px;
   max-height: 200px;
@@ -1540,7 +1550,10 @@ a.calendar-side-bar-order-box {
 }
 
 .side-bar-container {
-  background: var(--primary-grey);
+  background: var(--primary-grey-background);
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
 }
 .side-bar-container-link {
   background-color: rgb(218, 218, 218);

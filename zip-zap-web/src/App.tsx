@@ -460,9 +460,9 @@ function App() {
         {!user || !("email" in user) || !user.email ? (
           <Route exact path="/" component={HomePageComponent} />
         ) : (
-          <Row className="main-section-row">
-            <Col xs="2" className="side-bar-container">
-              <SideBarComponent />
+          <Row className="main-section-row" >
+            <Col xs="2"className="side-bar-container p-0">
+              <SideBarComponent/>
             </Col>
 
             {/* Main Page  */}
