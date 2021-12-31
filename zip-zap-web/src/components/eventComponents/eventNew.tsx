@@ -7,6 +7,8 @@ import {
   DropdownButton,
   Dropdown,
   Button,
+  Image,
+  Carousel
 } from "react-bootstrap";
 import "../../App.scss";
 import {
@@ -32,6 +34,7 @@ import ItemCard from "../basicComponents/eventComponents/itemCard";
 import UserListContainer from "../basicComponents/eventComponents/userListContainer";
 import GroupedItemCard from "../basicComponents/eventComponents/groupedItemCard";
 import ItemRow from "../basicComponents/eventComponents/itemRow";
+import appSettings from "../../appSettings.json";
 
 import { ReactComponent as BoltIcon } from "../../icons/bolt.svg";
 import { ReactComponent as GiftCardIcon } from "../../icons/giftCard.svg";
@@ -63,27 +66,12 @@ const getIcon = (icon: string | number, className?: string) => {
   if (typeof icon === "number") {
     icon = iconList[icon];
   }
-  if (icon === "bolt") {
+  if (icon === "onetime") {
     return <BoltIcon className={`${className}`} />;
-  } else if (icon === "giftCard") {
+  } else if (icon === "recurring") {
     return <GiftCardIcon className={`${className}`} />;
-  } else if (icon === "bird") {
-    return <PenguinIcon className={`${className}`} />;
-  } else if (icon === "star") {
-    return <StarIcon className={`${className}`} />;
-  } else if (icon === "tree") {
-    return <TreeIcon className={`${className}`} />;
-  } else if (icon === "pregnantWoman") {
-    return <PregnantWomenIcon className={`${className}`} />;
-  } else if (icon === "world") {
-    return <WorldIcon className={`${className}`} />;
-  } else if (icon === "piggyBank") {
-    return <PiggyBankIcon className={`${className}`} />;
-  } else if (icon === "smileyFace") {
-    return <SmileyFaceIcon className={`${className}`} />;
-  } else if (icon === "soccerBall") {
-    return <SoccerBallIcon className={`${className}`} />;
-  } else {
+  }
+  else {
     return <span></span>;
   }
 };
@@ -159,13 +147,18 @@ const createOrders = async (
   eventNote: string,
   startingNumber: number = 0,
   oneTime: string = "",
-  oneTimeDate: string = "",
-  recuringType: string = ""
+
+  startDate: string = "",
+  endDate: string = "",
+  recuringType: string = "",
+
 ) => {
   let orderData = {
     orders: {} as any,
     currentOrderList: [] as Array<any>,
   };
+
+  console.log(createOrders)
 
   let orderCreation = list.map(async (user, uIndex) => {
     if (!(user in userUsers.activeUsers)) {
@@ -173,6 +166,56 @@ const createOrders = async (
     }
 
     let shippingFee = await handleCalcShippingFee(userUsers.activeUsers[user]);
+
+    let activeDate = null;
+
+
+    if (oneTime == 'onetime' && startDate) {
+      activeDate = startDate
+    }   
+    else {
+      if(startDate && endDate) {
+        const startDateArray = startDate.split("-")
+        const startDateCheck = new Date(parseInt(startDateArray[0]), parseInt(startDateArray[1]) + 1, parseInt(startDateArray[2]))
+        const endDateArray = endDate.split("-")
+        const endDateCheck = new Date(parseInt(endDateArray[0]), parseInt(endDateArray[1]) + 1, parseInt(endDateArray[2]))
+        var compareDateArray = []
+        if (recuringType == "Birthday") {
+          compareDateArray = formatDate(userUsers.activeUsers[user].Birthday).split("-")
+        }
+        else {
+          compareDateArray = formatDate(userUsers.activeUsers[user]["Date Started"]).split("-")
+        }
+
+        const firstYearDate = new Date(parseInt(startDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
+        const secondYearDate = new Date(parseInt(endDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
+
+        if ( firstYearDate >= startDateCheck && firstYearDate <= endDateCheck) {
+          activeDate = firstYearDate
+          // console.log("active Date")
+          console.log(firstYearDate)
+        }
+        else if (secondYearDate  >= startDateCheck && secondYearDate  <= endDateCheck ) {
+          activeDate = secondYearDate
+          // console.log("active Date")
+          console.log(secondYearDate)
+        }
+      }
+      // If the start date is at the end of the year then this will test if birthday is in this time period
+      // will this span ever be greater than a year? will have to do something different
+
+      // if (endDateMonth > startDateMonth ) {
+      //   let todaysYear = new Date().getFullYear();
+      //   let calculatedBirthday = new Date(todaysYear, birthMonth, birthDay);
+      //   console.log(calculatedBirthday)
+      // }
+
+      // activeDate = userUsers.activeUsers[user].Birthday
+    } 
+    // else {
+    //   activeDate = userUsers.activeUsers[user]["Date Started"]
+    // } 
+
 
     orderData.orders[uIndex + startingNumber] = {
       orderID: uIndex + startingNumber,
@@ -187,18 +230,11 @@ const createOrders = async (
       giftID: item.type === "item" ? item.id : null,
       notes: eventNote,
       shippingFee: shippingFee,
-      shippingDate:
-        oneTime === "onetime" && oneTimeDate
-          ? oneTimeDate
-          : recuringType === "Birthday"
-          ? userUsers.activeUsers[user].Birthday
-          : userUsers.activeUsers[user]["Date Started"],
-      // TO-DO - handleCalcShippingDate
+      shippingDate: activeDate,
       shippingDetails: null,
       isActive: true,
     } as eventOrder;
   });
-
   await Promise.all(orderCreation);
 
   // TO-DO - currentOrderList & Shipping Date
@@ -335,11 +371,19 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [userCards, setUserCards] = useState([] as Array<stripeCard>);
 
   const [eventName, setEventName] = useState("");
+  const todaysDate = new Date();
+  const year = todaysDate.getFullYear();
+  const month = todaysDate.getMonth();
+  const day = todaysDate.getDate();
+  const yearToDate = new Date(year + 1, month, day)
+  const [recurringStartDate, setRecurringStartDate] = useState(todaysDate.getFullYear().toString() + '-' + (todaysDate.getMonth() + 1).toString() + '-' +  (todaysDate.getDate()+8).toString());
+  const [recurringEndDate, setRecurringEndDate] = useState(yearToDate.getFullYear().toString() + '-' + (yearToDate.getMonth() + 1).toString() + '-' +  (yearToDate.getDate()+7).toString());
   const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
   const [eventNote, setEventNote] = useState("");
   const [eventIcon, setEventIcon] = useState(1);
   const [activeCard, setActiveCard] = useState("");
+  const [activeItemModal, setActiveItemModal] = useState(false);
 
   const [itemPaginationStart, setItemPaginationStart] = useState(0);
   const [activeItemDetails, setActiveItemDetails] = useState({
@@ -352,13 +396,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const [giftType, setGiftType] = useState("grouped");
   const [dateType, setDateType] = useState("onetime");
-  const [recurringType, setrecurringType] = useState("Select");
+  const [recurringType, setrecurringType] = useState("");
 
   const [completedEvent, setCompletedEvent] = useState(
     null as null | userEvent
   );
 
   const [error, setError] = useState("");
+
   const [customGift, setCustomGift] = useState({
     id: "",
     name: "",
@@ -414,7 +459,13 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     }
   }, [user, userGroupedItems, setUserGroupedItems, needGroupedItems]);
 
-  const needActiveUsers = Object.keys(userUsers.activeUsers).length === 0;
+  var needActiveUsers = true
+  if (userUsers) {
+    needActiveUsers = Object.keys(userUsers.activeUsers).length === 0;
+  }
+  else {
+    console.log("need popup for adding users")
+  }
   useEffect(() => {
     const settingUsers = async () => {
       let users = await getUserList(user);
@@ -431,7 +482,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     if (needActiveUsers) {
       settingUsers();
     } else {
-      setUserList(Object.keys(userUsers.activeUsers));
+      // setUserList(Object.keys(userUsers.activeUsers));
       setUsersLoading(false);
     }
   }, [
@@ -532,12 +583,15 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
 
   const handleActiveItem = (type: string, id: string) => {
     if (activeItem.id) {
+      setActiveItemModal(false)
       return false;
     }
     if (activeItemDetails.type === type && activeItemDetails.id === id) {
       setActiveItemDetails({ type: "", id: "" });
+      setActiveItemModal(false)
     } else {
       setActiveItemDetails({ type: type, id: id });
+      setActiveItemModal(true)
     }
   };
 
@@ -545,14 +599,22 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     setrecurringType(type);
   };
 
+  const handleDeactiveItemModal = () => {
+    setActiveItemModal(false)
+    handleActiveItem("grouped", activeItemDetails.id)
+  }
+
   const handleChooseItem = () => {
     if (activeItem.id === activeItemDetails.id) {
       setActiveItem({
         type: "",
         id: "",
       });
+      handleActiveItem("grouped", activeItemDetails.id)
     } else {
       setActiveItem(activeItemDetails);
+      setActiveItemModal(false)
+      // handleDeactiveItemModal();
     }
   };
 
@@ -566,18 +628,57 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     } else {
       if (userList.includes(userID)) {
         let index = userList.indexOf(userID);
-
         userList.splice(index, 1);
       } else {
+        // if(userUsers.activeUsers[userID])
         userList.push(userID);
       }
 
       if (userSelectedList.includes(userID)) {
         let index = userSelectedList.indexOf(userID);
-
         userSelectedList.splice(index, 1);
       } else {
-        userSelectedList.push(userID);
+          userSelectedList.push(userID);
+          // if(dateType == "recurring") {
+          //   userSelectedList.push(userID);
+          // const startDateArray = eventStartDate.split("-")
+          // const endDateArray = eventEndDate.split("-")
+          // var newDateArray = []
+          // if (recurringType == "Birthday") {
+          //   newDateArray = formatDate(userUsers.activeUsers[userID].Birthday).split("-")
+          // }
+          // else {
+          //   newDateArray = formatDate(userUsers.activeUsers[userID]["Date Started"]).split("-")
+          // }
+
+          // if ( newDateArray[1] > startDateArray[1] && newDateArray[1] < endDateArray[1]) {
+          //   userSelectedList.push(userID);
+          // }
+          // else if ( newDateArray[1] == startDateArray[1] && newDateArray[2] > startDateArray[2]) {
+          //   userSelectedList.push(userID);
+          //   // if it is the same month as the start date, check that the day number is higher than start date
+          // }
+          // else if (newDateArray[1] == endDateArray[1] && newDateArray[2] < endDateArray[2]) {
+          //   userSelectedList.push(userID);
+          //   // if it is the same month as the start date, check that the day number is lower than end date
+          // }
+          // else {
+          //   // if birthday month is before the start month or after the end month, then throw an error
+          //   // show error somewhere else
+          //   setError("Users Birthday does not fall between start date and end date")
+          // }
+
+          // if (startDateArray[0] < endDateArray[0]) {
+          //   // what happens in this case, is span greater than a year, then create multiple events
+          //   // create error where you can't set date more than 1 year in advance
+          //   console.log("dates spans multiple years")
+          // }
+
+        // }
+        // else {
+        //   userSelectedList.push(userID);
+        // }
+
       }
 
       userList.sort((a, b) => parseInt(a) - parseInt(b));
@@ -592,7 +693,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     if (!eventName) {
       setError("Please enter an Event Name");
       return true;
-    } else if (!eventStartDate) {
+    } else if (dateType=="onetime" && !eventStartDate ) {
       setError("Please enter an Event Start Date");
       return true;
     }
@@ -619,22 +720,30 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       handleEditEvent();
       handleShow();
     } else {
-      handleAddNewEvent();
-      handleShow();
+      //this is where it is checking if it is a oneitme
+      if (dateType === "onetime" ){
+        handleAddOneTimeOrder();
+        handleShow();
+      }
+      else {
+        handleAddNewEvent();
+        handleShow();
+      }
     }
   };
 
-  const handleAddNewEvent = async () => {
+  const handleAddOneTimeOrder = async () => {
+
+
     let createEventResponse = await fetchRequest(
       user,
       "campaigns",
       "POST",
-
       {
         name: eventName,
         criteria: {},
         startDate: eventStartDate,
-        // endDate: eventEndDate,
+        endDate: eventEndDate,
         userList: userSelectedList,
         defaultItemID: activeItem.type === "item" ? activeItem.id : null,
         defaultGroupedItemID: activeItem.type === "item" ? null : activeItem.id,
@@ -646,6 +755,79 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         },
       }
     );
+
+    if (createEventResponse.campaignID) {
+      // TO-DO - get total price
+      let totalPrice =
+        activeItem.type === "grouped" && activeItem.id in userGroupedItems
+          ? userGroupedItems[activeItem.id].priceOverride
+            ? userGroupedItems[activeItem.id].priceOverride
+            : await calcGiftPackagePrice(
+                userGroupedItems[activeItem.id],
+                userItems
+              )
+          : 0;
+
+      let orders = await createOrders(
+        userUsers,
+        createEventResponse.campaignID,
+        userSelectedList,
+        activeItem,
+        totalPrice,
+        eventNote,
+        undefined,
+        'onetime',
+        eventStartDate
+        
+      );
+
+      let orderCreationResponse = await fetchRequest(
+        user,
+        `orders/${createEventResponse.campaignID}`,
+        "PUT",
+        // orders
+        {
+          user: orders.orders["0"],
+          oneTime: true,
+          oneTimeDB: orders.currentOrderList.length > 0 ? true : false,
+        }
+      );
+
+      if ("saved" in orderCreationResponse) {
+        setSuccess(true);
+        setUserEvents([]);
+      }
+    }
+
+
+  };
+
+  const handleAddNewEvent = async () => {
+
+    console.log("adding a reccuring event")
+
+    let createEventResponse = await fetchRequest(
+      user,
+      "campaigns",
+      "POST",
+      {
+        name: eventName,
+        criteria: {},
+        startDate: recurringStartDate,
+        endDate: recurringEndDate,
+        userList: userSelectedList,
+        defaultItemID: activeItem.type === "item" ? activeItem.id : null,
+        defaultGroupedItemID: activeItem.type === "item" ? null : activeItem.id,
+        defaultDetails: {
+          note: eventNote,
+          customGift: customGift,
+          eventIcon: eventIcon,
+          eventCard: activeCard,
+        },
+      }
+    );
+
+    console.log(createEventResponse)
 
     if ("campaignID" in createEventResponse) {
       // TO-DO - get total price
@@ -670,7 +852,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         //   ? userGroupedItems[activeItem.id].priceOverride
         //   : 0,
         totalPrice,
-        eventNote
+        eventNote,
+        undefined,
+        'recurring',
+        eventStartDate,
+        eventEndDate,
+        recurringType
       );
 
       let orderCreationResponse = await fetchRequest(
@@ -679,6 +866,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         "POST",
         orders
       );
+      console.log(orderCreationResponse)
 
       if ("saved" in orderCreationResponse && orderCreationResponse.saved) {
         setSuccess(true);
@@ -1129,8 +1317,8 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   type={"date"}
                   placeholder={"From"}
                   className={`general-input-fit new-event-date-input`}
-                  value={eventStartDate}
-                  onChange={(e: any) => setEventStartDate(e.target.value)}
+                  value={recurringStartDate}
+                  onChange={(e: any) => setRecurringStartDate(e.target.value)}
                   min={formatDate(getDateRestriction().toString())}
                 ></input>{" "}
               </Col>
@@ -1150,9 +1338,10 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   type={"date"}
                   placeholder={"To"}
                   className={`general-input-fit new-event-date-input`}
-                  value={eventEndDate}
-                  onChange={(e: any) => setEventEndDate(e.target.value)}
+                  value={recurringEndDate}
+                  onChange={(e: any) => setRecurringEndDate(e.target.value)}
                   min={formatDate(getDateRestriction().toString())}
+                  max={recurringEndDate}
                 ></input>{" "}
               </Col>
               <Col sm="4" className="my-2">
@@ -1402,6 +1591,103 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           </Row>
         )}
       </Row>
+      {/* <Modal show={activeItemModal} onHide={setActiveItemModal(false)}> */}
+      <Modal show={activeItemModal} onHide={handleDeactiveItemModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+              <h4>
+              <strong>
+                {activeItemDetails.type === "item" &&
+                activeItemDetails.id in userItems
+                  ? userItems[activeItemDetails.id].name
+                  : activeItemDetails.type === "grouped" &&
+                    activeItemDetails.id in userGroupedItems
+                  ? userGroupedItems[activeItemDetails.id].name
+                  : null}
+              </strong>
+              </h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+                  {activeItemDetails.type === "item" &&
+                  activeItemDetails.id in userItems
+                  ? (<Image
+                    src={`${appSettings.pictureURL}/${userItems[activeItemDetails.id].mainPicture}`}
+                    alt={userItems[activeItemDetails.id].name}
+                    className={`event-item-modal-image`}
+                  ></Image>)
+                  : activeItemDetails.type === "grouped" &&
+                    activeItemDetails.id in userGroupedItems
+                  ? (
+                    <div>
+                      <Carousel >
+                        <Carousel.Item>
+                            <Image
+                            src={`${appSettings.pictureURL}/${userGroupedItems[activeItemDetails.id].mainPicture}`}
+                            alt={userGroupedItems[activeItemDetails.id].name}
+                            className={`event-item-modal-image`}
+                            ></Image>
+                        </Carousel.Item>
+                        
+                        {!itemsLoading && giftType === "grouped"
+                          ? userGroupedItems[activeItemDetails.id].pictures
+                              .map((itemID, iIndex) => (
+                                
+                          <Carousel.Item key={itemID}>
+                            <img
+                              className="d-block w-100"
+                              src={`${appSettings.pictureURL}/${itemID}`}
+                              alt="Second slide"
+                              
+                            />
+                          </Carousel.Item>
+                          )) : null}
+                      </Carousel>
+                    </div>
+                  )
+                  : null}
+        </Modal.Body>
+            <Modal.Footer>
+              <div className="m-1">
+                <span>
+                  <i>Details: </i>
+                </span>
+                {activeItemDetails.type === "item" &&
+                activeItemDetails.id in userItems
+                  ? userItems[activeItemDetails.id].description
+                  : activeItemDetails.type === "grouped" &&
+                    activeItemDetails.id in userGroupedItems
+                  ? userGroupedItems[activeItemDetails.id].description
+                  : null}
+
+                {activeItemDetails.type === "grouped" &&
+                activeItemDetails.id in userGroupedItems ? (
+                  <div className={`margin-top-15 pt-3`}>
+                    <span className="items-included">Items Included</span>
+                    <ol>
+                      {userGroupedItems[activeItemDetails.id].itemsArray.map(
+                        (itemID, iIndex) =>
+                          itemID in userItems ? (
+                            <li key={iIndex}>{userItems[itemID].name}</li>
+                          ) : null
+                      )}
+                    </ol>
+                  </div>
+                ) : null}
+              </div>
+              <Button
+                  className={`event-item-description-button`}
+                  onClick={handleChooseItem}
+                  variant="zapGreen"
+              >
+                  {activeItem.id && activeItemDetails.id === activeItem.id
+                    ? "Deselect"
+                    : "Select"}{" "}
+                  Gift
+              </Button>
+
+            </Modal.Footer>
+      </Modal>
       <Row
         className={`event-item-description mx-5 ${
           activeItemDetails.id ? "event-item-description-show" : ""
@@ -1446,26 +1732,23 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
           </div>
         </Col>
         <Col xs="2">
-          <button
+          {/* <button
             onClick={() => handleActiveItem("grouped", activeItemDetails.id)}
             className={`x-button delete-button`}
           >
             x
-          </button>
+          </button> */}
         </Col>
         <div
           className={`event-item-description-button-container right-align-row`}
         >
           <Button
             className={`event-item-description-button`}
-            onClick={handleChooseItem}
+            onClick={() => handleActiveItem("grouped", activeItemDetails.id)}
             size="sm"
             variant="zapGreen"
           >
-            {activeItem.id && activeItemDetails.id === activeItem.id
-              ? "Deselect"
-              : "Select"}{" "}
-            Gift
+            Deselect Gift
           </Button>
         </div>
       </Row>
@@ -1477,21 +1760,27 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       <Row className="event-dashboard-sub-title primary-black-header mt-3 mx-5">
         <span>Recipient List</span>
       </Row>
+      {/* If reoccuring, show date type */}
       <Row className="new-event-main-section p-3 mx-5 ">
         <UserListContainer
           users={userUsers.activeUsers}
           userList={userList}
           loading={usersLoading}
           action={handleEditUserList}
+          dateType = {dateType}
           recurringType={recurringType}
+          eventStartDate={recurringStartDate}
+          eventEndDate={recurringEndDate}
         />
         <UserListContainer
           users={userUsers.activeUsers}
           userList={userSelectedList}
           loading={usersLoading}
           action={handleEditUserList}
+          dateType = {dateType}
           buttonType={"remove"}
           title={"Recipients on Gift List"}
+          recurringType={recurringType}
         />
       </Row>
 

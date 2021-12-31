@@ -1,41 +1,66 @@
 import React from "react";
 import { Col, Navbar, Nav } from "react-bootstrap";
+import {Navigation} from 'react-minimal-side-navigation';
+import { useHistory, useLocation } from "react-router-dom";
+import 'react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css';
+import { ReactComponent as GiftCardIcon } from "../../icons/giftCard.svg";
 
 function SideBarComponent() {
+    const history = useHistory();
+    const location = useLocation();
     return (
-        <Col className="text-center">
-            <Navbar className="flex-column">
-                <Nav className="flex-column" defaultActiveKey="/dashboard">
-                    <Nav.Link
-                        href="#/event"
-                        className="side-bar-container-link "
-                    >
-                        {" "}
-                        Gift Dashboard
-                    </Nav.Link>
-                    <Nav.Link
-                        href="#/recipients"
-                        className="side-bar-container-link"
-                    >
-                        {" "}
-                        Recipients
-                    </Nav.Link>
-                    <Nav.Link
-                        href="#/order/past"
-                        className="side-bar-container-link"
-                    >
-                        {" "}
-                        Orders
-                    </Nav.Link>
-                    <Nav.Link
-                        href="#/gifts"
-                        className="side-bar-container-link"
-                    >
-                        Gift Catalog
-                    </Nav.Link>
-                </Nav>
-            </Navbar>
-        </Col>
+        <div className="side-bar-container">
+        <Navigation
+        // you can use your own router's api to get pathname
+            activeItemId={location.pathname}
+            onSelect={({ itemId }) => {
+                history.push(itemId);
+            }}
+        items={[
+        {
+            title: 'Gift Dashboard',
+            itemId: '/',
+            // you can use your own custom Icon component as well
+            // icon is optional
+            elemBefore: () => <GiftCardIcon />,
+            subNav: [
+                {
+                    title: 'Add Gift',
+                    itemId: '/event/new',
+                }
+              ],
+          },
+          {
+            title: 'Recipients',
+            itemId: '/recipients',
+            subNav: [
+                {
+                    title: 'Upload A List',
+                    itemId: '/recipients/upload',
+                },
+            ],
+            // you can use your own custom Icon component as well
+            // icon is optional
+            // elemBefore: () => <Icon name="inbox" />,
+        },
+        {
+            title: 'Orders',
+            itemId: '/order/past',
+            // elemBefore: () => <Icon name="users" />,
+        },
+        {
+            title: 'Gift Catalog',
+            itemId: '/gifts',
+            // subNav: [
+            //   {
+            //     title: 'Teams',
+            //     itemId: '/management/teams',
+            //   },
+            // ],
+          },
+        ]}
+      />
+      </div>
     );
 }
 
