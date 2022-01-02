@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { format, parse, isValid } from "date-fns";
 import { Row, Col, Modal } from "react-bootstrap";
 import { fetchRequest, UserContext } from "../../App";
 import { userGroupedItem, userItem } from "../../classes";
@@ -70,15 +71,24 @@ const getMonthOrders = async (user: any) => {
 };
 
 const formatDate = (date: string) => {
-  var d = new Date(date),
-    month = "" + (d.getMonth() + 1),
-    day = "" + d.getDate(),
-    year = d.getFullYear();
+  if (!date) {
+    return "";
+  }
+  let d = new Date(date);
 
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
+  // The date strings in the database are actually local time, so remove the Zero Zone "Z"
+  if (date.endsWith("Z")) {
+    const localDate = parse(
+      date.slice(0, -1),
+      "yyyy-MM-dd'T'HH:mm:ss.SSS",
+      new Date()
+    );
+    if (isValid(localDate)) {
+      d = localDate;
+    }
+  }
 
-  return [year, month, day].join("-");
+  return format(d, "yyyy-MM-dd");
 };
 
 const getGroupedGiftPrice = (
