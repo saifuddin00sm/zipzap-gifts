@@ -1,5 +1,3 @@
-import React from "react";
-import { Col, Navbar, Nav } from "react-bootstrap";
 import {Navigation} from 'react-minimal-side-navigation';
 import { useHistory, useLocation } from "react-router-dom";
 import 'react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css';

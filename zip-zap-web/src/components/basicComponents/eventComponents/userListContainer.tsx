@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { parseISO, isValid } from "date-fns";
+import { parseISO, parse, isValid, isAfter, isWithinInterval } from "date-fns";
 import { userRecipient } from "../../../classes";
 import { Row, Col } from "react-bootstrap";
 import { ReactComponent as PlusIcon } from "../../../icons/plusSign.svg";
@@ -27,11 +27,17 @@ function UserListContainer(props: {
     JSON.parse(JSON.stringify(props.userList)) as Array<string>
   );
 
+
+  // this code will be used later when department is used to filter the user list
   // const [department, setDepartment] = useState("Filter By Department");
 
   // if (props.userList && props.buttonType == 'remove') {
   //   console.log(searchList)
   // }
+
+  // const handleSetDepartment = (type: string) => {
+  //   setDepartment(type);
+  // 
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -39,9 +45,7 @@ function UserListContainer(props: {
     setSearchList([...JSON.parse(JSON.stringify(props.userList))]);
   };
 
-  // const handleSetDepartment = (type: string) => {
-  //   setDepartment(type);
-  // 
+
   var invalidDatePeople: Array<userRecipient> = [];
 
   var departments = [];
@@ -236,55 +240,36 @@ function UserListContainer(props: {
               dateStarted = new Date(user["Date Started"]);
             }
 
-            if (props.dateType == "recurring") {
-              let validDate = false;
+            // TODO: look at making this code simplier
+            if (props.dateType === "recurring") {
+              if(props.recurringType && 
+                props.eventStartDate && 
+                props.eventEndDate) {
 
-              // let birthday = parseISO(user.Birthday);
-              // if (!isValid(birthday)) {
-              //   birthday = new Date(user.Birthday);
-              // }
-              // let dateStarted = parseISO(user["Date Started"]);
-              // if (!isValid(dateStarted)) {
-              //   dateStarted = new Date(user["Date Started"]);
-              // }
+                validDate = false;
+                const recurringDate = new Date(
+                  props.recurringType === "Birthday" ? birthday : dateStarted
+                );
+                const start = parse(props.eventStartDate, 'yyyy-MM-dd', new Date())
+                const end = parse(props.eventEndDate, 'yyyy-MM-dd', new Date())
 
-              if(props.recurringType && props.eventStartDate && props.eventEndDate) {
-                const startDateArray = props.eventStartDate.split("-")
-                const startDateCheck = new Date(parseInt(startDateArray[0]), parseInt(startDateArray[1]) + 1, parseInt(startDateArray[2]))
-                const endDateArray = props.eventEndDate.split("-")
-                const endDateCheck = new Date(parseInt(endDateArray[0]), parseInt(endDateArray[1]) + 1, parseInt(endDateArray[2]))
-                var compareDateArray = []
-                if (props.recurringType == "Birthday") {
-                  compareDateArray = formatDate(user.Birthday).split("-")
-                }
-                else {
-                  compareDateArray = formatDate(user["Date Started"]).split("-")
-                }
-
-                const firstYearDate = new Date(parseInt(startDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
-                const secondYearDate = new Date(parseInt(endDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
-
-                if ( firstYearDate >= startDateCheck && firstYearDate <= endDateCheck || secondYearDate  >= startDateCheck && secondYearDate  <= endDateCheck ) {
-                  validDate = true
-                }
-                else {
-                  validDate = false
-                }
-              // else if ( newDateArray[1] == startDateArray[1] && newDateArray[2] > startDateArray[2]) {
-              //   validDate = true
-              //   // if it is the same month as the start date, check that the day number is higher than start date
-              // }
-              // else if (newDateArray[1] == endDateArray[1] && newDateArray[2] < endDateArray[2]) {
-              //   validDate = true
-              //   // if it is the same month as the start date, check that the day number is lower than end date
-              // }
-              // else {
-              //   console.log("invalid date")
-                // invalidDatePeople.push(user)
-                // console.log("person with invalid date")
-              // }
+                if (isValid(start) && isValid(end) && isAfter(end, start)) {
+                  // Set the recurring date's year to the interval's to see if it falls within the start and end dates
+                  if (
+                    isWithinInterval(
+                      recurringDate.setFullYear(start.getFullYear()),
+                      { start, end }
+                    ) ||
+                    isWithinInterval(
+                      recurringDate.setFullYear(end.getFullYear()),
+                      { start, end }
+                    )
+                  ) {
+                    validDate = true;
+                  }
               }
             }
+          }
 
 
 
@@ -306,10 +291,9 @@ function UserListContainer(props: {
                 <Col>{user.Department}</Col>
               </Row>
             ) : (
-              <div>
+              <div key={uIndex}>
               {validDate ? (
               <Row
-                key={uIndex}
                 className={`p-1 border-bottom event-user-list-list`}
               >
                 <Col>

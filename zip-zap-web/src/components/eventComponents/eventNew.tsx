@@ -35,6 +35,7 @@ import UserListContainer from "../basicComponents/eventComponents/userListContai
 import GroupedItemCard from "../basicComponents/eventComponents/groupedItemCard";
 import ItemRow from "../basicComponents/eventComponents/itemRow";
 import appSettings from "../../appSettings.json";
+import { add, parseISO, isValid, isAfter, format } from "date-fns";
 
 import { ReactComponent as BoltIcon } from "../../icons/bolt.svg";
 import { ReactComponent as GiftCardIcon } from "../../icons/giftCard.svg";
@@ -158,8 +159,6 @@ const createOrders = async (
     currentOrderList: [] as Array<any>,
   };
 
-  console.log(createOrders)
-
   let orderCreation = list.map(async (user, uIndex) => {
     if (!(user in userUsers.activeUsers)) {
       return;
@@ -170,51 +169,32 @@ const createOrders = async (
     let activeDate = null;
 
 
-    if (oneTime == 'onetime' && startDate) {
+    if (oneTime === 'onetime' && startDate) {
       activeDate = startDate
     }   
     else {
-      if(startDate && endDate) {
-        const startDateArray = startDate.split("-")
-        const startDateCheck = new Date(parseInt(startDateArray[0]), parseInt(startDateArray[1]) + 1, parseInt(startDateArray[2]))
-        const endDateArray = endDate.split("-")
-        const endDateCheck = new Date(parseInt(endDateArray[0]), parseInt(endDateArray[1]) + 1, parseInt(endDateArray[2]))
-        var compareDateArray = []
-        if (recuringType == "Birthday") {
-          compareDateArray = formatDate(userUsers.activeUsers[user].Birthday).split("-")
-        }
-        else {
-          compareDateArray = formatDate(userUsers.activeUsers[user]["Date Started"]).split("-")
-        }
-
-        const firstYearDate = new Date(parseInt(startDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
-        const secondYearDate = new Date(parseInt(endDateArray[0]), parseInt(compareDateArray[1]) + 1, parseInt(compareDateArray[2]))
-
-        if ( firstYearDate >= startDateCheck && firstYearDate <= endDateCheck) {
-          activeDate = firstYearDate
-          // console.log("active Date")
-          console.log(firstYearDate)
-        }
-        else if (secondYearDate  >= startDateCheck && secondYearDate  <= endDateCheck ) {
-          activeDate = secondYearDate
-          // console.log("active Date")
-          console.log(secondYearDate)
-        }
+      if(startDate && endDate && recuringType) {
+        // We need to set the shipping date's year to within the event's start and end date interval
+      const dateString =
+      recuringType === "Birthday"
+        ? userUsers.activeUsers[user].Birthday
+        : userUsers.activeUsers[user]["Date Started"];
+      
+      let recurringDate = parseISO(dateString);
+      if (!isValid(recurringDate)) {
+        recurringDate = new Date(dateString);
       }
-      // If the start date is at the end of the year then this will test if birthday is in this time period
-      // will this span ever be greater than a year? will have to do something different
 
-      // if (endDateMonth > startDateMonth ) {
-      //   let todaysYear = new Date().getFullYear();
-      //   let calculatedBirthday = new Date(todaysYear, birthMonth, birthDay);
-      //   console.log(calculatedBirthday)
-      // }
+       // Set the recurring date's year to one of the interval years
+      recurringDate.setFullYear(new Date(endDate).getFullYear());
+      if (isAfter(recurringDate, new Date(endDate))) {
+        // The active date falls outside of the interval, so set it to the start date's year instead
+        recurringDate.setFullYear(new Date(startDate).getFullYear());
+      }
 
-      // activeDate = userUsers.activeUsers[user].Birthday
-    } 
-    // else {
-    //   activeDate = userUsers.activeUsers[user]["Date Started"]
-    // } 
+      activeDate = format(recurringDate, 'yyyy-MM-dd');
+    }
+  }
 
 
     orderData.orders[uIndex + startingNumber] = {
@@ -371,13 +351,23 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   const [userCards, setUserCards] = useState([] as Array<stripeCard>);
 
   const [eventName, setEventName] = useState("");
-  const todaysDate = new Date();
-  const year = todaysDate.getFullYear();
-  const month = todaysDate.getMonth();
-  const day = todaysDate.getDate();
-  const yearToDate = new Date(year + 1, month, day)
-  const [recurringStartDate, setRecurringStartDate] = useState(todaysDate.getFullYear().toString() + '-' + (todaysDate.getMonth() + 1).toString() + '-' +  (todaysDate.getDate()+8).toString());
-  const [recurringEndDate, setRecurringEndDate] = useState(yearToDate.getFullYear().toString() + '-' + (yearToDate.getMonth() + 1).toString() + '-' +  (yearToDate.getDate()+7).toString());
+  // const todaysDate = new Date();
+  // const year = todaysDate.getFullYear();
+  // const month = todaysDate.getMonth();
+  // const day = todaysDate.getDate();
+  // const yearToDate = new Date(year + 1, month, day)
+  const [recurringStartDate, setRecurringStartDate] = useState(
+    format(add(new Date(), { days: 8 }), "yyyy-MM-dd")
+  );
+  const [recurringEndDate, setRecurringEndDate] = useState(
+    format(add(new Date(), { years: 1, days: 7 }), "yyyy-MM-dd")
+  );
+  const [endDateMax, setEndDateMax] = useState(
+    format(add(new Date(), { years: 1, days: 7 }), "yyyy-MM-dd")
+  );
+
+  // const [recurringStartDate, setRecurringStartDate] = useState(todaysDate.getFullYear().toString() + '-' + (todaysDate.getMonth() + 1).toString() + '-' +  (todaysDate.getDate()+8).toString());
+  // const [recurringEndDate, setRecurringEndDate] = useState(yearToDate.getFullYear().toString() + '-' + (yearToDate.getMonth() + 1).toString() + '-' +  (yearToDate.getDate()+7).toString());
   const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
   const [eventNote, setEventNote] = useState("");
@@ -463,9 +453,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   if (userUsers) {
     needActiveUsers = Object.keys(userUsers.activeUsers).length === 0;
   }
-  else {
-    console.log("need popup for adding users")
-  }
+  // else {
+  //   TODO: need popup for adding users 
+  // }
   useEffect(() => {
     const settingUsers = async () => {
       let users = await getUserList(user);
@@ -475,14 +465,15 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       if ("activeUsers" in users) {
         setUserList(Object.keys(users.activeUsers));
       }
-
       setUsersLoading(false);
     };
 
     if (needActiveUsers) {
+      console.log("need active users")
       settingUsers();
     } else {
-      // setUserList(Object.keys(userUsers.activeUsers));
+      console.log("Do not need active users")
+      setUserList(Object.keys(userUsers.activeUsers));
       setUsersLoading(false);
     }
   }, [
@@ -599,6 +590,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
     setrecurringType(type);
   };
 
+  const handleSetStartDate = (startDate :string) => {
+    setRecurringStartDate(startDate);
+    var newEndDate = startDate.split("-")
+    console.log(newEndDate)
+    var endDateMax = format(add(new Date(Number(newEndDate[0]), Number(newEndDate[1]) - 1, Number(newEndDate[2])), { years: 1}), "yyyy-MM-dd")
+    setEndDateMax(endDateMax)
+  }
+
   const handleDeactiveItemModal = () => {
     setActiveItemModal(false)
     handleActiveItem("grouped", activeItemDetails.id)
@@ -638,49 +637,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         let index = userSelectedList.indexOf(userID);
         userSelectedList.splice(index, 1);
       } else {
-          userSelectedList.push(userID);
-          // if(dateType == "recurring") {
-          //   userSelectedList.push(userID);
-          // const startDateArray = eventStartDate.split("-")
-          // const endDateArray = eventEndDate.split("-")
-          // var newDateArray = []
-          // if (recurringType == "Birthday") {
-          //   newDateArray = formatDate(userUsers.activeUsers[userID].Birthday).split("-")
-          // }
-          // else {
-          //   newDateArray = formatDate(userUsers.activeUsers[userID]["Date Started"]).split("-")
-          // }
-
-          // if ( newDateArray[1] > startDateArray[1] && newDateArray[1] < endDateArray[1]) {
-          //   userSelectedList.push(userID);
-          // }
-          // else if ( newDateArray[1] == startDateArray[1] && newDateArray[2] > startDateArray[2]) {
-          //   userSelectedList.push(userID);
-          //   // if it is the same month as the start date, check that the day number is higher than start date
-          // }
-          // else if (newDateArray[1] == endDateArray[1] && newDateArray[2] < endDateArray[2]) {
-          //   userSelectedList.push(userID);
-          //   // if it is the same month as the start date, check that the day number is lower than end date
-          // }
-          // else {
-          //   // if birthday month is before the start month or after the end month, then throw an error
-          //   // show error somewhere else
-          //   setError("Users Birthday does not fall between start date and end date")
-          // }
-
-          // if (startDateArray[0] < endDateArray[0]) {
-          //   // what happens in this case, is span greater than a year, then create multiple events
-          //   // create error where you can't set date more than 1 year in advance
-          //   console.log("dates spans multiple years")
-          // }
-
-        // }
-        // else {
-        //   userSelectedList.push(userID);
-        // }
-
+          userSelectedList.push(userID)
+          console.log("adding user to container")
       }
-
       userList.sort((a, b) => parseInt(a) - parseInt(b));
       setUserList([...userList]);
 
@@ -697,13 +656,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       setError("Please enter an Event Start Date");
       return true;
     }
-    // var date1 = new Date(eventStartDate);
-    // var date2 = new Date();
-    // date2 = date2.getDate() + 7;
-    // if (date1 < date2) {
-    //   setError("Please enter an Event Start Date");
-    //   return true;
-    // }
     else if (!activeItem.id) {
       setError("Please select a gift");
       return true;
@@ -733,7 +685,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   };
 
   const handleAddOneTimeOrder = async () => {
-
 
     let createEventResponse = await fetchRequest(
       user,
@@ -778,14 +729,11 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         undefined,
         'onetime',
         eventStartDate
-        
       );
-
       let orderCreationResponse = await fetchRequest(
         user,
         `orders/${createEventResponse.campaignID}`,
         "PUT",
-        // orders
         {
           user: orders.orders["0"],
           oneTime: true,
@@ -803,8 +751,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
   };
 
   const handleAddNewEvent = async () => {
-
-    console.log("adding a reccuring event")
 
     let createEventResponse = await fetchRequest(
       user,
@@ -827,8 +773,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       }
     );
 
-    console.log(createEventResponse)
-
     if ("campaignID" in createEventResponse) {
       // TO-DO - get total price
       let totalPrice =
@@ -841,16 +785,12 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
               )
           : 0;
 
+      // TODO: handle price override
       let orders = await createOrders(
         userUsers,
         createEventResponse.campaignID,
         userSelectedList,
         activeItem,
-        // activeItem.type === "item" && activeItem.id in userItems
-        //   ? userItems[activeItem.id].price
-        //   : activeItem.type === "grouped" && activeItem.id in userGroupedItems
-        //   ? userGroupedItems[activeItem.id].priceOverride
-        //   : 0,
         totalPrice,
         eventNote,
         undefined,
@@ -866,7 +806,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         "POST",
         orders
       );
-      console.log(orderCreationResponse)
 
       if ("saved" in orderCreationResponse && orderCreationResponse.saved) {
         setSuccess(true);
@@ -889,7 +828,6 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         name: eventName,
         criteria: {},
         startDate: eventStartDate,
-        // endDate: eventEndDate,
         userList: userSelectedList,
         defaultItemID: activeItem.type === "item" ? activeItem.id : null,
         defaultGroupedItemID: activeItem.type === "item" ? null : activeItem.id,
@@ -979,7 +917,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         }
       }
 
-      // go through all orders and update order gifts
+      // TODO: go through all orders and update order gifts
     }
   };
 
@@ -1030,14 +968,9 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
       customGift.items.splice(index, 1);
     } else if (type === "detail") {
       let index = customGift.items.indexOf(data);
-
       let gift = customGift.items[index];
-
-      // extraData
-      // {detail, option, index}
-
       gift.details[extraData.detail] = extraData;
-      // customGift.items.splice(index, 1);
+      // TODO: customGift.items.splice(index, 1);
 
       customGift.items[index] = gift;
     }
@@ -1318,7 +1251,7 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   placeholder={"From"}
                   className={`general-input-fit new-event-date-input`}
                   value={recurringStartDate}
-                  onChange={(e: any) => setRecurringStartDate(e.target.value)}
+                  onChange={(e: any) => handleSetStartDate(e.target.value)}
                   min={formatDate(getDateRestriction().toString())}
                 ></input>{" "}
               </Col>
@@ -1341,14 +1274,14 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
                   value={recurringEndDate}
                   onChange={(e: any) => setRecurringEndDate(e.target.value)}
                   min={formatDate(getDateRestriction().toString())}
-                  max={recurringEndDate}
+                  max={endDateMax}
                 ></input>{" "}
               </Col>
               <Col sm="4" className="my-2">
                 <p>Select Recurring Type: </p>
                 <DropdownButton
                   id="dropdown-basic-button"
-                  title={recurringType}
+                  title={recurringType ? recurringType : "Select"}
                   variant="zapGreen"
                 >
                   <Dropdown.Item

@@ -138,8 +138,6 @@ function EventDashboard() {
     const settingMonthOrders = async () => {
       let { dateOrders } = await getMonthOrders(user);
       setUserMonthOrders({ orders: dateOrders });
-      console.log("user Month Orders")
-      console.log(userMonthOrders)
     };
 
     if (needMonthOrders) {
@@ -160,8 +158,6 @@ function EventDashboard() {
 
     if (needEvents) {
       settingEvents();
-      console.log("user Events");
-      console.log(Object.keys(userEvents));
     }
     
   }, [user, userEvents,  setUserEvents, needEvents]);
@@ -241,47 +237,6 @@ function EventDashboard() {
               )
             ) : null}
           </Row>
-          {/* <Row className="event-dashboard-sub-title primary-black-header mx-2">
-            <span>Current Recurring Gifts</span>
-          </Row>
-          <Row className="mx-2 p-2 event-dashboard-events-list event-dashboard-events-list-container">
-            {userUsersLoaded && userUsers ? (
-              Object.keys(userUsers.activeUsers).length === 0 ? (
-                <div>
-                  No Recipients, upload a list now!
-                  <br></br>
-                  <div className={`column center event-dashboard-events-list`}>
-                    <Link
-                      to={"/recipients"}
-                      className={`column center add-event-button add-event-button-blue`}
-                    >
-                      <AddIcon className="addIcon" />
-                    </Link>
-                  </div>
-                </div>
-              ) : Object.keys(userEvents).length >= 1 ? (
-                Object.keys(userEvents).map((event, eIndex) => (
-                  //dateOrders
-                  <EventDetailsRow
-                    key={eIndex}
-                    index={eIndex}
-                    event={userEvents[event]}
-                    confirmation={handleShow}
-                  />
-                )) */}
-              {/* ) : (
-                <div>
-                  No Recurring Gifts, create one now!
-                  <br></br>
-                  <div className={`column center event-dashboard-events-list`}>
-                    <Link to={"/event/new"} className={`add-event-button-link`}>
-                      <AddIcon className="addIcon" />
-                    </Link>
-                  </div>
-                </div>
-              )
-            ) : null} */}
-          {/* </Row> */}
         </Col>
         <Col>
           <Row className="event-dashboard-sub-title primary-black-header mx-2">
