@@ -610,11 +610,15 @@ function EventNew({ match, location }: RouteComponentProps<TParams>) {
         id: "",
       });
       handleActiveItem("grouped", activeItemDetails.id)
+      console.log("active item handle choose item")
     } else {
       setActiveItem(activeItemDetails);
       setActiveItemModal(false)
+      console.log("" )
       // handleDeactiveItemModal();
+      console.log(" non active item handle choose item")
     }
+    
   };
 
   const handleEditUserList = (userID: string) => {
