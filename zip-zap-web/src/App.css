@@ -1562,6 +1562,10 @@ a.calendar-side-bar-order-box {
   align-items: center;
   display: flex;
 }
+.main-menu-button {
+  margin-left: 10px;
+  margin-top: 10px;
+}
 .menu-toggle {
   background: none;
   display: flex;

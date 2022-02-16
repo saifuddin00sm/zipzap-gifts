@@ -17,13 +17,10 @@ import { ReactComponent as PersonalLogo} from "../../icons/PersonalLogo.svg";
 function SideBarComponent() {
     const history = useHistory();
     const location = useLocation();
-    console.log("the location is")
-    console.log(location.pathname)
     const [expanded, setExpanded] = useState(true);
 
     const handleExpanded = () => {
         setExpanded(!expanded);
-        console.log("set button")
     }
     
     // console.log()
@@ -36,8 +33,8 @@ function SideBarComponent() {
             <Col xs="2">
             <nav className="nav-menu">
                 <ul className="nav-menu-items">
-                    <li>
-                    <Button onClick={handleExpanded} variant="light" className="calendar-col-end">
+                    <li className="main-menu-button">
+                    <Button onClick={handleExpanded} variant="light">
                         <ArrowLeftSVG />
                         <Image src="https://s3.amazonaws.com/app.zipzapgifts.com/Wordmark_Grey.png" alt="zip zap logo" className="menu-logo"/>
                         {/* <ArrowLeftSVG /> */}
