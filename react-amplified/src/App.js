@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Zip Zap Test
+          Zip Zap Gifts
         </a>
       </header>
     </div>
