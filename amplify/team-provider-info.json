@@ -1,20 +1,26 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-zipzap-dev-02722-authRole",
-      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-authRole",
-      "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-zipzap-dev-02722-deployment",
-      "UnauthRoleName": "amplify-zipzap-dev-02722-unauthRole",
-      "StackName": "amplify-zipzap-dev-02722",
-      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-dev-02722/8bbe7cc0-96d5-11ec-92ae-0a56f2fbf479",
-      "AmplifyAppId": "d2qe40666r920c"
-    },
-    "categories": {
-      "auth": {
-        "zipzapf1e2d9dd": {}
-      }
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-zipzap-dev-02722-authRole",
+            "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-zipzap-dev-02722-deployment",
+            "UnauthRoleName": "amplify-zipzap-dev-02722-unauthRole",
+            "StackName": "amplify-zipzap-dev-02722",
+            "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-dev-02722/8bbe7cc0-96d5-11ec-92ae-0a56f2fbf479",
+            "AmplifyAppId": "d2qe40666r920c"
+        },
+        "categories": {
+            "auth": {
+                "zipzapf1e2d9dd": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d2qe40666r920c",
+                    "type": "manual"
+                }
+            }
+        }
     }
-  }
 }
