@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Zip Zap Gifts
+          Zip Zap Gifts: Hello, World!
         </a>
       </header>
     </div>
