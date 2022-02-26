@@ -1,3 +1,13 @@
+# Zip Zap Gifts
+
+An AWS Amplify project for Zip Zap Gifts.
+
+## Notes
+
+You need to have Node 17+ running on your local machine for development.
+
+In the amplify/backend/api/zipzap/cli-inputs.json file, you will need to make the `"gqlSchemaPath"` an absolute path on your machine to be able to properly use the amplify GraphQL commands.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
