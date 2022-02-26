@@ -141,3 +141,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+# local resolvers, we might want to remove this line later
+amplify/backend/api/zipzap/resolvers/*.vtl
