@@ -1,11 +1,225 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY {
-  globalAuthRule: AuthRule = { allow: public }
-} # FOR TESTING ONLY!
-type Todo @model {
+# "accessGroups" fields are to be used with Cognito Groups to put Users
+# into company groups so all users in a Company can access the same data
+
+type User
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  email: AWSEmail!
+  name: String!
+  phoneNumber: AWSPhone
+  company: Company @belongsTo
+  profilePhoto: String
+  # creditCards: [CreditCard] @hasMany
+  accessGroups: [String]
+}
+
+type Company
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  address: Address @hasOne
+  users: [User] @hasMany
+  recipients: [Recipient] @hasMany
+  giftEventsByDate: [GiftEvent]
+    @hasMany(indexName: "byCompanyByDate", fields: ["id"])
+  accessGroups: [String]
+}
+
+type Address
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  address1: String!
+  address2: String
+  city: String
+  state: String
+  zip: String!
+  accessGroups: [String]
+}
+
+type Recipient
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  company: Company @belongsTo
+  recipientType: String
+  firstName: String
+  lastName: String
+  shippingAddress: Address @hasOne
+  email: AWSEmail
+  phone: AWSPhone
+  jobTitle: String
+  birthday: AWSDate
+  startDate: AWSDate
+  departmentID: ID
+    @index(name: "byDepartment", sortKeyFields: ["firstName", "lastName"])
+  profilePhoto: String
+  favorites: [ProfileFavorite] @hasMany
+  giftHistory: [GiftEvent]
+    @hasMany(indexName: "byRecipientByDate", fields: ["id"])
+  welcomed: AWSDateTime
+  accessGroups: [String]
+}
+
+type Department
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  recipients: [Recipient] @hasMany(indexName: "byDepartment", fields: ["id"])
+  accessGroups: [String]
+}
+
+type ProfileFavorite
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  type: String
+  value: String
+  accessGroups: [String]
+}
+
+type GiftEvent
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  companyID: ID! @index(name: "byCompanyByDate", sortKeyFields: ["date"])
+  recipientID: ID! @index(name: "byRecipientByDate", sortKeyFields: ["date"])
+  orderID: ID @index(name: "byOrder", sortKeyFields: ["date"])
+  recipient: Recipient @belongsTo(fields: ["recipientID"])
+  giftType: GiftType
+  dateType: GiftDateType
+  date: AWSDate
+  gift: Gift! @hasOne
+  finalPrice: String
+  shippingCost: String
+  fullfilled: AWSDateTime
+  accessGroups: [String]
+}
+
+enum GiftType {
+  ONE_TIME
+  RECURRING
+}
+
+enum GiftDateType {
+  BIRTHDAY
+  ANNIVERSARY
+}
+
+type Order
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["Admin"] }
+      { allow: groups, groupsField: "accessGroups" }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  note: String
+  giftEvents: [GiftEvent] @hasMany(indexName: "byOrder", fields: ["id"])
+  createdBy: String!
+  totalPrice: String
+  # invoice: ?
+  completed: AWSDateTime
+  orderType: GiftType
+  orderDateType: GiftDateType
+  accessGroups: [String]
+}
+
+type Gift
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  items: [Item] @hasMany
+  price: String
+  description: String
+  pictures: [GiftImage]
+  active: Boolean
+  needs_subscription: Boolean
+}
+
+type Item
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
   id: ID!
   name: String!
   description: String
+  weight: String
+  price: String
+  pictures: [GiftImage]
+  active: Boolean
+  source: String
+  brandingAvailable: Boolean
+  quantityAvailable: Int
 }
- 
+
+type GiftImage
+  @model
+  @auth(
+    rules: [
+      { allow: groups, groups: ["Admin"] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  alt: String!
+  src: String!
+}
