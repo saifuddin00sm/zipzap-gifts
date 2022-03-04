@@ -186,7 +186,7 @@ type Gift
   items: [Item] @hasMany
   price: String
   description: String
-  pictures: [GiftImage]
+  pictures: [GiftImage] @hasMany
   active: Boolean
   needs_subscription: Boolean
 }
@@ -204,7 +204,7 @@ type Item
   description: String
   weight: String
   price: String
-  pictures: [GiftImage]
+  pictures: [GiftImage] @hasMany
   active: Boolean
   source: String
   brandingAvailable: Boolean

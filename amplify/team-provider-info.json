@@ -13,7 +13,8 @@
     },
     "categories": {
       "auth": {
-        "ZipZap": {}
+        "ZipZap": {},
+        "userPoolGroups": {}
       },
       "hosting": {
         "amplifyhosting": {

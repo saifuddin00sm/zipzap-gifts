@@ -956,14 +956,8 @@ export const getGiftEvent = /* GraphQL */ `
         price
         description
         pictures {
-          id
-          alt
-          src
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
+          nextToken
+          startedAt
         }
         active
         needs_subscription
@@ -1275,14 +1269,20 @@ export const getGift = /* GraphQL */ `
       price
       description
       pictures {
-        id
-        alt
-        src
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
+        items {
+          id
+          alt
+          src
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          giftPicturesId
+          itemPicturesId
+        }
+        nextToken
+        startedAt
       }
       active
       needs_subscription
@@ -1311,14 +1311,8 @@ export const listGifts = /* GraphQL */ `
         price
         description
         pictures {
-          id
-          alt
-          src
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
+          nextToken
+          startedAt
         }
         active
         needs_subscription
@@ -1356,14 +1350,8 @@ export const syncGifts = /* GraphQL */ `
         price
         description
         pictures {
-          id
-          alt
-          src
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
+          nextToken
+          startedAt
         }
         active
         needs_subscription
@@ -1387,14 +1375,20 @@ export const getItem = /* GraphQL */ `
       weight
       price
       pictures {
-        id
-        alt
-        src
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
+        items {
+          id
+          alt
+          src
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          giftPicturesId
+          itemPicturesId
+        }
+        nextToken
+        startedAt
       }
       active
       source
@@ -1423,14 +1417,8 @@ export const listItems = /* GraphQL */ `
         weight
         price
         pictures {
-          id
-          alt
-          src
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
+          nextToken
+          startedAt
         }
         active
         source
@@ -1468,14 +1456,8 @@ export const syncItems = /* GraphQL */ `
         weight
         price
         pictures {
-          id
-          alt
-          src
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
+          nextToken
+          startedAt
         }
         active
         source
@@ -1504,6 +1486,8 @@ export const getGiftImage = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      giftPicturesId
+      itemPicturesId
     }
   }
 `;
@@ -1523,6 +1507,8 @@ export const listGiftImages = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        giftPicturesId
+        itemPicturesId
       }
       nextToken
       startedAt
@@ -1551,6 +1537,8 @@ export const syncGiftImages = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        giftPicturesId
+        itemPicturesId
       }
       nextToken
       startedAt
