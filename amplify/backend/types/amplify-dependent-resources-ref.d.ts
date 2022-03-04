@@ -7,14 +7,15 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "auth": {
-        "zipzapf1e2d9dd": {
+        "ZipZap": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "UserPoolId": "string",
             "UserPoolArn": "string",
             "UserPoolName": "string",
             "AppClientIDWeb": "string",
-            "AppClientID": "string"
+            "AppClientID": "string",
+            "CreatedSNSRole": "string"
         }
     }
 }

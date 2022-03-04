@@ -178,7 +178,7 @@ type Gift
   @auth(
     rules: [
       { allow: groups, groups: ["Admin"] }
-      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
     ]
   ) {
   id: ID!
@@ -196,7 +196,7 @@ type Item
   @auth(
     rules: [
       { allow: groups, groups: ["Admin"] }
-      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
     ]
   ) {
   id: ID!
@@ -216,7 +216,7 @@ type GiftImage
   @auth(
     rules: [
       { allow: groups, groups: ["Admin"] }
-      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
     ]
   ) {
   id: ID!
