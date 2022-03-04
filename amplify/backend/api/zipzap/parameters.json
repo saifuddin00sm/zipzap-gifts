@@ -2,5 +2,6 @@
   "AppSyncApiName": "zipzap",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2022-02-27T04:17:54.188Z"
+  "AuthModeLastUpdated": "2022-02-27T04:17:54.188Z",
+  "AuthCognitoUserPoolId": "us-west-2_FKQO1Ep8o"
 }
