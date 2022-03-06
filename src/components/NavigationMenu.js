@@ -8,16 +8,23 @@ import {
   IconImportContacts,
   IconAccountBox,
   IconHelpOutline,
+  IconHighlightOff,
 } from "@aws-amplify/ui-react";
 
 const menu = [
   { name: "Gift Dashboard", link: "/", Icon: IconCardGiftcard },
-  { name: "Recipients", link: "/", Icon: IconSupervisorAccount },
-  { name: "Gift Calendar", link: "/", Icon: IconCalendarToday },
-  { name: "Orders", link: "/", Icon: IconReceiptLong },
-  { name: "Gift Catalogue", link: "/", Icon: IconImportContacts },
-  { name: "Profile", link: "/", Icon: IconAccountBox },
+  { name: "Recipients", link: "/recipients", Icon: IconSupervisorAccount },
+  { name: "Gift Calendar", link: "/calendar", Icon: IconCalendarToday },
+  { name: "Orders", link: "/orders", Icon: IconReceiptLong },
+  { name: "Gift Catalogue", link: "/catalogue", Icon: IconImportContacts },
+  { name: "Profile", link: "/profile", Icon: IconAccountBox },
   { name: "Help", link: "/todo", Icon: IconHelpOutline },
+  {
+    name: "Sign Out",
+    link: "/",
+    Icon: IconHighlightOff,
+    signOutLink: true,
+  },
 ];
 
 const NavigationMenu = ({ signOut, user }) => {
@@ -25,40 +32,39 @@ const NavigationMenu = ({ signOut, user }) => {
     <nav style={styles.menu}>
       {user.attributes.name}
       <ul style={styles.list}>
-        {menu.map(({ name, link, Icon }) => (
-          <li key={name + link} style={styles.link}>
+        {menu.map(({ name, link, Icon, signOutLink }) => (
+          <li key={name + link} style={styles.item}>
             <NavLink
               to={link}
               style={({ isActive }) => ({
-                ...styles.linkAnchor,
-                ...(isActive ? styles.linkActive : {}),
+                ...styles.link,
+                ...(isActive && !signOutLink ? styles.linkActive : {}),
               })}
+              className="nav-link"
+              onClick={signOutLink ? signOut : undefined}
             >
               <Icon /> {name}
             </NavLink>
           </li>
         ))}
-        <li style={styles.link}>
-          <NavLink to="/" style={styles.linkanchor} onClick={signOut}>
-            Sign Out
-          </NavLink>
-        </li>
       </ul>
     </nav>
   );
 };
 
 const backgroundColor = "#F0EDED";
+const textColor = "#343436";
+const selectedItemBackgroundColor = "white";
+const selectedBorderColor = "#ABC6BD";
 const styles = {
   menu: {
     zIndex: 2,
     display: "flex",
     flex: "0 1 auto",
     flexDirection: "column",
-    transition: "all 1s ease",
-    padding: "8px 16px 8px 16px",
     height: "100%",
     overflow: "auto",
+    transition: "all 1s ease",
     backgroundColor,
   },
   menuActive: {
@@ -66,19 +72,21 @@ const styles = {
   },
   list: {
     listStyleType: "none",
-    margin: 0,
-    padding: 0,
+    padding: "0 4px 0 4px",
   },
+  item: {},
   link: {
     listStyleType: "none",
-    margin: 0,
-    padding: 0,
-  },
-  linkAnchor: {
     display: "block",
+    padding: "8px 16px",
+    textDecoration: "none",
+    fontWeight: 500,
+    color: textColor,
+    // hover style is in index.css under .nav-link:hover
   },
   linkActive: {
-    color: "red",
+    background: selectedItemBackgroundColor,
+    borderLeft: `0.5rem solid ${selectedBorderColor}`,
   },
 };
 
