@@ -90,7 +90,7 @@ const NavigationMenu = ({ signOut, user }) => {
         </View>
         <ul style={styles.list}>
           {menu.map(({ name, link, Icon, signOutLink }) => (
-            <li key={name + link} style={styles.item}>
+            <li key={name + link}>
               <NavLink
                 to={link}
                 style={({ isActive }) => ({
@@ -128,18 +128,18 @@ const styles = {
   mobileHeader: {
     // index.css has media queries to hide unless on mobile
     display: "flex",
-    width: "100%",
-    position: "fixed",
     justifyContent: "space-between",
+    position: "fixed",
     top: 0,
+    width: "100%",
     fontSize: 50,
     backgroundColor: topNavBackgroundColor,
     color: textColor,
   },
   logo: {
+    margin: "-10px -5px",
     fontSize: 100,
     color: logoColor,
-    margin: "-10px -5px",
   },
   profilePicture: {
     margin: "0 auto",
@@ -166,7 +166,6 @@ const styles = {
     padding: "0 4px 0 4px",
     margin: 0,
   },
-  item: {},
   link: {
     listStyleType: "none",
     display: "block",

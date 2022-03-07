@@ -1,6 +1,6 @@
 import { Icon } from "@aws-amplify/ui-react";
 
-// The full Zip Zap Gifts logo with
+// The full Zip Zap Gifts logo with the full name and lightening bolt
 export const IconFullLogo = (props) => (
   <Icon
     {...props}
