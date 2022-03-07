@@ -52,6 +52,13 @@ const NavigationMenu = ({ signOut, user }) => {
     };
   }, []);
 
+  // Whenever the window is resized, close the menu
+  useEffect(() => {
+    const closeMenu = () => setMenuOpen(false);
+    window.addEventListener("resize", closeMenu);
+    return () => window.removeEventListener("resize", closeMenu);
+  }, []);
+
   return (
     <>
       <div className="mobile-header" style={styles.mobileHeader}>
@@ -120,10 +127,10 @@ const styles = {
     flexDirection: "column",
     height: "100%",
     overflow: "auto",
-    transition: "transform .35s ease-in-out",
     backgroundColor,
   },
   menuActive: {
+    transition: "transform .35s ease-in-out",
     position: "absolute",
     width: "fit-content",
     top: 0,
