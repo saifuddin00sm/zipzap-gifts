@@ -1,18 +1,41 @@
 /* src/App.js */
-import React from "react";
-import Amplify from "aws-amplify";
+import React, {useState} from "react";
+import {Amplify, AmplifyTheme} from "aws-amplify";
 import { Outlet } from "react-router-dom";
 import NavigationMenu from "./components/NavigationMenu";
+import "./App.css";
 
-import { Authenticator } from "@aws-amplify/ui-react";
+import { Authenticator, useTheme, View, Image } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
 const App = () => {
+  const components = {
+    Header() {
+      const { tokens } = useTheme();
+  
+      return (
+        <View textAlign="center" >
+          <br/>
+          <br/>
+          <Image
+            alt="Zip Zap logo"
+            src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
+          />
+        </View>
+      );
+    }
+  }
+  //const MySectionHeader = Object.assign({}, AmplifyTheme.sectionHeader, { background: 'orange' });
+  // const MyTheme = Object.assign({}, AmplifyTheme, { sectionHeader: MySectionHeader });
+
   return (
-    <Authenticator>
+    <>
+    
+    <Authenticator components={components} >
+
       {({ signOut, user }) => (
         <>
           <NavigationMenu signOut={signOut} user={user} />
@@ -20,8 +43,9 @@ const App = () => {
             <Outlet />
           </div>
         </>
-      )}
+      ) }
     </Authenticator>
+    </>
   );
 };
 
