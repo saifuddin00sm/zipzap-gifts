@@ -450,9 +450,7 @@ function App() {
         }}
       >
         {/* TO-DO - HANDLE ERRORS */}
-        <Row>
-          <NavBarComponent />
-        </Row>
+
         <Route exact path="/callback" component={AuthCallback} />
         <Route exact path="/register" component={RegisterComponent} />
         <Route exact path="/logout" component={Logout} />
@@ -461,9 +459,8 @@ function App() {
           <Route exact path="/" component={HomePageComponent} />
         ) : (
           <Row className="main-section-row" >
-            <Col xs="2"className="side-bar-container p-0">
               <SideBarComponent/>
-            </Col>
+            
 
             {/* Main Page  */}
             <Route exact path="/" component={EventDashboard} />

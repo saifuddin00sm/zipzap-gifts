@@ -1543,18 +1543,98 @@ a.calendar-side-bar-order-box {
 .footer-container,
 .nav-bar-container {
   background: var(--primary-text-grey);
-  padding: 14px 4px;
+  /* padding: 14px 4px; */
   padding-right: 5%;
   font-size: 20px;
   bottom: 0;
 }
-
+.personImage {
+  height: 100px;
+  width: 100px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
 .side-bar-container {
-  background: var(--primary-grey-background);
+  background-color: #f1f1f1;
   margin-left: 0;
   margin-right: 0;
-  width: 100%;
+  justify-content: start;
+  align-items: center;
+  display: flex;
 }
+.main-menu-button {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.menu-toggle {
+  background: none;
+  display: flex;
+  justify-content: end;
+  padding: 8px 0px 8px 16px;
+  list-style: none;
+  height: 60px;
+  color: #343436;
+}
+.menu-text {
+  background: none;
+  display: flex;
+  justify-content: start;
+  padding: 8px 0px 8px 16px;
+  list-style: none;
+  height: 60px;
+  color: #343436;
+}
+.menu-text-highlighted {
+  background: white;
+  padding: 0px 0px 0px 0px;
+}
+.green-highlight {
+  background-color: #abc6bd;
+  padding-left: 10px;
+  margin-right: 6px;
+}
+.menu-logo {
+  height: 100px;
+  margin-bottom: 10px;
+}
+.menu-text:checked {
+  background: white;
+}
+.menu-text a {
+  text-decoration: none;
+  color: #343436;
+  font-size: 18px;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 4px;
+}
+.link-title {
+  margin-left: 16px;
+}
+.menu-text a:hover {
+  color: #343436;
+}
+.nav-menu-items {
+  width: 100%;
+  padding: 0;
+}
+
+.nav-menu {
+  background-color: #f1f1f1;
+  height: 100vh;
+  /* width: 10vw; */
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: 850ms;
+  padding-right: 10px;
+}
+
 .side-bar-container-link {
   background-color: rgb(218, 218, 218);
   border: rgba(0, 0, 0, 0.6) 1px solid;
