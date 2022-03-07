@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "zipzap",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2022-03-04T08:15:48.460Z",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authZipZap",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
