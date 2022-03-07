@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import {
   Button,
   IconMenu,
+  View,
+  Image,
   IconCardGiftcard,
   IconSupervisorAccount,
   IconCalendarToday,
@@ -65,7 +67,7 @@ const NavigationMenu = ({ signOut, user }) => {
         <Button size="small" onClick={() => setMenuOpen(true)}>
           <IconMenu />
         </Button>
-        <IconFullLogo style={styles.logo} />
+        <IconFullLogo style={styles.topLogo} />
         <div></div>
       </div>
       <nav
@@ -73,7 +75,17 @@ const NavigationMenu = ({ signOut, user }) => {
         ref={node}
         className="menu"
       >
-        {user.attributes.name}
+        <IconFullLogo style={styles.logo} />
+        <View style={styles.profilePicture} c>
+          <Image
+            borderRadius="50%"
+            border="10px solid white"
+            objectFit="cover"
+            objectPosition="50% 50%"
+            maxWidth="100px"
+            src="/default_photo.png"
+          />
+        </View>
         <ul style={styles.list}>
           {menu.map(({ name, link, Icon, signOutLink }) => (
             <li key={name + link} style={styles.item}>
@@ -98,6 +110,7 @@ const NavigationMenu = ({ signOut, user }) => {
 
 const zipZapBlue = "#ABC4D6";
 const zipZapGreen = "#ABC6BD";
+const logoColor = "#6D6E70";
 
 const topNavBackgroundColor = zipZapBlue;
 const backgroundColor = "#F0EDED"; // light gray
@@ -106,8 +119,9 @@ const selectedItemBackgroundColor = "white";
 const selectedBorderColor = zipZapGreen;
 
 const styles = {
-  logo: {
+  topLogo: {
     marginLeft: "-10%",
+    color: logoColor,
   },
   mobileHeader: {
     // index.css has media queries to hide unless on mobile
@@ -119,6 +133,14 @@ const styles = {
     fontSize: 50,
     backgroundColor: topNavBackgroundColor,
     color: textColor,
+  },
+  logo: {
+    fontSize: 100,
+    color: logoColor,
+    margin: "-10px -5px",
+  },
+  profilePicture: {
+    margin: "0 auto",
   },
   menu: {
     zIndex: 2,
@@ -140,6 +162,7 @@ const styles = {
   list: {
     listStyleType: "none",
     padding: "0 4px 0 4px",
+    margin: 0,
   },
   item: {},
   link: {
