@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
   Button,
   IconMenu,
@@ -67,7 +67,9 @@ const NavigationMenu = ({ signOut, user }) => {
         <Button size="small" onClick={() => setMenuOpen(true)}>
           <IconMenu />
         </Button>
-        <IconFullLogo style={styles.topLogo} />
+        <Link to="/">
+          <IconFullLogo style={styles.topLogo} />
+        </Link>
         <div></div>
       </div>
       <nav
@@ -75,7 +77,9 @@ const NavigationMenu = ({ signOut, user }) => {
         ref={node}
         className="menu"
       >
-        <IconFullLogo style={styles.logo} />
+        <Link to="/">
+          <IconFullLogo style={styles.logo} />
+        </Link>
         <View style={styles.profilePicture} c>
           <Image
             borderRadius="50%"
