@@ -84,6 +84,8 @@ const NavigationMenu = ({ signOut, user }) => {
             objectPosition="50% 50%"
             maxWidth="100px"
             src="/default_photo.png"
+            width="100px"
+            height="100px"
           />
         </View>
         <ul style={styles.list}>
