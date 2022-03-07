@@ -29,3 +29,19 @@ code {
 .nav-link:hover {
   background-color: #abc6bd;
 }
+
+@media (max-width: 480px) {
+  .menu {
+    width: 0;
+  }
+
+  #root {
+    padding-top: 50px;
+  }
+}
+
+@media (min-width: 481px) {
+  .mobile-header {
+    display: none !important;
+  }
+}
