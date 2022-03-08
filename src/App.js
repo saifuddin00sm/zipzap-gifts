@@ -6,8 +6,9 @@ import NavigationMenu from "./components/NavigationMenu";
 
 import { Authenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
-
+import "./App.css";
 import awsExports from "./aws-exports";
+import 'bootstrap/dist/css/bootstrap.min.css';
 Amplify.configure(awsExports);
 
 const App = () => {
@@ -15,9 +16,10 @@ const App = () => {
     <Authenticator>
       {({ signOut, user }) => (
         <>
+          {/* <h1>Hello{user.username} {user.attributes.email}</h1> */}
           <NavigationMenu signOut={signOut} user={user} />
           <div style={styles.container}>
-            <Outlet />
+            <Outlet context={[user]}/>
           </div>
         </>
       )}

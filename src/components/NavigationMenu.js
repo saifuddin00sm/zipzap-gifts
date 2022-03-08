@@ -21,7 +21,7 @@ const menu = [
   { name: "Recipients", link: "/recipients", Icon: IconSupervisorAccount },
   { name: "Gift Calendar", link: "/calendar", Icon: IconCalendarToday },
   { name: "Orders", link: "/orders", Icon: IconReceiptLong },
-  { name: "Gift Catalogue", link: "/catalogue", Icon: IconImportContacts },
+  { name: "Gift Catalog", link: "/catalog", Icon: IconImportContacts },
   { name: "Profile", link: "/profile", Icon: IconAccountBox },
   { name: "Help", link: "/todo", Icon: IconHelpOutline },
   {
@@ -80,7 +80,7 @@ const NavigationMenu = ({ signOut, user }) => {
         <Link to="/">
           <IconFullLogo style={styles.logo} />
         </Link>
-        <View style={styles.profilePicture} c>
+        <View style={styles.profilePicture}>
           <Image
             borderRadius="50%"
             border="10px solid white"
