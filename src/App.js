@@ -4,6 +4,7 @@ import {Amplify, AmplifyTheme} from "aws-amplify";
 import { Outlet } from "react-router-dom";
 import NavigationMenu from "./components/NavigationMenu";
 import "./App.css";
+import useAuth from "./hooks/useAuth";
 
 import { Authenticator, useTheme, View, Image } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
@@ -12,29 +13,18 @@ import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
 const App = () => {
-  const components = {
-    Header() {
-      const { tokens } = useTheme();
-  
-      return (
-        <View textAlign="center" >
-          <br/>
-          <br/>
-          <Image
-            alt="Zip Zap logo"
-            src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
-          />
-        </View>
-      );
-    }
-  }
   //const MySectionHeader = Object.assign({}, AmplifyTheme.sectionHeader, { background: 'orange' });
   // const MyTheme = Object.assign({}, AmplifyTheme, { sectionHeader: MySectionHeader });
 
+
+  const {currentUser} = useAuth();
   return (
     <>
+
     
-    <Authenticator components={components} >
+    {currentUser ? 
+    ( 
+    <Authenticator >
 
       {({ signOut, user }) => (
         <>
@@ -44,7 +34,27 @@ const App = () => {
           </div>
         </>
       ) }
-    </Authenticator>
+    </Authenticator>) 
+    : 
+    ( 
+      <>
+      <Image
+        alt="Zip Zap logo"
+        src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
+      />
+      <Authenticator >
+
+      {({ signOut, user }) => (
+        <>
+          <NavigationMenu signOut={signOut} user={user} />
+          <div style={styles.container}>
+            <Outlet />
+          </div>
+        </>
+      ) }
+      </Authenticator>
+      </>
+    ) }
     </>
   );
 };
