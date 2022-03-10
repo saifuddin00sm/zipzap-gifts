@@ -44,8 +44,7 @@ const App = () => {
       ) }
     </Authenticator>) 
     : 
-    ( 
-      // <Container className="login-container">
+    (
       <Grid
       templateColumns="1fr 1fr"
       templateRows="10rem 10rem"
@@ -71,23 +70,7 @@ const App = () => {
         </Authenticator>
 
         </View>
-          {/* <Col sm="12" md="4" lg="6" className="sidebar-image">
-              <Image
-              alt="Zip Zap logo"
-              src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
-              className="sign-in-image"
-              />
-          </Col> */}
-          {/* <Col sm="12" md="8" lg="6" >
-            <Row className="authentication authentication-title">
-              <h1>An Automated Gift Giving Platform Built for Businesses</h1>
-            </Row>
-            <Row className="authentication">
-
-            </Row>
-          </Col> */}
         </Grid>
-      // </Container>
     ) }
     </>
   );
