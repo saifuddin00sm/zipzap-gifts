@@ -8,8 +8,9 @@ import useAuth from "./hooks/useAuth";
 
 import { Authenticator, AmplifyProvider, Grid, View, Image} from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
-
+import "./App.css";
 import awsExports from "./aws-exports";
+import 'bootstrap/dist/css/bootstrap.min.css';
 Amplify.configure(awsExports);
 
 const App = () => {
