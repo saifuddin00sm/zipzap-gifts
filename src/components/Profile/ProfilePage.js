@@ -1,4 +1,6 @@
-import { Row, Col, Modal, Container, Button } from "react-bootstrap";
+
+import { Row, Col, Container, Button } from "react-bootstrap";
+
 import {
     IconPhone,
     IconEmail,

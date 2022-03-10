@@ -1,12 +1,12 @@
 /* src/App.js */
-import React, {useState} from "react";
-import {Amplify, AmplifyTheme} from "aws-amplify";
+import React from "react";
+import {Amplify} from "aws-amplify";
 import { Outlet } from "react-router-dom";
 import NavigationMenu from "./components/NavigationMenu";
 import "./App.css";
 import useAuth from "./hooks/useAuth";
 
-import { Authenticator, useTheme, View, Image } from "@aws-amplify/ui-react";
+import { Authenticator, AmplifyProvider, Grid, View, Image} from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./App.css";
 import awsExports from "./aws-exports";
@@ -14,15 +14,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 Amplify.configure(awsExports);
 
 const App = () => {
-  //const MySectionHeader = Object.assign({}, AmplifyTheme.sectionHeader, { background: 'orange' });
-  // const MyTheme = Object.assign({}, AmplifyTheme, { sectionHeader: MySectionHeader });
+
+  const theme = {
+    name: 'my-theme',
+    tokens: {
+      colors: {
+        background: {
+          primary: { value: 'white' }
+        },
+      }
+    },
+  };
 
 
   const {currentUser} = useAuth();
   return (
     <>
-
-    
     {currentUser ? 
     ( 
     <Authenticator >
@@ -38,24 +45,49 @@ const App = () => {
     </Authenticator>) 
     : 
     ( 
-      <>
-      <Image
-        alt="Zip Zap logo"
-        src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
-      />
-      <Authenticator >
+      // <Container className="login-container">
+      <Grid
+      templateColumns="1fr 1fr"
+      templateRows="10rem 10rem"
+      gap="var(--amplify-space-small)">
+        <View className="sidebar-image">
+          <Image
+          alt="Zip Zap logo"
+          src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
+          className="sign-in-image"
+          />
+        </View>
+        <View className="authentication-side">
+        <h1 className="authentication-title">An Automated Gift Giving Platform Built for Businesses</h1>
+        <Authenticator >
+        {({ signOut, user }) => (
+          <>
+            <NavigationMenu signOut={signOut} user={user} />
+            <div style={styles.container}>
+              <Outlet />
+            </div>
+          </>
+        ) }
+        </Authenticator>
 
-      {({ signOut, user }) => (
-        <>
-          {/* <h1>Hello{user.username} {user.attributes.email}</h1> */}
-          <NavigationMenu signOut={signOut} user={user} />
-          <div style={styles.container}>
-            <Outlet context={[user]}/>
-          </div>
-        </>
-      ) }
-      </Authenticator>
-      </>
+        </View>
+          {/* <Col sm="12" md="4" lg="6" className="sidebar-image">
+              <Image
+              alt="Zip Zap logo"
+              src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
+              className="sign-in-image"
+              />
+          </Col> */}
+          {/* <Col sm="12" md="8" lg="6" >
+            <Row className="authentication authentication-title">
+              <h1>An Automated Gift Giving Platform Built for Businesses</h1>
+            </Row>
+            <Row className="authentication">
+
+            </Row>
+          </Col> */}
+        </Grid>
+      // </Container>
     ) }
     </>
   );
