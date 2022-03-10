@@ -1,8 +1,9 @@
 
 import { Row, Col, Container, Button } from "react-bootstrap";
+import { useOutletContext } from "react-router-dom";
 
 function GiftDashboard() {
-
+    const [user] = useOutletContext();
     return (
         <Container className="main-container">
             <Row className="page-header justify-content-center">
