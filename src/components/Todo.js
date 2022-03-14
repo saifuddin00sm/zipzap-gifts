@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGetTodos, useAddTodo } from "../data/todos";
+import { useTodos } from "../data/todos";
 import { Loader, View } from "@aws-amplify/ui-react";
 
 import "@aws-amplify/ui-react/styles.css";
@@ -18,8 +18,8 @@ const Todo = () => {
     getPreviousPage,
     hasNext,
     hasPrevious,
-  } = useGetTodos({ limit });
-  const { addTodo } = useAddTodo();
+    addTodo,
+  } = useTodos({ limit });
   const [formState, setFormState] = useState(initialState);
 
   const setInput = (key, value) => {

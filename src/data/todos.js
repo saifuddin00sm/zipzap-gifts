@@ -24,7 +24,7 @@ const addTodo = async (todo) => {
   await API.graphql(graphqlOperation(createTodo, { input: todo }));
 };
 
-const useGetTodos = ({ limit }) => {
+const useTodos = ({ limit }) => {
   const [previousTokens, setPreviousTokens] = useState([]);
   const [token, setToken] = useState("");
   const {
@@ -53,6 +53,18 @@ const useGetTodos = ({ limit }) => {
   const hasNext = !isPreviousData && nextToken;
   const hasPrevious = previousTokens.length > 0;
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(addTodo, {
+    onSuccess: () => {
+      // Remove the tokens since they might not be valid anymore
+      setToken("");
+      setPreviousTokens([]);
+      // Invalidate and refetch
+      queryClient.invalidateQueries("todos");
+    },
+  });
+
   return {
     todos,
     isLoading,
@@ -63,20 +75,8 @@ const useGetTodos = ({ limit }) => {
     getPreviousPage,
     hasNext,
     hasPrevious,
+    addTodo: mutation.mutate,
   };
 };
 
-const useAddTodo = () => {
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation(addTodo, {
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries("todos");
-    },
-  });
-
-  return { addTodo: mutation.mutate };
-};
-
-export { fetchTodos, useGetTodos, useAddTodo };
+export { fetchTodos, useTodos };
