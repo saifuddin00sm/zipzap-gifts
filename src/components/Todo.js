@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { fetchTodos } from "../data/todos";
+import { fetchTodos, useAddTodo } from "../data/todos";
 import { Loader, View } from "@aws-amplify/ui-react";
 
 import "@aws-amplify/ui-react/styles.css";
 
 const initialState = { name: "", description: "" };
+const limit = 3; // The number of todos to show on a single page
 
 const Todo = () => {
+  const { addTodo } = useAddTodo();
   const [previousTokens, setPreviousTokens] = useState([]);
   const [token, setToken] = useState("");
   const [formState, setFormState] = useState(initialState);
@@ -18,12 +20,17 @@ const Todo = () => {
     error,
     isFetching,
     isPreviousData,
-  } = useQuery(["todos", token], () => fetchTodos(token), {
+  } = useQuery(["todos", { token, limit }], () => fetchTodos(token, limit), {
     keepPreviousData: true,
   });
 
   const setInput = (key, value) => {
     setFormState({ ...formState, [key]: value });
+  };
+
+  const submitTodo = () => {
+    addTodo({ ...formState });
+    setFormState(initialState);
   };
 
   const previousPageClick = () => {
@@ -62,7 +69,7 @@ const Todo = () => {
         placeholder="Description"
       />
       <br />
-      <button style={styles.button} onClick={() => console.log("add todo")}>
+      <button style={styles.button} onClick={submitTodo}>
         Create Todo
       </button>
       <br />
