@@ -1,28 +1,26 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { fetchTodos, useAddTodo } from "../data/todos";
+import { useGetTodos, useAddTodo } from "../data/todos";
 import { Loader, View } from "@aws-amplify/ui-react";
 
 import "@aws-amplify/ui-react/styles.css";
 
 const initialState = { name: "", description: "" };
-const limit = 3; // The number of todos to show on a single page
+const limit = 5; // The number of todos to show on a single page
 
 const Todo = () => {
-  const { addTodo } = useAddTodo();
-  const [previousTokens, setPreviousTokens] = useState([]);
-  const [token, setToken] = useState("");
-  const [formState, setFormState] = useState(initialState);
   const {
+    todos,
     isLoading,
     isError,
-    data: { todos = [], nextToken } = {},
     error,
     isFetching,
-    isPreviousData,
-  } = useQuery(["todos", { token, limit }], () => fetchTodos(token, limit), {
-    keepPreviousData: true,
-  });
+    getNextPage,
+    getPreviousPage,
+    hasNext,
+    hasPrevious,
+  } = useGetTodos({ limit });
+  const { addTodo } = useAddTodo();
+  const [formState, setFormState] = useState(initialState);
 
   const setInput = (key, value) => {
     setFormState({ ...formState, [key]: value });
@@ -31,18 +29,6 @@ const Todo = () => {
   const submitTodo = () => {
     addTodo({ ...formState });
     setFormState(initialState);
-  };
-
-  const previousPageClick = () => {
-    setPreviousTokens((prevTokens) => prevTokens.slice(0, -1));
-    setToken(previousTokens[previousTokens.length - 1]);
-  };
-
-  const nextPageClick = () => {
-    if (!isPreviousData && nextToken) {
-      setPreviousTokens([...previousTokens, token]);
-      setToken(nextToken);
-    }
   };
 
   if (isLoading) {
@@ -73,7 +59,7 @@ const Todo = () => {
         Create Todo
       </button>
       <br />
-      <button onClick={previousPageClick} disabled={!previousTokens.length}>
+      <button onClick={getPreviousPage} disabled={!hasPrevious}>
         Previous Page
       </button>
 
@@ -85,7 +71,7 @@ const Todo = () => {
       ))}
 
       {isFetching && <Loader variation="linear" />}
-      <button onClick={nextPageClick} disabled={isPreviousData || !nextToken}>
+      <button onClick={getNextPage} disabled={!hasNext}>
         Next Page
       </button>
     </main>

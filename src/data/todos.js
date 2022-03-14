@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { listTodos } from "../graphql/queries";
 import { createTodo } from "../graphql/mutations";
-import { useMutation, useQueryClient } from "react-query";
 
 const fetchTodos = async (token = "", limit = 100) => {
   const variables = { limit };
@@ -23,6 +24,48 @@ const addTodo = async (todo) => {
   await API.graphql(graphqlOperation(createTodo, { input: todo }));
 };
 
+const useGetTodos = ({ limit }) => {
+  const [previousTokens, setPreviousTokens] = useState([]);
+  const [token, setToken] = useState("");
+  const {
+    isLoading,
+    isError,
+    data: { todos = [], nextToken } = {},
+    error,
+    isFetching,
+    isPreviousData,
+  } = useQuery(["todos", { token, limit }], () => fetchTodos(token, limit), {
+    keepPreviousData: true,
+  });
+
+  const getPreviousPage = () => {
+    setPreviousTokens((prevTokens) => prevTokens.slice(0, -1));
+    setToken(previousTokens[previousTokens.length - 1]);
+  };
+
+  const getNextPage = () => {
+    if (!isPreviousData && nextToken) {
+      setPreviousTokens([...previousTokens, token]);
+      setToken(nextToken);
+    }
+  };
+
+  const hasNext = !isPreviousData && nextToken;
+  const hasPrevious = previousTokens.length > 0;
+
+  return {
+    todos,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+    getNextPage,
+    getPreviousPage,
+    hasNext,
+    hasPrevious,
+  };
+};
+
 const useAddTodo = () => {
   const queryClient = useQueryClient();
 
@@ -36,4 +79,4 @@ const useAddTodo = () => {
   return { addTodo: mutation.mutate };
 };
 
-export { fetchTodos, useAddTodo };
+export { fetchTodos, useGetTodos, useAddTodo };
