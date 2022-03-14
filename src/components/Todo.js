@@ -1,44 +1,49 @@
-import React, { useEffect, useState } from "react";
-import { API, graphqlOperation } from "aws-amplify";
-import { createTodo } from "../graphql/mutations";
-import { listTodos } from "../graphql/queries";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
+import { fetchTodos } from "../data/todos";
+import { Loader, View } from "@aws-amplify/ui-react";
 
 import "@aws-amplify/ui-react/styles.css";
 
 const initialState = { name: "", description: "" };
 
 const Todo = () => {
+  const [previousTokens, setPreviousTokens] = useState([]);
+  const [token, setToken] = useState("");
   const [formState, setFormState] = useState(initialState);
-  const [todos, setTodos] = useState([]);
+  const {
+    isLoading,
+    isError,
+    data: { todos = [], nextToken } = {},
+    error,
+    isFetching,
+    isPreviousData,
+  } = useQuery(["todos", token], () => fetchTodos(token), {
+    keepPreviousData: true,
+  });
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  function setInput(key, value) {
+  const setInput = (key, value) => {
     setFormState({ ...formState, [key]: value });
+  };
+
+  const previousPageClick = () => {
+    setPreviousTokens((prevTokens) => prevTokens.slice(0, -1));
+    setToken(previousTokens[previousTokens.length - 1]);
+  };
+
+  const nextPageClick = () => {
+    if (!isPreviousData && nextToken) {
+      setPreviousTokens([...previousTokens, token]);
+      setToken(nextToken);
+    }
+  };
+
+  if (isLoading) {
+    return <Loader variation="linear" />;
   }
 
-  async function fetchTodos() {
-    try {
-      const todoData = await API.graphql(graphqlOperation(listTodos));
-      const todos = todoData.data.listTodos.items;
-      setTodos(todos);
-    } catch (err) {
-      console.log("error fetching todos");
-    }
-  }
-
-  async function addTodo() {
-    try {
-      if (!formState.name || !formState.description) return;
-      const todo = { ...formState };
-      setTodos([...todos, todo]);
-      setFormState(initialState);
-      await API.graphql(graphqlOperation(createTodo, { input: todo }));
-    } catch (err) {
-      console.log("error creating todo:", err);
-    }
+  if (isError) {
+    return <View>Error: {error.message}</View>;
   }
 
   return (
@@ -57,15 +62,25 @@ const Todo = () => {
         placeholder="Description"
       />
       <br />
-      <button style={styles.button} onClick={addTodo}>
+      <button style={styles.button} onClick={() => console.log("add todo")}>
         Create Todo
       </button>
+      <br />
+      <button onClick={previousPageClick} disabled={!previousTokens.length}>
+        Previous Page
+      </button>
+
       {todos.map((todo, index) => (
         <div key={todo.id ? todo.id : index} style={styles.todo}>
           <p style={styles.todoName}>{todo.name}</p>
           <p style={styles.todoDescription}>{todo.description}</p>
         </div>
       ))}
+
+      {isFetching && <Loader variation="linear" />}
+      <button onClick={nextPageClick} disabled={isPreviousData || !nextToken}>
+        Next Page
+      </button>
     </main>
   );
 };

@@ -80,7 +80,7 @@ const NavigationMenu = ({ signOut, user }) => {
         <Link to="/">
           <IconFullLogo style={styles.logo} />
         </Link>
-        <View style={styles.profilePicture} c>
+        <View style={styles.profilePicture}>
           <Image
             borderRadius="50%"
             border="10px solid white"
