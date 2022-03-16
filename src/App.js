@@ -5,16 +5,15 @@ import { Outlet } from "react-router-dom";
 import NavigationMenu from "./components/NavigationMenu";
 import "./App.css";
 import useAuth from "./hooks/useAuth";
-
-import { Authenticator, AmplifyProvider, Grid, View, Image} from "@aws-amplify/ui-react";
+import { Authenticator, AmplifyProvider, Grid, View, Image, Flex} from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import "./App.css";
 import awsExports from "./aws-exports";
 import 'bootstrap/dist/css/bootstrap.min.css';
 Amplify.configure(awsExports);
 
-const App = () => {
 
+const App = () => {
   const theme = {
     name: 'my-theme',
     tokens: {
@@ -32,13 +31,13 @@ const App = () => {
     <>
     {currentUser ? 
     ( 
-    <Authenticator >
+    <Authenticator  >
 
       {({ signOut, user }) => (
         <>
           <NavigationMenu signOut={signOut} user={user} />
           <div style={styles.container}>
-            <Outlet />
+            <Outlet  context={[user]} />
           </div>
         </>
       ) }
@@ -52,7 +51,7 @@ const App = () => {
         <View className="sidebar-image">
           <Image
           alt="Zip Zap logo"
-          src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
+          src="https://s3.amazonaws.com/content.zipzapgifts.com/zip-zap-login+(1).png"
           className="sign-in-image"
           />
         </View>
@@ -63,7 +62,7 @@ const App = () => {
           <>
             <NavigationMenu signOut={signOut} user={user} />
             <div style={styles.container}>
-              <Outlet />
+              <Outlet context={[user, signOut]}/>
             </div>
           </>
         ) }

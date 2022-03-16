@@ -6,8 +6,11 @@ import ProfilePage from './components/Profile/ProfilePage'
 
 import App from "./App";
 import Todo from "./components/Todo";
+import { useOutletContext } from "react-router-dom";
 
 const ZipZapRoutes = (props) => {
+  // const [user] = useOutletContext();
+  // console.log(user)
   const { pathname } = useLocation();
   console.log(props.user)
   return (
