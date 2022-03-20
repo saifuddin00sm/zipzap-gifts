@@ -28,6 +28,10 @@ type RecipientMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type DepartmentMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type ProfileFavoriteMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -45,10 +49,6 @@ type ItemMetaData = {
 }
 
 type GiftImageMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
-type DepartmentMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
@@ -115,7 +115,7 @@ export declare class Recipient {
   readonly jobTitle?: string;
   readonly birthday?: string;
   readonly startDate?: string;
-  readonly departmentID?: string;
+  readonly department?: Department;
   readonly profilePhoto?: string;
   readonly favorites?: (ProfileFavorite | null)[];
   readonly giftHistory?: (GiftEvent | null)[];
@@ -126,6 +126,17 @@ export declare class Recipient {
   readonly recipientShippingAddressId?: string;
   constructor(init: ModelInit<Recipient, RecipientMetaData>);
   static copyOf(source: Recipient, mutator: (draft: MutableModel<Recipient, RecipientMetaData>) => MutableModel<Recipient, RecipientMetaData> | void): Recipient;
+}
+
+export declare class Department {
+  readonly id: string;
+  readonly name: string;
+  readonly recipients?: (Recipient | null)[];
+  readonly accessGroups?: (string | null)[];
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  constructor(init: ModelInit<Department, DepartmentMetaData>);
+  static copyOf(source: Department, mutator: (draft: MutableModel<Department, DepartmentMetaData>) => MutableModel<Department, DepartmentMetaData> | void): Department;
 }
 
 export declare class ProfileFavorite {
@@ -203,17 +214,6 @@ export declare class GiftImage {
   readonly itemPicturesId?: string;
   constructor(init: ModelInit<GiftImage, GiftImageMetaData>);
   static copyOf(source: GiftImage, mutator: (draft: MutableModel<GiftImage, GiftImageMetaData>) => MutableModel<GiftImage, GiftImageMetaData> | void): GiftImage;
-}
-
-export declare class Department {
-  readonly id: string;
-  readonly name: string;
-  readonly recipients?: (Recipient | null)[];
-  readonly accessGroups?: (string | null)[];
-  readonly createdAt?: string;
-  readonly updatedAt?: string;
-  constructor(init: ModelInit<Department, DepartmentMetaData>);
-  static copyOf(source: Department, mutator: (draft: MutableModel<Department, DepartmentMetaData>) => MutableModel<Department, DepartmentMetaData> | void): Department;
 }
 
 export declare class Order {

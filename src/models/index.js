@@ -12,19 +12,19 @@ const GiftDateType = {
   "ANNIVERSARY": "ANNIVERSARY"
 };
 
-const { User, Company, Address, Recipient, ProfileFavorite, GiftEvent, Gift, Item, GiftImage, Department, Order, Todo } = initSchema(schema);
+const { User, Company, Address, Recipient, Department, ProfileFavorite, GiftEvent, Gift, Item, GiftImage, Order, Todo } = initSchema(schema);
 
 export {
   User,
   Company,
   Address,
   Recipient,
+  Department,
   ProfileFavorite,
   GiftEvent,
   Gift,
   Item,
   GiftImage,
-  Department,
   Order,
   Todo,
   GiftType,
