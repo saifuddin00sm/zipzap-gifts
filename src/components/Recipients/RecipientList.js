@@ -9,7 +9,7 @@ import {
   TableBody,
   TableHead,
   TableRow,
-  Loader,
+  Placeholder,
 } from "@aws-amplify/ui-react";
 import { useRecipients } from "../../data/recipients";
 
@@ -23,14 +23,16 @@ const RecipientList = () => {
     tableBody = (
       <TableRow>
         <TableCell colspan="6">
-          <Loader variation="linear" />
+          <Placeholder />
         </TableCell>
       </TableRow>
     );
   } else if (isError) {
     tableBody = (
       <TableRow>
-        <TableCell colspan="6">{error}</TableCell>
+        <TableCell colspan="6">
+          Error loading recipients: {error.message}
+        </TableCell>
       </TableRow>
     );
   } else {
