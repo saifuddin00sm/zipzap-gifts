@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import App from "./App";
 import Todo from "./components/Todo";
+import RecipientList from "./components/Recipients/RecipientList";
 
 const ZipZapRoutes = () => {
   const { pathname } = useLocation();
@@ -18,6 +19,7 @@ const ZipZapRoutes = () => {
           }
         />
         <Route path="todo" element={<Todo />} />
+        <Route path="recipients" element={<RecipientList />} />
         <Route
           path="*"
           element={
