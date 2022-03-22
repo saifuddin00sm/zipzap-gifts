@@ -25,6 +25,8 @@
     const signIn = () => Auth.federatedSignIn();
 
     const signOut = () => {
+        window.location.href = '/';
+        console.log("signing out")
         Auth.signOut();
     };
     return { currentUser, signIn, signOut };

@@ -19,7 +19,6 @@ import { IconFullLogo } from "./../icons/IconFullLogo";
 const menu = [
   { name: "Gift Dashboard", link: "/", Icon: IconCardGiftcard },
   { name: "Recipients", link: "/recipients", Icon: IconSupervisorAccount },
-  { name: "Gift Calendar", link: "/calendar", Icon: IconCalendarToday },
   { name: "Orders", link: "/orders", Icon: IconReceiptLong },
   { name: "Gift Catalog", link: "/catalog", Icon: IconImportContacts },
   { name: "Profile", link: "/profile", Icon: IconAccountBox },

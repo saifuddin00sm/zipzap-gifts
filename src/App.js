@@ -37,7 +37,7 @@ const App = () => {
         <>
           <NavigationMenu signOut={signOut} user={user} />
           <div style={styles.container}>
-            <Outlet  context={[user]} />
+            <Outlet context={[user]} />
           </div>
         </>
       ) }
@@ -62,7 +62,7 @@ const App = () => {
           <>
             <NavigationMenu signOut={signOut} user={user} />
             <div style={styles.container}>
-              <Outlet context={[user, signOut]}/>
+              <Outlet context={[user]}/>
             </div>
           </>
         ) }
