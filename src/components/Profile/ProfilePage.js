@@ -12,7 +12,6 @@ import { createAddress } from "../../graphql/mutations";
 import { createCompany } from "../../graphql/mutations";
 import { updateUser } from "../../graphql/mutations";
 import { updateAddress } from "../../graphql/mutations";
-import { updateCompany } from "../../graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
 import useAuth from "../../hooks/useAuth";
 
@@ -89,34 +88,27 @@ function ProfilePage(props) {
             setErrors([])
             try {
                 let companyID = "";
-                if (currentUser.company) {
+                let userCompanyID = {}
+                if (editUser) {
                     const newAddress =  {id: currentUser.company.companyAddressId, address1: formState.address, address2: formState.address2, city: formState.city, state: formState.state, zip: formState.zip};
                     const addressReturn = await API.graphql(graphqlOperation(updateAddress, { input: newAddress}));
-                    return;
+
+                    //TODO: add update Company call, 
+                    userCompanyID = {id: currentUser.id, name: formState.name}
                 }
                 else {
-                const newAddress =  {address1: formState.address, address2: formState.address, city: formState.city, state: formState.state, zip: formState.zip};
-                const addressReturn = await API.graphql(graphqlOperation(createAddress, { input: newAddress}));
-                console.log(formState)
-                const newCompany = {name: formState.company, companyAddressId: addressReturn.data.createAddress.id};
-                const companyReturn = await API.graphql(graphqlOperation(createCompany, { input: newCompany}));
-                companyID = companyReturn.data.createCompany.id
+                    const newAddress =  {address1: formState.address, address2: formState.address, city: formState.city, state: formState.state, zip: formState.zip};
+                    const addressReturn = await API.graphql(graphqlOperation(createAddress, { input: newAddress}));
+                    const newCompany = {name: formState.company, companyAddressId: addressReturn.data.createAddress.id};
+                    const companyReturn = await API.graphql(graphqlOperation(createCompany, { input: newCompany}));
+                    companyID = companyReturn.data.createCompany.id
+                    userCompanyID = {id: currentUser.id, companyUsersId: companyID}
                 }
                 if (companyID) {
-                    let userCompanyID = {}
-                    if (editUser) {
-                        userCompanyID = {id: currentUser.id, name: formState.name}
-                    } else {
-                        userCompanyID = {id: currentUser.id, companyUsersId: companyID}
-                    }
-                    
                     const companyUpdateReturn = await API.graphql(graphqlOperation(updateUser, { input: userCompanyID}));
-
-                    console.log(companyUpdateReturn)
                     setNewUser(false);
                     setEditUser(false);
                     setcurrentUser(companyUpdateReturn.data.updateUser);
-                    console.log(currentUser);
                 }
     
             } catch (err) {
