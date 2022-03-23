@@ -23,7 +23,7 @@ const LoginPage = ({ children }) => {
       <View className="sidebar-image">
         <Image
           alt="Zip Zap logo"
-          src="https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg"
+          src="https://s3.amazonaws.com/content.zipzapgifts.com/zip-zap-login+(1).png"
           className="sign-in-image"
         />
       </View>

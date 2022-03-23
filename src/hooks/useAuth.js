@@ -26,6 +26,7 @@ const useAuth = () => {
 
   const signOut = () => {
     Auth.signOut();
+    window.location.href = "/";
   };
   return { currentUser, signIn, signOut };
 };

@@ -19,7 +19,6 @@ import { IconFullLogo } from "./../icons/IconFullLogo";
 const menu = [
   { name: "Gift Dashboard", link: "/", Icon: IconCardGiftcard },
   { name: "Recipients", link: "/recipients", Icon: IconSupervisorAccount },
-  { name: "Gift Calendar", link: "/calendar", Icon: IconCalendarToday },
   { name: "Orders", link: "/orders", Icon: IconReceiptLong },
   { name: "Gift Catalog", link: "/catalog", Icon: IconImportContacts },
   { name: "Profile", link: "/profile", Icon: IconAccountBox },
@@ -80,18 +79,20 @@ const NavigationMenu = ({ signOut, user }) => {
         <Link to="/">
           <IconFullLogo style={styles.logo} />
         </Link>
-        <View style={styles.profilePicture}>
-          <Image
-            borderRadius="50%"
-            border="10px solid white"
-            objectFit="cover"
-            objectPosition="50% 50%"
-            maxWidth="100px"
-            src="/default_photo.png"
-            width="100px"
-            height="100px"
-          />
-        </View>
+        <Link to="/profile">
+          <View style={styles.profilePicture}>
+            <Image
+              borderRadius="50%"
+              // border="10px solid white"
+              objectFit="cover"
+              objectPosition="50% 50%"
+              maxWidth="100px"
+              src="/BluePersonalLogo.png"
+              width="100px"
+              height="100px"
+            />
+          </View>
+        </Link>
         <ul style={styles.list}>
           {menu.map(({ name, link, Icon, signOutLink }) => (
             <li key={name + link}>
@@ -147,6 +148,7 @@ const styles = {
   },
   profilePicture: {
     margin: "0 auto",
+    textAlign: "center"
   },
   menu: {
     zIndex: 2,
