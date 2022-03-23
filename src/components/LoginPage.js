@@ -7,34 +7,34 @@ import useAuth from "../hooks/useAuth";
  * user is currently not logged in.
  */
 const LoginPage = ({ children }) => {
-	const { currentUser } = useAuth();
+  const { currentUser } = useAuth();
 
-	// If the user is already logged in, do not render the login page
-	if (currentUser) {
-		return children;
-	}
+  // If the user is already logged in, do not render the login page
+  if (currentUser) {
+    return children;
+  }
 
-	return (
-		<Grid
-			templateColumns="1fr 1fr"
-			templateRows="10rem 10rem"
-			gap="var(--amplify-space-small)"
-		>
-			<View className="sidebar-image">
-				<Image
-					alt="Zip Zap logo"
-					src="https://s3.amazonaws.com/content.zipzapgifts.com/zip-zap-login+(1).png"
-					className="sign-in-image"
-				/>
-			</View>
-			<View className="authentication-side">
-				<h1 className="authentication-title">
-					An Automated Gift Giving Platform Built for Businesses
-				</h1>
-				{children}
-			</View>
-		</Grid>
-	);
+  return (
+    <Grid
+      templateColumns="1fr 1fr"
+      templateRows="10rem 10rem"
+      gap="var(--amplify-space-small)"
+    >
+      <View className="sidebar-image">
+        <Image
+          alt="Zip Zap logo"
+          src="https://s3.amazonaws.com/content.zipzapgifts.com/zip-zap-login+(1).png"
+          className="sign-in-image"
+        />
+      </View>
+      <View className="authentication-side">
+        <h1 className="authentication-title">
+          An Automated Gift Giving Platform Built for Businesses
+        </h1>
+        {children}
+      </View>
+    </Grid>
+  );
 };
 
 export default LoginPage;
