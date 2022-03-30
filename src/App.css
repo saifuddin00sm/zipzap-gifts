@@ -1,3 +1,174 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* 
+border-width: var(--amplify-components-button-primary-border-width);
+    background-color: var(--amplify-components-button-primary-background-color);
+    border-color: var(--amplify-components-button-primary-border-color);
+    color: var(--amplify-components-button-primary-color);
+} */
+
+:root {
+  --primary-light-grey-background: #f4f4f4;
+
+  --primary-blue: #abc4d6;
+  --primary-blue-lighter: #c6d4df;
+  --primary-blue-darker: #98b1c2;
+
+  --primary-green: #97afa7;
+  --primary-green-lighter: #abc6bd;
+  --primary-green-darker: #819991;
+
+  --primary-error: #c76749;
+  --primary-grey: #747474;
+  --primary-black: #343436;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
 .App {
   text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.btn-blue {
+  background-color: var(--primary-blue-darker);
+  color: white;
+  font-weight: 500;
+}
+.btn-blue:hover {
+  background-color: #849aa8;
+  color: white;
+  font-weight: 500;
+}
+
+.btn-dark {
+  background-color: #505050;
+  color: white;
+  font-weight: 500;
+}
+
+.error-message {
+  color: var(--primary-error);
+  align-items: center;
+  vertical-align: middle;
+}
+
+.button-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+.button-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.sign-in-image {
+  width: 100%;
+}
+.sidebar-image {
+  background-color: var(--primary-blue-lighter);
+  height: 100vh;
+}
+.authentication-title {
+  text-align: center;
+  padding-bottom: 40px;
+}
+.authentication {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+  padding: 20px 100px;
+}
+.authentication-side {
+  padding: 10vw;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #9eb1be;
+}
+
+.main-container {
+  width: 95%;
+  margin-left: 2%;
+  margin-top: 3vh;
+  font-family: "Poppins", sans-serif;
+}
+
+.page-header {
+  padding-top: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-header h1 {
+  color: #464646;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.profile-header {
+  background-color: var(--primary-blue-lighter);
+  padding: 2em;
+}
+.profile-header h2 {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+.profile-header p {
+  font-size: 20px;
+}
+.profile-image {
+  height: 100px;
+  width: 100px;
+}
+.profile-contact-container {
+  padding: 2em;
+}
+
+.profile-contact-container h3 {
+  font-weight: 600;
+}
+
+.side-bar-contact-container {
+  margin-left: 2em;
+  border-left: var(--primary-blue) 5px solid;
+}
+
+.contact-container-row {
+  padding-left: 2em;
+  margin-left: 100px;
+  margin: 20px;
+  align-items: center;
+  background-color: var(--primary-light-grey-background);
+  border-radius: 15px;
+  font-size: 20px;
+  line-height: 20px;
+  padding: 20px;
+}
+
+.contact-container-icon {
+  font-size: 25px;
+  vertical-align: text-top;
+}
+.contact-infomration {
+}
+.company-form {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.welcome-message {
+  color: #98b1c2;
+  font-weight: 800;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 7px;
+  padding: 20px;
+}
+
+@media (max-width: 480px) {
+  .contact-information {
+    margin-top: 20px;
+    margin-left: 5px;
+    font-size: 15px;
+  }
 }

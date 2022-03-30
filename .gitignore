@@ -111,6 +111,9 @@ dist
 # testing
 /coverage
 
+# local secrets
+.secrets
+
 # production
 /build
 
@@ -120,6 +123,9 @@ dist
 .env.development.local
 .env.test.local
 .env.production.local
+
+# local resolvers, we might want to remove this line later
+amplify/backend/api/zipzap/resolvers/*.vtl
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
@@ -141,6 +147,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-# local resolvers, we might want to remove this line later
-amplify/backend/api/zipzap/resolvers/*.vtl
