@@ -23,6 +23,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-west-2
 
-      - run: npm ci --omit=dev --ignore-scripts
+      - run: npm ci
       - run: npm run build
       - run: npm test
