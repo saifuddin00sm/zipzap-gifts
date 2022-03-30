@@ -7,7 +7,6 @@ import {
   Image,
   IconCardGiftcard,
   IconSupervisorAccount,
-  IconCalendarToday,
   IconReceiptLong,
   IconImportContacts,
   IconAccountBox,
@@ -148,7 +147,7 @@ const styles = {
   },
   profilePicture: {
     margin: "0 auto",
-    textAlign: "center"
+    textAlign: "center",
   },
   menu: {
     zIndex: 2,
