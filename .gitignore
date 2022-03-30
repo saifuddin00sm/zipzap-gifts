@@ -125,10 +125,7 @@ dist
 # local resolvers, we might want to remove this line later
 amplify/backend/api/zipzap/resolvers/*.vtl
 
-
 #amplify-do-not-edit-begin
-amplify\backend\*
-amplify\README.md
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
@@ -148,8 +145,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-amplify/backend/api/zipzap/cli-inputs.json
-amplify/.config/project-config.json
-*.json
-amplify/backend/api/zipzap/cli-inputs.json
-.vscode/settings.json
