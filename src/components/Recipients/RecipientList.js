@@ -2,15 +2,16 @@ import React from "react";
 import {
   Heading,
   View,
-  Button,
   TextField,
   Table,
   TableCell,
   TableBody,
   TableHead,
   TableRow,
+  TableFoot,
   Placeholder,
 } from "@aws-amplify/ui-react";
+import { Button } from "react-bootstrap";
 import { useRecipients } from "../../hooks/recipients";
 
 import "@aws-amplify/ui-react/styles.css";
@@ -67,19 +68,26 @@ const RecipientList = () => {
 
   return (
     <main style={styles.main}>
-      <View className="page-header">
-        <Heading level={1}>Recipient Dashboard</Heading>
-        <Button>Import A List</Button>
-        <Button>Add A Recipient</Button>
+      <View style={styles.header} className="page-header">
+        <Heading level={1} style={styles.title}>
+          Recipient Dashboard
+        </Heading>
+        <Button style={styles.button} variant="blue">
+          Import A List
+        </Button>
+        <Button style={styles.button} variant="blue">
+          Add A Recipient
+        </Button>
       </View>
+      <hr />
       <View>
         <TextField
           label="Search"
           labelHidden={true}
           variation="quiet"
+          backgroundColor={grey}
           placeholder="Search..."
         />
-        <View>Recipient List</View>
         <Table highlightOnHover={true}>
           <TableHead>
             <TableRow>
@@ -92,18 +100,38 @@ const RecipientList = () => {
             </TableRow>
           </TableHead>
           <TableBody>{tableBody}</TableBody>
+          <TableFoot>
+            <TableRow>
+              {" "}
+              <TableCell backgroundColor={grey} colSpan="6">
+                {recipients?.length} Recipients
+              </TableCell>
+            </TableRow>
+          </TableFoot>
         </Table>
-        <View>{recipients?.length} Recipients</View>
       </View>
     </main>
   );
 };
 
+// TODO: This should probably be removed and we should use theming or something
+const grey = "#F4F4F4";
 const styles = {
   main: {
     display: "flex",
     flexDirection: "column",
     margin: 20,
+    width: "100%",
+  },
+  header: {
+    display: "flex",
+    justifyContent: "flex-start",
+  },
+  title: {
+    marginRight: "auto",
+  },
+  button: {
+    margin: "1em",
   },
 };
 
