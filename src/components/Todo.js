@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTodos } from "../data/todos";
+import { useTodos } from "../hooks/todos";
 import { Loader, View } from "@aws-amplify/ui-react";
 
 import "@aws-amplify/ui-react/styles.css";

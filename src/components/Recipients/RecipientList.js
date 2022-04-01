@@ -11,7 +11,7 @@ import {
   TableRow,
   Placeholder,
 } from "@aws-amplify/ui-react";
-import { useRecipients } from "../../data/recipients";
+import { useRecipients } from "../../hooks/recipients";
 
 import "@aws-amplify/ui-react/styles.css";
 
@@ -22,7 +22,7 @@ const RecipientList = () => {
   if (isLoading) {
     tableBody = (
       <TableRow>
-        <TableCell colspan="6">
+        <TableCell colSpan="6">
           <Placeholder />
         </TableCell>
       </TableRow>
@@ -30,7 +30,7 @@ const RecipientList = () => {
   } else if (isError) {
     tableBody = (
       <TableRow>
-        <TableCell colspan="6">
+        <TableCell colSpan="6">
           Error loading recipients: {error.message}
         </TableCell>
       </TableRow>
@@ -67,8 +67,8 @@ const RecipientList = () => {
 
   return (
     <main style={styles.main}>
-      <View>
-        <Heading>Recipient Dashboard</Heading>
+      <View className="page-header">
+        <Heading level={1}>Recipient Dashboard</Heading>
         <Button>Import A List</Button>
         <Button>Add A Recipient</Button>
       </View>
