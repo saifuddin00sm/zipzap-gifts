@@ -12,7 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import TableFooter from "@mui/material/TableFooter";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import LinearProgress from "@mui/material/LinearProgress";
+import Skeleton from "@mui/material/Skeleton";
 import { useRecipients } from "../../hooks/recipients";
 
 const RecipientList = () => {
@@ -22,8 +22,23 @@ const RecipientList = () => {
   if (isLoading) {
     tableBody = (
       <TableRow>
-        <TableCell colSpan={6}>
-          <LinearProgress />
+        <TableCell>
+          <Skeleton variant="text" />
+        </TableCell>
+        <TableCell>
+          <Skeleton variant="text" />
+        </TableCell>
+        <TableCell>
+          <Skeleton variant="text" />
+        </TableCell>
+        <TableCell>
+          <Skeleton variant="text" />
+        </TableCell>
+        <TableCell>
+          <Skeleton variant="text" />
+        </TableCell>
+        <TableCell>
+          <Skeleton variant="text" />
         </TableCell>
       </TableRow>
     );

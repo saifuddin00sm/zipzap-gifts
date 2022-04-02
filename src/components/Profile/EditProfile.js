@@ -31,6 +31,7 @@ const EditProfile = ({ user, setcurrentUser, setNewUser }) => {
     setFormState({ ...formState, [key]: value });
   }
 
+  // TODO: I would like all of this updateThisUser to be moved out of this component into a hook or data file
   async function updateThisUser() {
     if (
       !formState.company ||
@@ -101,6 +102,7 @@ const EditProfile = ({ user, setcurrentUser, setNewUser }) => {
       }
     }
   }
+  // TODO: All of this needs to be styled nice. Like, put into boxes or paper or something.
   return (
     <Box>
       <Typography variant="h1">Welcome to Zip Zap!</Typography>
@@ -178,7 +180,7 @@ const EditProfile = ({ user, setcurrentUser, setNewUser }) => {
 
           {editUser ? (
             <>
-              <Button variant="dark" type="submit" onClick={updateThisUser}>
+              <Button type="submit" onClick={updateThisUser}>
                 Submit
               </Button>
             </>

@@ -68,6 +68,7 @@ function ProfilePage() {
         />
       ) : (
         <>
+          {/* TODO: This needs some serious styling, hahahah.... */}
           <Typography variant="h2">{currentUser.name}</Typography>
           <Typography paragraph>Company: {currentUser.company.name}</Typography>
           <Typography variant="h3">Contact Info</Typography>
