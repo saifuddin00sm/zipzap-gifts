@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Container, Button } from "react-bootstrap";
+import Container from "@mui/material/Container";
+import Header from "../Header.js";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { useOutletContext } from "react-router-dom";
 import { getUser } from "../../graphql/queries";
 import { createUser } from "../../graphql/mutations";
@@ -9,11 +16,7 @@ import { Link } from "react-router-dom";
 function GiftDashboard() {
   //congito user information
   const [user] = useOutletContext();
-  const [popUpMessage, setPopUpMessage] = useState(false);
-
-  const handleDismissPopup = () => {
-    setPopUpMessage(false);
-  };
+  const [open, setOpen] = useState(false);
 
   // TODO: Refactor this into a custom hook and move it out of this file
   useEffect(() => {
@@ -36,7 +39,7 @@ function GiftDashboard() {
       if (!userData.data.getUser) {
         addUser();
       } else if (!userData.data.getUser.company) {
-        setPopUpMessage(true);
+        setOpen(true);
       }
     }
 
@@ -49,48 +52,43 @@ function GiftDashboard() {
   ]);
 
   return (
-    <Container className="main-container">
-      <Row className="page-header justify-content-center">
-        <Col md="10">
-          <h1>Gift Dashboard</h1>
-        </Col>
-        <Col md="2">
-          <Button variant="blue">Send a Gift</Button>
-        </Col>
-      </Row>
-      <hr />
-      {popUpMessage ? (
-        <>
-          <Row className="welcome-message">
-            <Col xs="12" sm="6" md="7">
-              <h3>Welcome to Zip Zap!</h3>
-              <p>Do you want to finish setting up your account?</p>
-            </Col>
-            <Col xs="12" sm="6" md="3">
-              <Button variant="dark">
-                <Link to="/profile" className="button-link">
-                  Go to Profile
-                </Link>
-              </Button>
-            </Col>
-            <Col xs="12" sm="3" md="2">
-              <Button variant="dark" onClick={handleDismissPopup}>
-                Dismiss
-              </Button>
-            </Col>
-          </Row>
-        </>
-      ) : (
-        <Row>
-          <p>Welcome, {user.attributes.name}!</p>
-        </Row>
+    <Container component="main">
+      <Header>
+        <Typography variant="h1">Gift Dashboard</Typography>
+        <Button>Send a Gift</Button>
+      </Header>
+      <Collapse in={open}>
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          icon={false}
+          severity="info"
+          sx={{ mb: 2 }}
+        >
+          <Typography variant="h3" sx={{ my: 1 }}>
+            Welcome to Zip Zap!
+          </Typography>
+          <Typography>
+            Do you want to finish setting up your account?
+          </Typography>
+          <Link to="/profile" className="button-link">
+            <Button sx={{ my: 2 }}>Go to Profile</Button>
+          </Link>
+        </Alert>
+      </Collapse>
+      {user.attributes.name && (
+        <Typography>Welcome, {user.attributes.name}!</Typography>
       )}
-      <Row>
-        <Col>
-          <h1>One Time gifts</h1>
-        </Col>
-        <Col></Col>
-      </Row>
     </Container>
   );
 }

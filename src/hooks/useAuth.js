@@ -24,8 +24,8 @@ const useAuth = () => {
 
   const signIn = () => Auth.federatedSignIn();
 
-  const signOut = () => {
-    Auth.signOut();
+  const signOut = async () => {
+    await Auth.signOut();
     window.location.href = "/";
   };
   return { currentUser, signIn, signOut };

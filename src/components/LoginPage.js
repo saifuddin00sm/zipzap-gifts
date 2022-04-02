@@ -1,6 +1,10 @@
 import React from "react";
-import { Grid, View, Image } from "@aws-amplify/ui-react";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import useAuth from "../hooks/useAuth";
+
+const backgroundBlue = "#C5D4DF";
+const headingBlue = "#9EB1BE";
 
 /**
  * A helper component that shows the Zip Zap Login design if the
@@ -15,25 +19,46 @@ const LoginPage = ({ children }) => {
   }
 
   return (
-    <Grid
-      templateColumns="1fr 1fr"
-      templateRows="10rem 10rem"
-      gap="var(--amplify-space-small)"
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        marginTop: { xs: -20, md: "revert" },
+        backgroundColor: { xs: backgroundBlue, md: "white" },
+      }}
     >
-      <View className="sidebar-image">
-        <Image
-          alt="Zip Zap logo"
+      <Box
+        sx={{
+          display: { md: "flex" },
+          width: { xs: "100%", md: "50%" },
+          maxHeight: { xs: 280, md: "none" },
+          height: { md: "100%" },
+          backgroundColor: backgroundBlue,
+        }}
+      >
+        <Box
+          alignSelf="center"
+          component="img"
+          alt="Zip Zap Logo"
           src="https://s3.amazonaws.com/content.zipzapgifts.com/zip-zap-login+(1).png"
-          className="sign-in-image"
+          width="100%"
         />
-      </View>
-      <View className="authentication-side">
-        <h1 className="authentication-title">
+      </Box>
+      <Box sx={{ width: { xs: "100%", md: "50%" } }}>
+        <Typography
+          sx={{
+            color: { xs: "white", md: headingBlue },
+            padding: { xs: 2, md: 3 },
+          }}
+          align="center"
+          variant="h1"
+        >
           An Automated Gift Giving Platform Built for Businesses
-        </h1>
+        </Typography>
         {children}
-      </View>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
 

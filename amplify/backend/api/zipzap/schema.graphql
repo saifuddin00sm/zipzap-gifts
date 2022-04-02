@@ -79,6 +79,7 @@ type Recipient
   startDate: AWSDate
   departmentID: ID
     @index(name: "byDepartment", sortKeyFields: ["firstName", "lastName"])
+  department: Department @belongsTo(fields: ["departmentID"])
   profilePhoto: String
   favorites: [ProfileFavorite] @hasMany
   giftHistory: [GiftEvent]

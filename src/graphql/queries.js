@@ -498,6 +498,21 @@ export const getRecipient = /* GraphQL */ `
       birthday
       startDate
       departmentID
+      department {
+        id
+        name
+        recipients {
+          nextToken
+          startedAt
+        }
+        accessGroups
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       profilePhoto
       favorites {
         items {
@@ -598,6 +613,17 @@ export const listRecipients = /* GraphQL */ `
         birthday
         startDate
         departmentID
+        department {
+          id
+          name
+          accessGroups
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         profilePhoto
         favorites {
           nextToken
@@ -674,6 +700,17 @@ export const syncRecipients = /* GraphQL */ `
         birthday
         startDate
         departmentID
+        department {
+          id
+          name
+          accessGroups
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         profilePhoto
         favorites {
           nextToken
@@ -923,6 +960,17 @@ export const getGiftEvent = /* GraphQL */ `
         birthday
         startDate
         departmentID
+        department {
+          id
+          name
+          accessGroups
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         profilePhoto
         favorites {
           nextToken

@@ -632,6 +632,21 @@ export const createRecipient = /* GraphQL */ `
       birthday
       startDate
       departmentID
+      department {
+        id
+        name
+        recipients {
+          nextToken
+          startedAt
+        }
+        accessGroups
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       profilePhoto
       favorites {
         items {
@@ -757,6 +772,21 @@ export const updateRecipient = /* GraphQL */ `
       birthday
       startDate
       departmentID
+      department {
+        id
+        name
+        recipients {
+          nextToken
+          startedAt
+        }
+        accessGroups
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       profilePhoto
       favorites {
         items {
@@ -882,6 +912,21 @@ export const deleteRecipient = /* GraphQL */ `
       birthday
       startDate
       departmentID
+      department {
+        id
+        name
+        recipients {
+          nextToken
+          startedAt
+        }
+        accessGroups
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
       profilePhoto
       favorites {
         items {
@@ -1180,6 +1225,17 @@ export const createGiftEvent = /* GraphQL */ `
         birthday
         startDate
         departmentID
+        department {
+          id
+          name
+          accessGroups
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         profilePhoto
         favorites {
           nextToken
@@ -1286,6 +1342,17 @@ export const updateGiftEvent = /* GraphQL */ `
         birthday
         startDate
         departmentID
+        department {
+          id
+          name
+          accessGroups
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         profilePhoto
         favorites {
           nextToken
@@ -1392,6 +1459,17 @@ export const deleteGiftEvent = /* GraphQL */ `
         birthday
         startDate
         departmentID
+        department {
+          id
+          name
+          accessGroups
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          owner
+        }
         profilePhoto
         favorites {
           nextToken
