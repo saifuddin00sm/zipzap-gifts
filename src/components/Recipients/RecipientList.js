@@ -84,7 +84,7 @@ const RecipientList = () => {
     <Container component="main">
       <Header>
         <Typography variant="h1">Recipient Dashboard</Typography>
-        <Box>
+        <Box display="flex">
           <Button sx={{ mx: 2 }}>Import A List</Button>
           <Button>Add A Recipient</Button>
         </Box>
