@@ -11,7 +11,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { zipZapTheme } from "./theme";
 
 import "@aws-amplify/ui-react/styles.css";
-import "./App.css";
 
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
