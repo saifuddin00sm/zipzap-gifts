@@ -30,7 +30,7 @@ const menu = [
   },
 ];
 
-const NavigationMenu = ({ signOut, user }) => {
+const NavigationMenu = ({ signOut }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const node = useRef();
 

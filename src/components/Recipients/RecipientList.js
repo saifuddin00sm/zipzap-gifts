@@ -1,20 +1,19 @@
 import React from "react";
-import {
-  Heading,
-  View,
-  TextField,
-  Table,
-  TableCell,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableFoot,
-  Placeholder,
-} from "@aws-amplify/ui-react";
-import { Button } from "react-bootstrap";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Header from "../Header";
+import Typography from "@mui/material/Typography";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableFooter from "@mui/material/TableFooter";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import LinearProgress from "@mui/material/LinearProgress";
 import { useRecipients } from "../../hooks/recipients";
-
-import "@aws-amplify/ui-react/styles.css";
 
 const RecipientList = () => {
   const { recipients, isLoading, isError, error } = useRecipients();
@@ -23,15 +22,15 @@ const RecipientList = () => {
   if (isLoading) {
     tableBody = (
       <TableRow>
-        <TableCell colSpan="6">
-          <Placeholder />
+        <TableCell colSpan={6}>
+          <LinearProgress />
         </TableCell>
       </TableRow>
     );
   } else if (isError) {
     tableBody = (
       <TableRow>
-        <TableCell colSpan="6">
+        <TableCell colSpan={6}>
           Error loading recipients: {error.message}
         </TableCell>
       </TableRow>
@@ -67,72 +66,40 @@ const RecipientList = () => {
   }
 
   return (
-    <main style={styles.main}>
-      <View style={styles.header} className="page-header">
-        <Heading level={1} style={styles.title}>
-          Recipient Dashboard
-        </Heading>
-        <Button style={styles.button} variant="blue">
-          Import A List
-        </Button>
-        <Button style={styles.button} variant="blue">
-          Add A Recipient
-        </Button>
-      </View>
-      <hr />
-      <View>
-        <TextField
-          label="Search"
-          labelHidden={true}
-          variation="quiet"
-          backgroundColor={grey}
-          placeholder="Search..."
-        />
-        <Table highlightOnHover={true}>
-          <TableHead>
-            <TableRow>
-              <TableCell as="th">Name</TableCell>
-              <TableCell as="th">Birthday</TableCell>
-              <TableCell as="th">Address</TableCell>
-              <TableCell as="th">Job Title</TableCell>
-              <TableCell as="th">Date Started</TableCell>
-              <TableCell as="th">Department</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{tableBody}</TableBody>
-          <TableFoot>
-            <TableRow>
-              {" "}
-              <TableCell backgroundColor={grey} colSpan="6">
-                {recipients?.length} Recipients
-              </TableCell>
-            </TableRow>
-          </TableFoot>
-        </Table>
-      </View>
-    </main>
+    <Container component="main">
+      <Header>
+        <Typography variant="h1">Recipient Dashboard</Typography>
+        <Box>
+          <Button sx={{ mx: 2 }}>Import A List</Button>
+          <Button>Add A Recipient</Button>
+        </Box>
+      </Header>
+      <Container>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Birthday</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell>Job Title</TableCell>
+                <TableCell>Date Started</TableCell>
+                <TableCell>Department</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{tableBody}</TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={6}>
+                  {recipients?.length} Recipients
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      </Container>
+    </Container>
   );
-};
-
-// TODO: This should probably be removed and we should use theming or something
-const grey = "#F4F4F4";
-const styles = {
-  main: {
-    display: "flex",
-    flexDirection: "column",
-    margin: 20,
-    width: "100%",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "flex-start",
-  },
-  title: {
-    marginRight: "auto",
-  },
-  button: {
-    margin: "1em",
-  },
 };
 
 export default RecipientList;

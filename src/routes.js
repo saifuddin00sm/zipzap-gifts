@@ -8,14 +8,13 @@ import App from "./App";
 import Todo from "./components/Todo";
 import RecipientList from "./components/Recipients/RecipientList";
 
-const ZipZapRoutes = (props) => {
+const ZipZapRoutes = () => {
   const { pathname } = useLocation();
   return (
     <Routes>
       <Route path="/" element={<App />}>
         <Route index element={<GiftDashboard />} />
-        <Route path="profile" element={<ProfilePage user={props.user} />} />
-
+        <Route path="profile" element={<ProfilePage />} />
         <Route path="todo" element={<Todo />} />
         <Route path="recipients" element={<RecipientList />} />
         <Route
