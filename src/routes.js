@@ -8,6 +8,8 @@ import App from "./App";
 import Todo from "./components/Todo";
 import RecipientList from "./components/Recipients/RecipientList";
 
+import GiftCatalog from "./components/GiftCatalog/GiftCatalog";
+
 const ZipZapRoutes = () => {
   const { pathname } = useLocation();
   return (
@@ -17,6 +19,7 @@ const ZipZapRoutes = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="todo" element={<Todo />} />
         <Route path="recipients" element={<RecipientList />} />
+        <Route path="catalog" element={<GiftCatalog />} />
         <Route
           path="*"
           element={

@@ -1,0 +1,171 @@
+{
+  "data": {
+    "listGifts": {
+      "nextToken": null,
+      "startedAt": null,
+      "items": [
+        {
+          "id": "deab45f9-1d26-4fd3-8edf-b73c6dcf5a26",
+          "name": "Small Baby Basket",
+          "category": "birthday",
+          "price": "45",
+          "description": "A little welcome box for a new baby",
+          "pictures": {
+            "items": [
+              {
+                "alt": "small baby box",
+                "src": "https://d4ya733yr7s0y.cloudfront.net/images/made/images/uploads/general/7dd00d2830684131cd8b008a31bee64f88bf15ef.jpg"
+              }
+            ]
+          },
+          "items": {
+            "items": [
+              {
+                "name": "Baby Oneise",
+                "price": "10",
+                "description": "A cute little piece of clothing for a new baby",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "small baby box",
+                      "src": "https://i5.walmartimages.com/asr/bc0949cf-6cb3-41ed-b980-cd723f2a4954_1.99f30482539b7f223a9b75eccd07110d.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Baby Blanket",
+                "price": "25",
+                "description": "A soft, brandable blanket for a new baby",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "baby blanket",
+                      "src": "https://www.burtsbeesbaby.com/media/catalog/product/H/M/HM25788_Multi_alt1.jpg?quality=80&bg-color=255,255,255&fit=bounds&height=600&width=600&canvas=600:600"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "e0ca129f-2f46-4591-ba9d-fbaae3fbcd41",
+          "name": "Small Birthday Box",
+          "category": "congratulations",
+          "price": "15",
+          "description": "A fun little party box to celebrate a birthday",
+          "pictures": {
+            "items": [
+              {
+                "alt": "small birthday box",
+                "src": "https://images.squarespace-cdn.com/content/v1/5446f16ce4b08ee6bee03488/1589580690714-JL5Y9Y1DSZ3K8MLEMEO1/sassybirthdaypack.jpg?format=1000w"
+              }
+            ]
+          },
+          "items": {
+            "items": [
+              {
+                "name": "Party Popper",
+                "price": "0.5",
+                "description": "A fun little firecracker",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "party popper",
+                      "src": "https://bindusky.com/wp-content/uploads/2020/07/Party-popper-1.jpg"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Party Hat",
+                "price": "0.5",
+                "description": "A silly hat to wear at a party",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "party hat",
+                      "src": "https://imgs.michaels.com/MAM/assets/1/726D45CA1C364650A39CD1B336F03305/img/0792D2A8C9B1434FA4C581D3E9ADF96E/28181_47121.jpg?fit=inside|540:540"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Cake Mix",
+                "price": "3",
+                "description": "A tasty mix of cake you can make at home",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "cake mix",
+                      "src": "https://i5.walmartimages.com/asr/1cacecf8-8e2e-439f-bbb0-736ab5f3c339.a4e5a40b1ca702f56c8f7ab8bd8bb030.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "e0ca129f-2f46-4591-ba9d-fbaae3fbcd41jke",
+          "name": "Small Birthday Box",
+          "category": "congratulations",
+          "price": "20",
+          "description": "A fun little party box to celebrate a birthday",
+          "pictures": {
+            "items": [
+              {
+                "alt": "small birthday box",
+                "src": "https://images.squarespace-cdn.com/content/v1/5446f16ce4b08ee6bee03488/1589580690714-JL5Y9Y1DSZ3K8MLEMEO1/sassybirthdaypack.jpg?format=1000w"
+              }
+            ]
+          },
+          "items": {
+            "items": [
+              {
+                "name": "Party Popper",
+                "price": "0.5",
+                "description": "A fun little firecracker",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "party popper",
+                      "src": "https://bindusky.com/wp-content/uploads/2020/07/Party-popper-1.jpg"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Party Hat",
+                "price": "0.5",
+                "description": "A silly hat to wear at a party",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "party hat",
+                      "src": "https://imgs.michaels.com/MAM/assets/1/726D45CA1C364650A39CD1B336F03305/img/0792D2A8C9B1434FA4C581D3E9ADF96E/28181_47121.jpg?fit=inside|540:540"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Cake Mix",
+                "price": "3",
+                "description": "A tasty mix of cake you can make at home",
+                "pictures": {
+                  "items": [
+                    {
+                      "alt": "cake mix",
+                      "src": "https://i5.walmartimages.com/asr/1cacecf8-8e2e-439f-bbb0-736ab5f3c339.a4e5a40b1ca702f56c8f7ab8bd8bb030.png?odnHeight=612&odnWidth=612&odnBg=FFFFFF"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
