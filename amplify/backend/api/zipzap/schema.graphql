@@ -184,6 +184,7 @@ type Gift
   ) {
   id: ID!
   name: String!
+  category: String
   items: [Item] @hasMany
   price: String
   description: String

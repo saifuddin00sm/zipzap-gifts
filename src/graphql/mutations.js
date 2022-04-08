@@ -1262,6 +1262,7 @@ export const createGiftEvent = /* GraphQL */ `
       gift {
         id
         name
+        category
         items {
           nextToken
           startedAt
@@ -1379,6 +1380,7 @@ export const updateGiftEvent = /* GraphQL */ `
       gift {
         id
         name
+        category
         items {
           nextToken
           startedAt
@@ -1496,6 +1498,7 @@ export const deleteGiftEvent = /* GraphQL */ `
       gift {
         id
         name
+        category
         items {
           nextToken
           startedAt
@@ -1680,6 +1683,7 @@ export const createGift = /* GraphQL */ `
     createGift(input: $input, condition: $condition) {
       id
       name
+      category
       items {
         items {
           id
@@ -1737,6 +1741,7 @@ export const updateGift = /* GraphQL */ `
     updateGift(input: $input, condition: $condition) {
       id
       name
+      category
       items {
         items {
           id
@@ -1794,6 +1799,7 @@ export const deleteGift = /* GraphQL */ `
     deleteGift(input: $input, condition: $condition) {
       id
       name
+      category
       items {
         items {
           id
