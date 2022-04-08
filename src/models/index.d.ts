@@ -174,6 +174,7 @@ export declare class GiftEvent {
 export declare class Gift {
   readonly id: string;
   readonly name: string;
+  readonly category?: string;
   readonly items?: (Item | null)[];
   readonly price?: string;
   readonly description?: string;

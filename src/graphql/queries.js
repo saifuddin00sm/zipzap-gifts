@@ -997,6 +997,7 @@ export const getGiftEvent = /* GraphQL */ `
       gift {
         id
         name
+        category
         items {
           nextToken
           startedAt
@@ -1070,6 +1071,7 @@ export const listGiftEvents = /* GraphQL */ `
         gift {
           id
           name
+          category
           price
           description
           active
@@ -1144,6 +1146,7 @@ export const syncGiftEvents = /* GraphQL */ `
         gift {
           id
           name
+          category
           price
           description
           active
@@ -1293,6 +1296,7 @@ export const getGift = /* GraphQL */ `
     getGift(id: $id) {
       id
       name
+      category
       items {
         items {
           id
@@ -1352,6 +1356,7 @@ export const listGifts = /* GraphQL */ `
       items {
         id
         name
+        category
         items {
           nextToken
           startedAt
@@ -1391,6 +1396,7 @@ export const syncGifts = /* GraphQL */ `
       items {
         id
         name
+        category
         items {
           nextToken
           startedAt
