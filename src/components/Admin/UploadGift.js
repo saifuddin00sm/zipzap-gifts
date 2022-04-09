@@ -35,7 +35,7 @@ const initialItemState = {
   description: "",
   weight: "",
   price: "",
-  pictures: [],
+  pictures: [{ alt: "thumbnail", src: "" }],
   active: true,
   source: "",
 };
@@ -92,6 +92,130 @@ const GiftImageCard = ({
   );
 };
 
+const ItemUpload = () => {
+  const [formState, setFormState] = useState(initialItemState);
+
+  const setInput = (key, value) => {
+    setFormState({ ...formState, [key]: value });
+  };
+
+  const setPicture = (index, key, value) => {
+    setFormState({
+      ...formState,
+      pictures: formState.pictures.map((v, i) => {
+        if (i === index) {
+          return { ...v, [key]: value };
+        }
+        return v;
+      }),
+    });
+  };
+
+  const submit = () => {
+    createGift({ ...formState });
+    setFormState(initialGiftState);
+  };
+
+  const addImage = () => {
+    setFormState({
+      ...formState,
+      pictures: [...formState.pictures, { ...initialGiftImageState }],
+    });
+  };
+
+  const removeImage = (index) => {
+    setFormState({
+      ...formState,
+      pictures: formState.pictures.filter((v, i) => i !== index),
+    });
+  };
+
+  return (
+    <Box display="inline-block">
+      <Paper elevation={3} sx={{ padding: 3 }}>
+        <Grid
+          container
+          component="form"
+          direction={"column"}
+          spacing={3}
+          noValidate
+          autoComplete="off"
+        >
+          <Grid item>
+            <Typography variant="h2">Gift Item</Typography>
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Name"
+              fullWidth
+              value={formState.name}
+              onChange={(event) => setInput("name", event.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Description"
+              fullWidth
+              multiline
+              rows={2}
+              value={formState.description}
+              onChange={(event) => setInput("description", event.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Source"
+              fullWidth
+              value={formState.source}
+              onChange={(event) => setInput("source", event.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Weight"
+              fullWidth
+              value={formState.weight}
+              onChange={(event) => setInput("weight", event.target.value)}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Price"
+              fullWidth
+              value={formState.price}
+              type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              onChange={(event) => setInput("price", event.target.value)}
+            />
+          </Grid>
+          {formState.pictures.map(({ alt, src }, index) => (
+            <Grid item key={`image-${index}`}>
+              <GiftImageCard
+                type={"Item"}
+                alt={alt}
+                src={src}
+                isThumbnail={index === 0}
+                setInput={(key, val) => setPicture(index, key, val)}
+                deleteImage={() => removeImage(index)}
+              />
+            </Grid>
+          ))}
+          <Grid item>
+            <Tooltip title="Add Image" placement="right">
+              <IconButton aria-label="add image" onClick={addImage}>
+                <AddPhotoAlternateIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+          <Grid item>
+            <Button onClick={submit}>Create Gift Item</Button>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Box>
+  );
+};
+
 const UploadGift = () => {
   const [formState, setFormState] = useState(initialGiftState);
 
@@ -145,6 +269,9 @@ const UploadGift = () => {
             noValidate
             autoComplete="off"
           >
+            <Grid item>
+              <Typography variant="h2">Gift</Typography>
+            </Grid>
             <Grid item>
               <TextField
                 label="Name"
@@ -225,6 +352,7 @@ const UploadGift = () => {
           </Grid>
         </Paper>
       </Box>
+      <ItemUpload />
     </Container>
   );
 };
