@@ -49,15 +49,15 @@ const GiftCards = ({ data, loading, error }) => {
 
   return (
     <>
-      {categories.map(({ name, category }, index) => {
+      {categories.map(({ name, category }) => {
         const categoryGifts = data?.filter(
           ({ category: itemCategory }) => category === itemCategory
         );
         if (Array.isArray(categoryGifts)) {
-          if (categoryGifts.length < 1) return;
+          if (categoryGifts.length < 1) return null;
         }
         return (
-          <Box key={index}>
+          <Box key={category}>
             <Typography
               sx={{
                 fontfamily: "Poppins",
@@ -81,21 +81,19 @@ const GiftCards = ({ data, loading, error }) => {
             >
               <Grid container spacing={5}>
                 {categoryGifts &&
-                  categoryGifts?.map((item, index) => (
-                    <Grid key={index} item columns={{ xs: 4, sm: 8, md: 12 }}>
+                  categoryGifts?.map((item) => (
+                    <Grid key={item.id} item columns={{ xs: 4, sm: 8, md: 12 }}>
                       <StyledCard>
                         <Box className="inner_card">
-                          {item?.pictures?.items.map(({ src, alt }) => (
-                            <img
-                              style={{
-                                width: "100%",
-                                height: "174px",
-                                objectFit: "cover",
-                              }}
-                              src={src}
-                              alt={alt}
-                            />
-                          ))}
+                          <img
+                            style={{
+                              width: "100%",
+                              height: "174px",
+                              objectFit: "cover",
+                            }}
+                            src={item?.pictures?.items[0]?.src}
+                            alt={item?.pictures?.items[0]?.alt}
+                          />
                           <Typography variant="h6" sx={{ fontSize: "1.1rem" }}>
                             {item.name}
                           </Typography>
