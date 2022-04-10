@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { Storage } from "aws-amplify";
+import { v4 as uuid } from "uuid";
 import Header from "../Header";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -18,7 +20,13 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
-import { createGift } from "../../hooks/admin";
+import { createGift, useGiftItems } from "../../hooks/admin";
+import config from "../../aws-exports";
+
+const {
+  aws_user_files_s3_bucket_region: region,
+  aws_user_files_s3_bucket: bucket,
+} = config;
 
 const initialGiftState = {
   name: "",
@@ -35,7 +43,7 @@ const initialItemState = {
   description: "",
   weight: "",
   price: "",
-  pictures: [{ alt: "thumbnail", src: "" }],
+  pictures: [{ alt: "", src: "" }],
   active: true,
   source: "",
 };
@@ -63,6 +71,32 @@ const GiftImageCard = ({
   setInput,
   deleteImage,
 }) => {
+  const [fileName, setFileName] = useState("");
+  const fileInput = useRef();
+
+  const handleChange = async (event) => {
+    const {
+      target: { files },
+    } = event;
+    const file = files[0];
+    const [name, extension] = file.name.split(".");
+    setFileName(name);
+
+    // Upload image to AWS S3
+    if (!file) {
+      return;
+    }
+    const { type: mimeType } = file;
+    const key = `images/${uuid()}${name}.${extension}`;
+    const url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
+
+    await Storage.put(key, file, {
+      contentType: mimeType,
+    });
+    setInput("src", url);
+  };
+
+  // TODO: Add spinner to show that image is uploading and disable submit button until it's done
   return (
     <Card sx={{ maxWidth: 300 }}>
       {src && <CardMedia component="img" height="140" image={src} alt={alt} />}
@@ -77,7 +111,16 @@ const GiftImageCard = ({
         }
       />
       <CardContent>
-        <Button>Upload Image</Button>
+        <input
+          ref={fileInput}
+          style={{ display: "none" }}
+          accept="image/*"
+          type="file"
+          onChange={handleChange}
+        />
+        <Button onClick={() => fileInput.current.click()}>
+          {fileName || "Upload Image"}
+        </Button>
         {isThumbnail && <Typography>Thumbnails must be 175px high</Typography>}
         <TextField
           required
@@ -93,6 +136,7 @@ const GiftImageCard = ({
 };
 
 const ItemUpload = () => {
+  const { addGiftItem } = useGiftItems();
   const [formState, setFormState] = useState(initialItemState);
 
   const setInput = (key, value) => {
@@ -111,9 +155,9 @@ const ItemUpload = () => {
     });
   };
 
-  const submit = () => {
-    createGift({ ...formState });
-    setFormState(initialGiftState);
+  const submit = async () => {
+    await addGiftItem({ ...formState });
+    setFormState(initialItemState);
   };
 
   const addImage = () => {
@@ -194,7 +238,6 @@ const ItemUpload = () => {
                 type={"Item"}
                 alt={alt}
                 src={src}
-                isThumbnail={index === 0}
                 setInput={(key, val) => setPicture(index, key, val)}
                 deleteImage={() => removeImage(index)}
               />
@@ -217,6 +260,7 @@ const ItemUpload = () => {
 };
 
 const UploadGift = () => {
+  const { giftItems } = useGiftItems();
   const [formState, setFormState] = useState(initialGiftState);
 
   const setInput = (key, value) => {
@@ -235,8 +279,9 @@ const UploadGift = () => {
     });
   };
 
-  const submit = () => {
-    createGift({ ...formState });
+  const submit = async () => {
+    await createGift({ ...formState });
+    // TODO: This doesn't place nice with the Autocomplete fields. Fix this.
     setFormState(initialGiftState);
   };
 
@@ -259,7 +304,7 @@ const UploadGift = () => {
       <Header>
         <Typography variant="h1">Gift Upload</Typography>
       </Header>
-      <Box display="inline-block">
+      <Box display="inline-block" maxWidth={500}>
         <Paper elevation={3} sx={{ padding: 3 }}>
           <Grid
             container
@@ -332,6 +377,42 @@ const UploadGift = () => {
                   <AddPhotoAlternateIcon />
                 </IconButton>
               </Tooltip>
+            </Grid>
+            <Grid item>
+              <Autocomplete
+                multiple
+                options={
+                  giftItems?.sort((a, b) => (a.name > b.name ? 1 : -1)) || []
+                }
+                onChange={(event, values) =>
+                  setInput(
+                    "items",
+                    values.map(({ id }) => id)
+                  )
+                }
+                getOptionLabel={(option) => option.name}
+                renderOption={(props, option) => {
+                  return (
+                    <li
+                      {...props}
+                      style={{
+                        backgroundColor: props["aria-selected"] && "#97afa7",
+                      }}
+                      key={option.id}
+                    >
+                      {option.name}
+                    </li>
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Gift Items"
+                    placeholder="Gift Items"
+                  />
+                )}
+              />
             </Grid>
             <Grid item>
               <FormControlLabel
