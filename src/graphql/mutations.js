@@ -24,29 +24,20 @@ export const createUser = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -54,9 +45,6 @@ export const createUser = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyUsersId
       owner
     }
@@ -85,29 +73,20 @@ export const updateUser = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -115,9 +94,6 @@ export const updateUser = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyUsersId
       owner
     }
@@ -146,29 +122,20 @@ export const deleteUser = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -176,9 +143,6 @@ export const deleteUser = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyUsersId
       owner
     }
@@ -202,9 +166,6 @@ export const createCompany = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       users {
@@ -217,14 +178,10 @@ export const createCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyUsersId
           owner
         }
         nextToken
-        startedAt
       }
       recipients {
         items {
@@ -243,15 +200,11 @@ export const createCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       giftEventsByDate {
         items {
@@ -268,21 +221,14 @@ export const createCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyAddressId
       owner
     }
@@ -306,9 +252,6 @@ export const updateCompany = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       users {
@@ -321,14 +264,10 @@ export const updateCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyUsersId
           owner
         }
         nextToken
-        startedAt
       }
       recipients {
         items {
@@ -347,15 +286,11 @@ export const updateCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       giftEventsByDate {
         items {
@@ -372,21 +307,14 @@ export const updateCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyAddressId
       owner
     }
@@ -410,9 +338,6 @@ export const deleteCompany = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       users {
@@ -425,14 +350,10 @@ export const deleteCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyUsersId
           owner
         }
         nextToken
-        startedAt
       }
       recipients {
         items {
@@ -451,15 +372,11 @@ export const deleteCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       giftEventsByDate {
         items {
@@ -476,21 +393,14 @@ export const deleteCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyAddressId
       owner
     }
@@ -511,9 +421,6 @@ export const createAddress = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -533,9 +440,6 @@ export const updateAddress = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -555,9 +459,6 @@ export const deleteAddress = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -582,29 +483,20 @@ export const createRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -621,9 +513,6 @@ export const createRecipient = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       email
@@ -637,14 +526,10 @@ export const createRecipient = /* GraphQL */ `
         name
         recipients {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       profilePhoto
@@ -656,14 +541,10 @@ export const createRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           recipientFavoritesId
           owner
         }
         nextToken
-        startedAt
       }
       giftHistory {
         items {
@@ -680,22 +561,15 @@ export const createRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       welcomed
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyRecipientsId
       recipientShippingAddressId
       owner
@@ -722,29 +596,20 @@ export const updateRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -761,9 +626,6 @@ export const updateRecipient = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       email
@@ -777,14 +639,10 @@ export const updateRecipient = /* GraphQL */ `
         name
         recipients {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       profilePhoto
@@ -796,14 +654,10 @@ export const updateRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           recipientFavoritesId
           owner
         }
         nextToken
-        startedAt
       }
       giftHistory {
         items {
@@ -820,22 +674,15 @@ export const updateRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       welcomed
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyRecipientsId
       recipientShippingAddressId
       owner
@@ -862,29 +709,20 @@ export const deleteRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -901,9 +739,6 @@ export const deleteRecipient = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       email
@@ -917,14 +752,10 @@ export const deleteRecipient = /* GraphQL */ `
         name
         recipients {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       profilePhoto
@@ -936,14 +767,10 @@ export const deleteRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           recipientFavoritesId
           owner
         }
         nextToken
-        startedAt
       }
       giftHistory {
         items {
@@ -960,22 +787,15 @@ export const deleteRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       welcomed
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyRecipientsId
       recipientShippingAddressId
       owner
@@ -1007,22 +827,15 @@ export const createDepartment = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -1052,22 +865,15 @@ export const updateDepartment = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -1097,22 +903,15 @@ export const deleteDepartment = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -1129,9 +928,6 @@ export const createProfileFavorite = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       recipientFavoritesId
       owner
     }
@@ -1149,9 +945,6 @@ export const updateProfileFavorite = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       recipientFavoritesId
       owner
     }
@@ -1169,9 +962,6 @@ export const deleteProfileFavorite = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       recipientFavoritesId
       owner
     }
@@ -1195,9 +985,6 @@ export const createGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyAddressId
           owner
         }
@@ -1214,9 +1001,6 @@ export const createGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         email
@@ -1231,27 +1015,19 @@ export const createGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         profilePhoto
         favorites {
           nextToken
-          startedAt
         }
         giftHistory {
           nextToken
-          startedAt
         }
         welcomed
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyRecipientsId
         recipientShippingAddressId
         owner
@@ -1265,21 +1041,16 @@ export const createGiftEvent = /* GraphQL */ `
         category
         items {
           nextToken
-          startedAt
         }
         price
         description
         pictures {
           nextToken
-          startedAt
         }
         active
         needs_subscription
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       finalPrice
       shippingCost
@@ -1287,9 +1058,6 @@ export const createGiftEvent = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftEventGiftId
       owner
     }
@@ -1313,9 +1081,6 @@ export const updateGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyAddressId
           owner
         }
@@ -1332,9 +1097,6 @@ export const updateGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         email
@@ -1349,27 +1111,19 @@ export const updateGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         profilePhoto
         favorites {
           nextToken
-          startedAt
         }
         giftHistory {
           nextToken
-          startedAt
         }
         welcomed
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyRecipientsId
         recipientShippingAddressId
         owner
@@ -1383,21 +1137,16 @@ export const updateGiftEvent = /* GraphQL */ `
         category
         items {
           nextToken
-          startedAt
         }
         price
         description
         pictures {
           nextToken
-          startedAt
         }
         active
         needs_subscription
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       finalPrice
       shippingCost
@@ -1405,9 +1154,6 @@ export const updateGiftEvent = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftEventGiftId
       owner
     }
@@ -1431,9 +1177,6 @@ export const deleteGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyAddressId
           owner
         }
@@ -1450,9 +1193,6 @@ export const deleteGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         email
@@ -1467,27 +1207,19 @@ export const deleteGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         profilePhoto
         favorites {
           nextToken
-          startedAt
         }
         giftHistory {
           nextToken
-          startedAt
         }
         welcomed
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyRecipientsId
         recipientShippingAddressId
         owner
@@ -1501,21 +1233,16 @@ export const deleteGiftEvent = /* GraphQL */ `
         category
         items {
           nextToken
-          startedAt
         }
         price
         description
         pictures {
           nextToken
-          startedAt
         }
         active
         needs_subscription
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       finalPrice
       shippingCost
@@ -1523,9 +1250,6 @@ export const deleteGiftEvent = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftEventGiftId
       owner
     }
@@ -1555,14 +1279,10 @@ export const createOrder = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       createdBy
       totalPrice
@@ -1572,9 +1292,6 @@ export const createOrder = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -1603,14 +1320,10 @@ export const updateOrder = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       createdBy
       totalPrice
@@ -1620,9 +1333,6 @@ export const updateOrder = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -1651,14 +1361,10 @@ export const deleteOrder = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       createdBy
       totalPrice
@@ -1668,9 +1374,6 @@ export const deleteOrder = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -1697,13 +1400,9 @@ export const createGift = /* GraphQL */ `
           quantityAvailable
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftItemsId
         }
         nextToken
-        startedAt
       }
       price
       description
@@ -1714,22 +1413,15 @@ export const createGift = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       needs_subscription
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -1755,13 +1447,9 @@ export const updateGift = /* GraphQL */ `
           quantityAvailable
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftItemsId
         }
         nextToken
-        startedAt
       }
       price
       description
@@ -1772,22 +1460,15 @@ export const updateGift = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       needs_subscription
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -1813,13 +1494,9 @@ export const deleteGift = /* GraphQL */ `
           quantityAvailable
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftItemsId
         }
         nextToken
-        startedAt
       }
       price
       description
@@ -1830,22 +1507,15 @@ export const deleteGift = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       needs_subscription
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -1867,14 +1537,10 @@ export const createItem = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       source
@@ -1882,9 +1548,6 @@ export const createItem = /* GraphQL */ `
       quantityAvailable
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftItemsId
     }
   }
@@ -1907,14 +1570,10 @@ export const updateItem = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       source
@@ -1922,9 +1581,6 @@ export const updateItem = /* GraphQL */ `
       quantityAvailable
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftItemsId
     }
   }
@@ -1947,14 +1603,10 @@ export const deleteItem = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       source
@@ -1962,9 +1614,6 @@ export const deleteItem = /* GraphQL */ `
       quantityAvailable
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftItemsId
     }
   }
@@ -1980,9 +1629,6 @@ export const createGiftImage = /* GraphQL */ `
       src
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftPicturesId
       itemPicturesId
     }
@@ -1999,9 +1645,6 @@ export const updateGiftImage = /* GraphQL */ `
       src
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftPicturesId
       itemPicturesId
     }
@@ -2018,9 +1661,6 @@ export const deleteGiftImage = /* GraphQL */ `
       src
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftPicturesId
       itemPicturesId
     }
@@ -2037,9 +1677,6 @@ export const createTodo = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -2054,9 +1691,6 @@ export const updateTodo = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -2071,9 +1705,6 @@ export const deleteTodo = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
