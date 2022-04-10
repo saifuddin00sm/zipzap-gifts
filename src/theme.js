@@ -7,6 +7,10 @@ export const zipZapTheme = {
     secondary: {
       main: "#97afa7",
     },
+    gitCardsbackground: {
+      paper: "#E1E1E1",
+      white: "#fffff",
+    },
   },
   components: {
     MuiButton: {

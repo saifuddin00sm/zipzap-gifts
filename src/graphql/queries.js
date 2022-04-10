@@ -21,29 +21,20 @@ export const getUser = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -51,9 +42,6 @@ export const getUser = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyUsersId
       owner
     }
@@ -77,9 +65,6 @@ export const listUsers = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyAddressId
           owner
         }
@@ -87,59 +72,10 @@ export const listUsers = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyUsersId
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncUsers = /* GraphQL */ `
-  query SyncUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncUsers(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        email
-        name
-        phoneNumber
-        company {
-          id
-          name
-          accessGroups
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          companyAddressId
-          owner
-        }
-        profilePhoto
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        companyUsersId
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -158,9 +94,6 @@ export const getCompany = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       users {
@@ -173,14 +106,10 @@ export const getCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyUsersId
           owner
         }
         nextToken
-        startedAt
       }
       recipients {
         items {
@@ -199,15 +128,11 @@ export const getCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       giftEventsByDate {
         items {
@@ -224,21 +149,14 @@ export const getCompany = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyAddressId
       owner
     }
@@ -264,91 +182,24 @@ export const listCompanies = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncCompanies = /* GraphQL */ `
-  query SyncCompanies(
-    $filter: ModelCompanyFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncCompanies(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        name
-        address {
-          id
-          address1
-          address2
-          city
-          state
-          zip
-          accessGroups
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          owner
-        }
-        users {
-          nextToken
-          startedAt
-        }
-        recipients {
-          nextToken
-          startedAt
-        }
-        giftEventsByDate {
-          nextToken
-          startedAt
-        }
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        companyAddressId
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -364,9 +215,6 @@ export const getAddress = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -388,46 +236,9 @@ export const listAddresses = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncAddresses = /* GraphQL */ `
-  query SyncAddresses(
-    $filter: ModelAddressFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncAddresses(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        address1
-        address2
-        city
-        state
-        zip
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -448,29 +259,20 @@ export const getRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         users {
           nextToken
-          startedAt
         }
         recipients {
           nextToken
-          startedAt
         }
         giftEventsByDate {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyAddressId
         owner
       }
@@ -487,9 +289,6 @@ export const getRecipient = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       email
@@ -503,14 +302,10 @@ export const getRecipient = /* GraphQL */ `
         name
         recipients {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       profilePhoto
@@ -522,14 +317,10 @@ export const getRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           recipientFavoritesId
           owner
         }
         nextToken
-        startedAt
       }
       giftHistory {
         items {
@@ -546,22 +337,15 @@ export const getRecipient = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       welcomed
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       companyRecipientsId
       recipientShippingAddressId
       owner
@@ -583,9 +367,6 @@ export const listRecipients = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyAddressId
           owner
         }
@@ -602,9 +383,6 @@ export const listRecipients = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         email
@@ -619,120 +397,24 @@ export const listRecipients = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         profilePhoto
         favorites {
           nextToken
-          startedAt
         }
         giftHistory {
           nextToken
-          startedAt
         }
         welcomed
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyRecipientsId
         recipientShippingAddressId
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncRecipients = /* GraphQL */ `
-  query SyncRecipients(
-    $filter: ModelRecipientFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncRecipients(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        company {
-          id
-          name
-          accessGroups
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          companyAddressId
-          owner
-        }
-        recipientType
-        firstName
-        lastName
-        shippingAddress {
-          id
-          address1
-          address2
-          city
-          state
-          zip
-          accessGroups
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          owner
-        }
-        email
-        phone
-        jobTitle
-        birthday
-        startDate
-        departmentID
-        department {
-          id
-          name
-          accessGroups
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          owner
-        }
-        profilePhoto
-        favorites {
-          nextToken
-          startedAt
-        }
-        giftHistory {
-          nextToken
-          startedAt
-        }
-        welcomed
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        companyRecipientsId
-        recipientShippingAddressId
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -758,22 +440,15 @@ export const getDepartment = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
         }
         nextToken
-        startedAt
       }
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -790,51 +465,13 @@ export const listDepartments = /* GraphQL */ `
         name
         recipients {
           nextToken
-          startedAt
         }
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncDepartments = /* GraphQL */ `
-  query SyncDepartments(
-    $filter: ModelDepartmentFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncDepartments(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        name
-        recipients {
-          nextToken
-          startedAt
-        }
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -847,9 +484,6 @@ export const getProfileFavorite = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       recipientFavoritesId
       owner
     }
@@ -873,45 +507,10 @@ export const listProfileFavorites = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         recipientFavoritesId
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncProfileFavorites = /* GraphQL */ `
-  query SyncProfileFavorites(
-    $filter: ModelProfileFavoriteFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncProfileFavorites(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        type
-        value
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        recipientFavoritesId
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -930,9 +529,6 @@ export const getGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyAddressId
           owner
         }
@@ -949,9 +545,6 @@ export const getGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         email
@@ -966,27 +559,19 @@ export const getGiftEvent = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           owner
         }
         profilePhoto
         favorites {
           nextToken
-          startedAt
         }
         giftHistory {
           nextToken
-          startedAt
         }
         welcomed
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         companyRecipientsId
         recipientShippingAddressId
         owner
@@ -997,23 +582,19 @@ export const getGiftEvent = /* GraphQL */ `
       gift {
         id
         name
+        category
         items {
           nextToken
-          startedAt
         }
         price
         description
         pictures {
           nextToken
-          startedAt
         }
         active
         needs_subscription
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       finalPrice
       shippingCost
@@ -1021,9 +602,6 @@ export const getGiftEvent = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftEventGiftId
       owner
     }
@@ -1057,9 +635,6 @@ export const listGiftEvents = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           companyRecipientsId
           recipientShippingAddressId
           owner
@@ -1070,15 +645,13 @@ export const listGiftEvents = /* GraphQL */ `
         gift {
           id
           name
+          category
           price
           description
           active
           needs_subscription
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
         }
         finalPrice
         shippingCost
@@ -1086,88 +659,10 @@ export const listGiftEvents = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         giftEventGiftId
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncGiftEvents = /* GraphQL */ `
-  query SyncGiftEvents(
-    $filter: ModelGiftEventFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncGiftEvents(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        companyID
-        recipientID
-        orderID
-        recipient {
-          id
-          recipientType
-          firstName
-          lastName
-          email
-          phone
-          jobTitle
-          birthday
-          startDate
-          departmentID
-          profilePhoto
-          welcomed
-          accessGroups
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          companyRecipientsId
-          recipientShippingAddressId
-          owner
-        }
-        giftType
-        dateType
-        date
-        gift {
-          id
-          name
-          price
-          description
-          active
-          needs_subscription
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-        }
-        finalPrice
-        shippingCost
-        fullfilled
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        giftEventGiftId
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -1192,14 +687,10 @@ export const getOrder = /* GraphQL */ `
           accessGroups
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftEventGiftId
           owner
         }
         nextToken
-        startedAt
       }
       createdBy
       totalPrice
@@ -1209,9 +700,6 @@ export const getOrder = /* GraphQL */ `
       accessGroups
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
   }
@@ -1229,7 +717,6 @@ export const listOrders = /* GraphQL */ `
         note
         giftEvents {
           nextToken
-          startedAt
         }
         createdBy
         totalPrice
@@ -1239,52 +726,9 @@ export const listOrders = /* GraphQL */ `
         accessGroups
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncOrders = /* GraphQL */ `
-  query SyncOrders(
-    $filter: ModelOrderFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncOrders(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        name
-        note
-        giftEvents {
-          nextToken
-          startedAt
-        }
-        createdBy
-        totalPrice
-        completed
-        orderType
-        orderDateType
-        accessGroups
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -1293,26 +737,16 @@ export const getGift = /* GraphQL */ `
     getGift(id: $id) {
       id
       name
+      category
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          giftItemsId
         }
         nextToken
-        startedAt
       }
       price
       description
@@ -1323,22 +757,15 @@ export const getGift = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       needs_subscription
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -1352,65 +779,21 @@ export const listGifts = /* GraphQL */ `
       items {
         id
         name
+        category
         items {
           nextToken
-          startedAt
         }
         price
         description
         pictures {
           nextToken
-          startedAt
         }
         active
         needs_subscription
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncGifts = /* GraphQL */ `
-  query SyncGifts(
-    $filter: ModelGiftFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncGifts(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        name
-        items {
-          nextToken
-          startedAt
-        }
-        price
-        description
-        pictures {
-          nextToken
-          startedAt
-        }
-        active
-        needs_subscription
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -1429,25 +812,27 @@ export const getItem = /* GraphQL */ `
           src
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
           giftPicturesId
           itemPicturesId
         }
         nextToken
-        startedAt
       }
       active
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      giftItemsId
     }
   }
 `;
@@ -1466,60 +851,18 @@ export const listItems = /* GraphQL */ `
         price
         pictures {
           nextToken
-          startedAt
         }
         active
         source
         brandingAvailable
         quantityAvailable
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        giftItemsId
-      }
-      nextToken
-      startedAt
-    }
-  }
-`;
-export const syncItems = /* GraphQL */ `
-  query SyncItems(
-    $filter: ModelItemFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncItems(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        name
-        description
-        weight
-        price
-        pictures {
+        gifts {
           nextToken
-          startedAt
         }
-        active
-        source
-        brandingAvailable
-        quantityAvailable
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        giftItemsId
       }
       nextToken
-      startedAt
     }
   }
 `;
@@ -1531,9 +874,6 @@ export const getGiftImage = /* GraphQL */ `
       src
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       giftPicturesId
       itemPicturesId
     }
@@ -1552,44 +892,10 @@ export const listGiftImages = /* GraphQL */ `
         src
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
         giftPicturesId
         itemPicturesId
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncGiftImages = /* GraphQL */ `
-  query SyncGiftImages(
-    $filter: ModelGiftImageFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncGiftImages(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        alt
-        src
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        giftPicturesId
-        itemPicturesId
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -1601,9 +907,6 @@ export const getTodo = /* GraphQL */ `
       description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -1620,40 +923,97 @@ export const listTodos = /* GraphQL */ `
         description
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
     }
   }
 `;
-export const syncTodos = /* GraphQL */ `
-  query SyncTodos(
-    $filter: ModelTodoFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncTodos(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
+export const getGiftItems = /* GraphQL */ `
+  query GetGiftItems($id: ID!) {
+    getGiftItems(id: $id) {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
         id
         name
         description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listGiftItems = /* GraphQL */ `
+  query ListGiftItems(
+    $filter: ModelGiftItemsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGiftItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        giftID
+        itemID
+        gift {
+          id
+          name
+          category
+          price
+          description
+          active
+          needs_subscription
+          createdAt
+          updatedAt
+        }
+        item {
+          id
+          name
+          description
+          weight
+          price
+          active
+          source
+          brandingAvailable
+          quantityAvailable
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
       }
       nextToken
-      startedAt
     }
   }
 `;
