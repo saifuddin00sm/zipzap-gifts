@@ -38,12 +38,12 @@ const StyledCard = styled(Toolbar)(({ theme }) => ({
 
 const GiftCards = ({ data, loading, error }) => {
   const categories = [
-    { name: "Recommended gifts", category: "recommended" },
+    { name: "Recommended gifts", category: "recommendedGifts" },
     { name: "Birthday Gifts", category: "birthday" },
-    { name: "Upcoming Holiday Gifts", category: "holiday" },
-    { name: "Anniversary / Promotion Gifts", category: "anniversary" },
-    { name: "Sympathy/ Get Well", category: "sympathy" },
-    { name: "Just because", category: "just because" },
+    { name: "Upcoming Holiday Gifts", category: "upcomingHoliday" },
+    { name: "Anniversary / Promotion Gifts", category: "anniversaryPromotion" },
+    { name: "Sympathy/ Get Well", category: "sympathyGetWell" },
+    { name: "Just because", category: "justBecause" },
     { name: "Life Event", category: "lifeEvent" },
   ];
 
