@@ -1315,17 +1315,10 @@ export const onCreateGift = /* GraphQL */ `
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          giftItemsId
         }
         nextToken
       }
@@ -1359,17 +1352,10 @@ export const onUpdateGift = /* GraphQL */ `
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          giftItemsId
         }
         nextToken
       }
@@ -1403,17 +1389,10 @@ export const onDeleteGift = /* GraphQL */ `
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          giftItemsId
         }
         nextToken
       }
@@ -1462,9 +1441,18 @@ export const onCreateItem = /* GraphQL */ `
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      giftItemsId
     }
   }
 `;
@@ -1492,9 +1480,18 @@ export const onUpdateItem = /* GraphQL */ `
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      giftItemsId
     }
   }
 `;
@@ -1522,9 +1519,18 @@ export const onDeleteItem = /* GraphQL */ `
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      giftItemsId
     }
   }
 `;
@@ -1595,6 +1601,147 @@ export const onDeleteTodo = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateGiftItems = /* GraphQL */ `
+  subscription OnCreateGiftItems {
+    onCreateGiftItems {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
+        id
+        name
+        description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateGiftItems = /* GraphQL */ `
+  subscription OnUpdateGiftItems {
+    onUpdateGiftItems {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
+        id
+        name
+        description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteGiftItems = /* GraphQL */ `
+  subscription OnDeleteGiftItems {
+    onDeleteGiftItems {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
+        id
+        name
+        description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

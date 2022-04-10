@@ -1390,17 +1390,10 @@ export const createGift = /* GraphQL */ `
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          giftItemsId
         }
         nextToken
       }
@@ -1437,17 +1430,10 @@ export const updateGift = /* GraphQL */ `
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          giftItemsId
         }
         nextToken
       }
@@ -1484,17 +1470,10 @@ export const deleteGift = /* GraphQL */ `
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          giftItemsId
         }
         nextToken
       }
@@ -1546,9 +1525,18 @@ export const createItem = /* GraphQL */ `
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      giftItemsId
     }
   }
 `;
@@ -1579,9 +1567,18 @@ export const updateItem = /* GraphQL */ `
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      giftItemsId
     }
   }
 `;
@@ -1612,9 +1609,18 @@ export const deleteItem = /* GraphQL */ `
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      giftItemsId
     }
   }
 `;
@@ -1703,6 +1709,156 @@ export const deleteTodo = /* GraphQL */ `
       id
       name
       description
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createGiftItems = /* GraphQL */ `
+  mutation CreateGiftItems(
+    $input: CreateGiftItemsInput!
+    $condition: ModelGiftItemsConditionInput
+  ) {
+    createGiftItems(input: $input, condition: $condition) {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
+        id
+        name
+        description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateGiftItems = /* GraphQL */ `
+  mutation UpdateGiftItems(
+    $input: UpdateGiftItemsInput!
+    $condition: ModelGiftItemsConditionInput
+  ) {
+    updateGiftItems(input: $input, condition: $condition) {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
+        id
+        name
+        description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteGiftItems = /* GraphQL */ `
+  mutation DeleteGiftItems(
+    $input: DeleteGiftItemsInput!
+    $condition: ModelGiftItemsConditionInput
+  ) {
+    deleteGiftItems(input: $input, condition: $condition) {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
+        id
+        name
+        description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
