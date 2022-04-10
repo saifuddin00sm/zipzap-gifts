@@ -7,6 +7,7 @@ import ProfilePage from "./components/Profile/ProfilePage";
 import App from "./App";
 import Todo from "./components/Todo";
 import RecipientList from "./components/Recipients/RecipientList";
+import GiftCatalog from "./components/GiftCatalog/GiftCatalog";
 import UploadGift from "./components/Admin/UploadGift";
 
 const ZipZapRoutes = () => {
@@ -18,6 +19,7 @@ const ZipZapRoutes = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="todo" element={<Todo />} />
         <Route path="recipients" element={<RecipientList />} />
+        <Route path="catalog" element={<GiftCatalog />} />
         <Route path="admin" element={<UploadGift />} />
         <Route
           path="*"
