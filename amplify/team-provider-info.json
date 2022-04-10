@@ -14,7 +14,8 @@
     "categories": {
       "auth": {
         "ZipZap": {},
-        "userPoolGroups": {}
+        "userPoolGroups": {},
+        "true": {}
       },
       "hosting": {
         "amplifyhosting": {
