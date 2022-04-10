@@ -741,17 +741,10 @@ export const getGift = /* GraphQL */ `
       items {
         items {
           id
-          name
-          description
-          weight
-          price
-          active
-          source
-          brandingAvailable
-          quantityAvailable
+          giftID
+          itemID
           createdAt
           updatedAt
-          giftItemsId
         }
         nextToken
       }
@@ -828,9 +821,18 @@ export const getItem = /* GraphQL */ `
       source
       brandingAvailable
       quantityAvailable
+      gifts {
+        items {
+          id
+          giftID
+          itemID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
-      giftItemsId
     }
   }
 `;
@@ -854,9 +856,11 @@ export const listItems = /* GraphQL */ `
         source
         brandingAvailable
         quantityAvailable
+        gifts {
+          nextToken
+        }
         createdAt
         updatedAt
-        giftItemsId
       }
       nextToken
     }
@@ -917,6 +921,95 @@ export const listTodos = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getGiftItems = /* GraphQL */ `
+  query GetGiftItems($id: ID!) {
+    getGiftItems(id: $id) {
+      id
+      giftID
+      itemID
+      gift {
+        id
+        name
+        category
+        items {
+          nextToken
+        }
+        price
+        description
+        pictures {
+          nextToken
+        }
+        active
+        needs_subscription
+        createdAt
+        updatedAt
+      }
+      item {
+        id
+        name
+        description
+        weight
+        price
+        pictures {
+          nextToken
+        }
+        active
+        source
+        brandingAvailable
+        quantityAvailable
+        gifts {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listGiftItems = /* GraphQL */ `
+  query ListGiftItems(
+    $filter: ModelGiftItemsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGiftItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        giftID
+        itemID
+        gift {
+          id
+          name
+          category
+          price
+          description
+          active
+          needs_subscription
+          createdAt
+          updatedAt
+        }
+        item {
+          id
+          name
+          description
+          weight
+          price
+          active
+          source
+          brandingAvailable
+          quantityAvailable
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }

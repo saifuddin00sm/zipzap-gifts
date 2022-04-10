@@ -185,7 +185,7 @@ type Gift
   id: ID!
   name: String!
   category: String
-  items: [Item] @hasMany
+  items: [Item] @manyToMany(relationName: "GiftItems")
   price: String
   description: String
   pictures: [GiftImage] @hasMany
@@ -211,6 +211,7 @@ type Item
   source: String
   brandingAvailable: Boolean
   quantityAvailable: Int
+  gifts: [Gift] @manyToMany(relationName: "GiftItems")
 }
 
 type GiftImage
