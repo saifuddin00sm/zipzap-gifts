@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/material/styles";
+import GiftModal from "./GiftModal";
 
 const StyledCard = styled(Toolbar)(({ theme }) => ({
   background: "#ffff",
@@ -37,6 +38,7 @@ const StyledCard = styled(Toolbar)(({ theme }) => ({
 }));
 
 const GiftCards = ({ data, loading, error }) => {
+  const [openModal, setOpenModal] = useState({ open: false, modalData: {} });
   const categories = [
     { name: "Recommended gifts", category: "recommendedGifts" },
     { name: "Birthday Gifts", category: "birthday" },
@@ -46,6 +48,10 @@ const GiftCards = ({ data, loading, error }) => {
     { name: "Just because", category: "justBecause" },
     { name: "Life Event", category: "lifeEvent" },
   ];
+
+  const showModal = (gift) => {
+    setOpenModal({ open: true, modalData: gift });
+  };
 
   return (
     <>
@@ -111,7 +117,11 @@ const GiftCards = ({ data, loading, error }) => {
                           >
                             ${item.price}
                           </Typography>
-                          <Button variant="contained" className="select_btn">
+                          <Button
+                            onClick={() => showModal(item)}
+                            variant="contained"
+                            className="select_btn"
+                          >
                             Select
                           </Button>
                         </Box>
@@ -123,6 +133,13 @@ const GiftCards = ({ data, loading, error }) => {
           </Box>
         );
       })}
+      {openModal.open && (
+        <GiftModal
+          selectable={true}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
+      )}
     </>
   );
 };
