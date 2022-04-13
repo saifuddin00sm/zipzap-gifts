@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/material/styles";
-import GiftModal from "./GiftModal/GiftModal";
+import GiftModal from "./GiftModal";
 
 const StyledCard = styled(Toolbar)(({ theme }) => ({
   background: "#ffff",
@@ -134,7 +134,11 @@ const GiftCards = ({ data, loading, error }) => {
         );
       })}
       {openModal.open && (
-        <GiftModal openModal={openModal} setOpenModal={setOpenModal} />
+        <GiftModal
+          selectable={true}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
       )}
     </>
   );

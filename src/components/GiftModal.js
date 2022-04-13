@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import ClearIcon from "@mui/icons-material/Clear";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 
 const style = {
   position: "absolute",
@@ -88,7 +90,7 @@ const style = {
   },
 };
 
-export default function GiftModal({ openModal, setOpenModal }) {
+export default function GiftModal({ openModal, setOpenModal, selectable }) {
   const [slideIndex, setSlideIndex] = React.useState(0);
 
   const handleClose = () => {
@@ -96,57 +98,64 @@ export default function GiftModal({ openModal, setOpenModal }) {
     setOpenModal({ open: false, modalData: {} });
   };
   const { modalData, open } = openModal;
-  const { description, name, price, items } = modalData;
+  const { description, name, price, items, pictures } = modalData;
 
   const included = items?.items?.map((item) => item.item).map((i) => i.name);
 
-  const imgs = items?.items
+  const itemImgs = items?.items
     ?.map((item) => item.item)
     .map((i) => i.pictures.items)
-    .map((item) => item.map(({ src, alt }) => ({ src, alt })));
+    .reduce((imgs, pictures) => {
+      return [...imgs, ...pictures];
+    }, [])
+    .filter(({ alt }) => alt !== "thumbnail");
+
+  const imgs = [
+    ...pictures.items.filter(({ alt }) => alt !== "thumbnail"),
+    ...itemImgs,
+  ];
 
   return (
-    <Modal
-      keepMounted
-      open={open}
-      aria-labelledby="keep-mounted-modal-title"
-      aria-describedby="keep-mounted-modal-description"
-    >
+    <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <Box className="closeBtn">
-          <Box className="mainBtn" onClick={handleClose}>
+          <IconButton className="mainBtn" onClick={handleClose}>
             <ClearIcon sx={{ color: "#ffff" }} />
-          </Box>
+          </IconButton>
         </Box>
         <Box className="modalContents">
           <Box className="img_box">
-            <Box
+            <IconButton
               onClick={() => {
-                slideIndex > 0 && setSlideIndex(slideIndex - 1);
+                setSlideIndex(
+                  slideIndex > 0 ? slideIndex - 1 : imgs.length - 1
+                );
               }}
               className="left_arrow arrows"
             >
               <ChevronLeftIcon sx={{ fontSize: "2.5rem" }} />
-            </Box>
+            </IconButton>
             <Box className="slide">
               {!imgs ? (
                 <Typography>Loading...</Typography>
               ) : imgs.length > 0 ? (
-                <img src={imgs[slideIndex][0].src} alt="alts" />
+                <img src={imgs[slideIndex].src} alt="gift images" />
               ) : (
                 <Typography sx={{ textAlign: "center" }}>
                   No images found
                 </Typography>
               )}
             </Box>
-            <Box
+            <IconButton
               onClick={() => {
-                slideIndex < imgs.length - 1 && setSlideIndex(slideIndex + 1);
+                setSlideIndex(
+                  slideIndex < imgs.length - 1 ? slideIndex + 1 : 0
+                );
               }}
               className="right_arrow arrows"
             >
               <ChevronRightIcon sx={{ fontSize: "2.5rem" }} />
-            </Box>
+            </IconButton>
           </Box>
           <Box>
             <Typography
@@ -169,32 +178,36 @@ export default function GiftModal({ openModal, setOpenModal }) {
             }}
           >
             {included.length > 0 ? (
-              <ol className="list">
-                <Typography variant="h6">Inlcuded</Typography>
+              <ul className="list">
+                <Typography variant="h6">Items Inlcuded</Typography>
                 {included.map((list) => (
                   <li key={list}>{list}</li>
                 ))}
-              </ol>
+              </ul>
             ) : (
               <Typography>No Inlcuded data</Typography>
             )}
             <Typography className="price">{"$" + price}</Typography>
           </Box>
         </Box>
-        <Box
-          sx={{
-            background: "#ABC4D6",
-            padding: "15px",
-            textAlign: "center",
-            color: "#505050",
-            fontWeight: 500,
-            fontSize: "30px",
-            lineHeight: "45px",
-            cursor: "pointer",
-          }}
-        >
-          Select Gift
-        </Box>
+        {selectable && (
+          <Button
+            fullWidth
+            sx={{
+              background: "#ABC4D6",
+              padding: "15px",
+              textAlign: "center",
+              color: "#505050",
+              fontWeight: 500,
+              fontSize: "30px",
+              lineHeight: "45px",
+              cursor: "pointer",
+              textTransform: "capitalize",
+            }}
+          >
+            Select Gift
+          </Button>
+        )}
       </Box>
     </Modal>
   );
