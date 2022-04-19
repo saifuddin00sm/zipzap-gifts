@@ -7,12 +7,14 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import ChooseGift from "./ChooseGift";
 import GiftDetails from "./GiftDetails";
 import ChooseRecipient from "./ChooseRecipient";
 import Checkout from "./Checkout";
-import { styled } from "@mui/material/styles";
 import SuccessModal from "./SuccessModal";
+import InfoIcon from "@mui/icons-material/Info";
+import { styled } from "@mui/material/styles";
+import Tooltip from "@mui/material/Tooltip";
+import SelectGifts from "./SelectGifts";
 
 const Steppers = styled(Stepper)(({ theme }) => ({
   "& .Mui-active": { color: "red" },
@@ -54,6 +56,8 @@ const steps = [
 ];
 
 const SendAGift = () => {
+  const [selectedGift, setSelectedGift] = React.useState("");
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [open, setOpen] = React.useState(false);
 
@@ -92,7 +96,17 @@ const SendAGift = () => {
               })}
             </Steppers>
             <Box className="heading">
-              <Typography variant="h6">{steps[activeStep]}</Typography>
+              <Typography sx={{ display: "inline-block" }} variant="h6">
+                {steps[activeStep]}
+              </Typography>
+              {steps[activeStep] === "Choose a gift" && (
+                <Tooltip
+                  title='Select a Gift to send to one or more of your recipients by pressing "Select Gift"'
+                  placement="top"
+                >
+                  <InfoIcon sx={{ color: "#fff", marginLeft: "15px" }} />
+                </Tooltip>
+              )}
             </Box>
             <Box className="box_contents">
               <Box sx={{ width: "100%" }}>
@@ -100,7 +114,10 @@ const SendAGift = () => {
                   sx={{ overflow: "auto", maxHeight: "964px", height: "100%" }}
                 >
                   {activeStep === 0 ? (
-                    <ChooseGift />
+                    <SelectGifts
+                      selectedGift={selectedGift}
+                      setSelectedGift={setSelectedGift}
+                    />
                   ) : activeStep === 1 ? (
                     <GiftDetails />
                   ) : activeStep === 2 ? (

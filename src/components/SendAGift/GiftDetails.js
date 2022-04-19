@@ -92,9 +92,7 @@ const GiftDetails = () => {
 
             <Box>
               <Typography variant="h6">Gift Date</Typography>
-              <Box sx={{ marginTop: "20px" }}>
-                <Input placeholder="mm/dd/yyyy" />
-              </Box>
+              <Box sx={{ marginTop: "20px" }}>datePicker</Box>
             </Box>
           </Box>
         </Grid>

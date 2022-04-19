@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
+import Link from "@mui/material/Link";
 
 const options = [
   { opt: "To Recipients Home Address", price: "22", selected: true, id: 1 },
@@ -168,6 +169,10 @@ const Root = styled("div")(({ theme }) => ({
       fontSize: "20px",
     },
   },
+
+  "& .package_btn": {
+    textDecoration: "none",
+  },
 }));
 
 const Checkout = () => {
@@ -188,11 +193,18 @@ const Checkout = () => {
               <Box className="small_card">
                 <img src="" alt="Gift images" />
               </Box>
-              <Box className="recipients">
+              <Box>
                 <Typography variant="h5" className="big_text">
                   X 3 recipients
                 </Typography>
-                <Button disabled>Want Custom Packaging</Button>
+                <Button variant="outlined">
+                  <Link
+                    className="package_btn"
+                    href="mailto:connect@zipzapgifts.com"
+                  >
+                    Want Custom Packaging
+                  </Link>
+                </Button>
               </Box>
             </Box>
             <Box className="shipping_container">

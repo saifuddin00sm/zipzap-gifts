@@ -37,7 +37,7 @@ const StyledCard = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-const GiftCards = ({ data, loading, error }) => {
+const GiftCards = ({ data, loading, error, setSelectedGift }) => {
   const [openModal, setOpenModal] = useState({ open: false, modalData: {} });
   const categories = [
     { name: "Recommended gifts", category: "recommendedGifts" },
@@ -51,6 +51,7 @@ const GiftCards = ({ data, loading, error }) => {
 
   const showModal = (gift) => {
     setOpenModal({ open: true, modalData: gift });
+    setSelectedGift(gift.id);
   };
 
   return (
