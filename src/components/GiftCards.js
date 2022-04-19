@@ -51,7 +51,6 @@ const GiftCards = ({ data, loading, error, setSelectedGift }) => {
 
   const showModal = (gift) => {
     setOpenModal({ open: true, modalData: gift });
-    setSelectedGift(gift.id);
   };
 
   return (
@@ -136,6 +135,7 @@ const GiftCards = ({ data, loading, error, setSelectedGift }) => {
       })}
       {openModal.open && (
         <GiftModal
+          setSelectedGift={setSelectedGift}
           selectable={true}
           openModal={openModal}
           setOpenModal={setOpenModal}

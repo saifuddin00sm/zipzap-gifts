@@ -90,7 +90,12 @@ const style = {
   },
 };
 
-export default function GiftModal({ openModal, setOpenModal, selectable }) {
+export default function GiftModal({
+  openModal,
+  setOpenModal,
+  selectable,
+  setSelectedGift,
+}) {
   const [slideIndex, setSlideIndex] = React.useState(0);
 
   const handleClose = () => {
@@ -192,6 +197,7 @@ export default function GiftModal({ openModal, setOpenModal, selectable }) {
         </Box>
         {selectable && (
           <Button
+            onClick={() => setSelectedGift(modalData.id)}
             fullWidth
             sx={{
               background: "#ABC4D6",
