@@ -14,10 +14,37 @@ import SuccessModal from "./SuccessModal";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import SelectGifts from "./SelectGifts";
+import { Link } from "@mui/material";
+import InputBase from "@mui/material/InputBase";
+import { alpha, styled } from "@mui/material/styles";
 
-const style = {
+const Input = styled(InputBase)(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    width: "100%",
+    padding: "5px 12px",
+    transition: theme.transitions.create([
+      "border-color",
+      "background-color",
+      "box-shadow",
+    ]),
+    "&:focus": {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
+      borderColor: theme.palette.primary.main,
+    },
+  },
+}));
+
+const Root = styled("div")(({ theme }) => ({
   background: "#ABC4D6",
   padding: "50px",
+  [theme.breakpoints.down("md")]: {
+    padding: "25px",
+  },
   "& .innerBox": {
     "& .heading": {
       "& > h6": {
@@ -35,11 +62,37 @@ const style = {
       textAlign: "center",
     },
     "& .box_contents": {
+      "& .topItems": {
+        margin: "5px 0px 41px 0",
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "20px",
+        width: "100%",
+        [theme.breakpoints.down("md")]: {
+          flexDirection: "column",
+        },
+      },
+      "& .infoBox": {
+        padding: "10px",
+        background: "#FFFFFF",
+        border: "1px solid #000000",
+        maxWidth: "475px",
+        width: "100%",
+        "& p": {
+          fontFamily: "Poppins",
+          fontStyle: "normal",
+          fontWeight: 500,
+          fontSize: "14px",
+          lineHeight: "21px",
+          letterSpacing: "0.03em",
+          color: "#6D6E70",
+        },
+      },
       background: "#ffff",
       padding: "20px",
     },
   },
-};
+}));
 
 const steps = [
   "Choose a gift",
@@ -100,7 +153,7 @@ const SendAGift = () => {
         <Header>
           <Typography variant="h1">Send a Gift</Typography>
         </Header>
-        <Box sx={style}>
+        <Root>
           <Box className="innerBox">
             <Stepper
               activeStep={activeStep}
@@ -132,6 +185,22 @@ const SendAGift = () => {
             </Box>
             <Box className="box_contents">
               <Box sx={{ width: "100%" }}>
+                {activeStep === 0 && (
+                  <Box className="topItems">
+                    <Box>
+                      <Input fullWidth placeholder="Search for a gift" />
+                    </Box>
+                    <Box className="infoBox">
+                      <Typography>
+                        Don't see The perfect gift? Email{" "}
+                        <Link href="mailto:connect@zipzapgifts.com">
+                          connect@zipzapgifts.com
+                        </Link>{" "}
+                        to have a custom gift created just for you
+                      </Typography>
+                    </Box>
+                  </Box>
+                )}
                 <Box
                   sx={{ overflow: "auto", maxHeight: "964px", height: "100%" }}
                 >
@@ -154,7 +223,7 @@ const SendAGift = () => {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </Root>
       </Container>
       <SuccessModal open={open} setOpen={setOpen} />
     </>
