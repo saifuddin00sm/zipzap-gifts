@@ -6,8 +6,11 @@ import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import Tooltip from "@mui/material/Tooltip";
 
 const Input = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -174,6 +177,11 @@ const ChooseRecipient = () => {
             ) : (
               <Typography>No data</Typography>
             )}
+            <Box sx={{ textAlign: "center" }}>
+              <Button size="small" onClick={() => setSelectedData(usersData)}>
+                Add all
+              </Button>
+            </Box>
           </Box>
         </Grid>
         <Grid item xs={6}>
@@ -235,18 +243,37 @@ export default ChooseRecipient;
 const Head = ({ type, setSearchValue, setSelectSearchValue }) => {
   return (
     <Box>
-      <FormControl variant="standard">
-        <Input
-          fullWidth
-          placeholder="Search For A Recipient"
-          id="recipient"
-          onChange={
-            type === "add"
-              ? (e) => setSearchValue(e.target.value)
-              : (e) => setSelectSearchValue(e.target.value)
-          }
-        />
-      </FormControl>
+      <Box sx={{ display: "flex" }}>
+        <FormControl variant="standard" sx={{ display: "flex" }}>
+          <Input
+            fullWidth
+            placeholder="Search For A Recipient"
+            id="recipient"
+            onChange={
+              type === "add"
+                ? (e) => setSearchValue(e.target.value)
+                : (e) => setSelectSearchValue(e.target.value)
+            }
+          />
+        </FormControl>
+        {type === "add" && (
+          <Tooltip
+            title="Filter by Any attribute of the user"
+            placement="right-start"
+            arrow={true}
+          >
+            <QuestionMarkIcon
+              sx={{
+                border: "2px solid #000",
+                padding: "2px",
+                borderRadius: "100%",
+                marginLeft: "15px",
+                marginTop: "6px",
+              }}
+            />
+          </Tooltip>
+        )}
+      </Box>
       <Box
         sx={{
           display: "flex",
