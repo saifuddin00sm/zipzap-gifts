@@ -17,7 +17,22 @@ const style = {
   width: "100%",
   minHeight: "80vh",
   maxHeight: "80vh",
+  display: "flex",
+  justifyContent: "space-between",
+  flexDirection: "column",
   overflow: "auto",
+  "&::-webkit-scrollbar": {
+    width: "5px",
+  },
+
+  "&::-webkit-scrollbar-track": {
+    background: "#ffff",
+  },
+
+  "&::-webkit-scrollbar-thumb": {
+    background: "#98B1C2",
+    borderRadius: "15px",
+  },
   bgcolor: "background.paper",
   borderRadius: "10px",
   boxShadow: "2px 4px 8px 2px rgba(0, 0, 0, 0.25)",
@@ -198,25 +213,27 @@ export default function GiftModal({
             <Typography className="price">{"$" + price}</Typography>
           </Box>
         </Box>
-        {selectable && (
-          <Button
-            onClick={() => setSelectedGift(modalData.id)}
-            fullWidth
-            sx={{
-              background: "#ABC4D6",
-              padding: "15px",
-              textAlign: "center",
-              color: "#505050",
-              fontWeight: 500,
-              fontSize: "30px",
-              lineHeight: "45px",
-              cursor: "pointer",
-              textTransform: "capitalize",
-            }}
-          >
-            Select Gift
-          </Button>
-        )}
+        <Box>
+          {selectable && (
+            <Button
+              onClick={() => setSelectedGift(modalData.id)}
+              fullWidth
+              sx={{
+                background: "#ABC4D6",
+                padding: "15px",
+                textAlign: "center",
+                color: "#505050",
+                fontWeight: 500,
+                fontSize: "30px",
+                lineHeight: "45px",
+                cursor: "pointer",
+                textTransform: "capitalize",
+              }}
+            >
+              Select Gift
+            </Button>
+          )}
+        </Box>
       </Box>
     </Modal>
   );
