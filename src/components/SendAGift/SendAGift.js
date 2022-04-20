@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Header from "../Header";
@@ -12,15 +12,8 @@ import ChooseRecipient from "./ChooseRecipient";
 import Checkout from "./Checkout";
 import SuccessModal from "./SuccessModal";
 import InfoIcon from "@mui/icons-material/Info";
-import { styled } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import SelectGifts from "./SelectGifts";
-
-const Steppers = styled(Stepper)(({ theme }) => ({
-  "& .Mui-active": { color: "red" },
-  "& .Mui-completed": { color: "green" },
-  "& .Mui-disabled .MuiStep-root": { color: "cyan" },
-}));
 
 const style = {
   background: "#ABC4D6",
@@ -56,21 +49,49 @@ const steps = [
 ];
 
 const SendAGift = () => {
-  const [selectedGift, setSelectedGift] = React.useState("");
+  const [selectedGift, setSelectedGift] = useState("");
 
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    if (activeStep === steps.length - 1) {
-      setActiveStep(steps.length - 1);
-      setOpen(true);
-    }
+    setActiveStep((prevActiveStep) => {
+      const nextStep = prevActiveStep + 1;
+      if (nextStep >= steps.length) {
+        setOpen(true);
+        return steps.length - 1;
+      }
+      return nextStep;
+    });
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const StepComponent = () => {
+    let component = null;
+    switch (activeStep) {
+      case 0:
+        component = (
+          <SelectGifts
+            selectedGift={selectedGift}
+            setSelectedGift={setSelectedGift}
+          />
+        );
+        break;
+      case 1:
+        component = <GiftDetails />;
+        break;
+      case 2:
+        component = <ChooseRecipient />;
+        break;
+      case 3:
+      default:
+        component = <Checkout />;
+        break;
+    }
+    return component;
   };
 
   return (
@@ -81,11 +102,11 @@ const SendAGift = () => {
         </Header>
         <Box sx={style}>
           <Box className="innerBox">
-            <Steppers
+            <Stepper
               activeStep={activeStep}
               sx={{ width: "180px", marginBottom: "20px", marginLeft: "auto" }}
             >
-              {steps.map((label, index) => {
+              {steps.map((label) => {
                 const stepProps = {};
                 const labelProps = {};
                 return (
@@ -94,13 +115,14 @@ const SendAGift = () => {
                   </Step>
                 );
               })}
-            </Steppers>
+            </Stepper>
             <Box className="heading">
               <Typography sx={{ display: "inline-block" }} variant="h6">
                 {steps[activeStep]}
               </Typography>
               {steps[activeStep] === "Choose a gift" && (
                 <Tooltip
+                  enterTouchDelay={0}
                   title='Select a Gift to send to one or more of your recipients by pressing "Select Gift"'
                   placement="top"
                 >
@@ -113,18 +135,7 @@ const SendAGift = () => {
                 <Box
                   sx={{ overflow: "auto", maxHeight: "964px", height: "100%" }}
                 >
-                  {activeStep === 0 ? (
-                    <SelectGifts
-                      selectedGift={selectedGift}
-                      setSelectedGift={setSelectedGift}
-                    />
-                  ) : activeStep === 1 ? (
-                    <GiftDetails />
-                  ) : activeStep === 2 ? (
-                    <ChooseRecipient />
-                  ) : (
-                    activeStep === 3 && <Checkout />
-                  )}
+                  <StepComponent />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Button

@@ -7,6 +7,8 @@ import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 
 const Input = styled(InputBase)(({ theme }) => ({
   "label + &": {
@@ -87,6 +89,14 @@ const GiftDetails = () => {
               <Box sx={{ display: "flex", gap: "15px", marginTop: "20px" }}>
                 <Button>One Time</Button>
                 <Button variant="outlined">Recurring</Button>
+                <Tooltip
+                  title="A One Time Gift is a gift that goes out once! EX: A Get Well Soon Box, A Sympathy Gift, a Welcome Little One Box, things that are not necessarily planned on a specific day.
+                  A Recurring Gift is a gift that happens multiple times during a set time frame, for different people. EX: Anniversaries or Birthdays."
+                  placement="top"
+                  arrow={true}
+                >
+                  <InfoIcon sx={{ marginTop: "3px" }} />
+                </Tooltip>
               </Box>
             </Box>
 

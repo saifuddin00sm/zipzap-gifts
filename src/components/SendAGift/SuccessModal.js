@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
+import ConfettiExplosion from "react-confetti-explosion";
 
 const style = {
   position: "absolute",
@@ -44,10 +45,14 @@ const style = {
 
 export default function BasicModal({ open, setOpen }) {
   const navigate = useNavigate();
-  const handleClose = () => setOpen(!open);
+  const handleClose = () => {
+    setOpen(!open);
+  };
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
+        <ConfettiExplosion />
         <Box className="closeBtn">
           <IconButton
             className="mainBtn"

@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import { alpha, styled } from "@mui/material/styles";
 import GiftCards from "../GiftCards";
 import { useGifts } from "../../hooks/catalog";
+import { Link } from "@mui/material";
 
 const Input = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -51,7 +52,6 @@ const Root = styled("div")(({ theme }) => ({
       fontSize: "14px",
       lineHeight: "21px",
       letterSpacing: "0.03em",
-      textTransform: "capitalize",
       color: "#6D6E70",
     },
   },
@@ -67,8 +67,11 @@ const SelectGifts = ({ setSelectedGift }) => {
         </Box>
         <Box className="infoBox">
           <Typography>
-            Don't see The perfect gift? Email connect@zipzapgifts.com to have a
-            custom gift created just for you
+            Don't see The perfect gift? Email{" "}
+            <Link href="mailto:connect@zipzapgifts.com">
+              connect@zipzapgifts.com
+            </Link>{" "}
+            to have a custom gift created just for you
           </Typography>
         </Box>
       </Box>

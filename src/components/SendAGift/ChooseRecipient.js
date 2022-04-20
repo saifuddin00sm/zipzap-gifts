@@ -258,7 +258,7 @@ const Head = ({ type, setSearchValue, setSelectSearchValue }) => {
         </FormControl>
         {type === "add" && (
           <Tooltip
-            title="Filter by Any attribute of the user"
+            title="Filter your Recipients by Birthday, Department, Name or Anniversary!"
             placement="right-start"
             arrow={true}
           >

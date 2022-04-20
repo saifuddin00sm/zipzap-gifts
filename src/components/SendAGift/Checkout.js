@@ -119,12 +119,12 @@ const Root = styled("div")(({ theme }) => ({
     width: "100%",
     height: "100%",
     "& .card_top": {
-      height: "67px",
+      height: "70px",
       padding: "10px",
       borderRadius: "10px 10px 0px 0px",
     },
     "& .card_bottom": {
-      height: "67px",
+      height: "78px",
       padding: "10px",
       borderRadius: "0px 0px 10px 10px",
       "& h6": {
@@ -202,7 +202,7 @@ const Checkout = () => {
                     className="package_btn"
                     href="mailto:connect@zipzapgifts.com"
                   >
-                    Want Custom Packaging
+                    Want Custom Packaging ?
                   </Link>
                 </Button>
               </Box>
