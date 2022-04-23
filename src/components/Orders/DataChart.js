@@ -15,31 +15,23 @@ import { format } from "date-fns";
 
 // chart dummy data
 const data = [
-  { date: "2021-10-14" },
-  { date: "2021-10-18" },
-  { date: "2021-10-22" },
-  { date: "2021-10-22" },
-  { date: "2021-10-25" },
-  { date: "2021-10-31" },
-  { date: "2021-10-1" },
+  { date: "2021-11-14", gifts: 5 },
+  { date: "2021-7-18", gifts: 10 },
+  { date: "2021-9-22", gifts: 20 },
+  { date: "2021-8-22", gifts: 25 },
+  { date: "2021-2-25", gifts: 30 },
+  { date: "2021-3-31", gifts: 35 },
 ];
 
 const dateFormatter = (date) => {
-  return format(new Date(date), "MMM-dd-yyyy");
+  return format(new Date(date), "MMM");
 };
 
 const DataChart = () => {
-  var maindata = data.reduce((acc, { date }) => {
-    const datetime = dateFormatter(new Date(date));
-    const day = acc.find((day) => datetime.valueOf() === day.date.valueOf());
-    if (day) {
-      day.val++;
-    } else {
-      acc.push({ date: datetime, val: 1 });
-    }
-
-    return acc;
-  }, []);
+  const rawData = data.map(({ date, gifts }) => ({
+    date: dateFormatter(date),
+    gifts: gifts,
+  }));
 
   return (
     <Box>
@@ -73,7 +65,7 @@ const DataChart = () => {
           >
             Too See Upcoming Gifts Go to:
           </Typography>
-          <Button variant="contained">Get Calendar</Button>
+          <Button variant="contained">Gift Calendar</Button>
         </Box>
       </Box>
       <Box sx={{ background: "#F1F1F1", padding: "10px" }}>
@@ -97,7 +89,7 @@ const DataChart = () => {
           <AreaChart
             width={500}
             height={200}
-            data={maindata}
+            data={rawData}
             margin={{
               top: 10,
               right: 30,
@@ -117,7 +109,7 @@ const DataChart = () => {
             <Tooltip />
             <Area
               type="monotone"
-              dataKey="val"
+              dataKey="gifts"
               stroke="#8bb2ce"
               fillOpacity={0.5}
               fill="url(#colorUv)"
