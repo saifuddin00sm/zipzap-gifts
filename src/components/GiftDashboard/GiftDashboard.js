@@ -7,13 +7,14 @@ import Alert from "@mui/material/Alert";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { getUser } from "../../graphql/queries";
 import { createUser } from "../../graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
 import { Link } from "react-router-dom";
 
 function GiftDashboard() {
+  const navigate = useNavigate();
   //congito user information
   const [user] = useOutletContext();
   const [open, setOpen] = useState(false);
@@ -55,7 +56,7 @@ function GiftDashboard() {
     <Container component="main">
       <Header>
         <Typography variant="h1">Gift Dashboard</Typography>
-        <Button>Send a Gift</Button>
+        <Button onClick={() => navigate("gifts")}>Send a Gift</Button>
       </Header>
       <Collapse in={open}>
         <Alert
