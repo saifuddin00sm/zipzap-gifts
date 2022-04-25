@@ -88,7 +88,7 @@ const Root = styled("div")(({ theme }) => ({
     background: "#ABC4D6",
     padding: "30px",
     display: "flex",
-    alignItems: "center",
+    justifyContent: "space-between",
     gap: "30px",
     "& .img_box": {
       position: "relative",
