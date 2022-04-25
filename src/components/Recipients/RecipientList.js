@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Header from "../Header";
@@ -14,9 +14,18 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import { useRecipients } from "../../hooks/recipients";
+import RecipientModal from "./RecipientModal";
+import { Link, useNavigate } from "react-router-dom";
 
 const RecipientList = () => {
+  const navigate = useNavigate();
   const { recipients, isLoading, isError, error } = useRecipients();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(!open);
+
+  const goProfile = (id) => {
+    navigate(id);
+  };
 
   let tableBody;
   if (isLoading) {
@@ -62,7 +71,7 @@ const RecipientList = () => {
         startDate,
         department,
       }) => (
-        <TableRow key={id}>
+        <TableRow key={id} onClick={() => goProfile(id)}>
           <TableCell>
             {firstName} {lastName}
           </TableCell>
@@ -81,39 +90,49 @@ const RecipientList = () => {
   }
 
   return (
-    <Container component="main">
-      <Header>
-        <Typography variant="h1">Recipient Dashboard</Typography>
-        <Box display="flex">
-          <Button sx={{ mx: 2 }}>Import A List</Button>
-          <Button>Add A Recipient</Button>
-        </Box>
-      </Header>
-      <Container>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Birthday</TableCell>
-                <TableCell>Address</TableCell>
-                <TableCell>Job Title</TableCell>
-                <TableCell>Date Started</TableCell>
-                <TableCell>Department</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{tableBody}</TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={6}>
-                  {recipients?.length} Recipients
-                </TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+    <>
+      <Container component="main">
+        <Header>
+          <Typography variant="h1">Recipient Dashboard</Typography>
+          <Box display="flex">
+            <Button sx={{ mx: 2 }}>
+              <Link
+                to="upload"
+                style={{ textDecoration: "none", color: "#000" }}
+              >
+                import a list
+              </Link>
+            </Button>
+            <Button onClick={handleOpen}>Add A Recipient</Button>
+          </Box>
+        </Header>
+        <Container>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Birthday</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>Job Title</TableCell>
+                  <TableCell>Date Started</TableCell>
+                  <TableCell>Department</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{tableBody}</TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={6}>
+                    {recipients?.length} Recipients
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        </Container>
       </Container>
-    </Container>
+      <RecipientModal open={open} setOpen={setOpen} />
+    </>
   );
 };
 
