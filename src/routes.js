@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import GiftDashboard from "./components/GiftDashboard/GiftDashboard";
 import ProfilePage from "./components/Profile/ProfilePage";
+import Orders from "./components/Orders/Orders";
 
 import App from "./App";
 import Todo from "./components/Todo";
@@ -24,6 +25,7 @@ const ZipZapRoutes = () => {
         <Route path="catalog" element={<GiftCatalog />} />
         <Route path="recipients/upload" element={<ImportRecipients />} />
         <Route path="recipients/:id" element={<RecipientProfile />} />
+        <Route path="orders" element={<Orders />} />
         <Route
           path="*"
           element={
