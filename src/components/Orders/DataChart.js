@@ -2,6 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 import {
   AreaChart,
   Area,
@@ -28,6 +29,7 @@ const dateFormatter = (date) => {
 };
 
 const DataChart = () => {
+  const navigate = useNavigate();
   const rawData = data.map(({ date, gifts }) => ({
     date: dateFormatter(date),
     gifts: gifts,
@@ -63,9 +65,11 @@ const DataChart = () => {
               marginRight: "10px",
             }}
           >
-            Too See Upcoming Gifts Go to:
+            To See Upcoming Gifts Go to:
           </Typography>
-          <Button variant="contained">Gift Calendar</Button>
+          <Button variant="contained" onClick={() => navigate("/")}>
+            Gift Dashboard
+          </Button>
         </Box>
       </Box>
       <Box sx={{ background: "#F1F1F1", padding: "10px" }}>
@@ -129,7 +133,7 @@ const DataChart = () => {
             color: "#747474",
           }}
         >
-          Order from the past 6months
+          Orders From The Past 6 Months
         </Typography>
       </Box>
     </Box>
