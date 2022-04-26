@@ -84,12 +84,7 @@ const GiftProfile = ({ info }) => {
                     {giftName}
                   </Typography>
                   <Box>
-                    <img
-                      height="100%"
-                      width="100%"
-                      src="https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000"
-                      alt={alt}
-                    />
+                    <img height="100%" width="100%" src={src} alt={alt} />
                   </Box>
                 </CardContent>
               </Card>

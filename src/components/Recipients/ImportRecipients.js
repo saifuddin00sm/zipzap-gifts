@@ -99,7 +99,12 @@ const ImportList = () => {
           </Box>
         </Root>
       </Container>
-      <RecipientSuccess open={open} setOpen={setOpen} />
+      <RecipientSuccess
+        text="Recipient List Upload Successful!"
+        subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting"
+        open={open}
+        setOpen={setOpen}
+      />
     </>
   );
 };

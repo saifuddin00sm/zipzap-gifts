@@ -147,7 +147,12 @@ const AddRecipient = () => {
           </FormControl>
         </Box>
       </Root>
-      <RecipientSuccess open={open} setOpen={setOpen} />
+      <RecipientSuccess
+        text="Recipient Added Successfully!"
+        subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
+        open={open}
+        setOpen={setOpen}
+      />
     </>
   );
 };

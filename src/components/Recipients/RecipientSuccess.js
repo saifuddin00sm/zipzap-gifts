@@ -5,6 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 import ConfettiExplosion from "react-confetti-explosion";
 
 const style = {
@@ -51,7 +52,7 @@ const style = {
   },
 };
 
-const RecipientSuccess = ({ open, setOpen }) => {
+const RecipientSuccess = ({ text, subText, open, setOpen }) => {
   const handleClose = () => setOpen(!open);
   return (
     <Modal open={open} onClose={handleClose}>
@@ -63,15 +64,21 @@ const RecipientSuccess = ({ open, setOpen }) => {
         </Box>
         <Box sx={{ p: 4, paddingTop: 0 }}>
           <Typography variant="h5" className="successHead">
-            Recipient Upload Successful
+            {text}
           </Typography>
           <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
           <Typography variant="body2" className="subHead">
-            Successfully uploaded recipient, Send them an Email To gather
-            Information for customized Gift Giving
+            {subText}
           </Typography>
           <Box sx={{ textAlign: "center" }}>
-            <Button variant="contained">Send Email</Button>
+            <Button variant="contained">
+              <Link
+                sx={{ textDecoration: "none", color: "#000" }}
+                href="mailto:connect@zipzapgifts.com"
+              >
+                Send Email
+              </Link>
+            </Button>
           </Box>
         </Box>
       </Box>

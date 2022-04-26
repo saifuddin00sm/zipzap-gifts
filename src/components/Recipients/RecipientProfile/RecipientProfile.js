@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Header from "../../Header";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecipients } from "../../../hooks/recipients";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
@@ -26,22 +26,34 @@ const giftProfileData = {
   suggestedGift: [
     {
       giftName: "the outdoor lover",
-      image: { src: "", alt: "the outdoor" },
+      image: {
+        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+        alt: "the one outdoor",
+      },
       id: 1,
     },
     {
       giftName: "the outdoor lover",
-      image: { src: "", alt: "the outdoor" },
+      image: {
+        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+        alt: "the two outdoor",
+      },
       id: 2,
     },
     {
       giftName: "the outdoor lover",
-      image: { src: "", alt: "the outdoor" },
+      image: {
+        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+        alt: "the three outdoor",
+      },
       id: 3,
     },
     {
       giftName: "the outdoor lover",
-      image: { src: "", alt: "the outdoor" },
+      image: {
+        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+        alt: "the four outdoor",
+      },
       id: 4,
     },
   ],
@@ -51,19 +63,28 @@ const giftHistoryData = [
   {
     date: "12/24/2021",
     giftName: "the outdoor lover",
-    image: { src: "", alt: "the outdoor lover" },
+    image: {
+      src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+      alt: "the outdoor lover",
+    },
     id: 1,
   },
   {
     date: "12/24/2021",
     giftName: "the outdoor lover",
-    image: { src: "", alt: "the outdoor lover" },
+    image: {
+      src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+      alt: "the outdoor lover",
+    },
     id: 2,
   },
   {
     date: "12/24/2021",
     giftName: "the outdoor lover",
-    image: { src: "", alt: "the outdoor lover" },
+    image: {
+      src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+      alt: "the outdoor lover",
+    },
     id: 3,
   },
 ];
@@ -89,7 +110,7 @@ const Root = styled("div")(({ theme }) => ({
     padding: "30px",
     display: "flex",
     justifyContent: "space-between",
-    gap: "30px",
+    gap: "10px",
     "& .img_box": {
       position: "relative",
       "& .pen": {
@@ -143,6 +164,7 @@ const tabIndecators = {
 };
 
 const RecipientProfile = () => {
+  const navigate = useNavigate();
   const { recipients, isLoading, isError, error } = useRecipients();
   const location = useLocation();
   const { pathname } = location;
@@ -216,7 +238,14 @@ const RecipientProfile = () => {
                             border: "1px solid #ffff",
                           },
                           "& .MuiTabs-flexContainer": {
-                            gap: "0 15px",
+                            gap: "10px 15px",
+                            flexDirection: {
+                              md: "column",
+                              lg: "row",
+                              xl: "row",
+                              xs: "column",
+                              sm: "column",
+                            },
                           },
                         }}
                         value={value}
@@ -287,14 +316,7 @@ const RecipientProfile = () => {
       <Header>
         <Typography variant="h1">Recipient Dashboard</Typography>
       </Header>
-      <Button>
-        <Link
-          style={{ textDecoration: "none", color: "#000" }}
-          to="/recipients"
-        >
-          Back
-        </Link>
-      </Button>
+      <Button onClick={() => navigate("/recipients")}>Back</Button>
       <Root>{userData}</Root>
     </Container>
   );
