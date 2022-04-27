@@ -11,6 +11,8 @@ import RecipientList from "./components/Recipients/RecipientList";
 import SendAGift from "./components/SendAGift/SendAGift";
 import GiftCatalog from "./components/GiftCatalog/GiftCatalog";
 import UploadGift from "./components/Admin/UploadGift";
+import ImportRecipients from "./components/Recipients/ImportRecipients";
+import RecipientProfile from "./components/Recipients/RecipientProfile/RecipientProfile";
 
 const ZipZapRoutes = () => {
   const { pathname } = useLocation();
@@ -24,6 +26,8 @@ const ZipZapRoutes = () => {
         <Route path="catalog" element={<GiftCatalog />} />
         <Route path="gifts" element={<SendAGift />} />
         <Route path="admin" element={<UploadGift />} />
+        <Route path="recipients/upload" element={<ImportRecipients />} />
+        <Route path="recipients/:id" element={<RecipientProfile />} />
         <Route path="orders" element={<Orders />} />
         <Route
           path="*"

@@ -85,10 +85,10 @@ export default function DataTable() {
             color: "#FFFFFF",
           }}
         >
-          Statement
+          Statements
         </Typography>
       </Box>
-      <Table aria-label="customized table">
+      <Table aria-label="order statements">
         <TableHead>
           <TableRow>
             <StyledTableCell>Date</StyledTableCell>
