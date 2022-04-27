@@ -52,7 +52,6 @@ export default function BasicModal({ open, setOpen }) {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
-        <ConfettiExplosion />
         <Box className="closeBtn">
           <IconButton
             className="mainBtn"
@@ -63,6 +62,7 @@ export default function BasicModal({ open, setOpen }) {
           </IconButton>
         </Box>
         <Box className="congrats_text">
+          <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
           <Typography variant="h4">Congrats!</Typography>
           <Typography variant="h6">You have created a gift</Typography>
         </Box>

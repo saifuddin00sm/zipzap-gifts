@@ -202,7 +202,7 @@ const SendAGift = () => {
                   </Box>
                 )}
                 <Box
-                  sx={{ overflow: "auto", maxHeight: "964px", height: "100%" }}
+                  sx={{ overflow: "auto", maxHeight: "600px", height: "100%" }}
                 >
                   <StepComponent />
                 </Box>

@@ -90,9 +90,24 @@ const GiftDetails = () => {
                 <Button>One Time</Button>
                 <Button variant="outlined">Recurring</Button>
                 <Tooltip
-                  title="A One Time Gift is a gift that goes out once! EX: A Get Well Soon Box, A Sympathy Gift, a Welcome Little One Box, things that are not necessarily planned on a specific day.
-                  A Recurring Gift is a gift that happens multiple times during a set time frame, for different people. EX: Anniversaries or Birthdays."
-                  placement="top"
+                  title={
+                    <>
+                      <Typography>
+                        A <b>One Time Gift</b> is a gift that goes out once!{" "}
+                        <em>
+                          EX: A Get Well Soon Box, A Sympathy Gift, a Welcome
+                          Little One Box, things that are not necessarily
+                          planned on a specific day.
+                        </em>
+                      </Typography>
+                      <Typography>
+                        A <b>Recurring Gift</b> is a gift that happens multiple
+                        times during a set time frame, for different people.{" "}
+                        <em>EX: Anniversaries or Birthdays.</em>
+                      </Typography>
+                    </>
+                  }
+                  enterTouchDelay={0}
                   arrow={true}
                 >
                   <InfoIcon sx={{ marginTop: "3px" }} />

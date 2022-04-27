@@ -38,9 +38,7 @@ const style = {
     "& .plus": {
       width: "19px",
       height: "19px",
-      // background: '#ABC6BD',
       borderRadius: "100%",
-      display: "inline-block",
       textAlign: "center",
       marginRight: "10px",
       cursor: "pointer",
@@ -261,6 +259,7 @@ const Head = ({ type, setSearchValue, setSelectSearchValue }) => {
             title="Filter your Recipients by Birthday, Department, Name or Anniversary!"
             placement="right-start"
             arrow={true}
+            enterTouchDelay={0}
           >
             <QuestionMarkIcon
               sx={{
