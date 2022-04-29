@@ -158,7 +158,7 @@ const GiftDetails = () => {
                     End Date
                   </Typography>
                   <Typography sx={{ fontSize: "1.1rem" }} variant="h6">
-                    Select Reuccring Type:
+                    Select Recurring Type:
                   </Typography>
                 </Box>
                 <Box
