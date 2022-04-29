@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const Input = styled(InputBase)(({ theme }) => ({
   "label + &": {
@@ -53,6 +55,16 @@ const style = {
 };
 
 const GiftDetails = () => {
+  const [selectedBtn, setSelectedBtn] = useState(false);
+  const [type, setType] = useState("");
+  const selectType = () => {
+    setSelectedBtn(!selectedBtn);
+  };
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+  };
+
   return (
     <Box sx={style}>
       <Grid container rowSpacing={1} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -87,8 +99,18 @@ const GiftDetails = () => {
             <Box sx={{ marginBottom: "2.5rem" }}>
               <Typography variant="h6">Gift Type</Typography>
               <Box sx={{ display: "flex", gap: "15px", marginTop: "20px" }}>
-                <Button>One Time</Button>
-                <Button variant="outlined">Recurring</Button>
+                <Button
+                  onClick={selectType}
+                  variant={selectedBtn ? "outlined" : "contained"}
+                >
+                  One Time
+                </Button>
+                <Button
+                  onClick={selectType}
+                  variant={selectedBtn ? "contained" : "outlined"}
+                >
+                  Recurring
+                </Button>
                 <Tooltip
                   title={
                     <>
@@ -115,10 +137,59 @@ const GiftDetails = () => {
               </Box>
             </Box>
 
-            <Box>
-              <Typography variant="h6">Gift Date</Typography>
-              <Box sx={{ marginTop: "20px" }}>datePicker</Box>
-            </Box>
+            {!selectedBtn ? (
+              <Box>
+                <Typography variant="h6">Gift Date</Typography>
+                <Box sx={{ marginTop: "20px" }}>datePicker</Box>
+              </Box>
+            ) : (
+              <Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    mb: 4,
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1.1rem" }} variant="h6">
+                    Start Date
+                  </Typography>
+                  <Typography sx={{ fontSize: "1.1rem" }} variant="h6">
+                    End Date
+                  </Typography>
+                  <Typography sx={{ fontSize: "1.1rem" }} variant="h6">
+                    Select Recurring Type:
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>onePicker</Box>
+                  <Box>twoPicker</Box>
+                  <Box sx={{ maxWidth: "118px", width: "100%" }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Select
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={type}
+                        label="Select"
+                        onChange={handleChange}
+                      >
+                        <MenuItem value="birthday">Birthday</MenuItem>
+                        <MenuItem value={20}>Anniversary</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Box>
+              </Box>
+            )}
           </Box>
         </Grid>
       </Grid>
