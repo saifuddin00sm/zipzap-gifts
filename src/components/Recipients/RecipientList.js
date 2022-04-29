@@ -71,7 +71,12 @@ const RecipientList = () => {
         startDate,
         department,
       }) => (
-        <TableRow key={id} onClick={() => goProfile(id)}>
+        <TableRow
+          hover
+          key={id}
+          onClick={() => goProfile(id)}
+          style={{ cursor: "pointer" }}
+        >
           <TableCell>
             {firstName} {lastName}
           </TableCell>
@@ -100,7 +105,7 @@ const RecipientList = () => {
                 to="upload"
                 style={{ textDecoration: "none", color: "#000" }}
               >
-                import a list
+                Import a List
               </Link>
             </Button>
             <Button onClick={handleOpen}>Add A Recipient</Button>
