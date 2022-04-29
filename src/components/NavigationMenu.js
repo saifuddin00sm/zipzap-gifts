@@ -136,6 +136,7 @@ const styles = {
     position: "fixed",
     top: 0,
     width: "100%",
+    zIndex: 1000,
     fontSize: 50,
     backgroundColor: topNavBackgroundColor,
     color: textColor,
