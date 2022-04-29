@@ -71,7 +71,12 @@ const RecipientList = () => {
         startDate,
         department,
       }) => (
-        <TableRow key={id} onClick={() => goProfile(id)}>
+        <TableRow
+          hover
+          key={id}
+          onClick={() => goProfile(id)}
+          style={{ cursor: "pointer" }}
+        >
           <TableCell>
             {firstName} {lastName}
           </TableCell>
@@ -103,7 +108,7 @@ const RecipientList = () => {
                 margin: "0 20px",
               }}
             >
-              <Button>Import a list</Button>
+              <Button>Import a List</Button>
             </Link>
             <Button onClick={handleOpen}>Add A Recipient</Button>
           </Box>

@@ -21,71 +21,63 @@ import GiftHistory from "./GiftHistory";
 
 // dummy data
 const giftProfileData = {
-  favFood: "mac and chinese",
-  favColor: "baby blue",
-  hobbies: ["Rock Climbing", "Golfing", "and wakeboarding"],
-  favItems: ["Yoga mat", "golf towel", "magnetic timer", "National parks pass"],
+  favFood: "Mac and Chinese",
+  favColor: "Baby Blue",
+  hobbies: ["Rock Climbing", "Golfing", "and Wakeboarding"],
+  favItems: ["Yoga Mat", "Golf Towel", "Magnetic Timer", "National Parks Pass"],
   suggestedGift: [
     {
       giftName: "the outdoor lover",
       image: {
-        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+        src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
         alt: "the one outdoor",
       },
       id: 1,
     },
     {
-      giftName: "the outdoor lover",
+      giftName: "The Adventure Kit",
       image: {
-        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
-        alt: "the two outdoor",
+        src: "https://m.media-amazon.com/images/I/514yQATe68L._AC_SL1001_.jpg",
+        alt: "the adventure",
       },
       id: 2,
     },
     {
-      giftName: "the outdoor lover",
+      giftName: "Zen Meditation Bag",
       image: {
-        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
-        alt: "the three outdoor",
+        src: "https://cdn.shopify.com/s/files/1/0036/3714/9763/products/20210713-tupelo-5144-Web_1296x.jpg?v=1633548059",
+        alt: "zen box",
       },
       id: 3,
-    },
-    {
-      giftName: "the outdoor lover",
-      image: {
-        src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
-        alt: "the four outdoor",
-      },
-      id: 4,
     },
   ],
 };
 
 const giftHistoryData = [
   {
-    date: "12/24/2021",
+    date: "06/04/2021",
     giftName: "the outdoor lover",
     image: {
-      src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
+      src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
       alt: "the outdoor lover",
     },
     id: 1,
   },
   {
-    date: "12/24/2021",
-    giftName: "the outdoor lover",
+    date: "10/31/2021",
+    giftName: "Halloween Surprise",
     image: {
-      src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
-      alt: "the outdoor lover",
+      src: "https://m.media-amazon.com/images/I/61f9y8JeB0L._AC_UL320_.jpg",
+      alt: "Halloween box",
     },
     id: 2,
   },
   {
     date: "12/24/2021",
-    giftName: "the outdoor lover",
+    giftName: "Company Christmas Gift",
     image: {
-      src: "https://img.freepik.com/free-photo/gift-box-present-isolated_63260-52.jpg?w=2000",
-      alt: "the outdoor lover",
+      src: "https://www.basketcase.ie/wp-content/uploads/2021/07/Baby-Hamper-Blue-Box-Baby-Box-Paddy-Box-Hampers-ireland-scaled-1.jpg",
+      alt: "Christmas",
     },
     id: 3,
   },
@@ -314,7 +306,7 @@ const RecipientProfile = () => {
               <TabPanel value={value} index={0}>
                 <Box className="infoBox">
                   <Typography variant="h5" className="titles">
-                    General infromation
+                    General Information
                   </Typography>
                   <GeneralInfo info={i} />
                 </Box>
@@ -322,7 +314,7 @@ const RecipientProfile = () => {
               <TabPanel value={value} index={1}>
                 <Box className="infoBox">
                   <Typography className="titles" variant="h5">
-                    Gift profile
+                    Gift Profile
                   </Typography>
                   <GiftProfile info={giftProfileData} />
                 </Box>
@@ -330,7 +322,7 @@ const RecipientProfile = () => {
               <TabPanel value={value} index={2}>
                 <Box className="infoBox">
                   <Typography className="titles" variant="h5">
-                    Gift history
+                    Gift History
                   </Typography>
                   <GiftHistory info={giftHistoryData} />
                 </Box>

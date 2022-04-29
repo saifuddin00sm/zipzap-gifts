@@ -64,7 +64,7 @@ const AddRecipient = () => {
     <>
       <Root>
         <Box className="recipientHead">
-          <Typography variant="h4">New recipient</Typography>
+          <Typography variant="h4">New Recipient</Typography>
         </Box>
         <Divider />
         <Box

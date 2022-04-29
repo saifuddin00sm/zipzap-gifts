@@ -37,7 +37,9 @@ const GeneralInfo = ({ info }) => {
       </Box>
       <Box className="infos">
         <Typography className="keys">Address</Typography>
-        <Typography>{`${address1}, ${address2}, ${city}, ${state}, ${zip}`}</Typography>
+        <Typography>{`${address1}${
+          address2 ? ` ${address2}` : ""
+        }, ${city}, ${state}, ${zip}`}</Typography>
       </Box>
       <Box className="infos">
         <Typography className="keys">Job Title</Typography>
