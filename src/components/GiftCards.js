@@ -11,7 +11,8 @@ const StyledCard = styled(Toolbar)(({ theme }) => ({
   background: "#ffff",
   borderRadius: "10px",
   boxShadow: "2px 4px 8px 2px rgba(0, 0, 0, 0.25)",
-  width: "254px",
+  maxWidth: "254px",
+  width: "100%",
   height: "100%",
   "& .inner_card": {
     textAlign: "center",
@@ -37,7 +38,7 @@ const StyledCard = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-const GiftCards = ({ data, loading, error }) => {
+const GiftCards = ({ data, loading, error, setSelectedGift }) => {
   const [openModal, setOpenModal] = useState({ open: false, modalData: {} });
   const categories = [
     { name: "Recommended gifts", category: "recommendedGifts" },
@@ -81,11 +82,17 @@ const GiftCards = ({ data, loading, error }) => {
             <Box
               sx={{
                 bgcolor: "gitCardsbackground.paper",
-                p: 9,
+                p: { xs: 2, md: 6, lg: 8 },
                 borderRadius: "10px",
               }}
             >
-              <Grid container spacing={5}>
+              <Grid
+                sx={{
+                  justifyContent: { xs: "center", md: "start", lg: "start" },
+                }}
+                container
+                spacing={5}
+              >
                 {categoryGifts &&
                   categoryGifts?.map((item) => (
                     <Grid key={item.id} item columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -135,6 +142,7 @@ const GiftCards = ({ data, loading, error }) => {
       })}
       {openModal.open && (
         <GiftModal
+          setSelectedGift={setSelectedGift}
           selectable={true}
           openModal={openModal}
           setOpenModal={setOpenModal}
