@@ -4,7 +4,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Header from "../../Header";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecipients } from "../../../hooks/recipients";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
 import IconButton from "@mui/material/IconButton";
@@ -128,9 +130,7 @@ const Input = styled("input")({
   display: "none",
 });
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+function TabPanel({ children, value, index, ...other }) {
   return (
     <div
       role="tabpanel"
@@ -165,11 +165,14 @@ const tabIndecators = {
 
 const RecipientProfile = () => {
   const navigate = useNavigate();
-  const { recipients, isLoading, isError, error } = useRecipients();
   const location = useLocation();
   const { pathname } = location;
-
   const id = pathname.split("/")[2];
+  const { isLoading, isError, data, error } = useQuery(
+    "recipients",
+    API.graphql(graphqlOperation(getRecipient, { id }))
+  );
+  const recipients = data;
 
   const [value, setValue] = useState(0);
 
@@ -192,9 +195,30 @@ const RecipientProfile = () => {
       <Box>
         {recip.map((i) => (
           <Box key={i.id}>
-            <Box className="profileBox">
-              <Box sx={{ display: "flex", gap: "0 25px" }}>
-                <Box className="img_box">
+            <Box
+              className="profileBox"
+              sx={{
+                flexDirection: {
+                  xl: "row",
+                  lg: "row",
+                  xs: "column",
+                  sm: "column",
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: "0 25px",
+                  flexDirection: {
+                    xl: "row",
+                    lg: "row",
+                    xs: "column",
+                    sm: "column",
+                  },
+                }}
+              >
+                <Box className="img_box" sx={{ margin: "auto" }}>
                   <Image
                     borderRadius="50%"
                     objectFit="cover"
@@ -223,7 +247,15 @@ const RecipientProfile = () => {
                 </Box>
                 <Box>
                   <Typography
-                    sx={{ marginBottom: "16px" }}
+                    sx={{
+                      marginBottom: "16px",
+                      textAlign: {
+                        xl: "left",
+                        lg: "left",
+                        xs: "center",
+                        sm: "center",
+                      },
+                    }}
                     variant="h3"
                     className="titles"
                   >
@@ -240,7 +272,6 @@ const RecipientProfile = () => {
                           "& .MuiTabs-flexContainer": {
                             gap: "10px 15px",
                             flexDirection: {
-                              md: "column",
                               lg: "row",
                               xl: "row",
                               xs: "column",

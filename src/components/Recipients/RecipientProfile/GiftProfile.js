@@ -24,7 +24,6 @@ const Root = styled("div")(({ theme }) => ({
 
 const GiftProfile = ({ info }) => {
   const { favFood, favColor, favItems, hobbies, suggestedGift } = info;
-  console.log(suggestedGift);
   return (
     <Root>
       <Box>
@@ -39,25 +38,13 @@ const GiftProfile = ({ info }) => {
         <Box className="infos">
           <Typography className="keys">Hobbies</Typography>
           <Typography>
-            {hobbies.length === 0
-              ? "N/A"
-              : hobbies.map((i) => (
-                  <Typography key={i} variant="body">
-                    {i + ", "}
-                  </Typography>
-                ))}
+            {hobbies.length === 0 ? "N/A" : hobbies.join(", ")}
           </Typography>
         </Box>
         <Box className="infos">
           <Typography className="keys">Favorite Items</Typography>
           <Typography>
-            {favItems.length === 0
-              ? "N/A"
-              : favItems.map((i) => (
-                  <Typography key={i} variant="body">
-                    {i + ", "}
-                  </Typography>
-                ))}
+            {favItems.length === 0 ? "N/A" : favItems.join(", ")}
           </Typography>
         </Box>
       </Box>
