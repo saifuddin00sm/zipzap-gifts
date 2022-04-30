@@ -51,14 +51,12 @@ const ImportList = () => {
           <Typography variant="h1">Recipient Dashboard</Typography>
         </Header>
         <Box sx={{ marginBottom: "30px" }}>
-          <Button>
-            <Link
-              style={{ textDecoration: "none", color: "#000" }}
-              to="/recipients"
-            >
-              Back
-            </Link>
-          </Button>
+          <Link
+            style={{ textDecoration: "none", color: "#000" }}
+            to="/recipients"
+          >
+            <Button>Back</Button>
+          </Link>
         </Box>
         <Root>
           <Box className="upload">

@@ -4,7 +4,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Header from "../../Header";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecipients } from "../../../hooks/recipients";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
 import IconButton from "@mui/material/IconButton";
@@ -120,9 +122,7 @@ const Input = styled("input")({
   display: "none",
 });
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+function TabPanel({ children, value, index, ...other }) {
   return (
     <div
       role="tabpanel"
@@ -157,11 +157,17 @@ const tabIndecators = {
 
 const RecipientProfile = () => {
   const navigate = useNavigate();
-  const { recipients, isLoading, isError, error } = useRecipients();
   const location = useLocation();
   const { pathname } = location;
-
   const id = pathname.split("/")[2];
+  const {
+    isLoading,
+    isError,
+    data: { data: { getRecipient: recipient = {} } = {} } = {},
+    error,
+  } = useQuery(["recipients", id], () =>
+    API.graphql(graphqlOperation(getRecipient, { id }))
+  );
 
   const [value, setValue] = useState(0);
 
@@ -175,130 +181,151 @@ const RecipientProfile = () => {
     userData = <Typography>Loading...</Typography>;
   } else if (isError) {
     userData = (
-      <Typography>Error loading recipients: {error.message}</Typography>
+      <Typography>Error loading recipient: {error.message}</Typography>
     );
   } else {
-    const recip = recipients.filter((f) => f.id === id);
-
     userData = (
       <Box>
-        {recip.map((i) => (
-          <Box key={i.id}>
-            <Box className="profileBox">
-              <Box sx={{ display: "flex", gap: "0 25px" }}>
-                <Box className="img_box">
-                  <Image
-                    borderRadius="50%"
-                    objectFit="cover"
-                    objectPosition="50% 50%"
-                    maxWidth="100px"
-                    src="/BluePersonalLogo.png"
-                    width="100px"
-                    height="100px"
-                  />
-                  <Box className="pen">
-                    <label htmlFor="icon-button-file">
-                      <Input
-                        accept="image/*"
-                        id="icon-button-file"
-                        type="file"
-                      />
-                      <IconButton
-                        sx={{ color: "#263238" }}
-                        aria-label="upload picture"
-                        component="span"
-                      >
-                        <PhotoCamera />
-                      </IconButton>
-                    </label>
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography
-                    sx={{ marginBottom: "16px" }}
-                    variant="h3"
-                    className="titles"
-                  >
-                    {i?.firstName} {i?.lastName}
-                  </Typography>
-                  <Box classSName="tabs">
-                    <Box>
-                      <Tabs
-                        sx={{
-                          "& .Mui-selected": {
-                            background: "#fff",
-                            border: "1px solid #ffff",
-                          },
-                          "& .MuiTabs-flexContainer": {
-                            gap: "10px 15px",
-                            flexDirection: {
-                              md: "column",
-                              lg: "row",
-                              xl: "row",
-                              xs: "column",
-                              sm: "column",
-                            },
-                          },
-                        }}
-                        value={value}
-                        onChange={handleChange}
-                      >
-                        <Tab
-                          sx={tabIndecators}
-                          label="General Information"
-                          {...a11yProps(0)}
-                        />
-                        <Tab
-                          sx={tabIndecators}
-                          label="Gift Profile"
-                          {...a11yProps(1)}
-                        />
-                        <Tab
-                          sx={tabIndecators}
-                          label="Gift History"
-                          {...a11yProps(2)}
-                        />
-                      </Tabs>
-                    </Box>
-                  </Box>
+        <Box key={recipient.id}>
+          <Box
+            className="profileBox"
+            sx={{
+              flexDirection: {
+                xl: "row",
+                lg: "row",
+                xs: "column",
+                sm: "column",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                gap: "0 25px",
+                flexDirection: {
+                  xl: "row",
+                  lg: "row",
+                  xs: "column",
+                  sm: "column",
+                },
+              }}
+            >
+              <Box className="img_box" sx={{ margin: "auto" }}>
+                <Image
+                  borderRadius="50%"
+                  objectFit="cover"
+                  objectPosition="50% 50%"
+                  maxWidth="100px"
+                  src="/BluePersonalLogo.png"
+                  width="100px"
+                  height="100px"
+                />
+                <Box className="pen">
+                  <label htmlFor="icon-button-file">
+                    <Input accept="image/*" id="icon-button-file" type="file" />
+                    <IconButton
+                      sx={{ color: "#263238" }}
+                      aria-label="upload picture"
+                      component="span"
+                    >
+                      <PhotoCamera />
+                    </IconButton>
+                  </label>
                 </Box>
               </Box>
               <Box>
-                <Button variant="contained" color="secondary">
-                  Delete
-                </Button>
+                <Typography
+                  sx={{
+                    marginBottom: "16px",
+                    textAlign: {
+                      xl: "left",
+                      lg: "left",
+                      xs: "center",
+                      sm: "center",
+                    },
+                  }}
+                  variant="h3"
+                  className="titles"
+                >
+                  {recipient?.firstName} {recipient?.lastName}
+                </Typography>
+                <Box classSName="tabs">
+                  <Box>
+                    <Tabs
+                      sx={{
+                        "& .Mui-selected": {
+                          background: "#fff",
+                          border: "1px solid #ffff",
+                        },
+                        "& .MuiTabs-flexContainer": {
+                          gap: "10px 15px",
+                          marginBottom: "15px",
+                          flexDirection: {
+                            lg: "row",
+                            xl: "row",
+                            xs: "column",
+                            sm: "column",
+                          },
+                        },
+                      }}
+                      value={value}
+                      onChange={handleChange}
+                    >
+                      <Tab
+                        sx={tabIndecators}
+                        label="General Information"
+                        {...a11yProps(0)}
+                      />
+                      <Tab
+                        sx={tabIndecators}
+                        label="Gift Profile"
+                        {...a11yProps(1)}
+                      />
+                      <Tab
+                        sx={tabIndecators}
+                        label="Gift History"
+                        {...a11yProps(2)}
+                      />
+                    </Tabs>
+                  </Box>
+                </Box>
               </Box>
             </Box>
-
-            {/* tab panels */}
-            <Box className="tabsPanel">
-              <TabPanel value={value} index={0}>
-                <Box className="infoBox">
-                  <Typography variant="h5" className="titles">
-                    General Information
-                  </Typography>
-                  <GeneralInfo info={i} />
-                </Box>
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <Box className="infoBox">
-                  <Typography className="titles" variant="h5">
-                    Gift Profile
-                  </Typography>
-                  <GiftProfile info={giftProfileData} />
-                </Box>
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <Box className="infoBox">
-                  <Typography className="titles" variant="h5">
-                    Gift History
-                  </Typography>
-                  <GiftHistory info={giftHistoryData} />
-                </Box>
-              </TabPanel>
+            <Box>
+              <Button variant="contained" color="secondary">
+                Delete
+              </Button>
             </Box>
           </Box>
-        ))}
+
+          {/* tab panels */}
+          <Box className="tabsPanel">
+            <TabPanel value={value} index={0}>
+              <Box className="infoBox">
+                <Typography variant="h5" className="titles">
+                  General Information
+                </Typography>
+                <GeneralInfo info={recipient} />
+              </Box>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Box className="infoBox">
+                <Typography className="titles" variant="h5">
+                  Gift Profile
+                </Typography>
+                <GiftProfile info={giftProfileData} />
+              </Box>
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <Box className="infoBox">
+                <Typography className="titles" variant="h5">
+                  Gift History
+                </Typography>
+                <GiftHistory info={giftHistoryData} />
+              </Box>
+            </TabPanel>
+          </Box>
+        </Box>
       </Box>
     );
   }

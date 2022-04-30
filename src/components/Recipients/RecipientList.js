@@ -100,14 +100,16 @@ const RecipientList = () => {
         <Header>
           <Typography variant="h1">Recipient Dashboard</Typography>
           <Box display="flex">
-            <Button sx={{ mx: 2 }}>
-              <Link
-                to="upload"
-                style={{ textDecoration: "none", color: "#000" }}
-              >
-                Import a List
-              </Link>
-            </Button>
+            <Link
+              to="upload"
+              style={{
+                textDecoration: "none",
+                color: "#000",
+                margin: "0 20px",
+              }}
+            >
+              <Button>Import a List</Button>
+            </Link>
             <Button onClick={handleOpen}>Add A Recipient</Button>
           </Box>
         </Header>
