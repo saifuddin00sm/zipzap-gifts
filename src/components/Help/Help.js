@@ -65,8 +65,13 @@ const Root = styled("div")(({ theme }) => ({
       width: "100%",
     },
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "end",
+    alignItems: "start",
+    [theme.breakpoints.down("sm")]: {
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "300px",
+    },
   },
 
   "& .questions": {
@@ -117,8 +122,20 @@ const Help = () => {
       </Header>
       <Root>
         <Box className="banner">
-          <Box>
-            <Typography variant="h3">How Can We Help?</Typography>
+          <Box
+            sx={{
+              maxWidth: { xl: "411px", lg: "411px", sm: "80%", xs: "80%" },
+              marginTop: { xl: "80px", lg: "80px", sm: "80px", xs: 0 },
+              marginRight: { xl: "80px", lg: "80px", sm: "17px", xs: 0 },
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="h3"
+              sx={{ fontSize: { xl: "30px", lg: "30px", xs: "20px" } }}
+            >
+              How Can We Help?
+            </Typography>
             <FormControl variant="standard">
               <Input fullWidth placeholder="Search" id="search" />
             </FormControl>
