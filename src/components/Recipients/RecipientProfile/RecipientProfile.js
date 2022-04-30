@@ -263,6 +263,7 @@ const RecipientProfile = () => {
                           },
                           "& .MuiTabs-flexContainer": {
                             gap: "10px 15px",
+                            marginBottom: "15px",
                             flexDirection: {
                               lg: "row",
                               xl: "row",
