@@ -37,6 +37,20 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
       <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item lg={6} xl={6} md={6} xs={12} sm={12}>
           <Box className="util_box">
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 500,
+                fontSize: "25px",
+                lineHeight: "38px",
+                textTransform: "capitalize",
+                textAlign: "center",
+                marginBottom: "20px",
+                color: "#747474",
+              }}
+            >
+              Monthly Gift Utilization
+            </Typography>
             <Box
               sx={{
                 maxHeight: "300px",
@@ -55,6 +69,21 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                 })}
               />
             </Box>
+            <Typography
+              sx={{
+                fontWeight: 300,
+                fontSize: "20px",
+                lineHeight: "20px",
+                textTransform: "capitalize",
+                textAlign: "center",
+                marginTop: "30px",
+                color: "#000",
+              }}
+            >
+              {utilization !== 0
+                ? `You've sent ${utilization}% of your Recipeints a gift this month`
+                : "You haven't sent any Gifts this Month, send one now!"}
+            </Typography>
           </Box>
         </Grid>
         <Grid item lg={6} xl={6} md={6} xs={12} sm={12}>
