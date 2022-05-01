@@ -82,7 +82,7 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
               }}
             >
               {utilization ? (
-                `You've sent ${utilization}% of your Recipeints a gift this month`
+                `You've sent ${utilization}% of your Recipients a gift this month`
               ) : (
                 <>
                   You haven't sent any Gifts this Month.
