@@ -8,7 +8,6 @@ import {
 } from "date-fns";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import "./style.css";
 
 const GiftCalendar = ({ showDetailsHandle }) => {
   const currentMonth = new Date();
@@ -22,14 +21,14 @@ const GiftCalendar = ({ showDetailsHandle }) => {
   const renderHeader = () => {
     const dateFormat = "MMMM yyyy";
     return (
-      <Box className="header row flex-middle">
-        <Box className="col col-start"></Box>
-        <Box className="col col-center">
+      <Box className="calendarHeader calendarRow">
+        <Box className="calendarCol calendarCol-start"></Box>
+        <Box className="calendarCol calendarCol-center">
           <Typography variant="body" sx={{ fontSize: "20px", fontWeight: 600 }}>
             {format(currentMonth, dateFormat)}
           </Typography>
         </Box>
-        <Box className="col col-end"></Box>
+        <Box className="calendarCol calendarCol-end"></Box>
       </Box>
     );
   };
@@ -39,12 +38,12 @@ const GiftCalendar = ({ showDetailsHandle }) => {
     let startDate = startOfWeek(currentMonth, { weekStartsOn: 1 });
     for (let i = 0; i < 7; i++) {
       days.push(
-        <Box className="col col-center" key={i}>
+        <Box className="calendarCol calendarCol-center" key={i}>
           {format(addDays(startDate, i), dateFormat)}
         </Box>
       );
     }
-    return <Box className="days row">{days}</Box>;
+    return <Box className="days calendarRow">{days}</Box>;
   };
   const renderCells = () => {
     const startDate = startOfWeek(currentMonth, { weekStartsOn: 1 });
@@ -60,7 +59,7 @@ const GiftCalendar = ({ showDetailsHandle }) => {
         const cloneDay = day;
         days.push(
           <Box
-            className={`col cell ${
+            className={`calendarCol cell ${
               isSameDay(day, new Date())
                 ? "today"
                 : isSameDay(day, selectedDate)
@@ -85,7 +84,7 @@ const GiftCalendar = ({ showDetailsHandle }) => {
       }
 
       rows.push(
-        <Box className="row" key={day}>
+        <Box className="calendarRow" key={day}>
           {days}
         </Box>
       );

@@ -40,6 +40,180 @@ code {
   background-color: #abc6bd;
 }
 
+/* Gift dashboard calendar styligns */
+
+.calendarContainer {
+  font-family: "Poppins";
+  font-size: 1em;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #777;
+  background: #f9f9f9;
+  position: relative;
+  padding: 70px;
+  background: #abc4d6;
+  margin-top: 30px;
+}
+
+.calendarHeader {
+  display: block;
+  width: 100%;
+  padding: 1.75em 0;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+/* GRID */
+
+.calendarRow {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.calendarCol {
+  flex-grow: 1;
+  flex-basis: 0;
+  max-width: 100%;
+}
+
+.calendarCol-start {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.calendarCol-center {
+  justify-content: center;
+  text-align: center;
+}
+
+.calendarCol-end {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* Calendar */
+
+.calendar {
+  display: block;
+  position: relative;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.calendar .calendarHeader {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 115%;
+  padding: 1.5em 0;
+  border-bottom: 1px solid #eee;
+}
+
+.calendar .days {
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #747474;
+  font-size: 85%;
+  padding: 0.75em 0;
+  border-bottom: 1px solid #eee;
+}
+
+.calendar .body .cell {
+  position: relative;
+  height: 4em;
+  border: 1px solid #eee;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+  transition: 0.25s ease-out;
+  font-size: 1.5em;
+}
+
+.calendar .body .cell:hover {
+  background: #f9f9f9;
+  transition: 0.5s ease-out;
+}
+
+.calendar .body .selected {
+  border-left: 7px solid transparent;
+  border-image: linear-gradient(45deg, #1a8fff 0%, #53cbf1 40%);
+  border-image-slice: 1;
+}
+.calendar .body .today {
+  border-left: 7px solid transparent;
+  border-image: linear-gradient(
+    45deg,
+    #68a2cc 0%,
+    rgba(144, 175, 197, 0.73) 40%
+  );
+  border-image-slice: 1;
+}
+.calendar .body .calendarRow {
+  border-bottom: 1px solid #eee;
+}
+
+.calendar .body .cell .number {
+  position: absolute;
+  font-size: 82.5%;
+  line-height: 1;
+  top: 0.75em;
+  right: 0.75em;
+  font-weight: 700;
+}
+
+.calendar .body .disabled {
+  color: #ccc;
+  pointer-events: none;
+}
+
+.calendar .body .cell .bg {
+  font-weight: 700;
+  line-height: 1;
+  color: #1a8fff;
+  opacity: 0;
+  font-size: 5em;
+  position: absolute;
+  top: -0.1em;
+  right: 5px;
+  transition: 0.25s ease-out;
+  letter-spacing: -0.07em;
+}
+
+.calendar .body .cell:hover .bg,
+.calendar .body .selected .bg {
+  opacity: 0.06;
+  transition: 0.4s ease-in;
+}
+.calendar .body .cell.today .bg {
+  color: #5096c9;
+  opacity: 0.06;
+}
+
+.calendar .body .calendarCol {
+  flex-grow: 0;
+  flex-basis: calc(100% / 7);
+  width: calc(100% / 7);
+}
+
+@media (max-width: 768px) {
+  .calendarContainer {
+    padding: 20px;
+  }
+  .calendar .body .cell .number {
+    font-size: 62.5%;
+  }
+  .calendar .body .cell {
+    height: 2em;
+  }
+  .calendar .body .cell .bg {
+    font-size: 2em;
+  }
+}
+
 @media (max-width: 480px) {
   .menu {
     width: 0;
@@ -53,5 +227,29 @@ code {
 @media (min-width: 481px) {
   .mobile-header {
     display: none !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .calendar .days {
+    font-size: 75%;
+  }
+  .calendarContainer {
+    padding: 20px;
+  }
+  .calendar .body .cell .number {
+    font-size: 55.5%;
+  }
+  .calendar .body .cell .bg {
+    font-size: 1em;
+  }
+  .calendar .body .cell {
+    height: 1.5em;
+  }
+  .calendar .calendarHeader {
+    padding: 1em 0;
+  }
+  .calendar .calendarHeader span {
+    font-size: 15px;
   }
 }
