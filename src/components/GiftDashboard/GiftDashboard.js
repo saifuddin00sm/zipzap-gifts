@@ -8,7 +8,7 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { getUser } from "../../graphql/queries";
 import { createUser } from "../../graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
@@ -139,6 +139,7 @@ const defaultGifts = [
 function GiftDashboard() {
   // set this true when user have no recipient from the api/backend
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
   //congito user information
   const [user] = useOutletContext();
   const [open, setOpen] = useState(false);
@@ -181,7 +182,7 @@ function GiftDashboard() {
       <Container component="main">
         <Header>
           <Typography variant="h1">Gift Dashboard</Typography>
-          <Button>Send a Gift</Button>
+          <Button onClick={() => navigate("gifts")}>Send a Gift</Button>
         </Header>
         <Collapse in={open}>
           <Alert
