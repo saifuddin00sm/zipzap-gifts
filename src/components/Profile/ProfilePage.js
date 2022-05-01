@@ -8,12 +8,12 @@ import useAuth from "../../hooks/useAuth";
 import ProfileInfo from "./ProfileInfo";
 
 const userInfo = {
-  userName: "krista humphrey",
-  company: "zipZap gifts",
+  userName: "Krista Humphrey",
+  company: "Zip Zap Gifts",
   contactInfo: {
-    address: "602 E 5000 S Lehi, Utah",
-    phone: "99030030",
-    email: "HRdepartment@company.com",
+    address: "3003 N Thanksgiving Way, Lehi, UT 84043",
+    phone: "(801) 555-2022",
+    email: "hr_department@company.com",
   },
   cards: [
     {
