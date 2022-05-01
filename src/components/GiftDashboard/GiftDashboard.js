@@ -27,24 +27,24 @@ const recentGifts = [
     icon: <TodayIcon />,
     gifts: [
       {
-        name: "Skill Achievment Reward",
+        name: "Skill Achievement Reward",
         subItems: {
           dateShipped: "4/26/2020",
-          recipient: "victoria black",
+          recipient: "Victoria Black",
           image: {
-            src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z2lmdHxlbnwwfHwwfHw%3D&w=1000&q=80",
+            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
             alt: "gift image",
           },
         },
         id: 1,
       },
       {
-        name: "valentien's day",
+        name: "Valentine's Day",
         subItems: {
           dateShipped: "4/26/2022",
-          recipient: "malia morley",
+          recipient: "Malia Morley",
           image: {
-            src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z2lmdHxlbnwwfHwwfHw%3D&w=1000&q=80",
+            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
             alt: "gift image",
           },
         },
@@ -61,48 +61,48 @@ const recentGifts = [
     id: 2,
     gifts: [
       {
-        name: "jane bracket brithday",
+        name: "Saif Uddin birthday",
         subItems: {
           timeLine: "3/2/22- 4/2/22",
           recipient: "Saif uddin",
           image: {
-            src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z2lmdHxlbnwwfHwwfHw%3D&w=1000&q=80",
+            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
             alt: "gift image",
           },
         },
         id: 1,
       },
       {
-        name: "John doe brithday",
+        name: "Amelia Ostler birthday",
         subItems: {
           timeLine: "3/2/22 - 4/2/24",
           recipient: "Amelia Ostler",
           image: {
-            src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z2lmdHxlbnwwfHwwfHw%3D&w=1000&q=80",
+            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
             alt: "gift image",
           },
         },
         id: 2,
       },
       {
-        name: "james doe anniversary",
+        name: "Nathan Humphrey anniversary",
         id: 3,
         subItems: {
           timeLine: "3/2/22 - 4/2/20",
-          recipient: "james humphrey",
+          recipient: "Nathan Humphrey",
           image: {
-            src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z2lmdHxlbnwwfHwwfHw%3D&w=1000&q=80",
+            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
             alt: "gift image",
           },
         },
       },
       {
-        name: "marie brithday",
+        name: "Krista Humphrey birthday",
         subItems: {
           timeLine: "3/2/20 - 4/2/22",
-          recipient: "krista humphrey",
+          recipient: "Krista Humphrey",
           image: {
-            src: "https://images.unsplash.com/photo-1513201099705-a9746e1e201f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z2lmdHxlbnwwfHwwfHw%3D&w=1000&q=80",
+            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
             alt: "gift image",
           },
         },
@@ -112,24 +112,24 @@ const recentGifts = [
   },
 ];
 
-// utilization and defaul gift dummy data
+// utilization and default gift dummy data
 const utilization = 60;
 
 const defaultGifts = [
   {
     giftType: "default birthday gift",
-    status: "the get well soon box",
+    status: "Small Birthday Box",
     image: {
-      src: "https://media.istockphoto.com/vectors/isometric-gift-flat-icon-pixel-perfect-for-mobile-and-web-vector-id1152848595?k=20&m=1152848595&s=612x612&w=0&h=T9QQc2EYpvnB_sBzvcNrraL77VE9aXQlA86xum364uU=",
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVpoHhv49yIxz0hKqzcb1UuqRtaGCCHksmSQ&usqp=CAU",
       alt: "gift image",
     },
     id: 1,
   },
   {
     giftType: "default anniversary gift",
-    status: "the get well soon box",
+    status: "Good Job Basket",
     image: {
-      src: "https://media.istockphoto.com/vectors/isometric-gift-flat-icon-pixel-perfect-for-mobile-and-web-vector-id1152848595?k=20&m=1152848595&s=612x612&w=0&h=T9QQc2EYpvnB_sBzvcNrraL77VE9aXQlA86xum364uU=",
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5FidWWXA-75zfe8xcZFjFBbajsjErCBaVWQ&usqp=CAU",
       alt: "gift image",
     },
     id: 2,
@@ -137,9 +137,9 @@ const defaultGifts = [
 ];
 
 function GiftDashboard() {
-  const navigate = useNavigate();
   // set this true when user have no recipient from the api/backend
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
   //congito user information
   const [user] = useOutletContext();
   const [open, setOpen] = useState(false);
