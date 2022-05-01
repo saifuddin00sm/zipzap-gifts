@@ -1,4 +1,5 @@
 import React from "react";
+import { format } from "date-fns";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -68,6 +69,7 @@ const Accordions = ({ recentGifts }) => {
                     ({
                       id,
                       subItems: {
+                        date,
                         dateShipped,
                         timeLine,
                         recipient,
@@ -109,6 +111,11 @@ const Accordions = ({ recentGifts }) => {
                             </Box>
                             <Box>
                               <Typography>Recipient: {recipient}</Typography>
+                              {date && (
+                                <Typography>
+                                  Date: {format(new Date(date), "M/d/yyyy")}
+                                </Typography>
+                              )}
                               <Typography>
                                 {type === "recurring"
                                   ? "Timeline"

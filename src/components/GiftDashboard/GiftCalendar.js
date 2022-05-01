@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   format,
   startOfWeek,
@@ -9,7 +9,7 @@ import {
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const GiftCalendar = ({ showDetailsHandle }) => {
+const GiftCalendar = ({ showDetailsHandle, giftDates }) => {
   const currentMonth = new Date();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -68,13 +68,18 @@ const GiftCalendar = ({ showDetailsHandle }) => {
             }`}
             key={day}
             onClick={() => {
-              const dayStr = format(cloneDay, "ccc dd MMM yy");
+              const dayStr = format(cloneDay, "yyyy-MM-dd");
               onDateClickHandle(cloneDay, dayStr);
             }}
           >
             <Typography variant="body" className="number">
               {formattedDate}
             </Typography>
+            {giftDates
+              .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
+              .map(({ id, icon }) => (
+                <React.Fragment key={id}>{icon}</React.Fragment>
+              ))}
             <Typography variant="body" className="bg">
               {formattedDate}
             </Typography>
