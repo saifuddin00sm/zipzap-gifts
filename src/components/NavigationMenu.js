@@ -21,7 +21,7 @@ const menu = [
   { name: "Orders", link: "/orders", Icon: IconReceiptLong },
   { name: "Gift Catalog", link: "/catalog", Icon: IconImportContacts },
   { name: "Profile", link: "/profile", Icon: IconAccountBox },
-  { name: "Help", link: "/todo", Icon: IconHelpOutline },
+  { name: "Help", link: "/help", Icon: IconHelpOutline },
   {
     name: "Sign Out",
     link: "/",
