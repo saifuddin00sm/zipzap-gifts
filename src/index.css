@@ -40,6 +40,22 @@ code {
   background-color: #abc6bd;
 }
 
+@media (max-width: 480px) {
+  .menu {
+    width: 0;
+  }
+
+  #root {
+    padding-top: 50px;
+  }
+}
+
+@media (min-width: 481px) {
+  .mobile-header {
+    display: none !important;
+  }
+}
+
 /* Gift dashboard calendar styligns */
 
 .calendarContainer {
@@ -211,22 +227,6 @@ code {
   }
   .calendar .body .cell .bg {
     font-size: 2em;
-  }
-}
-
-@media (max-width: 480px) {
-  .menu {
-    width: 0;
-  }
-
-  #root {
-    padding-top: 50px;
-  }
-}
-
-@media (min-width: 481px) {
-  .mobile-header {
-    display: none !important;
   }
 }
 
