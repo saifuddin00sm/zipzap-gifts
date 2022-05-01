@@ -119,37 +119,45 @@ const recentGifts = [
 const calendarEvents = [
   {
     name: "Krista Humphrey Birthday",
-    icon: <EventRepeatIcon sx={{ fontSize: "3.5rem" }} color="secondary" />,
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
     date: "2022-05-15",
     id: 2,
   },
   {
     name: "Nathan Humphrey Anniversary",
-    icon: <EventRepeatIcon sx={{ fontSize: "3.5rem" }} color="secondary" />,
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
     date: "2022-05-21",
     id: 3,
   },
   {
     name: "Amelia Ostler Birthday",
-    icon: <EventRepeatIcon sx={{ fontSize: "3.5rem" }} color="secondary" />,
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
     date: "2022-05-18",
     id: 4,
   },
   {
     name: "Saif Uddin Birthday",
-    icon: <EventRepeatIcon sx={{ fontSize: "3.5rem" }} color="secondary" />,
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
     date: "2022-05-12",
     id: 5,
   },
   {
     name: "Skill Achievement Reward",
-    icon: <TodayIcon sx={{ fontSize: "3.5rem" }} color="secondary" />,
+    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
     date: "2022-05-04",
     id: 6,
   },
   {
     name: "New Baby",
-    icon: <TodayIcon sx={{ fontSize: "3.5rem" }} color="secondary" />,
+    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
     date: "2022-05-18",
     id: 7,
   },
