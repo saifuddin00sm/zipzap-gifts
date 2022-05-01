@@ -35,7 +35,6 @@ const style = {
     fontFamily: "Poppins",
     fontStyle: "normal",
     fontWeight: 600,
-    textTransform: "capitalize",
     color: "#343436",
     padding: "12px",
   },
@@ -61,16 +60,16 @@ export default function BasicModal({ open, setOpen }) {
         </Box>
         <Box className="congrats_text">
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-            no Recipients Uploaded
+            No Recipients Uploaded
           </Typography>
           <Typography>
-            To start creating gifts upload a recipient that you can assign the
-            gift to.
+            To start creating gifts, upload a recipient that you can ship a gift
+            to!
           </Typography>
         </Box>
         <Box sx={{ padding: 2, textAlign: "right" }}>
           <Button onClick={() => navigate("/recipients")} size="small">
-            Go to recipient page
+            Go to Recipient Page
           </Button>
         </Box>
       </Box>
