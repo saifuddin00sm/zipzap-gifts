@@ -39,7 +39,7 @@ const recentGifts = [
         id: 1,
       },
       {
-        name: "Valentine's Day",
+        name: "New Baby",
         subItems: {
           dateShipped: "4/26/2022",
           recipient: "Malia Morley",
@@ -56,7 +56,7 @@ const recentGifts = [
 
   {
     type: "recurring",
-    status: "Recurring Gifts this month",
+    status: "Recurring Gifts This Month",
     icon: <EventRepeatIcon />,
     id: 2,
     gifts: [

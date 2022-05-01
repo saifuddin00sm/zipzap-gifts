@@ -54,10 +54,10 @@ const Accordions = ({ recentGifts }) => {
                     }}
                   >
                     <Typography>
-                      No Gift this month!{" "}
+                      No Gifts this month!{" "}
                       <Link
                         sx={{ color: "#000", fontWeight: 700 }}
-                        href="https://dummyLink.com"
+                        href="gifts"
                       >
                         Create one now
                       </Link>
