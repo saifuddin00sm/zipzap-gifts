@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -80,9 +81,17 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                 color: "#000",
               }}
             >
-              {utilization !== 0
-                ? `You've sent ${utilization}% of your Recipeints a gift this month`
-                : "You haven't sent any Gifts this Month, send one now!"}
+              {utilization ? (
+                `You've sent ${utilization}% of your Recipeints a gift this month`
+              ) : (
+                <>
+                  You haven't sent any Gifts this Month.
+                  <br />
+                  <Link to="/gifts" className="button-link">
+                    Send one now!
+                  </Link>
+                </>
+              )}
             </Typography>
           </Box>
         </Grid>
