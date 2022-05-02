@@ -29,7 +29,7 @@ const recentGifts = [
       {
         name: "Skill Achievement Reward",
         subItems: {
-          dateShipped: "4/26/2020",
+          dateShipped: "5/04/2020",
           recipient: "Victoria Black",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -39,9 +39,9 @@ const recentGifts = [
         id: 1,
       },
       {
-        name: "Valentine's Day",
+        name: "New Baby",
         subItems: {
-          dateShipped: "4/26/2022",
+          dateShipped: "5/18/2022",
           recipient: "Malia Morley",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -56,14 +56,15 @@ const recentGifts = [
 
   {
     type: "recurring",
-    status: "Recurring Gifts this month",
+    status: "Recurring Gifts This Month",
     icon: <EventRepeatIcon />,
     id: 2,
     gifts: [
       {
         name: "Saif Uddin birthday",
         subItems: {
-          timeLine: "3/2/22- 4/2/22",
+          date: "2022-05-12",
+          timeLine: "1/1/21- 1/1/23",
           recipient: "Saif uddin",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -75,7 +76,8 @@ const recentGifts = [
       {
         name: "Amelia Ostler birthday",
         subItems: {
-          timeLine: "3/2/22 - 4/2/24",
+          date: "2022-05-18",
+          timeLine: "1/1/21- 1/1/23",
           recipient: "Amelia Ostler",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -88,7 +90,8 @@ const recentGifts = [
         name: "Nathan Humphrey anniversary",
         id: 3,
         subItems: {
-          timeLine: "3/2/22 - 4/2/20",
+          date: "2022-05-21",
+          timeLine: "1/1/21- 1/1/23",
           recipient: "Nathan Humphrey",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -99,7 +102,8 @@ const recentGifts = [
       {
         name: "Krista Humphrey birthday",
         subItems: {
-          timeLine: "3/2/20 - 4/2/22",
+          date: "2022-05-15",
+          timeLine: "1/1/21- 1/1/23",
           recipient: "Krista Humphrey",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -109,6 +113,53 @@ const recentGifts = [
         id: 4,
       },
     ],
+  },
+];
+
+const calendarEvents = [
+  {
+    name: "Krista Humphrey Birthday",
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
+    date: "2022-05-15",
+    id: 2,
+  },
+  {
+    name: "Nathan Humphrey Anniversary",
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
+    date: "2022-05-21",
+    id: 3,
+  },
+  {
+    name: "Amelia Ostler Birthday",
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
+    date: "2022-05-18",
+    id: 4,
+  },
+  {
+    name: "Saif Uddin Birthday",
+    icon: (
+      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+    ),
+    date: "2022-05-12",
+    id: 5,
+  },
+  {
+    name: "Skill Achievement Reward",
+    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
+    date: "2022-05-04",
+    id: 6,
+  },
+  {
+    name: "New Baby",
+    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
+    date: "2022-05-18",
+    id: 7,
   },
 ];
 
@@ -177,6 +228,8 @@ function GiftDashboard() {
     user.attributes.phone_number,
   ]);
 
+  const handleDayClick = (day) => {};
+
   return (
     <>
       <Container component="main">
@@ -227,7 +280,10 @@ function GiftDashboard() {
           />
         </Box>
         <Box>
-          <GiftCalendar />
+          <GiftCalendar
+            showDetailsHandle={handleDayClick}
+            giftDates={calendarEvents}
+          />
         </Box>
       </Container>
       {/* when there is no recipient, you can render this modal by passing the open prop as true up in the state */}
