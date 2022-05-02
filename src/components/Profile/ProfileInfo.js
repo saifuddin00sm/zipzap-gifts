@@ -7,7 +7,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import Grid from "@mui/material/Grid";
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const Root = styled("div")(({ theme }) => ({
   "& .profile": {
@@ -59,9 +62,9 @@ const Root = styled("div")(({ theme }) => ({
     position: "relative",
     "& .styles": {
       position: "absolute",
-      top: "47px",
+      top: "75px",
       left: "-19px",
-      height: "235px",
+      height: "200px",
       width: "8px",
       background: "#ABC4D6",
       [theme.breakpoints.down(768)]: {
@@ -76,7 +79,6 @@ const Root = styled("div")(({ theme }) => ({
       display: "flex",
       alignItems: "center",
       gap: "0 15px",
-      marginBottom: "30px",
       borderRadius: "10px",
       fontWeight: "400",
       fontSize: "20px",
@@ -138,7 +140,7 @@ const ProfileInfo = ({ info }) => {
   const {
     userName,
     company,
-    contactInfo: { address, email, phone } = {},
+    contactInfo: { address, email, phone, companySize } = {},
     cards,
   } = info;
   return (
@@ -174,26 +176,51 @@ const ProfileInfo = ({ info }) => {
           <Typography className="company">Company: {company}</Typography>
         </Box>
       </Box>
-      <Box className="contactInfo">
+      <Box className="contactInfo" sx={{ mb: 5 }}>
         <Box className="styles" />
-        <Typography
-          variant="h5"
-          sx={{ mb: 3, fontWeight: 600, color: "#505050" }}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 4,
+          }}
         >
-          Contact Info
-        </Typography>
-        <Box className="infoBox">
-          <HomeIcon />
-          <Typography>Address: {address}</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 600, color: "#505050" }}>
+            Contact Info
+          </Typography>
+          <Button>Edit Information</Button>
         </Box>
-        <Box className="infoBox">
-          <PhoneIcon />
-          <Typography>Phone: {phone}</Typography>
-        </Box>
-        <Box className="infoBox">
-          <EmailIcon />
-          <Typography>Email: {email}</Typography>
-        </Box>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <HomeIcon />
+              <Typography>Address: {address}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <PhoneIcon />
+              <Typography>Phone: {phone}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <EmailIcon />
+              <Typography>Email: {email}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <PeopleOutlineIcon />
+              <Typography>Company Size: {companySize}</Typography>
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
       <Typography
         variant="h5"
