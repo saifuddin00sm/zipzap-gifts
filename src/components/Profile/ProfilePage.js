@@ -14,6 +14,7 @@ const userInfo = {
     address: "3003 N Thanksgiving Way, Lehi, UT 84043",
     phone: "(801) 555-2022",
     email: "hr_department@company.com",
+    companySize: 200,
   },
   cards: [
     {
