@@ -16,12 +16,12 @@ import { format } from "date-fns";
 
 // chart dummy data
 const data = [
-  { date: "2021-11-14", gifts: 5 },
-  { date: "2021-7-18", gifts: 10 },
-  { date: "2021-9-22", gifts: 20 },
-  { date: "2021-8-22", gifts: 25 },
-  { date: "2021-2-25", gifts: 30 },
-  { date: "2021-3-31", gifts: 35 },
+  { date: "2021-12-15", gifts: 25 },
+  { date: "2022-01-15", gifts: 8 },
+  { date: "2022-02-15", gifts: 14 },
+  { date: "2022-03-15", gifts: 5 },
+  { date: "2022-04-15", gifts: 17 },
+  { date: "2022-05-15", gifts: 27 },
 ];
 
 const dateFormatter = (date) => {
