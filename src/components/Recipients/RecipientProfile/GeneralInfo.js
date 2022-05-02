@@ -26,7 +26,7 @@ const GeneralInfo = ({ info }) => {
     shippingAddress: { address1, address2, city, state, zip } = {},
     jobTitle,
     startDate,
-    department,
+    department: { name: departmentName } = {},
   } = info;
 
   return (
@@ -51,7 +51,9 @@ const GeneralInfo = ({ info }) => {
       </Box>
       <Box className="infos">
         <Typography className="keys">Department</Typography>
-        <Typography>{department === null ? "N/A" : department}</Typography>
+        <Typography>
+          {departmentName === null ? "N/A" : departmentName}
+        </Typography>
       </Box>
       <Box>
         <Button>Edit Information</Button>

@@ -76,7 +76,7 @@ const giftHistoryData = [
     date: "12/24/2021",
     giftName: "Company Christmas Gift",
     image: {
-      src: "https://www.basketcase.ie/wp-content/uploads/2021/07/Baby-Hamper-Blue-Box-Baby-Box-Paddy-Box-Hampers-ireland-scaled-1.jpg",
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVSk5tmzn3vnZlB_jBN2xIBTc1Pp-n_cLdmGIJuhKGk2KRyak87YEcLm7APwNfeTmgaSUzK4k&usqp=CAc",
       alt: "Christmas",
     },
     id: 3,
