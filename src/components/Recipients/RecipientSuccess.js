@@ -4,8 +4,8 @@ import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-// import Button from "@mui/material/Button";
-// import Link from "@mui/material/Link";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 import ConfettiExplosion from "react-confetti-explosion";
 
 const style = {
@@ -70,7 +70,7 @@ const RecipientSuccess = ({ text, subText, open, setOpen }) => {
           <Typography variant="body2" className="subHead">
             {subText}
           </Typography>
-          {/* <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: "center" }}>
             <Button variant="contained">
               <Link
                 sx={{ textDecoration: "none", color: "#000" }}
@@ -79,7 +79,7 @@ const RecipientSuccess = ({ text, subText, open, setOpen }) => {
                 Send Email
               </Link>
             </Button>
-          </Box> */}
+          </Box>
         </Box>
       </Box>
     </Modal>
