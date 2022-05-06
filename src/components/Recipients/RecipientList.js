@@ -22,7 +22,9 @@ const RecipientList = () => {
   const { recipients, isLoading, isError, error } = useRecipients();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
-
+  const handleClose = () => {
+    setOpen(!open);
+  };
   const goProfile = (id) => {
     navigate(id);
   };
@@ -138,7 +140,12 @@ const RecipientList = () => {
           </TableContainer>
         </Container>
       </Container>
-      <RecipientModal open={open} setOpen={setOpen} />
+      <RecipientModal
+        open={open}
+        setOpen={setOpen}
+        onClose={handleClose}
+        closeAfterTransition={true}
+      />
     </>
   );
 };
