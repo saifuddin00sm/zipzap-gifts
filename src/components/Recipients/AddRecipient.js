@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-
 import Box from "@mui/material/Box";
 import { Divider, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { styled } from "@mui/material/styles";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-
+import InputLabel from "@mui/material/InputLabel";
 import RecipientSuccess from "./RecipientSuccess";
 import { useRecipients } from "../../hooks/recipients";
 
@@ -25,6 +21,13 @@ const Root = styled("div")(({ theme }) => ({
       color: "#343436",
     },
   },
+}));
+
+const Label = styled(InputLabel)(({ theme }) => ({
+  fontSize: "16px",
+  color: "#000",
+  fontWeight: 600,
+  width: 200,
 }));
 
 const FormControl = styled("div")(({ theme }) => ({
@@ -54,8 +57,9 @@ const initialState = {
 
 const AddRecipient = () => {
   const { addRecipient } = useRecipients();
-  const [formValidation, setFormValidation] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [open, setOpen] = useState(false);
   const [formState, setFormState] = useState(initialState);
 
   function setInput(key, value) {
@@ -63,23 +67,45 @@ const AddRecipient = () => {
     validateForm();
   }
 
-  const handleSubmit = () => {
-    if (formValidation) {
-      addRecipient({ ...formState });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (isFormValid) {
+      await addRecipient({ ...formState });
       setFormState(initialState);
-      setOpen(true);
+      setSubmitted(true);
     }
   };
+
+  if (submitted) {
+    return (
+      <RecipientSuccess
+        text="Recipient Added Successfully!"
+        subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
+        open={open}
+        setOpen={setOpen}
+      />
+    );
+  }
 
   const validateForm = () => {
     if (
       formState.lastName !== "" &&
       formState.shippingAddress.address1 !== "" &&
-      formState.shippingAddress.zip !== ""
+      formState.shippingAddress.zip !== "" &&
+      formState.email !== ""
     ) {
-      setFormValidation(true);
+      setIsFormValid(true);
     }
   };
+
+  function setAddressInput(key, value) {
+    setFormState({
+      ...formState,
+      shippingAddress: { ...formState.shippingAddress, [key]: value },
+    });
+    validateForm();
+  }
 
   return (
     <>
@@ -94,26 +120,28 @@ const AddRecipient = () => {
           sx={{ marginTop: "20px" }}
         >
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
+            <Label
+              style={{
+                fontSize: "16px",
+                color: "#000",
+                fontWeight: 600,
+              }}
             >
               First Name
-            </Typography>
+            </Label>
             <TextField
               variant="standard"
+              fullWidth="true"
               onChange={(event) => setInput("firstName", event.target.value)}
               value={formState.firstName}
               placeholder="First Name"
             ></TextField>
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Last Name*
-            </Typography>
+            <Label>Last Name*</Label>
             <TextField
               variant="standard"
+              fullWidth="true"
               required
               onChange={(event) => setInput("lastName", event.target.value)}
               value={formState.lastName}
@@ -121,12 +149,9 @@ const AddRecipient = () => {
             />
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Email{" "}
-            </Typography>
+            <Label>Email*</Label>
             <TextField
+              fullWidth="true"
               onChange={(event) => setInput("email", event.target.value)}
               value={formState.email}
               placeholder="Email"
@@ -135,144 +160,98 @@ const AddRecipient = () => {
             />
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Birthday
-            </Typography>
-            <Stack>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label=""
-                  inputFormat="MM/dd/yyyy"
-                  value={formState.birthday}
-                  onChange={(value) => setInput("birthday", value)}
-                  renderInput={(params) => (
-                    <TextField
-                      style={{ width: "165px" }}
-                      variant="standard"
-                      {...params}
-                    />
-                  )}
-                />
-              </LocalizationProvider>
-            </Stack>
+            <Label>Birthday</Label>
+            <DatePicker
+              label=""
+              inputFormat="MM/dd/yyyy"
+              value={formState.birthday}
+              onChange={(value) => setInput("birthday", value)}
+              renderInput={(params) => (
+                <TextField fullWidth="true" variant="standard" {...params} />
+              )}
+            />
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Address*
-            </Typography>
+            <Label>Address*</Label>
             <TextField
               variant="standard"
+              fullWidth="true"
               required
               onChange={(event) =>
-                setInput(
-                  (formState.shippingAddress.address1 = event.target.value)
-                )
+                setAddressInput("address1", event.target.value)
               }
               value={formState.shippingAddress.address1}
               placeholder="Address"
             ></TextField>
           </FormControl>
           <FormControl>
-            <Typography></Typography>
+            <Label></Label>
             <TextField
               onChange={(event) =>
-                setInput(
-                  (formState.shippingAddress.address2 = event.target.value)
-                )
+                setAddressInput("address2", event.target.value)
               }
               value={formState.shippingAddress.address2}
               placeholder="Address 2"
               label=""
               variant="standard"
+              fullWidth="true"
             />
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              City
-            </Typography>
+            <Label>City</Label>
             <TextField
               variant="standard"
-              onChange={(event) =>
-                setInput((formState.shippingAddress.city = event.target.value))
-              }
+              fullWidth="true"
+              onChange={(event) => setAddressInput("city", event.target.value)}
               value={formState.shippingAddress.city}
               placeholder="City"
             ></TextField>
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
+            <Label style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}>
               State (i.e UT)
-            </Typography>
+            </Label>
             <TextField
               variant="standard"
-              onChange={(event) =>
-                setInput((formState.shippingAddress.state = event.target.value))
-              }
+              fullWidth="true"
+              onChange={(event) => setAddressInput("state", event.target.value)}
               value={formState.shippingAddress.state}
               placeholder="State"
             ></TextField>
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Zip Code*
-            </Typography>
+            <Label>Zip Code*</Label>
             <TextField
               variant="standard"
+              fullWidth="true"
               required
-              onChange={(event) =>
-                setInput((formState.shippingAddress.zip = event.target.value))
-              }
+              onChange={(event) => setAddressInput("zip", event.target.value)}
               value={formState.shippingAddress.zip}
               placeholder="Zip"
               label=""
             ></TextField>
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Job Title
-            </Typography>
+            <Label>Job Title</Label>
             <TextField
               variant="standard"
+              fullWidth="true"
               onChange={(event) => setInput("jobTitle", event.target.value)}
               value={formState.jobTitle}
               placeholder="Job Title"
             ></TextField>
           </FormControl>
           <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Date Started
-            </Typography>
-            <Stack>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label=""
-                  inputFormat="MM/dd/yyyy"
-                  value={formState.startDate}
-                  onChange={(value) => setInput("startDate", value)}
-                  renderInput={(params) => (
-                    <TextField
-                      style={{ width: "165px" }}
-                      variant="standard"
-                      {...params}
-                    />
-                  )}
-                />
-              </LocalizationProvider>
-            </Stack>
+            <Label>Date Started</Label>
+            <DatePicker
+              label=""
+              inputFormat="MM/dd/yyyy"
+              value={formState.startDate}
+              onChange={(value) => setInput("startDate", value)}
+              renderInput={(params) => (
+                <TextField fullWidth="true" variant="standard" {...params} />
+              )}
+            />
           </FormControl>
 
           {/* Adding back in later */}
@@ -295,19 +274,13 @@ const AddRecipient = () => {
               onClick={handleSubmit}
               variant="contained"
               type="submit"
-              disabled={!formValidation}
+              disabled={!isFormValid}
             >
               Create New Recipient
             </Button>
           </FormControl>
         </Box>
       </Root>
-      <RecipientSuccess
-        text="Recipient Added Successfully!"
-        subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
-        open={open}
-        setOpen={setOpen}
-      />
     </>
   );
 };

@@ -53,7 +53,7 @@ const style = {
 };
 
 const RecipientSuccess = ({ text, subText, open, setOpen }) => {
-  const handleClose = () => setOpen(!open);
+  const handleClose = () => setOpen(false);
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>

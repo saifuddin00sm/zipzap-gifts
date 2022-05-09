@@ -46,7 +46,7 @@ const style = {
 export default function BasicModal({ open, setOpen }) {
   const navigate = useNavigate();
   const handleClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
 
   return (

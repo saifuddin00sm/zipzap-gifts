@@ -21,9 +21,9 @@ const RecipientList = () => {
   const navigate = useNavigate();
   const { recipients, isLoading, isError, error } = useRecipients();
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => setOpen(true);
   const handleClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
   const goProfile = (id) => {
     navigate(id);

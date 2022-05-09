@@ -50,7 +50,7 @@ const style = {
 };
 
 const RecipientModal = ({ open, setOpen }) => {
-  const handleClose = () => setOpen(!open);
+  const handleClose = () => setOpen(false);
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
