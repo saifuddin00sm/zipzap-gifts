@@ -114,7 +114,12 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                         {giftType}
                       </Typography>
                       <Typography className="subTitle" variant="h5">
-                        {status}
+                        {status.map((event) => (
+                          <React.Fragment key={event}>
+                            {event}
+                            <br />
+                          </React.Fragment>
+                        ))}
                       </Typography>
                       <img height="200" width="230" src={src} alt={alt} />
                     </CardContent>

@@ -168,8 +168,12 @@ const utilization = 60;
 
 const defaultGifts = [
   {
-    giftType: "default birthday gift",
-    status: "Small Birthday Box",
+    giftType: "Upcoming Holidays",
+    status: [
+      "Memorial Day: May 30th",
+      "Receptionist Day: May 11th",
+      "Father's Day: June 19th",
+    ],
     image: {
       src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVpoHhv49yIxz0hKqzcb1UuqRtaGCCHksmSQ&usqp=CAU",
       alt: "gift image",
@@ -177,8 +181,8 @@ const defaultGifts = [
     id: 1,
   },
   {
-    giftType: "default anniversary gift",
-    status: "Good Job Basket",
+    giftType: "Upcoming Recipient Events",
+    status: ["Amelia's Birthday: May 18th", "Nathan's Anniversary: May 21st"],
     image: {
       src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5FidWWXA-75zfe8xcZFjFBbajsjErCBaVWQ&usqp=CAU",
       alt: "gift image",
