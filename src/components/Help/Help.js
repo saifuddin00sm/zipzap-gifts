@@ -3,10 +3,8 @@ import Container from "@mui/material/Container";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
-import { alpha, styled } from "@mui/material/styles";
-import FormControl from "@mui/material/FormControl";
+import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
@@ -22,13 +20,6 @@ import PersonRemoveAlt1Icon from "@mui/icons-material/PersonRemoveAlt1";
 // accordion items
 const questions = [
   {
-    question: "How do I delete a gift?",
-    answer:
-      "To delete a recipient, go to the recipients page, and click on the recipient you wish to delete. On the recipient dashboard, in the top right corner, you will see a gray delete button. Press that to delete the recipient.",
-    id: 1,
-    icon: <DeleteForeverIcon />,
-  },
-  {
     question: "How do I upload a list of recipients?",
     answer:
       'To upload a list of recipients, click on the "Recipients" link in the navigation menu on the left. In the top right hand corner of the Recipients page, click the “Upload a List” button. You can download our template and add your recipient information to that document, then upload for ease of use.',
@@ -38,16 +29,23 @@ const questions = [
   {
     question: "Where can I see my next gift? ",
     answer:
-      "To see your upcoming gifts, go to the gift dashboard and scroll down to the “Gift Calendar.” There you will see all the upcoming gifts. You can also see who the gift is going to. Happy gifting!",
+      "To see your upcoming gifts, go to the Gift Dashboard and scroll down to the “Gift Calendar.” There you will see all the upcoming gifts. You can also see who the gift is going to. Happy gifting!",
     id: 3,
     icon: <VisibilityIcon />,
   },
   {
     question: "How do I remove a recipient from a gift?",
     answer:
-      "If someone leaves your company and you need to remove them from a recurring gift, delete the recipient. You can do this by navigating to their profile, and pressing the gray delete button.",
+      "If someone leaves your company and you need to remove them from a recurring gift, delete the recipient. You can do this by navigating to their profile, and pressing the gray “Delete” button.",
     id: 4,
     icon: <PersonRemoveAlt1Icon />,
+  },
+  {
+    question: "How do I cancel an order?",
+    answer:
+      "Please contact Zip Zap Gifts at 385-212-6216 or connect@zipzpagifts.com",
+    id: 1,
+    icon: <DeleteForeverIcon />,
   },
 ];
 
@@ -89,6 +87,7 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
+/*
 const Input = styled(InputBase)(({ theme }) => ({
   "label + &": {
     marginTop: theme.spacing(4),
@@ -112,6 +111,7 @@ const Input = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+*/
 
 const Help = () => {
   return (
@@ -135,9 +135,11 @@ const Help = () => {
             >
               How Can We Help?
             </Typography>
+            {/*
             <FormControl variant="standard">
               <Input fullWidth placeholder="Search" id="search" />
             </FormControl>
+            */}
           </Box>
         </Box>
         <Box>
