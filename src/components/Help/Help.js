@@ -3,10 +3,8 @@ import Container from "@mui/material/Container";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
-import { alpha, styled } from "@mui/material/styles";
-import FormControl from "@mui/material/FormControl";
+import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
@@ -89,6 +87,7 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
+/*
 const Input = styled(InputBase)(({ theme }) => ({
   "label + &": {
     marginTop: theme.spacing(4),
@@ -112,6 +111,7 @@ const Input = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+*/
 
 const Help = () => {
   return (
