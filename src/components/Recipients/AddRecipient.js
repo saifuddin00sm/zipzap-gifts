@@ -61,7 +61,6 @@ const AddRecipient = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [open, setOpen] = useState(false);
   const [formState, setFormState] = useState(initialState);
-  const handleClose = () => setOpen(false);
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value });
