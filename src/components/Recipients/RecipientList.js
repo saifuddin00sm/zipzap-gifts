@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Container from "@mui/material/Container";
+
 import Box from "@mui/material/Box";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -140,12 +142,9 @@ const RecipientList = () => {
           </TableContainer>
         </Container>
       </Container>
-      <RecipientModal
-        open={open}
-        setOpen={setOpen}
-        onClose={handleClose}
-        closeAfterTransition={true}
-      />
+      <Modal open={open} setOpen={setOpen} closeAfterTransition={true}>
+        <RecipientModal open={open} setOpen={setOpen} />
+      </Modal>
     </>
   );
 };

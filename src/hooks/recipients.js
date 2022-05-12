@@ -102,10 +102,6 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   if (recipient.startDate) {
     recipient.startDate = format(recipient.startDate, "yyyy-MM-dd");
   }
-  /* TODO: Error checking here
-  if (!todo.name || !todo.description)
-    throw new Error("Missing name or description");
-  */
   const {
     data: {
       createAddress: { id },

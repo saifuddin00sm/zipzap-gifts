@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 import { Divider, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -57,36 +58,24 @@ const initialState = {
 
 const AddRecipient = () => {
   const { addRecipient } = useRecipients();
-  const [submitted, setSubmitted] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [open, setOpen] = useState(false);
   const [formState, setFormState] = useState(initialState);
+  const handleClose = () => setOpen(false);
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value });
     validateForm();
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     if (isFormValid) {
-      await addRecipient({ ...formState });
+      addRecipient({ ...formState });
       setFormState(initialState);
-      setSubmitted(true);
+      setOpen(true);
     }
   };
-
-  if (submitted) {
-    return (
-      <RecipientSuccess
-        text="Recipient Added Successfully!"
-        subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
-        open={open}
-        setOpen={setOpen}
-      />
-    );
-  }
 
   const validateForm = () => {
     if (
@@ -131,7 +120,7 @@ const AddRecipient = () => {
             </Label>
             <TextField
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
               onChange={(event) => setInput("firstName", event.target.value)}
               value={formState.firstName}
               placeholder="First Name"
@@ -141,7 +130,7 @@ const AddRecipient = () => {
             <Label>Last Name*</Label>
             <TextField
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
               required
               onChange={(event) => setInput("lastName", event.target.value)}
               value={formState.lastName}
@@ -151,7 +140,7 @@ const AddRecipient = () => {
           <FormControl>
             <Label>Email*</Label>
             <TextField
-              fullWidth="true"
+              fullWidth={true}
               onChange={(event) => setInput("email", event.target.value)}
               value={formState.email}
               placeholder="Email"
@@ -175,7 +164,7 @@ const AddRecipient = () => {
             <Label>Address*</Label>
             <TextField
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
               required
               onChange={(event) =>
                 setAddressInput("address1", event.target.value)
@@ -194,14 +183,14 @@ const AddRecipient = () => {
               placeholder="Address 2"
               label=""
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
             />
           </FormControl>
           <FormControl>
             <Label>City</Label>
             <TextField
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
               onChange={(event) => setAddressInput("city", event.target.value)}
               value={formState.shippingAddress.city}
               placeholder="City"
@@ -213,7 +202,7 @@ const AddRecipient = () => {
             </Label>
             <TextField
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
               onChange={(event) => setAddressInput("state", event.target.value)}
               value={formState.shippingAddress.state}
               placeholder="State"
@@ -223,7 +212,7 @@ const AddRecipient = () => {
             <Label>Zip Code*</Label>
             <TextField
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
               required
               onChange={(event) => setAddressInput("zip", event.target.value)}
               value={formState.shippingAddress.zip}
@@ -235,7 +224,7 @@ const AddRecipient = () => {
             <Label>Job Title</Label>
             <TextField
               variant="standard"
-              fullWidth="true"
+              fullWidth={true}
               onChange={(event) => setInput("jobTitle", event.target.value)}
               value={formState.jobTitle}
               placeholder="Job Title"
@@ -281,8 +270,15 @@ const AddRecipient = () => {
           </FormControl>
         </Box>
       </Root>
+      <Modal open={open} setOpen={setOpen}>
+        <RecipientSuccess
+          text="Recipient Added Successfully!"
+          subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
+          open={open}
+          setOpen={setOpen}
+        />
+      </Modal>
     </>
   );
 };
-
 export default AddRecipient;
