@@ -66,9 +66,15 @@ const AddRecipient = () => {
     validateForm();
   }
 
-  const handleSubmit = async () => {
-    await addRecipient({ ...formState });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    addRecipient({ ...formState });
     setFormState(initialState);
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve("done!"), 600);
+    });
+
+    let result = await promise;
     setOpen(true);
   };
 
