@@ -73,6 +73,7 @@ const AddRecipient = () => {
     let promise = new Promise((resolve) => {
       setTimeout(() => resolve("done!"), 600);
     });
+    await promise;
     setOpen(true);
   };
 
