@@ -50,26 +50,28 @@ export default function BasicModal({ open, setOpen }) {
   };
 
   return (
-    <Box sx={style}>
-      <Box className="closeBtn">
-        <IconButton
-          className="mainBtn"
-          sx={{ padding: 0 }}
-          onClick={handleClose}
-        >
-          <ClearIcon sx={{ color: "#fff" }} />
-        </IconButton>
+    <Modal open={open} onClose={handleClose}>
+      <Box sx={style}>
+        <Box className="closeBtn">
+          <IconButton
+            className="mainBtn"
+            sx={{ padding: 0 }}
+            onClick={handleClose}
+          >
+            <ClearIcon sx={{ color: "#fff" }} />
+          </IconButton>
+        </Box>
+        <Box className="congrats_text">
+          <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
+          <Typography variant="h4">Congrats!</Typography>
+          <Typography variant="h6">You have created a gift</Typography>
+        </Box>
+        <Box sx={{ padding: 2, textAlign: "right" }}>
+          <Button onClick={() => navigate("/")} size="small">
+            Back to gift dashboard
+          </Button>
+        </Box>
       </Box>
-      <Box className="congrats_text">
-        <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
-        <Typography variant="h4">Congrats!</Typography>
-        <Typography variant="h6">You have created a gift</Typography>
-      </Box>
-      <Box sx={{ padding: 2, textAlign: "right" }}>
-        <Button onClick={() => navigate("/")} size="small">
-          Back to gift dashboard
-        </Button>
-      </Box>
-    </Box>
+    </Modal>
   );
 }

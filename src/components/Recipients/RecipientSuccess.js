@@ -53,34 +53,36 @@ const style = {
 };
 
 const RecipientSuccess = ({ text, subText, open, setOpen }) => {
-  const handleClose = () => setOpen(!open);
+  const handleClose = () => setOpen(false);
   return (
-    <Box sx={style}>
-      <Box className="closeBtn">
-        <IconButton className="mainBtn" onClick={handleClose}>
-          <ClearIcon sx={{ color: "#ffff" }} />
-        </IconButton>
-      </Box>
-      <Box sx={{ p: 4, paddingTop: 0 }}>
-        <Typography variant="h5" className="successHead">
-          {text}
-        </Typography>
-        <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
-        <Typography variant="body2" className="subHead">
-          {subText}
-        </Typography>
-        <Box sx={{ textAlign: "center" }}>
-          <Button variant="contained">
-            <Link
-              sx={{ textDecoration: "none", color: "#000" }}
-              href="mailto:connect@zipzapgifts.com"
-            >
-              Send Email
-            </Link>
-          </Button>
+    <Modal open={open}>
+      <Box sx={style}>
+        <Box className="closeBtn">
+          <IconButton className="mainBtn" onClick={handleClose}>
+            <ClearIcon sx={{ color: "#ffff" }} />
+          </IconButton>
+        </Box>
+        <Box sx={{ p: 4, paddingTop: 0 }}>
+          <Typography variant="h5" className="successHead">
+            {text}
+          </Typography>
+          <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
+          <Typography variant="body2" className="subHead">
+            {subText}
+          </Typography>
+          <Box sx={{ textAlign: "center" }}>
+            <Button variant="contained">
+              <Link
+                sx={{ textDecoration: "none", color: "#000" }}
+                href="mailto:connect@zipzapgifts.com"
+              >
+                Send Email
+              </Link>
+            </Button>
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </Modal>
   );
 };
 

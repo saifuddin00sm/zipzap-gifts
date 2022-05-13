@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import { Divider, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -67,13 +66,10 @@ const AddRecipient = () => {
     validateForm();
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isFormValid) {
-      addRecipient({ ...formState });
-      setFormState(initialState);
-      setOpen(true);
-    }
+  const handleSubmit = async () => {
+    await addRecipient({ ...formState });
+    setFormState(initialState);
+    setOpen(true);
   };
 
   const validateForm = () => {
@@ -155,7 +151,7 @@ const AddRecipient = () => {
               value={formState.birthday}
               onChange={(value) => setInput("birthday", value)}
               renderInput={(params) => (
-                <TextField fullWidth="true" variant="standard" {...params} />
+                <TextField fullWidth={true} variant="standard" {...params} />
               )}
             />
           </FormControl>
@@ -237,7 +233,7 @@ const AddRecipient = () => {
               value={formState.startDate}
               onChange={(value) => setInput("startDate", value)}
               renderInput={(params) => (
-                <TextField fullWidth="true" variant="standard" {...params} />
+                <TextField fullWidth={true} variant="standard" {...params} />
               )}
             />
           </FormControl>
@@ -258,25 +254,18 @@ const AddRecipient = () => {
               marginBottom: 0,
             }}
           >
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              type="submit"
-              disabled={!isFormValid}
-            >
+            <Button variant="contained" type="submit" disabled={!isFormValid}>
               Create New Recipient
             </Button>
           </FormControl>
         </Box>
       </Root>
-      <Modal open={open} setOpen={setOpen}>
-        <RecipientSuccess
-          text="Recipient Added Successfully!"
-          subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
-          open={open}
-          setOpen={setOpen}
-        />
-      </Modal>
+      <RecipientSuccess
+        text="Recipient Added Successfully!"
+        subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
+        open={open}
+        setOpen={setOpen}
+      />
     </>
   );
 };

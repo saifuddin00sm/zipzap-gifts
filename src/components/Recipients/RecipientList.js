@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import Container from "@mui/material/Container";
-
 import Box from "@mui/material/Box";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -23,10 +21,8 @@ const RecipientList = () => {
   const navigate = useNavigate();
   const { recipients, isLoading, isError, error } = useRecipients();
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleOpen = () => setOpen(!open);
+
   const goProfile = (id) => {
     navigate(id);
   };
@@ -142,9 +138,7 @@ const RecipientList = () => {
           </TableContainer>
         </Container>
       </Container>
-      <Modal open={open} setOpen={setOpen} closeAfterTransition={true}>
-        <RecipientModal open={open} setOpen={setOpen} />
-      </Modal>
+      <RecipientModal open={open} setOpen={setOpen} />
     </>
   );
 };

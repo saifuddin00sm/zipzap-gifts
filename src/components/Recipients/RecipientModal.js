@@ -50,18 +50,20 @@ const style = {
 };
 
 const RecipientModal = ({ open, setOpen }) => {
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setOpen(!open);
   return (
-    <Box sx={style}>
-      <Box className="closeBtn">
-        <IconButton className="mainBtn" onClick={handleClose}>
-          <ClearIcon sx={{ color: "#ffff" }} />
-        </IconButton>
+    <Modal open={open} onClose={handleClose}>
+      <Box sx={style}>
+        <Box className="closeBtn">
+          <IconButton className="mainBtn" onClick={handleClose}>
+            <ClearIcon sx={{ color: "#ffff" }} />
+          </IconButton>
+        </Box>
+        <Box sx={{ p: 4, paddingTop: 0 }}>
+          <AddRecipient />
+        </Box>
       </Box>
-      <Box sx={{ p: 4, paddingTop: 0 }}>
-        <AddRecipient />
-      </Box>
-    </Box>
+    </Modal>
   );
 };
 export default RecipientModal;
