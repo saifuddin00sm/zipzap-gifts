@@ -70,11 +70,9 @@ const AddRecipient = () => {
     e.preventDefault();
     addRecipient({ ...formState });
     setFormState(initialState);
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise((resolve) => {
       setTimeout(() => resolve("done!"), 600);
     });
-
-    let result = await promise;
     setOpen(true);
   };
 
