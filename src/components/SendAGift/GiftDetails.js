@@ -79,7 +79,7 @@ const GiftDetails = () => {
               </FormControl>
               <FormControl variant="standard">
                 <InputLabel className="label" shrink htmlFor="custom-note">
-                  Custome note
+                  Custom Note
                 </InputLabel>
                 <Input
                   multiline

@@ -21,10 +21,11 @@ import GiftHistory from "./GiftHistory";
 
 // dummy data
 const giftProfileData = {
-  favFood: "Mac and Chinese",
-  favColor: "Baby Blue",
-  hobbies: ["Rock Climbing", "Golfing", "and Wakeboarding"],
-  favItems: ["Yoga Mat", "Golf Towel", "Magnetic Timer", "National Parks Pass"],
+  favColor: "Blue",
+  favSnack: "Salty, Crunchy",
+  favSwag: "Hat",
+  hobbies: ["Mountain Biking", "Basketball", "Camping"],
+  allergies: "Diabetic, please don't send sugary snacks",
   suggestedGift: [
     {
       giftName: "the outdoor lover",

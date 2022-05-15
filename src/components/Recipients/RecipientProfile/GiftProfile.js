@@ -23,29 +23,32 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 const GiftProfile = ({ info }) => {
-  const { favFood, favColor, favItems, hobbies, suggestedGift } = info;
+  const { favColor, favSnack, favSwag, hobbies, allergies, suggestedGift } =
+    info;
   return (
     <Root>
       <Box>
         <Box className="infos">
-          <Typography className="keys">Favorite</Typography>
-          <Typography>{favFood === null ? "N/A" : favFood}</Typography>
+          <Typography className="keys">Favorite Color</Typography>
+          <Typography>{favColor || "N/A"}</Typography>
         </Box>
         <Box className="infos">
-          <Typography className="keys">Favorite Color</Typography>
-          <Typography>{favColor === null ? "N/A" : favColor}</Typography>
+          <Typography className="keys">Favorite Snack Type</Typography>
+          <Typography>{favSnack || "N/A"}</Typography>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Favorite Swag Item</Typography>
+          <Typography>{favSwag || "N/A"}</Typography>
         </Box>
         <Box className="infos">
           <Typography className="keys">Hobbies</Typography>
           <Typography>
-            {hobbies.length === 0 ? "N/A" : hobbies.join(", ")}
+            {hobbies?.length ? hobbies.join(", ") : "N/A"}
           </Typography>
         </Box>
         <Box className="infos">
-          <Typography className="keys">Favorite Items</Typography>
-          <Typography>
-            {favItems.length === 0 ? "N/A" : favItems.join(", ")}
-          </Typography>
+          <Typography className="keys">Allergies/ Aversions/ Goals</Typography>
+          <Typography>{allergies || "N/A"}</Typography>
         </Box>
       </Box>
       <Box sx={{ mt: 5 }}>
