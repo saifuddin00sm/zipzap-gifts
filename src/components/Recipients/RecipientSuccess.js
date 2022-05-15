@@ -5,15 +5,12 @@ import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-import ConfettiExplosion from "react-confetti-explosion";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
   bgcolor: "background.paper",
   boxShadow: 24,
   "& .closeBtn": {
@@ -46,19 +43,17 @@ const style = {
     fontWeight: 300,
     fontSize: "20px",
     lineHeight: "30px",
-    textTransform: "capitalize",
     color: "#000000",
     marginBottom: "20px",
   },
 };
 
-const RecipientSuccess = ({ text, subText, open, setOpen }) => {
-  const handleClose = () => setOpen(!open);
+const RecipientSuccess = ({ text, subText, open, close }) => {
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open}>
       <Box sx={style}>
         <Box className="closeBtn">
-          <IconButton className="mainBtn" onClick={handleClose}>
+          <IconButton className="mainBtn" onClick={close}>
             <ClearIcon sx={{ color: "#ffff" }} />
           </IconButton>
         </Box>
@@ -66,18 +61,12 @@ const RecipientSuccess = ({ text, subText, open, setOpen }) => {
           <Typography variant="h5" className="successHead">
             {text}
           </Typography>
-          <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
           <Typography variant="body2" className="subHead">
             {subText}
           </Typography>
           <Box sx={{ textAlign: "center" }}>
-            <Button variant="contained">
-              <Link
-                sx={{ textDecoration: "none", color: "#000" }}
-                href="mailto:connect@zipzapgifts.com"
-              >
-                Send Email
-              </Link>
+            <Button id="confetti-id" variant="contained" onClick={close}>
+              Send Email
             </Button>
           </Box>
         </Box>

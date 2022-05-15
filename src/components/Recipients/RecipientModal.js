@@ -49,7 +49,7 @@ const style = {
   },
 };
 
-const RecipientModal = ({ open, setOpen }) => {
+const RecipientModal = ({ open, setOpen, onSuccess }) => {
   const handleClose = () => setOpen(!open);
   return (
     <Modal open={open} onClose={handleClose}>
@@ -60,7 +60,7 @@ const RecipientModal = ({ open, setOpen }) => {
           </IconButton>
         </Box>
         <Box sx={{ p: 4, paddingTop: 0 }}>
-          <AddRecipient />
+          <AddRecipient onSuccess={onSuccess} />
         </Box>
       </Box>
     </Modal>

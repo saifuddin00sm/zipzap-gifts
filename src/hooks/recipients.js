@@ -1,6 +1,7 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { createRecipient } from "../graphql/mutations";
+import { createRecipient, createAddress } from "../graphql/mutations";
+import format from "date-fns/format";
 
 const listRecipients = /* GraphQL */ `
   query ListRecipients(
@@ -84,11 +85,31 @@ const getAllRecipients = async () => {
   return recipientsList;
 };
 
-const addRecipient = async (recipient) => {
-  /* TODO: Error checking here
-  if (!todo.name || !todo.description)
-    throw new Error("Missing name or description");
-  */
+const addRecipient = async ({ shippingAddress, ...recipient }) => {
+  if (!recipient.email) {
+    recipient.email = null;
+  }
+  if (!recipient.phone) {
+    recipient.phone = null;
+  }
+  if (!recipient.firstName && !recipient.lastName) {
+    new Error("Missing First and Last Name");
+    return;
+  }
+  if (recipient.birthday) {
+    recipient.birthday = format(recipient.birthday, "yyyy-MM-dd");
+  }
+  if (recipient.startDate) {
+    recipient.startDate = format(recipient.startDate, "yyyy-MM-dd");
+  }
+  const {
+    data: {
+      createAddress: { id },
+    },
+  } = await API.graphql(
+    graphqlOperation(createAddress, { input: shippingAddress })
+  );
+  recipient.recipientShippingAddressId = id;
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
 };
 
