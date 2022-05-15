@@ -11,7 +11,6 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
   bgcolor: "background.paper",
   boxShadow: 24,
   "& .closeBtn": {
@@ -44,7 +43,6 @@ const style = {
     fontWeight: 300,
     fontSize: "20px",
     lineHeight: "30px",
-    textTransform: "capitalize",
     color: "#000000",
     marginBottom: "20px",
   },

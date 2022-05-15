@@ -161,7 +161,7 @@ const RecipientList = () => {
       {success ? (
         <RecipientSuccess
           text="Recipient Added Successfully!"
-          subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
+          subText="Press the button to send an email to gather information for customized gifting."
           open={open}
           close={handleClose}
         />
