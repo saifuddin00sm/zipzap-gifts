@@ -15,16 +15,36 @@ import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import { useRecipients } from "../../hooks/recipients";
 import RecipientModal from "./RecipientModal";
+import RecipientSuccess from "./RecipientSuccess";
 import { Link, useNavigate } from "react-router-dom";
+import { useReward } from "react-rewards";
 
 const RecipientList = () => {
   const navigate = useNavigate();
+  const { reward } = useReward("confetti-id", "confetti", {
+    colors: ["#abc6bd", "#c5d5e2", "#abc4d6"],
+    startVelocity: 30,
+    spread: 85,
+    elementSize: 18,
+  });
   const { recipients, isLoading, isError, error } = useRecipients();
+  const [success, setSuccess] = useState(false);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
+
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => {
+    setOpen(false);
+    setSuccess(false);
+  };
 
   const goProfile = (id) => {
     navigate(id);
+  };
+
+  const onSuccess = () => {
+    setSuccess(true);
+    reward();
   };
 
   let tableBody;
@@ -138,7 +158,16 @@ const RecipientList = () => {
           </TableContainer>
         </Container>
       </Container>
-      <RecipientModal open={open} setOpen={setOpen} />
+      {success ? (
+        <RecipientSuccess
+          text="Recipient Added Successfully!"
+          subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
+          open={open}
+          close={handleClose}
+        />
+      ) : (
+        <RecipientModal open={open} setOpen={setOpen} onSuccess={onSuccess} />
+      )}
     </>
   );
 };

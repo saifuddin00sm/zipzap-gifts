@@ -6,7 +6,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
-import RecipientSuccess from "./RecipientSuccess";
 import { useRecipients } from "../../hooks/recipients";
 
 const Root = styled("div")(({ theme }) => ({
@@ -55,10 +54,9 @@ const initialState = {
   startDate: new Date("01-01-2020"),
 };
 
-const AddRecipient = () => {
+const AddRecipient = ({ onSuccess }) => {
   const { addRecipient } = useRecipients();
   const [isFormValid, setIsFormValid] = useState(false);
-  const [open, setOpen] = useState(false);
   const [formState, setFormState] = useState(initialState);
 
   function setInput(key, value) {
@@ -68,13 +66,9 @@ const AddRecipient = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    addRecipient({ ...formState });
+    await addRecipient({ ...formState });
     setFormState(initialState);
-    let promise = new Promise((resolve) => {
-      setTimeout(() => resolve("done!"), 600);
-    });
-    await promise;
-    setOpen(true);
+    onSuccess();
   };
 
   const validateForm = () => {
@@ -265,12 +259,6 @@ const AddRecipient = () => {
           </FormControl>
         </Box>
       </Root>
-      <RecipientSuccess
-        text="Recipient Added Successfully!"
-        subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
-        open={open}
-        setOpen={setOpen}
-      />
     </>
   );
 };
