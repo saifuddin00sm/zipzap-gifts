@@ -8,6 +8,9 @@ import NavigationMenu from "./components/NavigationMenu";
 import LoginPage from "./components/LoginPage";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 import { zipZapTheme } from "./theme";
 
 import "@aws-amplify/ui-react/styles.css";
@@ -20,22 +23,24 @@ const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <LoginPage>
-          <Authenticator>
-            {({ signOut, user }) => (
-              <>
-                <NavigationMenu signOut={signOut} />
-                <div style={styles.container}>
-                  <Outlet context={[user]} />
-                </div>
-              </>
-            )}
-          </Authenticator>
-        </LoginPage>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <LoginPage>
+            <Authenticator>
+              {({ signOut, user }) => (
+                <>
+                  <NavigationMenu signOut={signOut} />
+                  <div style={styles.container}>
+                    <Outlet context={[user]} />
+                  </div>
+                </>
+              )}
+            </Authenticator>
+          </LoginPage>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </LocalizationProvider>
   );
 };
 

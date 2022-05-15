@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
-import ConfettiExplosion from "react-confetti-explosion";
 
 const style = {
   position: "absolute",
@@ -46,7 +45,7 @@ const style = {
 export default function BasicModal({ open, setOpen }) {
   const navigate = useNavigate();
   const handleClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
 
   return (
@@ -61,8 +60,7 @@ export default function BasicModal({ open, setOpen }) {
             <ClearIcon sx={{ color: "#fff" }} />
           </IconButton>
         </Box>
-        <Box className="congrats_text">
-          <ConfettiExplosion colors={["#abc6bd", "#c5d5e2", "#abc4d6"]} />
+        <Box id="send-gift-success-id" className="congrats_text">
           <Typography variant="h4">Congrats!</Typography>
           <Typography variant="h6">You have created a gift</Typography>
         </Box>

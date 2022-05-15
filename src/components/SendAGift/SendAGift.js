@@ -17,6 +17,7 @@ import SelectGifts from "./SelectGifts";
 import { Link } from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import { alpha, styled } from "@mui/material/styles";
+import { useReward } from "react-rewards";
 
 const Input = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -107,11 +108,20 @@ const SendAGift = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen] = useState(false);
 
+  const { reward } = useReward("send-gift-success-id", "confetti", {
+    colors: ["#abc6bd", "#c5d5e2", "#abc4d6"],
+    startVelocity: 25,
+    spread: 85,
+    elementSize: 16,
+  });
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => {
       const nextStep = prevActiveStep + 1;
       if (nextStep >= steps.length) {
         setOpen(true);
+        // Wait a bit for the success modal to render
+        setTimeout(reward, 100);
         return steps.length - 1;
       }
       return nextStep;

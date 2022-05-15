@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import { Divider, Typography } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import RecipientSuccess from "./RecipientSuccess";
+import InputLabel from "@mui/material/InputLabel";
+import { useRecipients } from "../../hooks/recipients";
 
 const Root = styled("div")(({ theme }) => ({
   "& .recipientHead": {
@@ -21,26 +22,11 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-const Input = styled(InputBase)(({ theme }) => ({
-  "& .MuiInputBase-input": {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
-    fontSize: 16,
-    width: "100%",
-    padding: "5px 12px",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
-  },
-}));
-
-const Label = styled("label")(({ theme }) => ({
+const Label = styled(InputLabel)(({ theme }) => ({
   fontSize: "16px",
   color: "#000",
   fontWeight: 600,
+  width: 200,
 }));
 
 const FormControl = styled("div")(({ theme }) => ({
@@ -50,16 +36,60 @@ const FormControl = styled("div")(({ theme }) => ({
   marginBottom: "20px",
 }));
 
-const AddRecipient = () => {
-  // recipient success modal condition
-  const [open, setOpen] = useState(false);
+const initialState = {
+  birthday: new Date("01-01-1990"),
+  email: "",
+  firstName: "",
+  jobTitle: "",
+  lastName: "",
+  phone: "",
+  shippingAddress: {
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zip: "",
+  },
+  recipientType: "",
+  startDate: new Date("01-01-2020"),
+};
 
-  const handleSubmit = (e) => {
-    //   TODO: make this "handleSubmit" function async await when making api call, set a loader, twick between the modals.
+const AddRecipient = ({ onSuccess }) => {
+  const { addRecipient } = useRecipients();
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [formState, setFormState] = useState(initialState);
+
+  function setInput(key, value) {
+    setFormState({ ...formState, [key]: value });
+    validateForm();
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // once the data is sent to the backend you can turn on the success modal with this set method.
-    setOpen(true);
+    await addRecipient({ ...formState });
+    setFormState(initialState);
+    onSuccess();
   };
+
+  const validateForm = () => {
+    if (
+      formState.lastName !== "" &&
+      formState.shippingAddress.address1 !== "" &&
+      formState.shippingAddress.zip !== "" &&
+      formState.email !== ""
+    ) {
+      setIsFormValid(true);
+    }
+  };
+
+  function setAddressInput(key, value) {
+    setFormState({
+      ...formState,
+      shippingAddress: { ...formState.shippingAddress, [key]: value },
+    });
+    validateForm();
+  }
+
   return (
     <>
       <Root>
@@ -73,67 +103,149 @@ const AddRecipient = () => {
           sx={{ marginTop: "20px" }}
         >
           <FormControl>
-            <Label>First Name</Label>
-            <Input placeholder="First Name" />
+            <Label
+              style={{
+                fontSize: "16px",
+                color: "#000",
+                fontWeight: 600,
+              }}
+            >
+              First Name
+            </Label>
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              onChange={(event) => setInput("firstName", event.target.value)}
+              value={formState.firstName}
+              placeholder="First Name"
+            ></TextField>
           </FormControl>
           <FormControl>
-            <Label>Last Name</Label>
-            <Input placeholder="Last Name" />
+            <Label>Last Name*</Label>
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              required
+              onChange={(event) => setInput("lastName", event.target.value)}
+              value={formState.lastName}
+              placeholder="Last Name"
+            />
+          </FormControl>
+          <FormControl>
+            <Label>Email*</Label>
+            <TextField
+              fullWidth={true}
+              onChange={(event) => setInput("email", event.target.value)}
+              value={formState.email}
+              placeholder="Email"
+              label=""
+              variant="standard"
+            />
           </FormControl>
           <FormControl>
             <Label>Birthday</Label>
-            <Stack>
-              <Input
-                id="date"
-                label="Birthday"
-                type="date"
-                defaultValue="2017-05-24"
-                sx={{ width: 220 }}
-                inputlabelprops={{
-                  shrink: true,
-                }}
-              />
-            </Stack>
+            <DatePicker
+              label=""
+              inputFormat="MM/dd/yyyy"
+              value={formState.birthday}
+              onChange={(value) => setInput("birthday", value)}
+              renderInput={(params) => (
+                <TextField fullWidth={true} variant="standard" {...params} />
+              )}
+            />
           </FormControl>
           <FormControl>
-            <Label>Address</Label>
-            <Input placeholder="Address" />
+            <Label>Address*</Label>
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              required
+              onChange={(event) =>
+                setAddressInput("address1", event.target.value)
+              }
+              value={formState.shippingAddress.address1}
+              placeholder="Address"
+            ></TextField>
+          </FormControl>
+          <FormControl>
+            <Label></Label>
+            <TextField
+              onChange={(event) =>
+                setAddressInput("address2", event.target.value)
+              }
+              value={formState.shippingAddress.address2}
+              placeholder="Address 2"
+              label=""
+              variant="standard"
+              fullWidth={true}
+            />
           </FormControl>
           <FormControl>
             <Label>City</Label>
-            <Input placeholder="City" />
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              onChange={(event) => setAddressInput("city", event.target.value)}
+              value={formState.shippingAddress.city}
+              placeholder="City"
+            ></TextField>
           </FormControl>
           <FormControl>
-            <Label>State (i.e UT):</Label>
-            <Input placeholder="State" />
+            <Label style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}>
+              State (i.e UT)
+            </Label>
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              onChange={(event) => setAddressInput("state", event.target.value)}
+              value={formState.shippingAddress.state}
+              placeholder="State"
+            ></TextField>
           </FormControl>
           <FormControl>
-            <Label>Zip Code</Label>
-            <Input type="number" placeholder="Zip" />
+            <Label>Zip Code*</Label>
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              required
+              onChange={(event) => setAddressInput("zip", event.target.value)}
+              value={formState.shippingAddress.zip}
+              placeholder="Zip"
+              label=""
+            ></TextField>
           </FormControl>
           <FormControl>
             <Label>Job Title</Label>
-            <Input placeholder="Job Title" />
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              onChange={(event) => setInput("jobTitle", event.target.value)}
+              value={formState.jobTitle}
+              placeholder="Job Title"
+            ></TextField>
           </FormControl>
           <FormControl>
             <Label>Date Started</Label>
-            <Stack>
-              <Input
-                id="date"
-                label="Started"
-                type="date"
-                defaultValue="2017-05-24"
-                sx={{ width: 220 }}
-                inputlabelprops={{
-                  shrink: true,
-                }}
-              />
-            </Stack>
+            <DatePicker
+              label=""
+              inputFormat="MM/dd/yyyy"
+              value={formState.startDate}
+              onChange={(value) => setInput("startDate", value)}
+              renderInput={(params) => (
+                <TextField fullWidth={true} variant="standard" {...params} />
+              )}
+            />
           </FormControl>
-          <FormControl>
-            <Label>Department (optional)</Label>
+
+          {/* Adding back in later */}
+          {/* <FormControl>
+            <Typography
+              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
+            >
+              Department (optional)
+            </Typography>
             <Input placeholder="Department" />
-          </FormControl>
+          </FormControl> */}
           <FormControl
             sx={{
               justifyContent: "center",
@@ -141,20 +253,13 @@ const AddRecipient = () => {
               marginBottom: 0,
             }}
           >
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" disabled={!isFormValid}>
               Create New Recipient
             </Button>
           </FormControl>
         </Box>
       </Root>
-      <RecipientSuccess
-        text="Recipient Added Successfully!"
-        subText="Successfully Added Recipient, Send An Email To Gather Information For Customized Gifting"
-        open={open}
-        setOpen={setOpen}
-      />
     </>
   );
 };
-
 export default AddRecipient;
