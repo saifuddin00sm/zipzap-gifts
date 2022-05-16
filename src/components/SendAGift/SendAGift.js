@@ -3,14 +3,12 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import GiftDetails from "./GiftDetails";
 import ChooseRecipient from "./ChooseRecipient";
 import Checkout from "./Checkout";
 import SuccessModal from "./SuccessModal";
+import GiftStepper from "./GiftStepper";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import SelectGifts from "./SelectGifts";
@@ -42,7 +40,7 @@ const Input = styled(InputBase)(({ theme }) => ({
 
 const Root = styled("div")(({ theme }) => ({
   background: "#ABC4D6",
-  padding: "50px",
+  padding: "20px 50px 50px",
   [theme.breakpoints.down("md")]: {
     padding: "25px",
   },
@@ -96,10 +94,10 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 const steps = [
-  "Choose a gift",
-  "Gift details",
-  "Choose recipients",
-  "Check out",
+  "Choose a Gift",
+  "Gift Details",
+  "Choose Recipients",
+  "Check Out",
 ];
 
 const SendAGift = () => {
@@ -159,31 +157,22 @@ const SendAGift = () => {
 
   return (
     <>
-      <Container component="main">
+      <Container sx={{ px: 0 }} component="main">
         <Header>
           <Typography variant="h1">Send a Gift</Typography>
         </Header>
         <Root>
           <Box className="innerBox">
-            <Stepper
+            <GiftStepper
+              steps={steps}
               activeStep={activeStep}
-              sx={{ width: "180px", marginBottom: "20px", marginLeft: "auto" }}
-            >
-              {steps.map((label) => {
-                const stepProps = {};
-                const labelProps = {};
-                return (
-                  <Step key={label} {...stepProps}>
-                    <StepLabel {...labelProps}></StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
+              setActiveStep={setActiveStep}
+            />
             <Box className="heading">
               <Typography sx={{ display: "inline-block" }} variant="h6">
                 {steps[activeStep]}
               </Typography>
-              {steps[activeStep] === "Choose a gift" && (
+              {steps[activeStep] === steps[0] && (
                 <Tooltip
                   enterTouchDelay={0}
                   title='Select a Gift to send to one or more of your recipients by pressing "Select Gift"'
