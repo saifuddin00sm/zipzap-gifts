@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Header from "../Header";
@@ -101,6 +101,7 @@ const steps = [
 ];
 
 const SendAGift = () => {
+  const top = useRef(null);
   const [selectedGift, setSelectedGift] = useState("");
 
   const [activeStep, setActiveStep] = useState(0);
@@ -114,6 +115,7 @@ const SendAGift = () => {
   });
 
   const handleNext = () => {
+    top.current.scrollIntoView({ behavior: "smooth" });
     setActiveStep((prevActiveStep) => {
       const nextStep = prevActiveStep + 1;
       if (nextStep >= steps.length) {
@@ -127,6 +129,7 @@ const SendAGift = () => {
   };
 
   const handleBack = () => {
+    top.current.scrollIntoView({ behavior: "smooth" });
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -161,7 +164,7 @@ const SendAGift = () => {
         <Header>
           <Typography variant="h1">Send a Gift</Typography>
         </Header>
-        <Root>
+        <Root ref={top}>
           <Box className="innerBox">
             <GiftStepper
               steps={steps}
