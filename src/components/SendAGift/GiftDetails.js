@@ -11,6 +11,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const Input = styled(InputBase)(({ theme }) => ({
   "label + &": {
@@ -54,9 +56,20 @@ const style = {
   },
 };
 
+const initialState = {
+  to: new Date(),
+  from: new Date(),
+};
+
 const GiftDetails = () => {
+  const [formState, setFormState] = useState(initialState);
   const [selectedBtn, setSelectedBtn] = useState(false);
   const [type, setType] = useState("");
+
+  function setInput(key, value) {
+    setFormState({ ...formState, [key]: value });
+  }
+
   const selectType = () => {
     setSelectedBtn(!selectedBtn);
   };
@@ -140,36 +153,43 @@ const GiftDetails = () => {
             {!selectedBtn ? (
               <Box>
                 <Typography variant="h6">Gift Date</Typography>
-                <Box sx={{ marginTop: "20px" }}>datePicker</Box>
+                <DatePicker
+                  value={formState.to}
+                  inputFormat="MM/dd/yyyy"
+                  onChange={(value) => setInput("to", value)}
+                  renderInput={(params) => (
+                    <TextField variant="standard" {...params} />
+                  )}
+                />
               </Box>
             ) : (
               <Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    mb: 4,
-                  }}
-                >
+                <Box>
                   <Typography sx={{ fontSize: "1.1rem" }} variant="h6">
                     Start Date
                   </Typography>
+                  <DatePicker
+                    value={formState.to}
+                    inputFormat="MM/dd/yyyy"
+                    onChange={(value) => setInput("to", value)}
+                    renderInput={(params) => (
+                      <TextField variant="standard" {...params} />
+                    )}
+                  />
                   <Typography sx={{ fontSize: "1.1rem" }} variant="h6">
                     End Date
                   </Typography>
+                  <DatePicker
+                    value={formState.from}
+                    inputFormat="MM/dd/yyyy"
+                    onChange={(value) => setInput("from", value)}
+                    renderInput={(params) => (
+                      <TextField variant="standard" {...params} />
+                    )}
+                  />
                   <Typography sx={{ fontSize: "1.1rem" }} variant="h6">
                     Select Recurring Type:
                   </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box>onePicker</Box>
-                  <Box>twoPicker</Box>
                   <Box sx={{ maxWidth: "118px", width: "100%" }}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
