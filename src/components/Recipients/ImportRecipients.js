@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Header from "../Header";
@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import Papa from "papaparse";
 import TemplateTable from "./TemplateTable";
 import RecipientSuccess from "./RecipientSuccess";
 
@@ -38,11 +39,29 @@ const Input = styled("input")({
 
 const ImportList = () => {
   const [open, setOpen] = useState(false);
+  const [files, setFiles] = useState("");
+  const [parsedData, setParsedData] = useState([]);
+  const [tableRows, setTableRows] = useState([]);
+  const [values, setValues] = useState([]);
 
-  const uploadFile = (e) => {
-    // TODO: make an api call to upload the file, onSuccess block put this setOpen method
-    setOpen(true);
+  const changeHandler = (event) => {
+    Papa.parse(event.target.files[0], {
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        const rowsArray = [];
+        const valuesArray = [];
+        results.data.map((d) => {
+          rowsArray.push(Object.keys(d));
+          valuesArray.push(Object.values(d));
+          setParsedData(results.data);
+        });
+        setTableRows(rowsArray[0]);
+        setValues(valuesArray);
+      },
+    });
   };
+  // TODO: make an api call to upload the file, onSuccess block put this setOpen method
 
   return (
     <>
@@ -73,17 +92,13 @@ const ImportList = () => {
                 Started, Address, City, State, Zip
               </Typography>
               <Box className="uploadBtn">
-                <label htmlFor="contained-button-file">
-                  <Input
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                    onChange={uploadFile}
-                  />
-                  <Button component="span" size="large" variant="contained">
-                    <FileUploadIcon sx={{ width: "2.5em", height: "2.5em" }} />
-                  </Button>
-                </label>
+                <input
+                  type="file"
+                  name="file"
+                  accept=".csv"
+                  onChange={changeHandler}
+                  style={{ display: "block", margin: "10px auto" }}
+                />
               </Box>
             </Box>
           </Box>
@@ -96,6 +111,26 @@ const ImportList = () => {
             </Box>
           </Box>
         </Root>
+        <table>
+          <thead>
+            <tr>
+              {tableRows.map((rows, index) => {
+                return <th key={index}>{rows}</th>;
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {values.map((value, index) => {
+              return (
+                <tr key={index}>
+                  {value.map((val, i) => {
+                    return <td key={i}>{val}</td>;
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </Container>
       <RecipientSuccess
         text="Recipient List Upload Successful!"
