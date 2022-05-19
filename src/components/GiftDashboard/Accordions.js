@@ -50,7 +50,7 @@ const Accordions = ({ recentGifts }) => {
                   top: 0,
                   position: "sticky",
                   width: "100%",
-                  zIndex: 10,
+                  zIndex: 2,
                 }}
               >
                 {icon}
