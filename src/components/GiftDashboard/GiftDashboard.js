@@ -64,7 +64,7 @@ const recentGifts = [
         name: "Saif Uddin birthday",
         subItems: {
           date: "2022-05-12",
-          timeLine: "1/1/21- 1/1/23",
+          timeLine: "1/1/22- 12/31/22",
           recipient: "Saif uddin",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -77,7 +77,7 @@ const recentGifts = [
         name: "Amelia Ostler birthday",
         subItems: {
           date: "2022-05-18",
-          timeLine: "1/1/21- 1/1/23",
+          timeLine: "1/1/22- 12/31/22",
           recipient: "Amelia Ostler",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -91,7 +91,7 @@ const recentGifts = [
         id: 3,
         subItems: {
           date: "2022-05-21",
-          timeLine: "1/1/21- 1/1/23",
+          timeLine: "1/1/22- 12/31/22",
           recipient: "Nathan Humphrey",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
@@ -103,7 +103,7 @@ const recentGifts = [
         name: "Krista Humphrey birthday",
         subItems: {
           date: "2022-05-15",
-          timeLine: "1/1/21- 1/1/23",
+          timeLine: "1/1/22- 12/31/22",
           recipient: "Krista Humphrey",
           image: {
             src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
