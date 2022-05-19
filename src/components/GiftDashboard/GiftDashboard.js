@@ -24,6 +24,8 @@ const recentGifts = [
   {
     type: "oneTime",
     status: "One Time Gifts This Month",
+    tooltip:
+      "A One Time Gift is a gift that goes out once! EX: A Get Well Soon Box, A Sympathy Gift, a Welcome Little One Box.",
     icon: <TodayIcon />,
     gifts: [
       {
@@ -57,6 +59,8 @@ const recentGifts = [
   {
     type: "recurring",
     status: "Recurring Gifts This Month",
+    tooltip:
+      "A Recurring Gift is a gift that happens multiple times during a set time frame for different people. EX: Anniversaries or Birthdays",
     icon: <EventRepeatIcon />,
     id: 2,
     gifts: [

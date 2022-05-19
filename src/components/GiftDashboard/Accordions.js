@@ -9,6 +9,8 @@ import Link from "@mui/material/Link";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Tooltip from "@mui/material/Tooltip";
+import InfoIcon from "@mui/icons-material/Info";
 
 const Root = styled("div")(({ theme }) => ({
   "& .cards": {
@@ -35,7 +37,7 @@ const Accordions = ({ recentGifts }) => {
   return (
     <Root>
       <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        {recentGifts.map(({ gifts, id, status, icon, type }) => (
+        {recentGifts.map(({ gifts, id, status, icon, type, tooltip }) => (
           <Grid key={id} item lg={6} xl={6} md={6} xs={12} sm={12}>
             <Box className="cards">
               <Box
@@ -52,7 +54,10 @@ const Accordions = ({ recentGifts }) => {
                 }}
               >
                 {icon}
-                <Typography variant="h5">{status}</Typography>
+                <Typography variant="h5">{status}</Typography>{" "}
+                <Tooltip enterTouchDelay={0} title={tooltip}>
+                  <InfoIcon sx={{ color: "text.secondary" }} />
+                </Tooltip>
               </Box>
               <Box sx={{ mt: 3, px: 4 }}>
                 {gifts.length === 0 ? (
