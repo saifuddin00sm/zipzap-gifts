@@ -13,7 +13,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 const Root = styled("div")(({ theme }) => ({
   "& .cards": {
     background: "#F4F4F4",
-    padding: "30px",
     height: "320px",
     borderRadius: "10px",
     overflow: "auto",
@@ -40,12 +39,22 @@ const Accordions = ({ recentGifts }) => {
           <Grid key={id} item lg={6} xl={6} md={6} xs={12} sm={12}>
             <Box className="cards">
               <Box
-                sx={{ display: "flex", alignItems: "center", gap: "0 10px" }}
+                sx={{
+                  background: "#F4F4F4",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "30px 30px 8px 30px",
+                  gap: "0 10px",
+                  top: 0,
+                  position: "sticky",
+                  width: "100%",
+                  zIndex: 10,
+                }}
               >
                 {icon}
                 <Typography variant="h5">{status}</Typography>
               </Box>
-              <Box sx={{ mt: 4 }}>
+              <Box sx={{ mt: 3, px: 4 }}>
                 {gifts.length === 0 ? (
                   <Box
                     sx={{
