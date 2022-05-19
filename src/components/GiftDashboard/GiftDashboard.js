@@ -27,7 +27,7 @@ const recentGifts = [
     icon: <TodayIcon />,
     gifts: [
       {
-        name: "Skill Achievement Reward",
+        name: "Employee of the Month",
         subItems: {
           dateShipped: "5/04/2020",
           recipient: "Victoria Black",
