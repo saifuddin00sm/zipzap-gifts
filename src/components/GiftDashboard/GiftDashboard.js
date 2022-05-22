@@ -124,7 +124,7 @@ const calendarEvents = [
   {
     name: "Krista Humphrey Birthday",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-15",
     id: 2,
@@ -132,7 +132,7 @@ const calendarEvents = [
   {
     name: "Nathan Humphrey Anniversary",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-21",
     id: 3,
@@ -140,7 +140,7 @@ const calendarEvents = [
   {
     name: "Amelia Ostler Birthday",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-18",
     id: 4,
@@ -148,20 +148,20 @@ const calendarEvents = [
   {
     name: "Saif Uddin Birthday",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-12",
     id: 5,
   },
   {
     name: "Skill Achievement Reward",
-    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
+    icon: <TodayIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />,
     date: "2022-05-04",
     id: 6,
   },
   {
     name: "New Baby",
-    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
+    icon: <TodayIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />,
     date: "2022-05-18",
     id: 7,
   },
@@ -176,7 +176,7 @@ const defaultGifts = [
     gifts: [
       {
         name: "national donut day",
-        date: "june 19th",
+        date: "2022-1-05",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -184,7 +184,7 @@ const defaultGifts = [
       },
       {
         name: "father's day",
-        date: "june 20th",
+        date: "2022-12-09",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -192,7 +192,7 @@ const defaultGifts = [
       },
       {
         name: "international yoga day",
-        date: "june 5th",
+        date: "2022-05-3",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -200,7 +200,7 @@ const defaultGifts = [
       },
       {
         name: "independence day",
-        date: "july 8th",
+        date: "2022-7-20",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -214,7 +214,7 @@ const defaultGifts = [
     gifts: [
       {
         name: "Kelsey Zaugg Birthday",
-        date: "june 4th",
+        date: "2022-8-12",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -225,7 +225,7 @@ const defaultGifts = [
       },
       {
         name: "Andrew Zaugg Birthday",
-        date: "june 19th",
+        date: "2022-6-19",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -236,7 +236,7 @@ const defaultGifts = [
       },
       {
         name: "Michael Scott Anniversary",
-        date: "may 18th",
+        date: "2022-5-14",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -247,7 +247,7 @@ const defaultGifts = [
       },
       {
         name: "Kelsey Zaugg Anniversary",
-        date: "july 8th",
+        date: "2022-6-04",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
