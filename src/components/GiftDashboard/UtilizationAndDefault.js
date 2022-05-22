@@ -49,7 +49,14 @@ const SmallCards = styled("div")(({ theme }) => ({
     textAlign: "center",
     textTransform: "capitalize",
     color: "#000000",
+    height: "21px",
     marginBottom: "10px",
+  },
+  "& .iconBox": {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "51px",
   },
   "& .date": {
     fontStyle: "normal",
@@ -155,7 +162,7 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                               <Typography className="giftTitle">
                                 {name}
                               </Typography>
-                              <Box>{icon}</Box>
+                              <Box className="iconBox">{icon}</Box>
                               <Typography variant="h6" className="date">
                                 {date}
                               </Typography>
