@@ -10,33 +10,12 @@ import Checkout from "./Checkout";
 import SuccessModal from "./SuccessModal";
 import GiftStepper from "./GiftStepper";
 import InfoIcon from "@mui/icons-material/Info";
+import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 import SelectGifts from "./SelectGifts";
 import { Link } from "@mui/material";
-import InputBase from "@mui/material/InputBase";
-import { alpha, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { useReward } from "react-rewards";
-
-const Input = styled(InputBase)(({ theme }) => ({
-  "& .MuiInputBase-input": {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
-    border: "1px solid #ced4da",
-    fontSize: 16,
-    width: "100%",
-    padding: "5px 12px",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
-    "&:focus": {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}));
 
 const Root = styled("div")(({ theme }) => ({
   background: "#ABC4D6",
@@ -102,6 +81,7 @@ const steps = [
 
 const SendAGift = () => {
   const top = useRef(null);
+  const [giftSearch, setGiftSearch] = useState("");
   const [selectedGift, setSelectedGift] = useState("");
 
   const [activeStep, setActiveStep] = useState(0);
@@ -113,6 +93,16 @@ const SendAGift = () => {
     spread: 85,
     elementSize: 16,
   });
+
+  const handleSearch = (event) => {
+    setGiftSearch(event.target.value);
+  };
+
+  const handleSearchKey = (event) => {
+    if (event.key === "Escape") {
+      setGiftSearch("");
+    }
+  };
 
   const handleNext = () => {
     top.current.scrollIntoView({ behavior: "smooth" });
@@ -139,8 +129,12 @@ const SendAGift = () => {
       case 0:
         component = (
           <SelectGifts
+            giftSearch={giftSearch}
             selectedGift={selectedGift}
-            setSelectedGift={setSelectedGift}
+            setSelectedGift={(giftID) => {
+              setSelectedGift(giftID);
+              handleNext();
+            }}
           />
         );
         break;
@@ -189,9 +183,14 @@ const SendAGift = () => {
               <Box sx={{ width: "100%" }}>
                 {activeStep === 0 && (
                   <Box className="topItems">
-                    <Box>
-                      <Input fullWidth placeholder="Search for a gift" />
-                    </Box>
+                    <TextField
+                      fullWidth
+                      label="Search for a Gift"
+                      variant="outlined"
+                      value={giftSearch}
+                      onChange={handleSearch}
+                      onKeyDown={handleSearchKey}
+                    />
                     <Box className="infoBox">
                       <Typography>
                         Don't see The perfect gift? Email{" "}

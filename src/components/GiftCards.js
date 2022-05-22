@@ -38,7 +38,7 @@ const StyledCard = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
-const GiftCards = ({ data, loading, error, setSelectedGift }) => {
+const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
   const [openModal, setOpenModal] = useState({ open: false, modalData: {} });
   const categories = [
     { name: "Recommended gifts", category: "recommendedGifts" },
@@ -95,8 +95,25 @@ const GiftCards = ({ data, loading, error, setSelectedGift }) => {
               >
                 {categoryGifts &&
                   categoryGifts?.map((item) => (
-                    <Grid key={item.id} item columns={{ xs: 4, sm: 8, md: 12 }}>
-                      <StyledCard>
+                    <Grid
+                      sx={{
+                        ...(selectedGift &&
+                          selectedGift !== item.id && {
+                            filter: "grayscale(90%)",
+                          }),
+                      }}
+                      key={item.id}
+                      item
+                      columns={{ xs: 4, sm: 8, md: 12 }}
+                    >
+                      <StyledCard
+                        sx={{
+                          ...(selectedGift &&
+                            selectedGift === item.id && {
+                              border: 5,
+                            }),
+                        }}
+                      >
                         <Box className="inner_card">
                           <img
                             style={{
