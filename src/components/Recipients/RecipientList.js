@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,6 +17,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { useRecipients } from "../../hooks/recipients";
 import RecipientModal from "./RecipientModal";
 import RecipientSuccess from "./RecipientSuccess";
+import Fuse from "fuse.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useReward } from "react-rewards";
 
@@ -28,8 +30,49 @@ const RecipientList = () => {
     elementSize: 18,
   });
   const { recipients, isLoading, isError, error } = useRecipients();
+  const [search, setSearch] = useState("");
+  const [rows, setRows] = useState([]);
   const [success, setSuccess] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSearchKey = (event) => {
+    if (event.key === "Escape") {
+      setSearch("");
+    }
+  };
+
+  useEffect(() => {
+    const searchOptions = {
+      tokenize: false,
+      threshold: 0.3,
+      keys: [
+        { name: "firstName", weight: 2 },
+        { name: "lastName", weight: 2 },
+        "fullName",
+        "jobTitle",
+        "department.name",
+        "birthday",
+        "startDate",
+      ],
+    };
+    if (recipients) {
+      if (search) {
+        const fuse = new Fuse(
+          recipients.map((r) => {
+            return { ...r, fullName: `${r.firstName} ${r.lastName}` };
+          }),
+          searchOptions
+        );
+        setRows(fuse.search(search).map((i) => i.item));
+      } else {
+        setRows(recipients);
+      }
+    }
+  }, [search, recipients]);
 
   const handleOpen = () => setOpen(true);
 
@@ -80,7 +123,7 @@ const RecipientList = () => {
       </TableRow>
     );
   } else {
-    tableBody = recipients.map(
+    tableBody = rows.map(
       ({
         id,
         firstName,
@@ -134,6 +177,14 @@ const RecipientList = () => {
           </Box>
         </Header>
         <Container>
+          <TextField
+            fullWidth
+            label="Search"
+            variant="standard"
+            value={search}
+            onChange={handleSearch}
+            onKeyDown={handleSearchKey}
+          />
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -150,7 +201,9 @@ const RecipientList = () => {
               <TableFooter>
                 <TableRow>
                   <TableCell colSpan={6}>
-                    {recipients?.length} Recipients
+                    {rows?.length} Recipients
+                    {rows?.length !== recipients?.length &&
+                      ` (${recipients?.length} Total)`}
                   </TableCell>
                 </TableRow>
               </TableFooter>
