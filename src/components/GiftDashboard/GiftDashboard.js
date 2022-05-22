@@ -173,24 +173,90 @@ const utilization = 60;
 const defaultGifts = [
   {
     giftType: "Upcoming Holidays",
-    status: [
-      "Memorial Day: May 30th",
-      "Receptionist Day: May 11th",
-      "Father's Day: June 19th",
+    gifts: [
+      {
+        name: "national donut day",
+        date: "june 19th",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 1,
+      },
+      {
+        name: "father's day",
+        date: "june 20th",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 2,
+      },
+      {
+        name: "international yoga day",
+        date: "june 5th",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 3,
+      },
+      {
+        name: "independence day",
+        date: "july 8th",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 4,
+      },
     ],
-    image: {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVpoHhv49yIxz0hKqzcb1UuqRtaGCCHksmSQ&usqp=CAU",
-      alt: "gift image",
-    },
     id: 1,
   },
   {
     giftType: "Upcoming Recipient Events",
-    status: ["Amelia's Birthday: May 18th", "Nathan's Anniversary: May 21st"],
-    image: {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5FidWWXA-75zfe8xcZFjFBbajsjErCBaVWQ&usqp=CAU",
-      alt: "gift image",
-    },
+    gifts: [
+      {
+        name: "Kelsey Zaugg Birthday",
+        date: "june 4th",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 1,
+      },
+      {
+        name: "Andrew Zaugg Birthday",
+        date: "june 19th",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 2,
+      },
+      {
+        name: "Michael Scott Anniversary",
+        date: "may 18th",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 3,
+      },
+      {
+        name: "Kelsey Zaugg Anniversary",
+        date: "july 8th",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 4,
+      },
+    ],
     id: 2,
   },
 ];
