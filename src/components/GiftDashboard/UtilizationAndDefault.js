@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { format } from "date-fns";
 import "react-circular-progressbar/dist/styles.css";
 
 const Root = styled("div")(({ theme }) => ({
@@ -57,6 +58,7 @@ const SmallCards = styled("div")(({ theme }) => ({
     justifyContent: "center",
     alignItems: "center",
     height: "51px",
+    margin: "5px 0px",
   },
   "& .date": {
     fontStyle: "normal",
@@ -66,6 +68,10 @@ const SmallCards = styled("div")(({ theme }) => ({
     textAlign: "center",
     textTransform: "capitalize",
     color: "#000000",
+    display: "flex",
+    height: "51px",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 
@@ -164,7 +170,7 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                               </Typography>
                               <Box className="iconBox">{icon}</Box>
                               <Typography variant="h6" className="date">
-                                {date}
+                                {format(new Date(date), "MMM Qo")}
                               </Typography>
                             </SmallCards>
                           </Grid>
