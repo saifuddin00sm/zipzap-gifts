@@ -222,11 +222,11 @@ const GiftCards = ({ data, loading, error, setSelectedGift }) => {
                                     border: "none",
                                     "&:hover": { border: "none" },
                                   }}
-                                  onClick={() => incPrice(item)}
+                                  onClick={() => decPrice(item)}
                                   size="small"
                                   variant="outlined"
                                 >
-                                  +
+                                  -
                                 </Button>
                                 <Typography
                                   sx={{
@@ -246,11 +246,11 @@ const GiftCards = ({ data, loading, error, setSelectedGift }) => {
                                     border: "none",
                                     "&:hover": { border: "none" },
                                   }}
-                                  onClick={() => decPrice(item)}
+                                  onClick={() => incPrice(item)}
                                   size="small"
                                   variant="outlined"
                                 >
-                                  -
+                                  +
                                 </Button>
                               </Box>
                             ) : (
