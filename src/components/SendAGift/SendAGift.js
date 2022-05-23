@@ -79,10 +79,61 @@ const steps = [
   "Check Out",
 ];
 
+const initialState = {
+  giftID: "",
+  name: "",
+  note: "",
+  to: new Date(),
+  from: new Date(),
+  orderType: "ONE_TIME",
+  orderDateType: "",
+  recipients: [],
+  totalPrice: "",
+};
+
+const StepComponent = ({
+  activeStep,
+  giftSearch,
+  formState,
+  setInput,
+  handleNext,
+}) => {
+  let component = null;
+  switch (activeStep) {
+    case 0:
+      component = (
+        <SelectGifts
+          giftSearch={giftSearch}
+          selectedGift={formState.giftID}
+          setSelectedGift={(giftID) => {
+            setInput("giftID", giftID);
+            handleNext();
+          }}
+        />
+      );
+      break;
+    case 1:
+      component = <GiftDetails {...formState} setInput={setInput} />;
+      break;
+    case 2:
+      component = <ChooseRecipient />;
+      break;
+    case 3:
+    default:
+      component = <Checkout />;
+      break;
+  }
+  return component;
+};
+
 const SendAGift = () => {
   const top = useRef(null);
   const [giftSearch, setGiftSearch] = useState("");
-  const [selectedGift, setSelectedGift] = useState("");
+  const [formState, setFormState] = useState({ ...initialState });
+
+  function setInput(key, value) {
+    setFormState({ ...formState, [key]: value });
+  }
 
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen] = useState(false);
@@ -121,35 +172,6 @@ const SendAGift = () => {
   const handleBack = () => {
     top.current.scrollIntoView({ behavior: "smooth" });
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const StepComponent = () => {
-    let component = null;
-    switch (activeStep) {
-      case 0:
-        component = (
-          <SelectGifts
-            giftSearch={giftSearch}
-            selectedGift={selectedGift}
-            setSelectedGift={(giftID) => {
-              setSelectedGift(giftID);
-              handleNext();
-            }}
-          />
-        );
-        break;
-      case 1:
-        component = <GiftDetails />;
-        break;
-      case 2:
-        component = <ChooseRecipient />;
-        break;
-      case 3:
-      default:
-        component = <Checkout />;
-        break;
-    }
-    return component;
   };
 
   return (
@@ -205,7 +227,13 @@ const SendAGift = () => {
                 <Box
                   sx={{ overflow: "auto", maxHeight: "600px", height: "100%" }}
                 >
-                  <StepComponent />
+                  <StepComponent
+                    activeStep={activeStep}
+                    giftSearch={giftSearch}
+                    formState={formState}
+                    setInput={setInput}
+                    handleNext={handleNext}
+                  />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Button
