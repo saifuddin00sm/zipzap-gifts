@@ -81,6 +81,8 @@ const steps = [
 
 const initialState = {
   giftID: "",
+  giftImage: "",
+  giftPrice: 0,
   name: "",
   note: "",
   to: new Date(),
@@ -89,6 +91,7 @@ const initialState = {
   orderDateType: "",
   recipients: [],
   totalPrice: "",
+  shippingAddressType: "RECIPIENT_ADDRESS",
 };
 
 const StepComponent = ({
@@ -105,8 +108,8 @@ const StepComponent = ({
         <SelectGifts
           giftSearch={giftSearch}
           selectedGift={formState.giftID}
-          setSelectedGift={(giftID) => {
-            setInput("giftID", giftID);
+          setSelectedGift={(gift) => {
+            setInput("gift", gift);
             handleNext();
           }}
         />
@@ -126,7 +129,15 @@ const StepComponent = ({
       break;
     case 3:
     default:
-      component = <Checkout />;
+      component = (
+        <Checkout
+          recipientCount={formState.recipients.length}
+          giftImage={formState.giftImage}
+          giftPrice={formState.giftPrice}
+          shippingAddressType={formState.shippingAddressType}
+          setInput={setInput}
+        />
+      );
       break;
   }
   return component;
@@ -138,10 +149,23 @@ const SendAGift = () => {
   const [formState, setFormState] = useState({ ...initialState });
 
   function setInput(key, value) {
+    let k = key;
+    let v = value;
+    let giftImage;
+    let giftPrice;
+    if (key === "gift") {
+      k = "giftID";
+      v = value.id;
+      giftImage = value?.pictures?.items.filter(
+        ({ alt }) => alt === "thumbnail"
+      )?.[0]?.src;
+      giftPrice = value.price;
+    }
     setFormState({
       ...formState,
-      [key]: value,
+      [k]: v,
       ...(key === "orderType" && value === "ONE_TIME" && { orderDateType: "" }),
+      ...(key === "gift" && { giftImage, giftPrice }),
     });
   }
 
