@@ -55,6 +55,7 @@ const Root = styled("div")(({ theme }) => ({
       padding: "15px",
       width: "164px",
       height: "128px",
+      overflow: "hidden",
     },
     "& .big_text": {
       fontFamily: "Poppins",

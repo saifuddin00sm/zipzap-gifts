@@ -124,7 +124,7 @@ const calendarEvents = [
   {
     name: "Krista Humphrey Birthday",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-15",
     id: 2,
@@ -132,7 +132,7 @@ const calendarEvents = [
   {
     name: "Nathan Humphrey Anniversary",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-21",
     id: 3,
@@ -140,7 +140,7 @@ const calendarEvents = [
   {
     name: "Amelia Ostler Birthday",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-18",
     id: 4,
@@ -148,20 +148,20 @@ const calendarEvents = [
   {
     name: "Saif Uddin Birthday",
     icon: (
-      <EventRepeatIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />
+      <EventRepeatIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />
     ),
     date: "2022-05-12",
     id: 5,
   },
   {
     name: "Skill Achievement Reward",
-    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
+    icon: <TodayIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />,
     date: "2022-05-04",
     id: 6,
   },
   {
     name: "New Baby",
-    icon: <TodayIcon sx={{ fontSize: { lg: "3.5rem" } }} color="secondary" />,
+    icon: <TodayIcon sx={{ fontSize: { lg: "3rem" } }} color="secondary" />,
     date: "2022-05-18",
     id: 7,
   },
@@ -173,24 +173,90 @@ const utilization = 60;
 const defaultGifts = [
   {
     giftType: "Upcoming Holidays",
-    status: [
-      "Memorial Day: May 30th",
-      "Receptionist Day: May 11th",
-      "Father's Day: June 19th",
+    gifts: [
+      {
+        name: "national donut day",
+        date: "2022-1-05",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 1,
+      },
+      {
+        name: "father's day",
+        date: "2022-12-09",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 2,
+      },
+      {
+        name: "international yoga day",
+        date: "2022-05-3",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 3,
+      },
+      {
+        name: "independence day",
+        date: "2022-7-20",
+        icon: (
+          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+        ),
+        id: 4,
+      },
     ],
-    image: {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVpoHhv49yIxz0hKqzcb1UuqRtaGCCHksmSQ&usqp=CAU",
-      alt: "gift image",
-    },
     id: 1,
   },
   {
     giftType: "Upcoming Recipient Events",
-    status: ["Amelia's Birthday: May 18th", "Nathan's Anniversary: May 21st"],
-    image: {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5FidWWXA-75zfe8xcZFjFBbajsjErCBaVWQ&usqp=CAU",
-      alt: "gift image",
-    },
+    gifts: [
+      {
+        name: "Kelsey Zaugg Birthday",
+        date: "2022-8-12",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 1,
+      },
+      {
+        name: "Andrew Zaugg Birthday",
+        date: "2022-6-19",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 2,
+      },
+      {
+        name: "Michael Scott Anniversary",
+        date: "2022-5-14",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 3,
+      },
+      {
+        name: "Kelsey Zaugg Anniversary",
+        date: "2022-6-04",
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.7rem" } }}
+            color="secondary"
+          />
+        ),
+        id: 4,
+      },
+    ],
     id: 2,
   },
 ];
