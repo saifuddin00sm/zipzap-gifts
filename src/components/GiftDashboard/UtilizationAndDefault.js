@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import CelebrationIcon from "@mui/icons-material/Celebration";
 import { format } from "date-fns";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -160,21 +161,34 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                         sx={{ justifyContent: "center" }}
                         container
                         rowSpacing={2}
-                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                        columnSpacing={{ xs: 3, sm: 3, md: 3 }}
                       >
-                        {gifts.map(({ name, date, icon, id }) => (
-                          <Grid item key={id}>
-                            <SmallCards>
-                              <Typography className="giftTitle">
-                                {name}
+                        {gifts.length === 0 ? (
+                          <Grid item>
+                            <Box>
+                              <Typography>
+                                {giftType === "Upcoming Holidays"
+                                  ? "All Holiday gifts are scheduled, way to go! "
+                                  : "All recipient events are scheduled this month, way to go! Everyone is taken care of! "}
+                                <CelebrationIcon sx={{ fontSize: "30px" }} />
                               </Typography>
-                              <Box className="iconBox">{icon}</Box>
-                              <Typography variant="h6" className="date">
-                                {format(new Date(date), "MMM Qo")}
-                              </Typography>
-                            </SmallCards>
+                            </Box>
                           </Grid>
-                        ))}
+                        ) : (
+                          gifts.map(({ name, date, icon, id }) => (
+                            <Grid item key={id}>
+                              <SmallCards>
+                                <Typography className="giftTitle">
+                                  {name}
+                                </Typography>
+                                <Box className="iconBox">{icon}</Box>
+                                <Typography variant="h6" className="date">
+                                  {format(new Date(date), "MMM Qo")}
+                                </Typography>
+                              </SmallCards>
+                            </Grid>
+                          ))
+                        )}
                       </Grid>
                     </Box>
                     <Button size="small" variant="contained">
