@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { alpha, styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -11,27 +9,9 @@ import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import Tooltip from "@mui/material/Tooltip";
-
-const Input = styled(InputBase)(({ theme }) => ({
-  "& .MuiInputBase-input": {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
-    border: "1px solid #ced4da",
-    fontSize: 16,
-    width: "100%",
-    padding: "5px 12px",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
-    "&:focus": {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}));
+import { useRecipients } from "../../hooks/recipients";
+import Fuse from "fuse.js";
+import { format } from "date-fns";
 
 const style = {
   "& .list_items": {
@@ -84,45 +64,69 @@ const style = {
   },
 };
 
-// searchable data
-const data = [
-  {
-    name: "Wylieasd Sawyer",
-    birthday: "12/5",
-    id: 1,
-  },
-  {
-    name: "Karen Holt",
-    birthday: "1/5",
-    id: 2,
-  },
-  {
-    name: "Abreahm Mcdaniel",
-    birthday: "12/5",
-    id: 3,
-  },
-  {
-    name: "Reed Gtreends",
-    birthday: "2/5",
-    id: 4,
-  },
-  {
-    name: "Wesley Burnett",
-    birthday: "3/5",
-    id: 5,
-  },
-  {
-    name: "Stephany Cardenas",
-    birthday: "12/5",
-    id: 6,
-  },
-];
-
 const ChooseRecipient = () => {
-  const usersData = data;
+  const { recipients } = useRecipients();
+  const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [selectSearchValue, setSelectSearchValue] = useState("");
   const [selectedData, setSelectedData] = useState([]);
+
+  useEffect(() => {
+    const searchOptions = {
+      tokenize: false,
+      threshold: 0.3,
+      keys: [
+        { name: "firstName", weight: 2 },
+        { name: "lastName", weight: 2 },
+        "fullName",
+        "jobTitle",
+        "department.name",
+        "birthday",
+        "startDate",
+      ],
+    };
+    if (recipients) {
+      if (searchValue) {
+        const fuse = new Fuse(
+          recipients.map((r) => {
+            return { ...r, fullName: `${r.firstName} ${r.lastName}` };
+          }),
+          searchOptions
+        );
+        setData(fuse.search(searchValue).map((i) => i.item));
+      } else {
+        setData(recipients);
+      }
+    }
+  }, [searchValue, recipients]);
+
+  useEffect(() => {
+    const searchOptions = {
+      tokenize: false,
+      threshold: 0.3,
+      keys: [
+        { name: "firstName", weight: 2 },
+        { name: "lastName", weight: 2 },
+        "fullName",
+        "jobTitle",
+        "department.name",
+        "birthday",
+        "startDate",
+      ],
+    };
+    if (recipients) {
+      if (searchValue) {
+        const fuse = new Fuse(
+          recipients.map((r) => {
+            return { ...r, fullName: `${r.firstName} ${r.lastName}` };
+          }),
+          searchOptions
+        );
+        setData(fuse.search(searchValue).map((i) => i.item));
+      } else {
+        setData(recipients);
+      }
+    }
+  }, [searchValue, recipients]);
 
   return (
     <Box sx={style}>
@@ -134,23 +138,13 @@ const ChooseRecipient = () => {
       >
         <Grid item xs={6}>
           <Box sx={{ padding: "30px" }}>
-            <Typography
-              sx={{ marginBottom: "20px" }}
-              variant="h6"
-              className="head"
-            >
-              Master List
-            </Typography>
             <Head type="add" setSearchValue={setSearchValue} />
-            {usersData.length > 0 ? (
-              usersData
-                .filter((i) =>
-                  searchValue === ""
-                    ? i
-                    : i.name.toLowerCase().includes(searchValue.toLowerCase())
-                )
-                .map((item) => (
-                  <Box className="list_items" key={item.id}>
+            {data.length > 0 ? (
+              data
+                .filter(({ id }) => !selectedData.includes(id))
+                .sort((a, b) => a.firstName.localeCompare(b.firstName))
+                .map(({ id, firstName, lastName, birthday }) => (
+                  <Box className="list_items" key={id}>
                     <Box>
                       <Box>
                         <IconButton
@@ -158,25 +152,35 @@ const ChooseRecipient = () => {
                           sx={{
                             background: "#ABC6BD",
                           }}
-                          onClick={() =>
-                            setSelectedData([...selectedData, item])
-                          }
+                          onClick={() => setSelectedData([...selectedData, id])}
                         >
                           <AddIcon sx={{ fontSize: "15px", color: "#000" }} />
                         </IconButton>
-                        <Typography variant="body">{item.name}</Typography>
+                        <Typography variant="body">{`${firstName} ${lastName}`}</Typography>
                       </Box>
                     </Box>
                     <Box>
-                      <Typography variant="body">{item.birthday}</Typography>
+                      <Typography variant="body">
+                        {format(new Date(birthday), "M/d")}
+                      </Typography>
                     </Box>
                   </Box>
                 ))
             ) : (
-              <Typography>No data</Typography>
+              <Typography>No Recipients!</Typography>
             )}
             <Box sx={{ textAlign: "center" }}>
-              <Button size="small" onClick={() => setSelectedData(usersData)}>
+              <Button
+                size="small"
+                onClick={() =>
+                  setSelectedData([
+                    ...selectedData,
+                    ...data
+                      .filter(({ id }) => !selectedData.includes(id))
+                      .map(({ id }) => id),
+                  ])
+                }
+              >
                 Add all
               </Button>
             </Box>
@@ -191,18 +195,12 @@ const ChooseRecipient = () => {
             >
               Recipients for this Gift
             </Typography>
-            <Head type="remove" setSelectSearchValue={setSelectSearchValue} />
             {selectedData.length > 0 &&
-              selectedData
-                .filter((i) =>
-                  selectSearchValue === ""
-                    ? i
-                    : i.name
-                        .toLowerCase()
-                        .includes(selectSearchValue.toLowerCase())
-                )
-                .map((data) => (
-                  <Box className="list_items" key={data.id}>
+              recipients
+                .filter(({ id }) => selectedData.includes(id))
+                .sort((a, b) => a.firstName.localeCompare(b.firstName))
+                .map(({ id, firstName, lastName, birthday }) => (
+                  <Box className="list_items" key={id}>
                     <Box>
                       <Box>
                         <IconButton
@@ -212,7 +210,7 @@ const ChooseRecipient = () => {
                           }}
                           onClick={() =>
                             setSelectedData(
-                              selectedData.filter((f) => f.id !== data.id)
+                              selectedData.filter((f) => f !== id)
                             )
                           }
                         >
@@ -220,11 +218,13 @@ const ChooseRecipient = () => {
                             sx={{ fontSize: "15px", color: "#000" }}
                           />
                         </IconButton>
-                        <Typography variant="body">{data.name}</Typography>
+                        <Typography variant="body">{`${firstName} ${lastName}`}</Typography>
                       </Box>
                     </Box>
                     <Box>
-                      <Typography variant="body">{data.birthday}</Typography>
+                      <Typography variant="body">
+                        {format(new Date(birthday), "M/d")}
+                      </Typography>
                     </Box>
                   </Box>
                 ))}
@@ -242,18 +242,16 @@ const Head = ({ type, setSearchValue, setSelectSearchValue }) => {
   return (
     <Box>
       <Box sx={{ display: "flex" }}>
-        <FormControl variant="standard" sx={{ display: "flex" }}>
-          <Input
-            fullWidth
-            placeholder="Search For A Recipient"
-            id="recipient"
-            onChange={
-              type === "add"
-                ? (e) => setSearchValue(e.target.value)
-                : (e) => setSelectSearchValue(e.target.value)
-            }
-          />
-        </FormControl>
+        <TextField
+          fullWidth
+          size="small"
+          label="Search For A Recipient"
+          onChange={
+            type === "add"
+              ? (e) => setSearchValue(e.target.value)
+              : (e) => setSelectSearchValue(e.target.value)
+          }
+        />
         {type === "add" && (
           <Tooltip
             title="Filter your Recipients by Birthday, Department, Name or Anniversary!"
