@@ -151,7 +151,7 @@ const styles = {
     textAlign: "center",
   },
   menu: {
-    zIndex: 2,
+    zIndex: 99,
     display: "flex",
     flex: "0 1 auto",
     flexDirection: "column",
