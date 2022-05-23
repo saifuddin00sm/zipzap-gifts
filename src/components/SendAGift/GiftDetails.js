@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
-import { alpha, styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
 import InputLabel from "@mui/material/InputLabel";
+import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -11,32 +10,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
-const Input = styled(InputBase)(({ theme }) => ({
-  "label + &": {
-    marginTop: theme.spacing(4),
-  },
-  "& .MuiInputBase-input": {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
-    border: "1px solid #ced4da",
-    fontSize: 16,
-    width: "100%",
-    padding: "10px 12px",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
-    "&:focus": {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}));
 
 const style = {
   display: "flex",
@@ -45,62 +19,38 @@ const style = {
     width: "100%",
     marginBottom: "2.5rem",
   },
-  "& .label": {
-    fontFamily: "Poppins",
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "28px",
-    lineHeight: "42px",
-    textTransform: "capitalize",
-    color: "#343436",
-  },
 };
 
-const initialState = {
-  to: new Date(),
-  from: new Date(),
-};
-
-const GiftDetails = () => {
-  const [formState, setFormState] = useState(initialState);
-  const [selectedBtn, setSelectedBtn] = useState(false);
-  const [type, setType] = useState("");
-
-  function setInput(key, value) {
-    setFormState({ ...formState, [key]: value });
-  }
-
-  const selectType = () => {
-    setSelectedBtn(!selectedBtn);
-  };
-
-  const handleChange = (event) => {
-    setType(event.target.value);
-  };
-
+const GiftDetails = ({
+  name,
+  note,
+  orderType,
+  orderDateType,
+  to,
+  from,
+  setInput,
+}) => {
   return (
     <Box sx={style}>
       <Grid container rowSpacing={1} columns={{ xs: 4, sm: 8, md: 12 }}>
         <Grid item xs={6}>
           <Box sx={{ padding: "30px" }}>
             <Box className="left" component="form">
-              <FormControl variant="standard">
-                <InputLabel className="label" shrink htmlFor="Gitf-name">
-                  Gift Name
-                </InputLabel>
-                <Input fullWidth placeholder="Birthdays" id="Gitf-name" />
-              </FormControl>
-              <FormControl variant="standard">
-                <InputLabel className="label" shrink htmlFor="custom-note">
-                  Custom Note
-                </InputLabel>
-                <Input
-                  multiline
-                  rows={10}
-                  placeholder="Thanks for being a great
-                    Employee"
-                />
-              </FormControl>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Gift Name"
+                value={name}
+                onChange={(event) => setInput("name", event.target.value)}
+              />
+              <TextField
+                label="Custom Note"
+                multiline
+                rows={10}
+                placeholder="Thanks for being a great employee!"
+                value={note}
+                onChange={(event) => setInput("note", event.target.value)}
+              />
             </Box>
           </Box>
         </Grid>
@@ -113,14 +63,14 @@ const GiftDetails = () => {
               <Typography variant="h6">Gift Type</Typography>
               <Box sx={{ display: "flex", gap: "15px", marginTop: "20px" }}>
                 <Button
-                  onClick={selectType}
-                  variant={selectedBtn ? "outlined" : "contained"}
+                  onClick={() => setInput("orderType", "ONE_TIME")}
+                  variant={orderType === "ONE_TIME" ? "contained" : "outlined"}
                 >
                   One Time
                 </Button>
                 <Button
-                  onClick={selectType}
-                  variant={selectedBtn ? "contained" : "outlined"}
+                  onClick={() => setInput("orderType", "RECURRING")}
+                  variant={orderType === "RECURRING" ? "contained" : "outlined"}
                 >
                   Recurring
                 </Button>
@@ -150,11 +100,11 @@ const GiftDetails = () => {
               </Box>
             </Box>
 
-            {!selectedBtn ? (
+            {orderType === "ONE_TIME" ? (
               <Box>
                 <Typography variant="h6">Gift Date</Typography>
                 <DatePicker
-                  value={formState.to}
+                  value={to}
                   inputFormat="MM/dd/yyyy"
                   onChange={(value) => setInput("to", value)}
                   renderInput={(params) => (
@@ -169,7 +119,7 @@ const GiftDetails = () => {
                     Start Date
                   </Typography>
                   <DatePicker
-                    value={formState.to}
+                    value={to}
                     inputFormat="MM/dd/yyyy"
                     onChange={(value) => setInput("to", value)}
                     renderInput={(params) => (
@@ -180,7 +130,7 @@ const GiftDetails = () => {
                     End Date
                   </Typography>
                   <DatePicker
-                    value={formState.from}
+                    value={from}
                     inputFormat="MM/dd/yyyy"
                     onChange={(value) => setInput("from", value)}
                     renderInput={(params) => (
@@ -198,12 +148,14 @@ const GiftDetails = () => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={type}
+                        value={orderDateType}
                         label="Select"
-                        onChange={handleChange}
+                        onChange={(event) =>
+                          setInput("orderDateType", event.target.value)
+                        }
                       >
-                        <MenuItem value="birthday">Birthday</MenuItem>
-                        <MenuItem value={20}>Anniversary</MenuItem>
+                        <MenuItem value="BIRTHDAY">Birthday</MenuItem>
+                        <MenuItem value="ANNIVERSARY">Anniversary</MenuItem>
                       </Select>
                     </FormControl>
                   </Box>
