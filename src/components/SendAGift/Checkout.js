@@ -6,44 +6,27 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 
-const options = [
-  { opt: "To Recipients Home Address", price: "22", selected: true, id: 1 },
-  {
-    opt: "To central office: 200 2000 S America",
-    price: "12",
-    id: 2,
-    selected: false,
-  },
-];
-
 const cards = [
   {
-    cardName: "credit card",
-    ending: 1993993,
+    cardName: "Company Credit Card",
+    ending: 1111,
     exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
+    name: "Name on Card: HR Department",
     isSelected: false,
   },
   {
-    cardName: "credit card",
-    ending: 9393939,
+    cardName: "Company Debit Card",
+    ending: 1234,
     exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
+    name: "Name on Card: HR Department",
     isSelected: true,
   },
   {
-    cardName: "credit card",
-    ending: 9923939,
+    cardName: "Personal Card",
+    ending: 4567,
     exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
+    name: "Name on Card: John Doe",
     isSelected: false,
-  },
-  {
-    cardName: "credit card",
-    ending: 4393939,
-    exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
-    isSelected: true,
   },
 ];
 
@@ -175,7 +158,24 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-const Checkout = () => {
+const Checkout = ({
+  recipientCount,
+  giftImage,
+  giftPrice,
+  shippingAddressType,
+  setInput,
+}) => {
+  const recipientShippingPrice = 22;
+  const officeShippingPrice = 12;
+
+  let shippingCost = 0;
+  if (shippingAddressType === "RECIPIENT_ADDRESS") {
+    shippingCost = recipientShippingPrice;
+  } else if (shippingAddressType === "COMPANY_ADDRESS") {
+    shippingCost = officeShippingPrice;
+  }
+  const totalPrice = giftPrice * recipientCount + shippingCost * recipientCount;
+
   return (
     <Root>
       <Grid
@@ -191,11 +191,18 @@ const Checkout = () => {
             </Typography>
             <Box className="card_container">
               <Box className="small_card">
-                <img src="" alt="Gift images" />
+                <img
+                  style={{
+                    width: "100%",
+                    objectFit: "cover",
+                  }}
+                  src={giftImage}
+                  alt="Gift images"
+                />
               </Box>
               <Box>
                 <Typography variant="h5" className="big_text">
-                  X 3 recipients
+                  X {recipientCount} recipients
                 </Typography>
                 <Button variant="outlined">
                   <Link
@@ -212,20 +219,44 @@ const Checkout = () => {
                 Choose Shipping Option
               </Typography>
               <Box>
-                {options.map(({ opt, price, selected, id }) => (
-                  <Box
-                    key={id}
-                    className="shipping_cards"
-                    sx={{ background: selected ? "#ABC6BD" : "#fff" }}
-                  >
-                    <Typography className="address" variant="body">
-                      {opt}
-                    </Typography>
-                    <Typography className="prices" variant="body2">
-                      {"$" + price}
-                    </Typography>
-                  </Box>
-                ))}
+                <Box
+                  onClick={() =>
+                    setInput("shippingAddressType", "RECIPIENT_ADDRESS")
+                  }
+                  className="shipping_cards"
+                  sx={{
+                    background:
+                      shippingAddressType === "RECIPIENT_ADDRESS"
+                        ? "#ABC6BD"
+                        : "#fff",
+                  }}
+                >
+                  <Typography className="address" variant="body">
+                    To Recipients Address
+                  </Typography>
+                  <Typography className="prices" variant="body2">
+                    ${recipientShippingPrice}
+                  </Typography>
+                </Box>
+                <Box
+                  onClick={() =>
+                    setInput("shippingAddressType", "COMPANY_ADDRESS")
+                  }
+                  className="shipping_cards"
+                  sx={{
+                    background:
+                      shippingAddressType === "COMPANY_ADDRESS"
+                        ? "#ABC6BD"
+                        : "#fff",
+                  }}
+                >
+                  <Typography className="address" variant="body">
+                    Ship Gifts to Company Address
+                  </Typography>
+                  <Typography className="prices" variant="body2">
+                    ${officeShippingPrice}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -278,7 +309,7 @@ const Checkout = () => {
               </Box>
             </Box>
             <Typography variant="body" className="totalPrice">
-              Total Price: $288.33
+              Total Price: ${totalPrice}
             </Typography>
           </Box>
         </Grid>
