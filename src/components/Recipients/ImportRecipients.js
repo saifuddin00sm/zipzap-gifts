@@ -39,7 +39,6 @@ const Input = styled("input")({
 
 const ImportList = () => {
   const [open, setOpen] = useState(false);
-  const [files, setFiles] = useState("");
   const [parsedData, setParsedData] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const [values, setValues] = useState([]);
@@ -111,7 +110,7 @@ const ImportList = () => {
             </Box>
           </Box>
         </Root>
-        <table>
+        {/* <table>
           <thead>
             <tr>
               {tableRows.map((rows, index) => {
@@ -130,7 +129,7 @@ const ImportList = () => {
               );
             })}
           </tbody>
-        </table>
+        </table> */}
       </Container>
       <RecipientSuccess
         text="Recipient List Upload Successful!"
