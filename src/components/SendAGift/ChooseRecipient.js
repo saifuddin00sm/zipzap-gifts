@@ -64,11 +64,14 @@ const style = {
   },
 };
 
-const ChooseRecipient = () => {
+const ChooseRecipient = ({
+  selectedRecipients,
+  setRecipients,
+  orderDateType,
+}) => {
   const { recipients } = useRecipients();
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
     const searchOptions = {
@@ -138,34 +141,86 @@ const ChooseRecipient = () => {
       >
         <Grid item xs={6}>
           <Box sx={{ padding: "30px" }}>
-            <Head type="add" setSearchValue={setSearchValue} />
+            <Box>
+              <Box sx={{ display: "flex" }}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Search For A Recipient"
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+
+                <Tooltip
+                  title="Filter your Recipients by Birthday, Department, Name or Anniversary!"
+                  placement="right-start"
+                  arrow={true}
+                  enterTouchDelay={0}
+                >
+                  <QuestionMarkIcon
+                    sx={{
+                      border: "2px solid #000",
+                      padding: "2px",
+                      borderRadius: "100%",
+                      marginLeft: "15px",
+                      marginTop: "6px",
+                    }}
+                  />
+                </Tooltip>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: ".8rem",
+                }}
+              >
+                <Typography variant="body2" className="table_head">
+                  Name
+                </Typography>
+                <Typography variant="body2" className="table_head">
+                  {orderDateType}
+                </Typography>
+              </Box>
+            </Box>
             {data.length > 0 ? (
               data
-                .filter(({ id }) => !selectedData.includes(id))
+                .filter(({ id }) => !selectedRecipients.includes(id))
                 .sort((a, b) => a.firstName.localeCompare(b.firstName))
-                .map(({ id, firstName, lastName, birthday }) => (
-                  <Box className="list_items" key={id}>
-                    <Box>
+                .map(({ id, firstName, lastName, birthday, startDate }) => {
+                  let date;
+                  if (orderDateType === "BIRTHDAY") {
+                    date = birthday;
+                  } else if (orderDateType === "ANNIVERSARY") {
+                    date = startDate;
+                  }
+                  return (
+                    <Box className="list_items" key={id}>
                       <Box>
-                        <IconButton
-                          className="plus"
-                          sx={{
-                            background: "#ABC6BD",
-                          }}
-                          onClick={() => setSelectedData([...selectedData, id])}
-                        >
-                          <AddIcon sx={{ fontSize: "15px", color: "#000" }} />
-                        </IconButton>
-                        <Typography variant="body">{`${firstName} ${lastName}`}</Typography>
+                        <Box>
+                          <IconButton
+                            className="plus"
+                            sx={{
+                              background: "#ABC6BD",
+                            }}
+                            onClick={() =>
+                              setRecipients([...selectedRecipients, id])
+                            }
+                          >
+                            <AddIcon sx={{ fontSize: "15px", color: "#000" }} />
+                          </IconButton>
+                          <Typography variant="body">{`${firstName} ${lastName}`}</Typography>
+                        </Box>
                       </Box>
+                      {date && (
+                        <Box>
+                          <Typography variant="body">
+                            {format(new Date(date), "M/d")}
+                          </Typography>
+                        </Box>
+                      )}
                     </Box>
-                    <Box>
-                      <Typography variant="body">
-                        {format(new Date(birthday), "M/d")}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))
+                  );
+                })
             ) : (
               <Typography>No Recipients!</Typography>
             )}
@@ -173,10 +228,10 @@ const ChooseRecipient = () => {
               <Button
                 size="small"
                 onClick={() =>
-                  setSelectedData([
-                    ...selectedData,
+                  setRecipients([
+                    ...selectedRecipients,
                     ...data
-                      .filter(({ id }) => !selectedData.includes(id))
+                      .filter(({ id }) => !selectedRecipients.includes(id))
                       .map(({ id }) => id),
                   ])
                 }
@@ -195,39 +250,49 @@ const ChooseRecipient = () => {
             >
               Recipients for this Gift
             </Typography>
-            {selectedData.length > 0 &&
+            {selectedRecipients.length > 0 &&
               recipients
-                .filter(({ id }) => selectedData.includes(id))
+                .filter(({ id }) => selectedRecipients.includes(id))
                 .sort((a, b) => a.firstName.localeCompare(b.firstName))
-                .map(({ id, firstName, lastName, birthday }) => (
-                  <Box className="list_items" key={id}>
-                    <Box>
+                .map(({ id, firstName, lastName, birthday, startDate }) => {
+                  let date;
+                  if (orderDateType === "BIRTHDAY") {
+                    date = birthday;
+                  } else if (orderDateType === "ANNIVERSARY") {
+                    date = startDate;
+                  }
+                  return (
+                    <Box className="list_items" key={id}>
                       <Box>
-                        <IconButton
-                          className="plus"
-                          sx={{
-                            background: "#D38D77",
-                          }}
-                          onClick={() =>
-                            setSelectedData(
-                              selectedData.filter((f) => f !== id)
-                            )
-                          }
-                        >
-                          <HorizontalRuleIcon
-                            sx={{ fontSize: "15px", color: "#000" }}
-                          />
-                        </IconButton>
-                        <Typography variant="body">{`${firstName} ${lastName}`}</Typography>
+                        <Box>
+                          <IconButton
+                            className="plus"
+                            sx={{
+                              background: "#D38D77",
+                            }}
+                            onClick={() =>
+                              setRecipients(
+                                selectedRecipients.filter((f) => f !== id)
+                              )
+                            }
+                          >
+                            <HorizontalRuleIcon
+                              sx={{ fontSize: "15px", color: "#000" }}
+                            />
+                          </IconButton>
+                          <Typography variant="body">{`${firstName} ${lastName}`}</Typography>
+                        </Box>
                       </Box>
+                      {date && (
+                        <Box>
+                          <Typography variant="body">
+                            {format(new Date(date), "M/d")}
+                          </Typography>
+                        </Box>
+                      )}
                     </Box>
-                    <Box>
-                      <Typography variant="body">
-                        {format(new Date(birthday), "M/d")}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
+                  );
+                })}
           </Box>
         </Grid>
       </Grid>
@@ -236,55 +301,3 @@ const ChooseRecipient = () => {
 };
 
 export default ChooseRecipient;
-
-// Header component
-const Head = ({ type, setSearchValue, setSelectSearchValue }) => {
-  return (
-    <Box>
-      <Box sx={{ display: "flex" }}>
-        <TextField
-          fullWidth
-          size="small"
-          label="Search For A Recipient"
-          onChange={
-            type === "add"
-              ? (e) => setSearchValue(e.target.value)
-              : (e) => setSelectSearchValue(e.target.value)
-          }
-        />
-        {type === "add" && (
-          <Tooltip
-            title="Filter your Recipients by Birthday, Department, Name or Anniversary!"
-            placement="right-start"
-            arrow={true}
-            enterTouchDelay={0}
-          >
-            <QuestionMarkIcon
-              sx={{
-                border: "2px solid #000",
-                padding: "2px",
-                borderRadius: "100%",
-                marginLeft: "15px",
-                marginTop: "6px",
-              }}
-            />
-          </Tooltip>
-        )}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: ".8rem",
-        }}
-      >
-        <Typography variant="body2" className="table_head">
-          Name
-        </Typography>
-        <Typography variant="body2" className="table_head">
-          Birthday
-        </Typography>
-      </Box>
-    </Box>
-  );
-};

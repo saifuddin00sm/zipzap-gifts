@@ -116,7 +116,13 @@ const StepComponent = ({
       component = <GiftDetails {...formState} setInput={setInput} />;
       break;
     case 2:
-      component = <ChooseRecipient />;
+      component = (
+        <ChooseRecipient
+          selectedRecipients={formState.recipients}
+          setRecipients={(recipients) => setInput("recipients", recipients)}
+          orderDateType={formState.orderDateType}
+        />
+      );
       break;
     case 3:
     default:
@@ -132,7 +138,11 @@ const SendAGift = () => {
   const [formState, setFormState] = useState({ ...initialState });
 
   function setInput(key, value) {
-    setFormState({ ...formState, [key]: value });
+    setFormState({
+      ...formState,
+      [key]: value,
+      ...(key === "orderType" && value === "ONE_TIME" && { orderDateType: "" }),
+    });
   }
 
   const [activeStep, setActiveStep] = useState(0);
