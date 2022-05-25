@@ -211,9 +211,6 @@ const SendAGift = () => {
   return (
     <>
       <Container sx={{ px: 0 }} component="main">
-        <Header>
-          <Typography variant="h1">Send a Gift</Typography>
-        </Header>
         <Root ref={top}>
           <Box className="innerBox">
             <GiftStepper
