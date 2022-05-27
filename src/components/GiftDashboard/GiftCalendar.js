@@ -91,6 +91,7 @@ const GiftCalendar = ({ showDetailsHandle, giftDates, holidaysData }) => {
                 .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
                 .map(({ name }) => (
                   <Typography
+                    key={name}
                     sx={{ fontSize: { lg: "10px", sm: "5px", xs: "4px" } }}
                   >
                     {name}
