@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -77,6 +77,7 @@ const SmallCards = styled("div")(({ theme }) => ({
 }));
 
 const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
+  const navigate = useNavigate();
   return (
     <Root>
       <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -191,7 +192,11 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                         )}
                       </Grid>
                     </Box>
-                    <Button size="small" variant="contained">
+                    <Button
+                      onClick={() => navigate("gifts")}
+                      size="small"
+                      variant="contained"
+                    >
                       Schedule a gift
                     </Button>
                   </CardContent>
