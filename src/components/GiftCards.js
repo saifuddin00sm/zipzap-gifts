@@ -77,12 +77,12 @@ const GiftCards = ({ data, loading, error, setSelectedGift }) => {
   const [stateData, setStateData] = useState([]);
 
   const categories = [
-    { name: "Recommended gifts", category: "recommendedGifts" },
     {
       name: "Zip it!",
       category: "zipIt",
       subText: "Virtual Gifts: choose your amount and send via email",
     },
+    { name: "Recommended gifts", category: "recommendedGifts" },
     { name: "Birthday Gifts", category: "birthday" },
     { name: "Upcoming Holiday Gifts", category: "upcomingHoliday" },
     { name: "Anniversary / Promotion Gifts", category: "anniversaryPromotion" },
@@ -171,7 +171,7 @@ const GiftCards = ({ data, loading, error, setSelectedGift }) => {
                 {name}
               </Typography>
               <Typography variant="body" sx={{ marginBottom: "9px" }}>
-                <i>{subText && subText}</i>
+                <i>{subText}</i>
               </Typography>
             </Box>
             <Box
