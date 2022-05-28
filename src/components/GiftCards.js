@@ -43,7 +43,7 @@ const zipIt = [
   {
     active: null,
     category: "zipIt",
-    description: "send a virtual gift card to thread wallets",
+    description: "Send a virtual gift card to thread wallets!",
     id: "sgab45f9-1x26-777-8edla-b73c6dcf5a26",
     items: { items: [] },
     name: "Thread Wallets",
@@ -64,7 +64,7 @@ const zipIt = [
   {
     active: null,
     category: "zipIt",
-    description: "send a virtual gift card to pillow cube",
+    description: "Send a virtual gift card to pillow cube!",
     id: "deak45f9-1x26-8888-8edca-b73c6dcf5a26",
     items: { items: [] },
     name: "Pillow Cube",
@@ -85,7 +85,7 @@ const zipIt = [
   {
     active: null,
     category: "zipIt",
-    description: "send a virtual gift card to thread wallets",
+    description: "Send a virtual gift card to thread wallets!",
     id: "deab45y9-1x26-9999-8edla-b73c6dcf5a26",
     items: { items: [] },
     name: "Golden Coil",
@@ -128,38 +128,15 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
     setOpenModal({ open: true, modalData: gift });
   };
 
-  // increasing zipit price
-  const incPrice = (el) => {
-    let checkPrice = false;
-    stateData.forEach((i) => {
-      if (i.id === el.id) {
-        if (+i?.price === 200) {
-          checkPrice = true;
+  const updatePrice = (id, count) => {
+    setStateData((prevState) =>
+      prevState.map((i) => {
+        if (i.id === id) {
+          return { ...i, price: +i.price + count };
         }
-      }
-    });
-    if (checkPrice === true) return;
-    const newArr = stateData.map((i) =>
-      i?.id === el?.id ? { ...i, price: +i?.price + 1 } : i
+        return i;
+      })
     );
-    setStateData(newArr);
-  };
-
-  // decreasing zipit price
-  const decPrice = (el) => {
-    let checkPrice = false;
-    stateData.forEach((i) => {
-      if (i.id === el.id) {
-        if (+i?.price === 10) {
-          checkPrice = true;
-        }
-      }
-    });
-    if (checkPrice === true) return;
-    const newArr = stateData.map((i) =>
-      i?.id === el?.id ? { ...i, price: +i?.price - 1 } : i
-    );
-    setStateData(newArr);
   };
 
   useEffect(() => {
@@ -204,7 +181,7 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
                 {name}
               </Typography>
               <Typography variant="body" sx={{ marginBottom: "9px" }}>
-                <i>{subText && subText}</i>
+                <i>{subText}</i>
               </Typography>
             </Box>
             <Box
@@ -271,12 +248,14 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
                                     fontSize: "1.5rem",
                                     border: "none",
                                     "&:hover": { border: "none" },
+                                    "&:disabled": { border: "none" },
                                   }}
-                                  onClick={() => incPrice(item)}
+                                  disabled={item.price <= 0}
+                                  onClick={() => updatePrice(item.id, -1)}
                                   size="small"
                                   variant="outlined"
                                 >
-                                  +
+                                  -
                                 </Button>
                                 <Typography
                                   sx={{
@@ -295,12 +274,14 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
                                     fontSize: "1.5rem",
                                     border: "none",
                                     "&:hover": { border: "none" },
+                                    "&:disabled": { border: "none" },
                                   }}
-                                  onClick={() => decPrice(item)}
+                                  disabled={item.price >= 1000}
+                                  onClick={() => updatePrice(item.id, 1)}
                                   size="small"
                                   variant="outlined"
                                 >
-                                  -
+                                  +
                                 </Button>
                               </Box>
                             ) : (

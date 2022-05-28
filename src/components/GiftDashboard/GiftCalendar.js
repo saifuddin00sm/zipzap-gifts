@@ -9,7 +9,7 @@ import {
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const GiftCalendar = ({ showDetailsHandle, giftDates }) => {
+const GiftCalendar = ({ showDetailsHandle, giftDates, holidaysData }) => {
   const currentMonth = new Date();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -78,8 +78,26 @@ const GiftCalendar = ({ showDetailsHandle, giftDates }) => {
             {giftDates
               .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
               .map(({ id, icon }) => (
-                <React.Fragment key={id}>{icon}</React.Fragment>
+                <Typography
+                  variant="body"
+                  sx={{ position: "absolute", top: { lg: "0", xs: "-9px" } }}
+                  key={id}
+                >
+                  {icon}
+                </Typography>
               ))}
+            <Box sx={{ position: "absolute", bottom: "0", left: "2px" }}>
+              {holidaysData
+                .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
+                .map(({ name }) => (
+                  <Typography
+                    key={name}
+                    sx={{ fontSize: { lg: "10px", sm: "5px", xs: "4px" } }}
+                  >
+                    {name}
+                  </Typography>
+                ))}
+            </Box>
             <Typography variant="body" className="bg">
               {formattedDate}
             </Typography>
