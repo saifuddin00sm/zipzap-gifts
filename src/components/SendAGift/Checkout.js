@@ -207,7 +207,7 @@ const Checkout = ({
                 <Button variant="outlined">
                   <Link
                     className="package_btn"
-                    href="mailto:connect@zipzapgifts.com"
+                    href="mailto:connect@zipzapgifts.com?subject=Custom Packaging&body=Hi, Zip Zap!%0D%0A%0D%0AI am interested in custom packaging for my gift!"
                   >
                     Want Custom Packaging ?
                   </Link>
