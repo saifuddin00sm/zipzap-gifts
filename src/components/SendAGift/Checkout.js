@@ -232,7 +232,7 @@ const Checkout = ({
                   }}
                 >
                   <Typography className="address" variant="body">
-                    To Recipients Address
+                    To Recipient's Address
                   </Typography>
                   <Typography className="prices" variant="body2">
                     ${recipientShippingPrice}
