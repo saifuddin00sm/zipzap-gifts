@@ -5,30 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
-
-const cards = [
-  {
-    cardName: "Company Credit Card",
-    ending: 1111,
-    exp: "12/2065",
-    name: "Name on Card: HR Department",
-    isSelected: false,
-  },
-  {
-    cardName: "Company Debit Card",
-    ending: 1234,
-    exp: "12/2065",
-    name: "Name on Card: HR Department",
-    isSelected: true,
-  },
-  {
-    cardName: "Personal Card",
-    ending: 4567,
-    exp: "12/2065",
-    name: "Name on Card: John Doe",
-    isSelected: false,
-  },
-];
+import Payment from "./Payment";
 
 const Root = styled("div")(({ theme }) => ({
   "& .headings_text": {
@@ -273,40 +250,7 @@ const Checkout = ({
             }}
           >
             <Box>
-              <Typography className="headings_text" variant="h6">
-                Choose Credit Card Option
-              </Typography>
-              <Box className="credit_cards">
-                <Box className="inner_card">
-                  {cards.map(({ cardName, exp, name, isSelected, ending }) => (
-                    <Box key={ending} className="credit_card">
-                      <Box
-                        className="card_top"
-                        sx={{ background: isSelected ? "#F1F1F1" : "#C5D6E2" }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            textAlign: "right",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {cardName}
-                        </Typography>
-                      </Box>
-                      <Box
-                        className="card_bottom"
-                        sx={{ background: isSelected ? "#DEDEDE" : "#ABC4D6" }}
-                      >
-                        <Typography variant="h6">Ending In {ending}</Typography>
-                        <Typography variant="body2">Exp: {exp}</Typography>
-                        <Typography variant="body2">{name}</Typography>
-                      </Box>
-                    </Box>
-                  ))}
-                </Box>
-                <Button variant="outlined">Add New Card</Button>
-              </Box>
+              <Payment />
             </Box>
             <Typography variant="body" className="totalPrice">
               Total Price: ${totalPrice}
