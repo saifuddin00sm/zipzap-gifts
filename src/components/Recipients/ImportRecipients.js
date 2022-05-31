@@ -7,9 +7,11 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import CsvDownloader from "react-csv-downloader";
 import Papa from "papaparse";
 import TemplateTable from "./TemplateTable";
 import RecipientSuccess from "./RecipientSuccess";
+import { useRecipients } from "../../hooks/recipients";
 
 const Root = styled("div")(({ theme }) => ({
   "& .upload": {
@@ -39,28 +41,69 @@ const Input = styled("input")({
 
 const ImportList = () => {
   const [open, setOpen] = useState(false);
-  const [parsedData, setParsedData] = useState([]);
-  const [tableRows, setTableRows] = useState([]);
-  const [values, setValues] = useState([]);
+  const { addRecipient } = useRecipients();
+
+  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Department,Job Title,Birthday,Date Started,Address,City,State,Zip
+  John,Doe,john.doe@example.com,HR,Manager,12/31/1990,11/01/2020,1616 W Traverse Pkwy,Lehi,UT,84043`;
 
   const changeHandler = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
+      delimiter: ",",
+      transformHeader: (header) => {
+        const headers = {
+          firstname: "firstName",
+          lastname: "lastName",
+          department: "department",
+          title: "jobTitle",
+          birthday: "birthday",
+          datestarted: "startDate",
+          address: "address1",
+          city: "city",
+          state: "state",
+          zip: "zip",
+        };
+        return headers?.[header.replace(/\s/g, "").toLowerCase()];
+      },
       skipEmptyLines: true,
-      complete: function (results) {
-        const rowsArray = [];
-        const valuesArray = [];
-        results.data.map((d) => {
-          rowsArray.push(Object.keys(d));
-          valuesArray.push(Object.values(d));
-          setParsedData(results.data);
-        });
-        setTableRows(rowsArray[0]);
-        setValues(valuesArray);
+      complete: async function ({ data, errors }) {
+        if (errors?.length) {
+          console.log(
+            "Probably should handle the errors or show them to the user?",
+            errors
+          );
+          return;
+        }
+
+        const errs = [];
+
+        for (const row of data) {
+          const recipient = {
+            ...row,
+            shippingAddress: {
+              address1: row?.address1 || "",
+              city: row?.city || "",
+              state: row?.state || "",
+              zip: row?.zip || "",
+            },
+          };
+          delete recipient.undefined;
+          delete recipient.address1;
+          delete recipient.city;
+          delete recipient.state;
+          delete recipient.zip;
+          try {
+            console.log(recipient);
+            setOpen(true);
+            //await addRecipient(recipient);
+          } catch (error) {
+            errs.push(error);
+          }
+        }
+        console.log("Done!", errs);
       },
     });
   };
-  // TODO: make an api call to upload the file, onSuccess block put this setOpen method
 
   return (
     <>
@@ -103,33 +146,16 @@ const ImportList = () => {
           </Box>
           <Box className="download">
             <Box sx={{ marginBottom: "20px" }}>
-              <Button>Download Template</Button>
+              <Button href={csvFile} download="zip_zap_template.csv">
+                Download Template
+              </Button>
             </Box>
+
             <Box className="templateTable">
               <TemplateTable />
             </Box>
           </Box>
         </Root>
-        {/* <table>
-          <thead>
-            <tr>
-              {tableRows.map((rows, index) => {
-                return <th key={index}>{rows}</th>;
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {values.map((value, index) => {
-              return (
-                <tr key={index}>
-                  {value.map((val, i) => {
-                    return <td key={i}>{val}</td>;
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table> */}
       </Container>
       <RecipientSuccess
         text="Recipient List Upload Successful!"

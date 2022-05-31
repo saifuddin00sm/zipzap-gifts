@@ -48,12 +48,13 @@ const style = {
   },
 };
 
-const RecipientSuccess = ({ text, subText, open, close }) => {
+const RecipientSuccess = ({ text, subText, open, setOpen }) => {
+  const handleClose = () => setOpen(false);
   return (
     <Modal open={open}>
       <Box sx={style}>
         <Box className="closeBtn">
-          <IconButton className="mainBtn" onClick={close}>
+          <IconButton className="mainBtn" onClick={handleClose}>
             <ClearIcon sx={{ color: "#ffff" }} />
           </IconButton>
         </Box>
@@ -65,7 +66,7 @@ const RecipientSuccess = ({ text, subText, open, close }) => {
             {subText}
           </Typography>
           <Box sx={{ textAlign: "center" }}>
-            <Button id="confetti-id" variant="contained" onClick={close}>
+            <Button id="confetti-id" variant="contained" onClick={handleClose}>
               Send Email
             </Button>
           </Box>
