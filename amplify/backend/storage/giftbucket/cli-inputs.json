@@ -1,0 +1,14 @@
+{
+  "resourceName": "giftbucket",
+  "policyUUID": "833efb29",
+  "bucketName": "gifts",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}
