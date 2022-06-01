@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/secret": {
+      "name": "/secret",
+      "lambdaFunction": "stripe",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

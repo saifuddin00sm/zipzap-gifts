@@ -3,7 +3,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
 import { getUser } from "../../graphql/queries";
 import { useOutletContext } from "react-router-dom";
-import { Elements } from "@stripe/react-stripe-js";
+import { Elements, PaymentElement } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
@@ -27,14 +27,13 @@ const Payment = () => {
     const getSecret = async () => {
       try {
         // TODO: REMOVE THIS LINE
-        const customerID = "";
-        const response = await fetch("/secret", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, customerID }),
+        const customerID = "cus_LnJhdY7DreukGt";
+        const response = await API.post("stripe", "/secret", {
+          body: { name, customerID },
         });
-        const json = await response.json();
-        setClientSecret(json.clientSecret);
+        // TODO: Remove
+        console.log(response);
+        setClientSecret(response.clientSecret);
         setErrMsg("");
       } catch (error) {
         // TODO: REMOVE THIS LINE
@@ -61,7 +60,7 @@ const Payment = () => {
   };
   return (
     <Elements stripe={stripePromise} options={options}>
-      {name}: {stripeID}
+      <PaymentElement />
     </Elements>
   );
 };
