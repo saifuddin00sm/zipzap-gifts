@@ -48,8 +48,9 @@ const style = {
   },
 };
 
-const RecipientSuccess = ({ text, subText, open, setOpen }) => {
+const RecipientSuccess = ({ text, subText, open, setOpen, onSuccess }) => {
   const handleClose = () => setOpen(false);
+
   return (
     <Modal open={open}>
       <Box sx={style}>

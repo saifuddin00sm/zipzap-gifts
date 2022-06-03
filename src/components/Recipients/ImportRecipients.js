@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Header from "../Header";
@@ -7,41 +7,26 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import CsvDownloader from "react-csv-downloader";
 import Papa from "papaparse";
 import TemplateTable from "./TemplateTable";
 import RecipientSuccess from "./RecipientSuccess";
 import { useRecipients } from "../../hooks/recipients";
-
-const Root = styled("div")(({ theme }) => ({
-  "& .upload": {
-    marginBottom: "40px",
-    "& .uploadContents": {
-      border: "1px solid #F1F1F1",
-      padding: "70px",
-      [theme.breakpoints.down("md")]: {
-        padding: "25px",
-      },
-    },
-    "& .uploadBtn": {
-      marginTop: "50px",
-      textAlign: "center",
-    },
-    "& .uploadHead": {
-      background: "#343436",
-      padding: "16px",
-      color: "#fff",
-    },
-  },
-}));
-
-const Input = styled("input")({
-  display: "none",
-});
+import { useReward } from "react-rewards";
 
 const ImportList = () => {
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
+  const [error, setError] = useState(false);
+  const [counter, setCounter] = useState(1);
+  const [success, setSuccess] = useState(false);
+  const { reward } = useReward("confetti-id", "confetti", {
+    colors: ["#abc6bd", "#c5d5e2", "#abc4d6"],
+    startVelocity: 30,
+    spread: 85,
+    elementSize: 18,
+  });
+
+  let err = [];
 
   const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Department,Job Title,Birthday,Date Started,Address,City,State,Zip
   John,Doe,john.doe@example.com,HR,Manager,12/31/1990,11/01/2020,1616 W Traverse Pkwy,Lehi,UT,84043`;
@@ -67,16 +52,23 @@ const ImportList = () => {
       },
       skipEmptyLines: true,
       complete: async function ({ data, errors }) {
-        if (errors?.length) {
+        setCounter(counter + 1);
+        if (errors?.length !== 0) {
+          err = err.push(errors);
           console.log(
             "Probably should handle the errors or show them to the user?",
             errors
           );
+          setError(true);
+          setOpen(true);
           return;
+        } else {
+          setError(false);
+          setOpen(true);
+          onSuccess();
+          setCounter(1);
         }
-
         const errs = [];
-
         for (const row of data) {
           const recipient = {
             ...row,
@@ -95,9 +87,10 @@ const ImportList = () => {
           try {
             console.log(recipient);
             setOpen(true);
-            //await addRecipient(recipient);
+            await addRecipient(recipient);
           } catch (error) {
             errs.push(error);
+            console.log(errs);
           }
         }
         console.log("Done!", errs);
@@ -105,6 +98,10 @@ const ImportList = () => {
     });
   };
 
+  const onSuccess = () => {
+    setSuccess(true);
+    reward();
+  };
   return (
     <>
       <Container component="main">
@@ -134,13 +131,17 @@ const ImportList = () => {
                 Started, Address, City, State, Zip
               </Typography>
               <Box className="uploadBtn">
-                <input
-                  type="file"
-                  name="file"
-                  accept=".csv"
-                  onChange={changeHandler}
-                  style={{ display: "block", margin: "10px auto" }}
-                />
+                <label htmlFor="contained-button-file">
+                  <Input
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                    onChange={changeHandler}
+                  />
+                  <Button component="span" size="large" variant="contained">
+                    <FileUploadIcon sx={{ width: "2.5em", height: "2.5em" }} />
+                  </Button>
+                </label>
               </Box>
             </Box>
           </Box>
@@ -157,14 +158,51 @@ const ImportList = () => {
           </Box>
         </Root>
       </Container>
-      <RecipientSuccess
-        text="Recipient List Upload Successful!"
-        subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting"
-        open={open}
-        setOpen={setOpen}
-      />
+      {error ? (
+        <RecipientSuccess
+          text="Uh-oh!"
+          subText={`There was an error on row ${counter}`}
+          open={open}
+          setOpen={setOpen}
+        />
+      ) : (
+        <RecipientSuccess
+          text="Recipient List Upload Successful!"
+          subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting"
+          open={open}
+          setOpen={setOpen}
+          onSuccess={onSuccess}
+        />
+      )}
+      ;
     </>
   );
 };
 
 export default ImportList;
+
+const Root = styled("div")(({ theme }) => ({
+  "& .upload": {
+    marginBottom: "40px",
+    "& .uploadContents": {
+      border: "1px solid #F1F1F1",
+      padding: "70px",
+      [theme.breakpoints.down("md")]: {
+        padding: "25px",
+      },
+    },
+    "& .uploadBtn": {
+      marginTop: "50px",
+      textAlign: "center",
+    },
+    "& .uploadHead": {
+      background: "#343436",
+      padding: "16px",
+      color: "#fff",
+    },
+  },
+}));
+
+const Input = styled("input")({
+  display: "none",
+});
