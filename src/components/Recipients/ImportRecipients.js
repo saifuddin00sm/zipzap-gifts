@@ -19,6 +19,10 @@ const ImportList = () => {
   const [error, setError] = useState(false);
   const [counter, setCounter] = useState(1);
   const [success, setSuccess] = useState(false);
+  const onClose = () => {
+    setOpen(false);
+    navigate("/recipients");
+  };
   const { reward } = useReward("confetti-id", "confetti", {
     colors: ["#abc6bd", "#c5d5e2", "#abc4d6"],
     startVelocity: 30,
@@ -26,7 +30,6 @@ const ImportList = () => {
     elementSize: 18,
   });
 
-  let err = [];
   let navigate = useNavigate();
 
   const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip
@@ -55,7 +58,6 @@ const ImportList = () => {
       complete: async function ({ data, errors }) {
         setCounter(counter + 1);
         if (errors?.length !== 0) {
-          err = err.push(errors);
           console.log(
             "Probably should handle the errors or show them to the user?",
             errors
@@ -102,7 +104,6 @@ const ImportList = () => {
   const onSuccess = () => {
     setSuccess(true);
     reward();
-    setTimeout(() => navigate("/recipients"), 3000);
   };
 
   return (
@@ -163,19 +164,20 @@ const ImportList = () => {
       </Container>
       {error ? (
         <RecipientSuccess
-          text="Uh-oh!"
-          subText={`There was an error on row ${counter}`}
+          text="Uh-oh! We Were Unable To Upload Your List"
+          subText={`It Looks Like There Was An Error On Line ${counter}. Please Make Sure Your CSV Matches The Example And Try Again.`}
           open={open}
           setOpen={setOpen}
         />
       ) : (
         <RecipientSuccess
           text="Recipient List Upload Successful!"
-          subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting"
+          subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting. Don't Worry, If You Decide Not To, You Can Send It Later."
           open={open}
           setOpen={setOpen}
           onSuccess={onSuccess}
           success={success}
+          onClose={onClose}
           //added onSuccess and success because the linter got mad because success 'was not used'
         />
       )}

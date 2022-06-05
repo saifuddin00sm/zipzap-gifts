@@ -55,8 +55,9 @@ const RecipientSuccess = ({
   setOpen,
   onSuccess,
   success,
+  onClose,
 }) => {
-  const handleClose = () => setOpen(false);
+  const handleClose = () => onClose();
 
   return (
     <Modal open={open}>
