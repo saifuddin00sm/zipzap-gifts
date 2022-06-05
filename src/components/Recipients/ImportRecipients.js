@@ -175,6 +175,8 @@ const ImportList = () => {
           open={open}
           setOpen={setOpen}
           onSuccess={onSuccess}
+          success={success}
+          //added onSuccess and success because the linter got mad because success 'was not used'
         />
       )}
       ;

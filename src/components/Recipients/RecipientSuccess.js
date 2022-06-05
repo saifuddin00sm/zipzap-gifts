@@ -48,7 +48,14 @@ const style = {
   },
 };
 
-const RecipientSuccess = ({ text, subText, open, setOpen, onSuccess }) => {
+const RecipientSuccess = ({
+  text,
+  subText,
+  open,
+  setOpen,
+  onSuccess,
+  success,
+}) => {
   const handleClose = () => setOpen(false);
 
   return (
