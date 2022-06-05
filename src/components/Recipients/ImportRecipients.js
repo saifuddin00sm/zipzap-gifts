@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import Papa from "papaparse";
@@ -27,9 +27,10 @@ const ImportList = () => {
   });
 
   let err = [];
+  let navigate = useNavigate();
 
-  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Department,Job Title,Birthday,Date Started,Address,City,State,Zip
-  John,Doe,john.doe@example.com,HR,Manager,12/31/1990,11/01/2020,1616 W Traverse Pkwy,Lehi,UT,84043`;
+  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip
+  John,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
 
   const changeHandler = (event) => {
     Papa.parse(event.target.files[0], {
@@ -39,8 +40,8 @@ const ImportList = () => {
         const headers = {
           firstname: "firstName",
           lastname: "lastName",
-          department: "department",
-          title: "jobTitle",
+          // department: "department",
+          jobtitle: "jobTitle",
           birthday: "birthday",
           datestarted: "startDate",
           address: "address1",
@@ -101,7 +102,9 @@ const ImportList = () => {
   const onSuccess = () => {
     setSuccess(true);
     reward();
+    setTimeout(() => navigate("/recipients"), 3000);
   };
+
   return (
     <>
       <Container component="main">
