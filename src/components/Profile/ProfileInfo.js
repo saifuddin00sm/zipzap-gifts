@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
+// import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Grid from "@mui/material/Grid";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
@@ -164,7 +164,7 @@ const ProfileInfo = ({ info }) => {
                 aria-label="upload picture"
                 component="span"
               >
-                <PhotoCamera />
+                {/* <PhotoCamera /> */}
               </IconButton>
             </label>
           </Box>
