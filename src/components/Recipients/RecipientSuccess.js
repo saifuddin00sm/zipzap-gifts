@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const RecipientSuccess = ({ text, subText, open, onClose }) => {
+const RecipientSuccess = ({ text, subText, open, onClose, success }) => {
   const handleClose = () => onClose();
 
   return (
@@ -25,9 +25,15 @@ const RecipientSuccess = ({ text, subText, open, onClose }) => {
             {subText}
           </Typography>
           <Box sx={{ textAlign: "center" }}>
-            <Button id="confetti-id" variant="contained" onClick={handleClose}>
-              Send Email
-            </Button>
+            {success ? (
+              <Button
+                id="confetti-id"
+                variant="contained"
+                onClick={handleClose}
+              >
+                Send Email
+              </Button>
+            ) : null}
           </Box>
         </Box>
       </Box>
