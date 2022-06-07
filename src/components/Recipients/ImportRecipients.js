@@ -16,7 +16,6 @@ import { useReward } from "react-rewards";
 const ImportList = () => {
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
-  const [error, setError] = useState(false);
   const [counter, setCounter] = useState(1);
   const [success, setSuccess] = useState(false);
   const onClose = () => {
@@ -62,11 +61,9 @@ const ImportList = () => {
             "Probably should handle the errors or show them to the user?",
             errors
           );
-          setError(true);
           setOpen(true);
           return;
         } else {
-          setError(false);
           setOpen(true);
           onSuccess();
           setCounter(1);
@@ -162,23 +159,19 @@ const ImportList = () => {
           </Box>
         </Root>
       </Container>
-      {error ? (
+      {!success ? (
         <RecipientSuccess
           text="Uh-oh! We Were Unable To Upload Your List"
           subText={`It Looks Like There Was An Error On Line ${counter}. Please Make Sure Your CSV Matches The Example And Try Again.`}
           open={open}
-          setOpen={setOpen}
+          onClose={onClose}
         />
       ) : (
         <RecipientSuccess
           text="Recipient List Upload Successful!"
           subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting. Don't Worry, If You Decide Not To, You Can Send It Later."
           open={open}
-          setOpen={setOpen}
-          onSuccess={onSuccess}
-          success={success}
           onClose={onClose}
-          //added onSuccess and success because the linter got mad because success 'was not used'
         />
       )}
       ;

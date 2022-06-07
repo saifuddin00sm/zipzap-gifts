@@ -6,6 +6,37 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
+const RecipientSuccess = ({ text, subText, open, onClose }) => {
+  const handleClose = () => onClose();
+
+  return (
+    <Modal open={open}>
+      <Box sx={style}>
+        <Box className="closeBtn">
+          <IconButton className="mainBtn" onClick={handleClose}>
+            <ClearIcon sx={{ color: "#ffff" }} />
+          </IconButton>
+        </Box>
+        <Box sx={{ p: 4, paddingTop: 0 }}>
+          <Typography variant="h5" className="successHead">
+            {text}
+          </Typography>
+          <Typography variant="body2" className="subHead">
+            {subText}
+          </Typography>
+          <Box sx={{ textAlign: "center" }}>
+            <Button id="confetti-id" variant="contained" onClick={handleClose}>
+              Send Email
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </Modal>
+  );
+};
+
+export default RecipientSuccess;
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -47,42 +78,3 @@ const style = {
     marginBottom: "20px",
   },
 };
-
-const RecipientSuccess = ({
-  text,
-  subText,
-  open,
-  setOpen,
-  onSuccess,
-  success,
-  onClose,
-}) => {
-  const handleClose = () => onClose();
-
-  return (
-    <Modal open={open}>
-      <Box sx={style}>
-        <Box className="closeBtn">
-          <IconButton className="mainBtn" onClick={handleClose}>
-            <ClearIcon sx={{ color: "#ffff" }} />
-          </IconButton>
-        </Box>
-        <Box sx={{ p: 4, paddingTop: 0 }}>
-          <Typography variant="h5" className="successHead">
-            {text}
-          </Typography>
-          <Typography variant="body2" className="subHead">
-            {subText}
-          </Typography>
-          <Box sx={{ textAlign: "center" }}>
-            <Button id="confetti-id" variant="contained" onClick={handleClose}>
-              Send Email
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </Modal>
-  );
-};
-
-export default RecipientSuccess;
