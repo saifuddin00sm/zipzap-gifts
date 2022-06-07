@@ -165,7 +165,7 @@ const ImportList = () => {
           subText={`It Looks Like There Was An Error On Line ${counter}. Please Make Sure Your CSV Matches The Example And Try Again.`}
           open={open}
           onClose={onClose}
-          success={success}
+          button={false}
         />
       ) : (
         <RecipientSuccess
@@ -173,7 +173,7 @@ const ImportList = () => {
           subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting. Don't Worry, If You Decide Not To, You Can Send It Later."
           open={open}
           onClose={onClose}
-          success={success}
+          button={true}
         />
       )}
       ;

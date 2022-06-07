@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const RecipientSuccess = ({ text, subText, open, onClose, success }) => {
+const RecipientSuccess = ({ text, subText, open, onClose, button }) => {
   const handleClose = () => onClose();
 
   return (
@@ -25,7 +25,7 @@ const RecipientSuccess = ({ text, subText, open, onClose, success }) => {
             {subText}
           </Typography>
           <Box sx={{ textAlign: "center" }}>
-            {success ? (
+            {button ? (
               <Button
                 id="confetti-id"
                 variant="contained"
@@ -44,6 +44,9 @@ const RecipientSuccess = ({ text, subText, open, onClose, success }) => {
 export default RecipientSuccess;
 
 const style = {
+  textAlign: "center",
+  borderRadius: "9px",
+  width: "40%",
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -78,7 +81,7 @@ const style = {
   "& .subHead": {
     fontStyle: "normal",
     fontWeight: 300,
-    fontSize: "20px",
+    fontSize: "16px",
     lineHeight: "30px",
     color: "#000000",
     marginBottom: "20px",
