@@ -11,7 +11,7 @@ import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
+// import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -229,7 +229,7 @@ const RecipientProfile = () => {
                       aria-label="upload picture"
                       component="span"
                     >
-                      <PhotoCamera />
+                      {/* <PhotoCamera /> */}
                     </IconButton>
                   </label>
                 </Box>
