@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import AddRecipient from "./AddRecipient";
 import Box from "@mui/material/Box";
@@ -7,45 +7,58 @@ import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import RecipientSuccess from "./RecipientSuccess";
 
 const DeleteModal = ({ open, setOpen }) => {
   let navigate = useNavigate();
+  const [success, setSuccess] = useState(false);
   const onClose = () => {
     setOpen(false);
-    navigate("/recipients");
+    // navigate("/recipients");
+    setSuccess(true);
   };
   return (
-    <Modal open={open} onClose={onClose}>
-      <Box sx={style}>
-        <Box className="closeBtn">
-          <IconButton className="mainBtn" onClick={() => setOpen(false)}>
-            <ClearIcon sx={{ color: "#ffff" }} />
-          </IconButton>
-        </Box>
-        <Box sx={{ p: 4, paddingTop: 0 }}>
-          <Typography
-            variant="h5"
-            className="successHead"
-            sx={{ textAlign: "center" }}
-          >
-            Are You Sure You Want To Delete This Recipient?
-          </Typography>
-          <Box sx={{ textAlign: "center", padding: "20px 0 60px 0" }}>
-            <Button variant="contained" onClick={onClose}>
-              Confirm Delete
-            </Button>
+    <>
+      <Modal open={open} onClose={onClose}>
+        <Box sx={style}>
+          <Box className="closeBtn">
+            <IconButton className="mainBtn" onClick={() => setOpen(false)}>
+              <ClearIcon sx={{ color: "#ffff" }} />
+            </IconButton>
           </Box>
-          <Typography
-            variant="h5"
-            sx={{ textAlign: "center", fontWeight: 500, fontSize: "12px" }}
-          >
-            They Will Be Removed From Your Recipient List And Any Scheduled
-            Gifts For Them Will Be Voided. You Will Be Refunded For Any Gifts
-            You Have Already Paid For, For This Recipient
-          </Typography>
+          <Box sx={{ p: 4, paddingTop: 0 }}>
+            <Typography
+              variant="h5"
+              className="successHead"
+              sx={{ textAlign: "center" }}
+            >
+              Are You Sure You Want To Delete This Recipient?
+            </Typography>
+            <Box sx={{ textAlign: "center", padding: "20px 0 60px 0" }}>
+              <Button variant="contained" onClick={onClose}>
+                Confirm Delete
+              </Button>
+            </Box>
+            <Typography
+              variant="h5"
+              sx={{ textAlign: "center", fontWeight: 500, fontSize: "12px" }}
+            >
+              They Will Be Removed From Your Recipient List And Any Scheduled
+              Gifts For Them Will Be Voided. You Will Be Refunded For Any Gifts
+              You Have Already Paid For, For This Recipient
+            </Typography>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+      <RecipientSuccess
+        text="Recipient Deletion Successful!"
+        subText="Successfully Deleted This Recipient. You Will Be Refunded For Any You Will Be Refunded For Any Gifts You Have Already Paid For, For This Recipient "
+        open={success}
+        setOpen={setSuccess}
+        close={() => (setSuccess(false), navigate("/recipients"))}
+        button={false}
+      />
+    </>
   );
 };
 export default DeleteModal;

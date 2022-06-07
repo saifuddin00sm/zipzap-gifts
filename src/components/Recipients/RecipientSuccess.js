@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 const style = {
+  borderRadius: "9px",
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -48,7 +49,7 @@ const style = {
   },
 };
 
-const RecipientSuccess = ({ text, subText, open, close }) => {
+const RecipientSuccess = ({ text, subText, open, close, button }) => {
   return (
     <Modal open={open}>
       <Box sx={style}>
@@ -65,9 +66,11 @@ const RecipientSuccess = ({ text, subText, open, close }) => {
             {subText}
           </Typography>
           <Box sx={{ textAlign: "center" }}>
-            <Button id="confetti-id" variant="contained" onClick={close}>
-              Send Email
-            </Button>
+            {button ? (
+              <Button id="confetti-id" variant="contained" onClick={close}>
+                Send Email
+              </Button>
+            ) : null}
           </Box>
         </Box>
       </Box>
