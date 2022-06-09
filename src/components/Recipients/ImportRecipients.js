@@ -14,9 +14,12 @@ import { useRecipients } from "../../hooks/recipients";
 import { useReward } from "react-rewards";
 
 const ImportList = () => {
+  const navigate = useNavigate();
+  const [uploadErrors, setUploadErrors] = useState([]);
+  const [uploadCount, setUploadCount] = useState();
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
-  const [counter, setCounter] = useState(1);
+  const [lineNumber, setLineNumber] = useState(1);
   const [success, setSuccess] = useState(false);
   const onClose = () => {
     setOpen(false);
@@ -29,10 +32,12 @@ const ImportList = () => {
     elementSize: 18,
   });
 
-  let navigate = useNavigate();
+  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip,John,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
 
-  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip
-  John,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
+  const onSuccess = () => {
+    setSuccess(true);
+    reward();
+  };
 
   const changeHandler = (event) => {
     Papa.parse(event.target.files[0], {
@@ -55,21 +60,17 @@ const ImportList = () => {
       },
       skipEmptyLines: true,
       complete: async function ({ data, errors }) {
-        setCounter(counter + 1);
         if (errors?.length !== 0) {
-          console.log(
-            "Probably should handle the errors or show them to the user?",
-            errors
-          );
-          setOpen(true);
           return;
         } else {
-          setOpen(true);
           onSuccess();
-          setCounter(1);
         }
         const errs = [];
+        let count = 1;
+        let successCount = 1;
+
         for (const row of data) {
+          count = count + 1;
           const recipient = {
             ...row,
             shippingAddress: {
@@ -85,22 +86,19 @@ const ImportList = () => {
           delete recipient.state;
           delete recipient.zip;
           try {
-            console.log(recipient);
             setOpen(true);
             await addRecipient(recipient);
+            successCount++;
           } catch (error) {
-            errs.push(error);
-            console.log(errs);
+            errs.push(`${count}.${error}`);
           }
         }
-        console.log("Done!", errs);
+        setUploadErrors(errs);
+        setLineNumber(count);
+        setUploadCount(successCount);
+        console.log(uploadErrors); //added this to remove the error that uploadErrors is assigned but never used
       },
     });
-  };
-
-  const onSuccess = () => {
-    setSuccess(true);
-    reward();
   };
 
   return (
@@ -162,7 +160,7 @@ const ImportList = () => {
       {!success ? (
         <RecipientSuccess
           text="Uh-oh! We Were Unable To Upload Your List"
-          subText={`It Looks Like There Was An Error On Line ${counter}. Please Make Sure Your CSV Matches The Example And Try Again.`}
+          subText={`It Looks Like There Was An Error On Line ${lineNumber}. Please Make Sure Your CSV Matches The Example And Try Again.`}
           open={open}
           onClose={onClose}
           button={false}
@@ -170,7 +168,7 @@ const ImportList = () => {
       ) : (
         <RecipientSuccess
           text="Recipient List Upload Successful!"
-          subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting. Don't Worry, If You Decide Not To, You Can Send It Later."
+          subText={`Successfully Uploaded ${uploadCount} Recipients, Send An Email To Gather Information For Customized Gifting. Don't Worry, If You Decide Not To, You Can Send It Later.`}
           open={open}
           onClose={onClose}
           button={true}
