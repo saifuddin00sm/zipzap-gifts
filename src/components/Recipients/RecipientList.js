@@ -220,12 +220,7 @@ const RecipientList = () => {
           button={true}
         />
       ) : (
-        <RecipientModal
-          open={open}
-          setOpen={setOpen}
-          onSuccess={onSuccess}
-          button={false}
-        />
+        <RecipientModal open={open} setOpen={setOpen} onSuccess={onSuccess} />
       )}
     </>
   );

@@ -15,11 +15,11 @@ import { useReward } from "react-rewards";
 
 const ImportList = () => {
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars -- We're going to use the errors later`
   const [uploadErrors, setUploadErrors] = useState([]);
   const [uploadCount, setUploadCount] = useState();
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
-  const [lineNumber, setLineNumber] = useState(1);
   const [success, setSuccess] = useState(false);
   const onClose = () => {
     setOpen(false);
@@ -32,12 +32,7 @@ const ImportList = () => {
     elementSize: 18,
   });
 
-  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip,John,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
-
-  const onSuccess = () => {
-    setSuccess(true);
-    reward();
-  };
+  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip\nJohn,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
 
   const changeHandler = (event) => {
     Papa.parse(event.target.files[0], {
@@ -61,13 +56,16 @@ const ImportList = () => {
       skipEmptyLines: true,
       complete: async function ({ data, errors }) {
         if (errors?.length !== 0) {
-          return;
+          console.log(
+            "Probably should handle the errors or show them to the user?",
+            errors
+          );
         } else {
-          onSuccess();
+          setSuccess(true);
         }
         const errs = [];
         let count = 1;
-        let successCount = 1;
+        let successCount = 0;
 
         for (const row of data) {
           count = count + 1;
@@ -87,6 +85,8 @@ const ImportList = () => {
           delete recipient.zip;
           try {
             setOpen(true);
+            reward();
+            console.log(success);
             await addRecipient(recipient);
             successCount++;
           } catch (error) {
@@ -94,11 +94,10 @@ const ImportList = () => {
           }
         }
         setUploadErrors(errs);
-        setLineNumber(count);
         setUploadCount(successCount);
-        console.log(uploadErrors); //added this to remove the error that uploadErrors is assigned but never used
       },
     });
+    console.log(success);
   };
 
   return (
@@ -160,7 +159,20 @@ const ImportList = () => {
       {!success ? (
         <RecipientSuccess
           text="Uh-oh! We Were Unable To Upload Your List"
-          subText={`It Looks Like There Was An Error On Line ${lineNumber}. Please Make Sure Your CSV Matches The Example And Try Again.`}
+          subText={
+            <>
+              It Looks Like There Was An Error. Please Make Sure Your CSV
+              Matches The Template
+              <br />
+              {uploadErrors.length > 0 &&
+                uploadErrors.map((e) => (
+                  <Typography key={e} component="span" color="error">
+                    {e}
+                    <br />
+                  </Typography>
+                ))}
+            </>
+          }
           open={open}
           onClose={onClose}
           button={false}
@@ -168,7 +180,21 @@ const ImportList = () => {
       ) : (
         <RecipientSuccess
           text="Recipient List Upload Successful!"
-          subText={`Successfully Uploaded ${uploadCount} Recipients, Send An Email To Gather Information For Customized Gifting. Don't Worry, If You Decide Not To, You Can Send It Later.`}
+          subText={
+            <>
+              Successfully Uploaded {uploadCount} Recipients, Send An Email To
+              Gather Information For Customized Gifting. Don't Worry, If You
+              Decide Not To, You Can Send It Later.
+              <br />
+              {uploadErrors.length > 0 &&
+                uploadErrors.map((e) => (
+                  <Typography key={e} component="span" color="error">
+                    {e}
+                    <br />
+                  </Typography>
+                ))}
+            </>
+          }
           open={open}
           onClose={onClose}
           button={true}
