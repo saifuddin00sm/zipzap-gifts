@@ -56,12 +56,8 @@ const ImportList = () => {
       skipEmptyLines: true,
       complete: async function ({ data, errors }) {
         if (errors?.length !== 0) {
-          console.log(
-            "Probably should handle the errors or show them to the user?",
-            errors
-          );
-        } else {
-          setSuccess(true);
+          setOpen(true);
+          return;
         }
         const errs = [];
         let count = 1;
@@ -84,8 +80,6 @@ const ImportList = () => {
           delete recipient.state;
           delete recipient.zip;
           try {
-            setOpen(true);
-            reward();
             await addRecipient(recipient);
             successCount++;
           } catch (error) {
@@ -94,6 +88,8 @@ const ImportList = () => {
         }
         setUploadErrors(errs);
         setUploadCount(successCount);
+        setOpen(true);
+        reward();
       },
     });
   };
