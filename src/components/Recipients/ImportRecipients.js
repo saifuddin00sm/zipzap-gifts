@@ -56,6 +56,9 @@ const ImportList = () => {
       skipEmptyLines: true,
       complete: async function ({ data, errors }) {
         if (errors?.length !== 0) {
+          setUploadErrors(
+            errors.map(({ row, message }) => `Row ${row}: ${message}`)
+          );
           setOpen(true);
           return;
         }
@@ -83,11 +86,16 @@ const ImportList = () => {
             await addRecipient(recipient);
             successCount++;
           } catch (error) {
-            errs.push(`${count}.${error}`);
+            if (error?.errors?.length > 0) {
+              errs.push(`Row ${count}: ${error.errors[0]?.message}`);
+            } else {
+              errs.push(`Row ${count}: ${error}`);
+            }
           }
         }
         setUploadErrors(errs);
         setUploadCount(successCount);
+        setSuccess(true);
         setOpen(true);
         reward();
       },
