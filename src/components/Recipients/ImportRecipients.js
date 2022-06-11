@@ -86,7 +86,6 @@ const ImportList = () => {
           try {
             setOpen(true);
             reward();
-            console.log(success);
             await addRecipient(recipient);
             successCount++;
           } catch (error) {
@@ -97,7 +96,6 @@ const ImportList = () => {
         setUploadCount(successCount);
       },
     });
-    console.log(success);
   };
 
   return (
