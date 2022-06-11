@@ -1,7 +1,7 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { createRecipient, createAddress } from "../graphql/mutations";
-import format from "date-fns/format";
+import { format, isDate } from "date-fns";
 
 const listRecipients = /* GraphQL */ `
   query ListRecipients(
@@ -97,10 +97,16 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
     return;
   }
   if (recipient.birthday) {
-    recipient.birthday = format(recipient.birthday, "yyyy-MM-dd");
+    const birthday = isDate(recipient.birthday)
+      ? recipient.birthday
+      : new Date(recipient.birthday);
+    recipient.birthday = format(birthday, "yyyy-MM-dd");
   }
   if (recipient.startDate) {
-    recipient.startDate = format(recipient.startDate, "yyyy-MM-dd");
+    const startDate = isDate(recipient.startDate)
+      ? recipient.startDate
+      : new Date(recipient.startDate);
+    recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
   const {
     data: {
@@ -134,7 +140,7 @@ const useRecipients = () => {
     isLoading,
     isError,
     error,
-    addRecipient: mutation.mutate,
+    addRecipient: mutation.mutateAsync,
   };
 };
 

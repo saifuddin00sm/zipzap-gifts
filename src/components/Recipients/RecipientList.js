@@ -216,7 +216,8 @@ const RecipientList = () => {
           text="Recipient Added Successfully!"
           subText="Press the button to send an email to gather information for customized gifting."
           open={open}
-          close={handleClose}
+          onClose={handleClose}
+          button={true}
         />
       ) : (
         <RecipientModal open={open} setOpen={setOpen} onSuccess={onSuccess} />
