@@ -5,23 +5,23 @@ import {
   IconMenu,
   View,
   Image,
-  IconCardGiftcard,
-  IconSupervisorAccount,
-  IconReceiptLong,
-  IconImportContacts,
-  IconAccountBox,
-  IconHelpOutline,
   IconHighlightOff,
 } from "@aws-amplify/ui-react";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { IconFullLogo } from "./../icons/IconFullLogo";
 
 const menu = [
-  { name: "Gift Dashboard", link: "/", Icon: IconCardGiftcard },
-  { name: "Recipients", link: "/recipients", Icon: IconSupervisorAccount },
-  { name: "Orders", link: "/orders", Icon: IconReceiptLong },
-  { name: "Gift Catalog", link: "/catalog", Icon: IconImportContacts },
-  { name: "Profile", link: "/profile", Icon: IconAccountBox },
-  { name: "Help", link: "/help", Icon: IconHelpOutline },
+  { name: "Gift Dashboard", link: "/", Icon: CardGiftcardIcon },
+  { name: "Recipients", link: "/recipients", Icon: SupervisorAccountIcon },
+  { name: "Orders", link: "/orders", Icon: ReceiptLongIcon },
+  { name: "Gift Catalog", link: "/catalog", Icon: ImportContactsIcon },
+  { name: "Profile", link: "/profile", Icon: AccountBoxIcon },
+  { name: "Help", link: "/help", Icon: HelpOutlineIcon },
   {
     name: "Sign Out",
     link: "/",
