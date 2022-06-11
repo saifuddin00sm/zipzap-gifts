@@ -187,9 +187,9 @@ const ImportList = () => {
           subText={
             <>
               Successfully Uploaded {uploadCount}{" "}
-              {uploadCount !== totalCount ? `of ${totalCount}` : ""}, Send An
-              Email To Gather Information For Customized Gifting. Don't Worry,
-              If You Decide Not To, You Can Send It Later.
+              {uploadCount !== totalCount ? `of ${totalCount}` : ""} Recipients,
+              Send An Email To Gather Information For Customized Gifting. Don't
+              Worry, If You Decide Not To, You Can Send It Later.
               <br />
               {uploadErrors.length > 0 &&
                 uploadErrors.map((e) => (
