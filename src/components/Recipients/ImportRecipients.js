@@ -18,7 +18,7 @@ const ImportList = () => {
   // eslint-disable-next-line no-unused-vars -- We're going to use the errors later`
   const [uploadErrors, setUploadErrors] = useState([]);
   const [uploadCount, setUploadCount] = useState();
-  const [totalCount, setTotalCount] = useState();
+  const [totalCount, setTotalCount] = useState(0);
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
   const [success, setSuccess] = useState(false);
@@ -64,7 +64,7 @@ const ImportList = () => {
           return;
         }
         const errs = [];
-        let count = 1;
+        let count = 0;
         let successCount = 0;
 
         for (const row of data) {
@@ -88,9 +88,9 @@ const ImportList = () => {
             successCount++;
           } catch (error) {
             if (error?.errors?.length > 0) {
-              errs.push(`Row ${count}: ${error.errors[0]?.message}`);
+              errs.push(`Row ${count + 1}: ${error.errors[0]?.message}`);
             } else {
-              errs.push(`Row ${count}: ${error}`);
+              errs.push(`Row ${count + 1}: ${error}`);
             }
           }
         }
