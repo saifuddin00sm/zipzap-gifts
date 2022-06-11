@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Header from "../Header";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import GiftDetails from "./GiftDetails";
@@ -211,9 +210,6 @@ const SendAGift = () => {
   return (
     <>
       <Container sx={{ px: 0 }} component="main">
-        <Header>
-          <Typography variant="h1">Send a Gift</Typography>
-        </Header>
         <Root ref={top}>
           <Box className="innerBox">
             <GiftStepper
