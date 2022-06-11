@@ -18,6 +18,7 @@ const ImportList = () => {
   // eslint-disable-next-line no-unused-vars -- We're going to use the errors later`
   const [uploadErrors, setUploadErrors] = useState([]);
   const [uploadCount, setUploadCount] = useState();
+  const [totalCount, setTotalCount] = useState();
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
   const [success, setSuccess] = useState(false);
@@ -57,7 +58,7 @@ const ImportList = () => {
       complete: async function ({ data, errors }) {
         if (errors?.length !== 0) {
           setUploadErrors(
-            errors.map(({ row, message }) => `Row ${row}: ${message}`)
+            errors.map(({ row, message }) => `Row ${row + 2}: ${message}`)
           );
           setOpen(true);
           return;
@@ -95,6 +96,7 @@ const ImportList = () => {
         }
         setUploadErrors(errs);
         setUploadCount(successCount);
+        setTotalCount(count);
         setSuccess(true);
         setOpen(true);
         reward();
@@ -184,9 +186,10 @@ const ImportList = () => {
           text="Recipient List Upload Successful!"
           subText={
             <>
-              Successfully Uploaded {uploadCount} Recipients, Send An Email To
-              Gather Information For Customized Gifting. Don't Worry, If You
-              Decide Not To, You Can Send It Later.
+              Successfully Uploaded {uploadCount}{" "}
+              {uploadCount !== totalCount ? `of ${totalCount}` : ""}, Send An
+              Email To Gather Information For Customized Gifting. Don't Worry,
+              If You Decide Not To, You Can Send It Later.
               <br />
               {uploadErrors.length > 0 &&
                 uploadErrors.map((e) => (
