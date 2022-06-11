@@ -140,7 +140,7 @@ const useRecipients = () => {
     isLoading,
     isError,
     error,
-    addRecipient: mutation.mutate,
+    addRecipient: mutation.mutateAsync,
   };
 };
 
