@@ -9,9 +9,9 @@ import { useQuery } from "react-query";
 import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
-import IconButton from "@mui/material/IconButton";
+// import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
+// import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -119,9 +119,9 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-const Input = styled("input")({
-  display: "none",
-});
+// const Input = styled("input")({
+//   display: "none",
+// });
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -221,7 +221,7 @@ const RecipientProfile = () => {
                   width="100px"
                   height="100px"
                 />
-                <Box className="pen">
+                {/* <Box className="pen">
                   <label htmlFor="icon-button-file">
                     <Input accept="image/*" id="icon-button-file" type="file" />
                     <IconButton
@@ -232,7 +232,7 @@ const RecipientProfile = () => {
                       <PhotoCamera />
                     </IconButton>
                   </label>
-                </Box>
+                </Box> */}
               </Box>
               <Box>
                 <Typography
