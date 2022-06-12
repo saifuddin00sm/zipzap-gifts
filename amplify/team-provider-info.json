@@ -26,7 +26,7 @@
         "stripe": {
           "secretsPathAmplifyAppId": "d2qe40666r920c",
           "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
-          "s3Key": "amplify-builds/stripe-74385564322f69354752-build.zip"
+          "s3Key": "amplify-builds/stripe-45484b42693032616c6c-build.zip"
         }
       }
     }

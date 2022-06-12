@@ -4,44 +4,104 @@ import Box from "@mui/material/Box";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import Papa from "papaparse";
 import TemplateTable from "./TemplateTable";
 import RecipientSuccess from "./RecipientSuccess";
-
-const Root = styled("div")(({ theme }) => ({
-  "& .upload": {
-    marginBottom: "40px",
-    "& .uploadContents": {
-      border: "1px solid #F1F1F1",
-      padding: "70px",
-      [theme.breakpoints.down("md")]: {
-        padding: "25px",
-      },
-    },
-    "& .uploadBtn": {
-      marginTop: "50px",
-      textAlign: "center",
-    },
-    "& .uploadHead": {
-      background: "#343436",
-      padding: "16px",
-      color: "#fff",
-    },
-  },
-}));
-
-const Input = styled("input")({
-  display: "none",
-});
+import { useRecipients } from "../../hooks/recipients";
+import { useReward } from "react-rewards";
 
 const ImportList = () => {
+  const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars -- We're going to use the errors later`
+  const [uploadErrors, setUploadErrors] = useState([]);
+  const [uploadCount, setUploadCount] = useState();
+  const [totalCount, setTotalCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const { addRecipient } = useRecipients();
+  const [success, setSuccess] = useState(false);
+  const onClose = () => {
+    setOpen(false);
+    navigate("/recipients");
+  };
+  const { reward } = useReward("confetti-id", "confetti", {
+    colors: ["#abc6bd", "#c5d5e2", "#abc4d6"],
+    startVelocity: 30,
+    spread: 85,
+    elementSize: 18,
+  });
 
-  const uploadFile = (e) => {
-    // TODO: make an api call to upload the file, onSuccess block put this setOpen method
-    setOpen(true);
+  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip\nJohn,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
+
+  const changeHandler = (event) => {
+    Papa.parse(event.target.files[0], {
+      header: true,
+      delimiter: ",",
+      transformHeader: (header) => {
+        const headers = {
+          firstname: "firstName",
+          lastname: "lastName",
+          // department: "department",
+          jobtitle: "jobTitle",
+          birthday: "birthday",
+          datestarted: "startDate",
+          address: "address1",
+          city: "city",
+          state: "state",
+          zip: "zip",
+        };
+        return headers?.[header.replace(/\s/g, "").toLowerCase()];
+      },
+      skipEmptyLines: true,
+      complete: async function ({ data, errors }) {
+        if (errors?.length !== 0) {
+          setUploadErrors(
+            errors.map(({ row, message }) => `Row ${row + 2}: ${message}`)
+          );
+          setOpen(true);
+          return;
+        }
+        const errs = [];
+        let count = 0;
+        let successCount = 0;
+
+        for (const row of data) {
+          count = count + 1;
+          const recipient = {
+            ...row,
+            shippingAddress: {
+              address1: row?.address1 || "",
+              city: row?.city || "",
+              state: row?.state || "",
+              zip: row?.zip || "",
+            },
+          };
+          delete recipient.undefined;
+          delete recipient.address1;
+          delete recipient.city;
+          delete recipient.state;
+          delete recipient.zip;
+          try {
+            await addRecipient(recipient);
+            successCount++;
+          } catch (error) {
+            if (error?.errors?.length > 0) {
+              errs.push(`Row ${count + 1}: ${error.errors[0]?.message}`);
+            } else {
+              errs.push(`Row ${count + 1}: ${error}`);
+            }
+          }
+        }
+        setUploadErrors(errs);
+        setUploadCount(successCount);
+        setTotalCount(count);
+        setSuccess(true);
+        setOpen(true);
+        reward();
+      },
+    });
   };
 
   return (
@@ -78,7 +138,7 @@ const ImportList = () => {
                     id="contained-button-file"
                     multiple
                     type="file"
-                    onChange={uploadFile}
+                    onChange={changeHandler}
                   />
                   <Button component="span" size="large" variant="contained">
                     <FileUploadIcon sx={{ width: "2.5em", height: "2.5em" }} />
@@ -89,22 +149,91 @@ const ImportList = () => {
           </Box>
           <Box className="download">
             <Box sx={{ marginBottom: "20px" }}>
-              <Button>Download Template</Button>
+              <Button href={csvFile} download="zip_zap_template.csv">
+                Download Template
+              </Button>
             </Box>
+
             <Box className="templateTable">
               <TemplateTable />
             </Box>
           </Box>
         </Root>
       </Container>
-      <RecipientSuccess
-        text="Recipient List Upload Successful!"
-        subText="Successfully Uploaded All Recipients, Send An Email To Gather Information For Customized Gifting"
-        open={open}
-        setOpen={setOpen}
-      />
+      {!success ? (
+        <RecipientSuccess
+          text="Uh-oh! We Were Unable To Upload Your List"
+          subText={
+            <>
+              It Looks Like There Was An Error. Please Make Sure Your CSV
+              Matches The Template
+              <br />
+              {uploadErrors.length > 0 &&
+                uploadErrors.map((e) => (
+                  <Typography key={e} component="span" color="error">
+                    {e}
+                    <br />
+                  </Typography>
+                ))}
+            </>
+          }
+          open={open}
+          onClose={onClose}
+          button={false}
+        />
+      ) : (
+        <RecipientSuccess
+          text="Recipient List Upload Successful!"
+          subText={
+            <>
+              Successfully Uploaded {uploadCount}{" "}
+              {uploadCount !== totalCount ? `of ${totalCount}` : ""} Recipients,
+              Send An Email To Gather Information For Customized Gifting. Don't
+              Worry, If You Decide Not To, You Can Send It Later.
+              <br />
+              {uploadErrors.length > 0 &&
+                uploadErrors.map((e) => (
+                  <Typography key={e} component="span" color="error">
+                    {e}
+                    <br />
+                  </Typography>
+                ))}
+            </>
+          }
+          open={open}
+          onClose={onClose}
+          button={true}
+        />
+      )}
+      ;
     </>
   );
 };
 
 export default ImportList;
+
+const Root = styled("div")(({ theme }) => ({
+  "& .upload": {
+    marginBottom: "40px",
+    "& .uploadContents": {
+      border: "1px solid #F1F1F1",
+      padding: "70px",
+      [theme.breakpoints.down("md")]: {
+        padding: "25px",
+      },
+    },
+    "& .uploadBtn": {
+      marginTop: "50px",
+      textAlign: "center",
+    },
+    "& .uploadHead": {
+      background: "#343436",
+      padding: "16px",
+      color: "#fff",
+    },
+  },
+}));
+
+const Input = styled("input")({
+  display: "none",
+});

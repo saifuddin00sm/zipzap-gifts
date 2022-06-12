@@ -1,12 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
+import Button from "@mui/material/Button";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import CelebrationIcon from "@mui/icons-material/Celebration";
+import { format } from "date-fns";
 import "react-circular-progressbar/dist/styles.css";
 
 const Root = styled("div")(({ theme }) => ({
@@ -22,6 +25,7 @@ const Root = styled("div")(({ theme }) => ({
       fontWeight: 500,
       fontSize: "22px",
       lineHeight: "33px",
+      marginBottom: "15px",
     },
     "& .subTitle": {
       textTransform: "capitalize",
@@ -32,7 +36,48 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
+const SmallCards = styled("div")(({ theme }) => ({
+  maxWidth: "91px",
+  maxHeight: "153px",
+  background: "#F1F1F1",
+  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+  borderRadius: "15px",
+  padding: "10px",
+  "& .giftTitle": {
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: "9px",
+    lineHeight: "12px",
+    textAlign: "center",
+    textTransform: "capitalize",
+    color: "#000000",
+    height: "21px",
+    marginBottom: "10px",
+  },
+  "& .iconBox": {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "51px",
+    margin: "5px 0px",
+  },
+  "& .date": {
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: "20px",
+    lineHeight: "30px",
+    textAlign: "center",
+    textTransform: "capitalize",
+    color: "#000000",
+    display: "flex",
+    height: "51px",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+}));
+
 const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
+  const navigate = useNavigate();
   return (
     <Root>
       <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -98,34 +143,65 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
         <Grid item lg={6} xl={6} md={6} xs={12} sm={12}>
           <Box className="gift_cards">
             {defaultGifts.length > 0 &&
-              defaultGifts.map(
-                ({ status, giftType, image: { src, alt } = {}, id }) => (
-                  <Card
-                    key={id}
-                    sx={{
-                      mb: 2,
-                      background: "#FFFFFF",
-                      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    <CardContent>
-                      <Typography className="title" variant="h5">
-                        {giftType}
-                      </Typography>
-                      <Typography className="subTitle" variant="h5">
-                        {status.map((event) => (
-                          <React.Fragment key={event}>
-                            {event}
-                            <br />
-                          </React.Fragment>
-                        ))}
-                      </Typography>
-                      <img height="200" width="230" src={src} alt={alt} />
-                    </CardContent>
-                  </Card>
-                )
-              )}
+              defaultGifts.map(({ giftType, gifts, id }) => (
+                <Card
+                  key={id}
+                  sx={{
+                    mb: 2,
+                    background: "#FFFFFF",
+                    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <CardContent>
+                    <Typography className="title" variant="h5">
+                      {giftType}
+                    </Typography>
+                    <Box sx={{ mb: 4 }}>
+                      <Grid
+                        sx={{ justifyContent: "center" }}
+                        container
+                        rowSpacing={2}
+                        columnSpacing={{ xs: 3, sm: 3, md: 3 }}
+                      >
+                        {gifts.length === 0 ? (
+                          <Grid item>
+                            <Box>
+                              <Typography>
+                                {giftType === "Upcoming Holidays"
+                                  ? "All Holiday gifts are scheduled, way to go! "
+                                  : "All recipient events are scheduled this month, way to go! Everyone is taken care of! "}
+                                <CelebrationIcon sx={{ fontSize: "30px" }} />
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        ) : (
+                          gifts.map(({ name, date, icon, id }) => (
+                            <Grid item key={id}>
+                              <SmallCards>
+                                <Typography className="giftTitle">
+                                  {name}
+                                </Typography>
+                                <Box className="iconBox">{icon}</Box>
+                                <Typography variant="h6" className="date">
+                                  {format(new Date(date), "MMM Qo")}
+                                </Typography>
+                              </SmallCards>
+                            </Grid>
+                          ))
+                        )}
+                      </Grid>
+                    </Box>
+                    <Button
+                      onClick={() => navigate("gifts")}
+                      size="small"
+                      variant="contained"
+                    >
+                      Schedule a gift
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
           </Box>
         </Grid>
       </Grid>
