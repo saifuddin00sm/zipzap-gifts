@@ -1,9 +1,9 @@
 /* Amplify Params - DO NOT EDIT
-  API_ZIPZAP_GRAPHQLAPIENDPOINTOUTPUT
-  API_ZIPZAP_GRAPHQLAPIIDOUTPUT
-  ENV
-  REGION
-Amplify Params - DO NOT EDIT */ /*
+	API_ZIPZAP_GRAPHQLAPIENDPOINTOUTPUT
+	API_ZIPZAP_GRAPHQLAPIIDOUTPUT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT *//*
 Copyright 2017 - 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
     http://aws.amazon.com/apache2.0/
@@ -11,11 +11,10 @@ or in the "license" file accompanying this file. This file is distributed on an 
 See the License for the specific language governing permissions and limitations under the License.
 */
 
-import aws from "aws-sdk";
-import express from "express";
-import bodyParser from "body-parser";
-import awsServerlessExpressMiddleware from "aws-serverless-express/middleware";
-import Stripe from "stripe";
+const aws = require("aws-sdk");
+const express = require("express");
+const bodyParser = require("body-parser");
+const awsServerlessExpressMiddleware = require("aws-serverless-express/middleware");
 
 // declare a new express app
 const app = express();
@@ -29,19 +28,19 @@ app.use(function (req, res, next) {
   next();
 });
 
-const { Parameters } = await new aws.SSM()
-  .getParameters({
-    Names: ["STRIPE_KEY"].map((secretName) => process.env[secretName]),
-    WithDecryption: true,
-  })
-  .promise();
-const stripe = Stripe(Parameters.pop().Value);
-
 // Returns a Stripe clientSecret associated with a customer that is either
 // passed in the request body as "customerID" or creates a new customer in
 // Stripe with the "name" parameter and returns the new customerID to be
 // associated with the calling user.
 app.post("/secret", async function (req, res) {
+  const { Parameters } = await new aws.SSM()
+    .getParameters({
+      Names: ["STRIPE_KEY"].map((secretName) => process.env[secretName]),
+      WithDecryption: true,
+    })
+    .promise();
+  const stripe = require("stripe")(Parameters.pop().Value);
+
   const { name } = req.body;
   let customerID = req.body.customerID;
 
@@ -70,4 +69,4 @@ app.listen(3000, function () {
 // Export the app object. When executing the application local this does nothing. However,
 // to port it to AWS Lambda we will create a wrapper around that will load the app from
 // this file
-export default app;
+module.exports = app;
