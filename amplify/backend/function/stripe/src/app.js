@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and limitations 
 import aws from "aws-sdk";
 import express from "express";
 import bodyParser from "body-parser";
-import awsServerlessExpressMiddleware from "aws-serverless-express/middleware";
+import awsServerlessExpressMiddleware from "aws-serverless-express/middleware.js";
 import Stripe from "stripe";
 
 // declare a new express app
