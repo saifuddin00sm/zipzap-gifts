@@ -5,7 +5,13 @@
       "name": "/secret",
       "lambdaFunction": "stripe",
       "permissions": {
-        "setting": "open"
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
       }
     }
   }

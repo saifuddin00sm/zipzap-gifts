@@ -40,6 +40,7 @@ export const getUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -70,6 +71,7 @@ export const listUsers = /* GraphQL */ `
         }
         profilePhoto
         accessGroups
+        stripeID
         createdAt
         updatedAt
         companyUsersId
@@ -104,6 +106,7 @@ export const getCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId

@@ -40,6 +40,7 @@ export const onCreateUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -86,6 +87,7 @@ export const onUpdateUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -132,6 +134,7 @@ export const onDeleteUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -164,6 +167,7 @@ export const onCreateCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -247,6 +251,7 @@ export const onUpdateCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -330,6 +335,7 @@ export const onDeleteCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId

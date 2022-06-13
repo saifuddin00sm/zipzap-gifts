@@ -16,8 +16,8 @@ type User
   phoneNumber: AWSPhone
   company: Company @belongsTo
   profilePhoto: String
-  # creditCards: [CreditCard] @hasMany
   accessGroups: [String]
+  stripeID: String
 }
 
 type Company
