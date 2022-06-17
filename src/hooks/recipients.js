@@ -3,7 +3,6 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   createRecipient,
   createAddress,
-  deleteAddress,
   deleteRecipient,
 } from "../graphql/mutations";
 import format from "date-fns/format";
