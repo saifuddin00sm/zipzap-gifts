@@ -5,12 +5,11 @@ import Container from "@mui/material/Container";
 import Header from "../../Header";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
-import { useRecipients } from "../../../hooks/recipients";
 import { useQuery } from "react-query";
 import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
-import IconButton from "@mui/material/IconButton";
+// import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 // import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import PropTypes from "prop-types";
@@ -120,10 +119,6 @@ const Root = styled("div")(({ theme }) => ({
     },
   },
 }));
-
-const Input = styled("input")({
-  display: "none",
-});
 
 function TabPanel({ children, value, index, ...other }) {
   return (
