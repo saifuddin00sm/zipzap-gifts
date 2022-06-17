@@ -18,6 +18,7 @@ import Tab from "@mui/material/Tab";
 import GeneralInfo from "./GeneralInfo";
 import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
+import EditRecipientProfile from "./EditRecipient";
 
 // dummy data
 const giftProfileData = {
@@ -159,6 +160,7 @@ const tabIndecators = {
 const RecipientProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isEdit, setIsEdit] = useState(false);
   const { pathname } = location;
   const id = pathname.split("/")[2];
   const {
@@ -306,7 +308,19 @@ const RecipientProfile = () => {
                 <Typography variant="h5" className="titles">
                   General Information
                 </Typography>
-                <GeneralInfo info={recipient} />
+                {!isEdit ? (
+                  <GeneralInfo
+                    info={recipient}
+                    isEdit={isEdit}
+                    setIsEdit={setIsEdit}
+                  />
+                ) : (
+                  <EditRecipientProfile
+                    info={recipient}
+                    isEdit={isEdit}
+                    setIsEdit={setIsEdit}
+                  />
+                )}
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>

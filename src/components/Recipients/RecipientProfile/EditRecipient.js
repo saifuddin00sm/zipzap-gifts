@@ -3,8 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import EditRecipientProfile from "./EditRecipient";
-import { useNavigate } from "react-router-dom";
+import { Input } from "@mui/material";
 
 const Root = styled("div")(({ theme }) => ({
   marginTop: "20px",
@@ -22,9 +21,8 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
+const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
   const {
-    id,
     birthday,
     shippingAddress: { address1, address2, city, state, zip } = {},
     jobTitle,
@@ -32,43 +30,41 @@ const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
     department,
   } = info;
 
-  let navigate = useNavigate();
-
   const handleClick = () => {
-    setIsEdit(true);
+    setIsEdit(false);
   };
 
   return (
     <Root>
       <Box className="infos">
         <Typography className="keys">Birthday</Typography>
-        <Typography>{birthday === null ? "N/A" : birthday}</Typography>
+        <Input label={info.birthday}>
+          {birthday === null ? "N/A" : birthday}
+        </Input>
       </Box>
       <Box className="infos">
         <Typography className="keys">Address</Typography>
-        <Typography>{`${address1}${
+        <Input>{`${address1}${
           address2 ? ` ${address2}` : ""
-        }, ${city}, ${state}, ${zip}`}</Typography>
+        }, ${city}, ${state}, ${zip}`}</Input>
       </Box>
       <Box className="infos">
         <Typography className="keys">Job Title</Typography>
-        <Typography>{jobTitle === null ? "N/A" : jobTitle}</Typography>
+        <Input>{jobTitle === null ? "N/A" : jobTitle}</Input>
       </Box>
       <Box className="infos">
         <Typography className="keys">Date Started</Typography>
-        <Typography>{startDate === null ? "N/A" : startDate}</Typography>
+        <Input>{startDate === null ? "N/A" : startDate}</Input>
       </Box>
       <Box className="infos">
         <Typography className="keys">Department</Typography>
-        <Typography>
-          {department?.name === null ? "N/A" : department?.name}
-        </Typography>
+        <Input>{department?.name === null ? "N/A" : department?.name}</Input>
       </Box>
       <Box>
-        <Button onClick={handleClick}>Edit Information</Button>
+        <Button onClick={handleClick}>Save Changes</Button>
       </Box>
     </Root>
   );
 };
 
-export default GeneralInfo;
+export default EditRecipientProfile;
