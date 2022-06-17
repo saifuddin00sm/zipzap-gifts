@@ -117,8 +117,8 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
 };
 
-const removeRecipient = async ({ id }) => {
-  await API.graphql(graphqlOperation(deleteRecipient, { input: id }));
+const removeRecipient = async (id) => {
+  await API.graphql(graphqlOperation(deleteRecipient, { input: { id } }));
 };
 
 const useRecipients = () => {
@@ -137,12 +137,20 @@ const useRecipients = () => {
     },
   });
 
+  const removeMutation = useMutation(removeRecipient, {
+    onSuccess: () => {
+      // Invalidate and refresh all of the recipients queries
+      queryClient.invalidateQueries("recipients");
+    },
+  });
+
   return {
     recipients,
     isLoading,
     isError,
     error,
     addRecipient: mutation.mutate,
+    removeRecipient: removeMutation.mutateAsync,
   };
 };
 

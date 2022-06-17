@@ -5,6 +5,7 @@ import Container from "@mui/material/Container";
 import Header from "../../Header";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
+import { useRecipients } from "../../../hooks/recipients";
 import { useQuery } from "react-query";
 import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";

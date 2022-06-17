@@ -21,7 +21,7 @@ const DeleteModal = ({ open, setOpen, recipientId }) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    await removeRecipient(["id", recipientId]);
+    await removeRecipient(recipientId);
     setSuccess(true);
   };
 
