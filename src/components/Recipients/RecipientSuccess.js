@@ -6,6 +6,43 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
+const RecipientSuccess = ({ text, subText, open, onClose, button }) => {
+  const handleClose = () => onClose();
+
+  return (
+    <Modal open={open}>
+      <Box sx={style}>
+        <Box className="closeBtn">
+          <IconButton className="mainBtn" onClick={handleClose}>
+            <ClearIcon sx={{ color: "#ffff" }} />
+          </IconButton>
+        </Box>
+        <Box sx={{ p: 4, paddingTop: 0 }}>
+          <Typography variant="h5" className="successHead">
+            {text}
+          </Typography>
+          <Typography variant="body2" className="subHead">
+            {subText}
+          </Typography>
+          <Box sx={{ textAlign: "center" }}>
+            {button ? (
+              <Button
+                id="confetti-id"
+                variant="contained"
+                onClick={handleClose}
+              >
+                Send Email
+              </Button>
+            ) : null}
+          </Box>
+        </Box>
+      </Box>
+    </Modal>
+  );
+};
+
+export default RecipientSuccess;
+
 const style = {
   borderRadius: "9px",
   position: "absolute",
@@ -42,40 +79,9 @@ const style = {
   "& .subHead": {
     fontStyle: "normal",
     fontWeight: 300,
-    fontSize: "20px",
+    fontSize: "16px",
     lineHeight: "30px",
     color: "#000000",
     marginBottom: "20px",
   },
 };
-
-const RecipientSuccess = ({ text, subText, open, close, button }) => {
-  return (
-    <Modal open={open}>
-      <Box sx={style}>
-        <Box className="closeBtn">
-          <IconButton className="mainBtn" onClick={close}>
-            <ClearIcon sx={{ color: "#ffff" }} />
-          </IconButton>
-        </Box>
-        <Box sx={{ p: 4, paddingTop: 0 }}>
-          <Typography variant="h5" className="successHead">
-            {text}
-          </Typography>
-          <Typography variant="body2" className="subHead">
-            {subText}
-          </Typography>
-          <Box sx={{ textAlign: "center" }}>
-            {button ? (
-              <Button id="confetti-id" variant="contained" onClick={close}>
-                Send Email
-              </Button>
-            ) : null}
-          </Box>
-        </Box>
-      </Box>
-    </Modal>
-  );
-};
-
-export default RecipientSuccess;
