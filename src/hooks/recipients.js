@@ -4,7 +4,7 @@ import {
   createRecipient,
   createAddress,
   deleteAddress,
-  deleteUser,
+  deleteRecipient,
 } from "../graphql/mutations";
 import format from "date-fns/format";
 
@@ -118,8 +118,8 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
 };
 
-const deleteRecipients = async ({ recipientId }) => {
-  await API.graphql(graphqlOperation(deleteUser, { input: recipientId }));
+const removeRecipient = async ({ id }) => {
+  await API.graphql(graphqlOperation(deleteRecipient, { input: { id } }));
 };
 
 const useRecipients = () => {
@@ -147,4 +147,4 @@ const useRecipients = () => {
   };
 };
 
-export { fetchRecipients, getAllRecipients, useRecipients, deleteRecipients };
+export { fetchRecipients, getAllRecipients, useRecipients, removeRecipient };

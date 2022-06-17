@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteRecipients } from "../../hooks/recipients";
+import { removeRecipient } from "../../hooks/recipients";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import RecipientSuccess from "./RecipientSuccess";
 
 const DeleteModal = ({ open, setOpen, recipientId }) => {
+  console.log(recipientId);
   let navigate = useNavigate();
   const [success, setSuccess] = useState(false);
   const onClose = () => {
@@ -20,7 +21,7 @@ const DeleteModal = ({ open, setOpen, recipientId }) => {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    await deleteRecipients(recipientId);
+    await removeRecipient(["id", recipientId]);
     setSuccess(true);
   };
 
