@@ -119,7 +119,7 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
 };
 
 const removeRecipient = async ({ id }) => {
-  await API.graphql(graphqlOperation(deleteRecipient, { input: { id } }));
+  await API.graphql(graphqlOperation(deleteRecipient, { input: id }));
 };
 
 const useRecipients = () => {
