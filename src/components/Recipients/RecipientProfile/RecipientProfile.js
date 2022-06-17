@@ -160,6 +160,7 @@ const tabIndecators = {
 const RecipientProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
   const { pathname } = location;
   const id = pathname.split("/")[2];
   const {
@@ -224,7 +225,7 @@ const RecipientProfile = () => {
                   height="100px"
                 />
                 <Box className="pen">
-                  <label htmlFor="icon-button-file">
+                  {/* <label htmlFor="icon-button-file">
                     <Input accept="image/*" id="icon-button-file" type="file" />
                     <IconButton
                       sx={{ color: "#263238" }}
@@ -232,8 +233,8 @@ const RecipientProfile = () => {
                       component="span"
                     >
                       {/* <PhotoCamera /> */}
-                    </IconButton>
-                  </label>
+                  {/* </IconButton>
+                  </label> */}
                 </Box>
               </Box>
               <Box>
@@ -302,7 +303,11 @@ const RecipientProfile = () => {
               >
                 Delete
               </Button>
-              <DeleteModal open={open} setOpen={setOpen} />
+              <DeleteModal
+                open={open}
+                setOpen={setOpen}
+                recipientId={recipient.id}
+              />
             </Box>
           </Box>
 

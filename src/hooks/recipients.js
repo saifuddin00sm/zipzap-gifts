@@ -1,6 +1,11 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { createRecipient, createAddress } from "../graphql/mutations";
+import {
+  createRecipient,
+  createAddress,
+  deleteAddress,
+  deleteUser,
+} from "../graphql/mutations";
 import format from "date-fns/format";
 
 const listRecipients = /* GraphQL */ `
@@ -113,6 +118,10 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
 };
 
+const deleteRecipients = async ({ recipientId }) => {
+  await API.graphql(graphqlOperation(deleteUser, { input: recipientId }));
+};
+
 const useRecipients = () => {
   const queryClient = useQueryClient();
   const {
@@ -138,4 +147,4 @@ const useRecipients = () => {
   };
 };
 
-export { fetchRecipients, getAllRecipients, useRecipients };
+export { fetchRecipients, getAllRecipients, useRecipients, deleteRecipients };
