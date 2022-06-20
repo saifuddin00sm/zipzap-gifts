@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { removeRecipient } from "../../hooks/recipients";
+import { useRecipients } from "../../hooks/recipients";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -10,13 +10,11 @@ import Typography from "@mui/material/Typography";
 import RecipientSuccess from "./RecipientSuccess";
 
 const DeleteModal = ({ open, setOpen, recipientId }) => {
-  console.log(recipientId);
+  const { removeRecipient } = useRecipients();
   let navigate = useNavigate();
   const [success, setSuccess] = useState(false);
   const onClose = () => {
     setOpen(false);
-    // navigate("/recipients");
-    // setSuccess(true);
   };
 
   const handleDelete = async (e) => {
@@ -47,6 +45,11 @@ const DeleteModal = ({ open, setOpen, recipientId }) => {
                 Confirm Delete
               </Button>
             </Box>
+            <Box sx={{ textAlign: "center", padding: "20px 0 60px 0" }}>
+              <Button variant="contained" onClick={onClose} autFocus="true">
+                Cancel
+              </Button>
+            </Box>
             <Typography
               variant="h5"
               sx={{ textAlign: "center", fontWeight: 500, fontSize: "12px" }}
@@ -58,14 +61,7 @@ const DeleteModal = ({ open, setOpen, recipientId }) => {
           </Box>
         </Box>
       </Modal>
-      <RecipientSuccess
-        text="Recipient Deletion Successful!"
-        subText="Successfully Deleted This Recipient. You Will Be Refunded For Any You Will Be Refunded For Any Gifts You Have Already Paid For, For This Recipient "
-        open={success}
-        setOpen={setSuccess}
-        close={() => navigate("/recipients")}
-        button={false}
-      />
+      {/* to be replaced with alert notifications soon */}
     </>
   );
 };

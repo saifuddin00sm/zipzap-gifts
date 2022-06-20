@@ -220,18 +220,18 @@ const RecipientProfile = () => {
                   width="100px"
                   height="100px"
                 />
-                <Box className="pen">
-                  {/* <label htmlFor="icon-button-file">
+                {/* <Box className="pen">
+                  <label htmlFor="icon-button-file">
                     <Input accept="image/*" id="icon-button-file" type="file" />
                     <IconButton
                       sx={{ color: "#263238" }}
                       aria-label="upload picture"
                       component="span"
                     >
-                      {/* <PhotoCamera /> */}
-                  {/* </IconButton>
-                  </label> */}
-                </Box>
+                      <PhotoCamera />
+                    </IconButton>
+                  </label>
+                </Box> */}
               </Box>
               <Box>
                 <Typography

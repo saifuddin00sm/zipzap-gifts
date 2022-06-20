@@ -160,4 +160,4 @@ const useRecipients = () => {
   };
 };
 
-export { fetchRecipients, getAllRecipients, useRecipients, removeRecipient };
+export { fetchRecipients, getAllRecipients, useRecipients };
