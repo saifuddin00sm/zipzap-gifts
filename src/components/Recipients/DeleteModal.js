@@ -7,6 +7,11 @@ import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import RecipientSuccess from "./RecipientSuccess";
 
 const DeleteModal = ({ open, setOpen, recipientId }) => {
@@ -25,42 +30,29 @@ const DeleteModal = ({ open, setOpen, recipientId }) => {
 
   return (
     <>
-      <Modal open={open} onClose={onClose}>
-        <Box sx={style}>
-          <Box className="closeBtn">
-            <IconButton className="mainBtn" onClick={() => setOpen(false)}>
-              <ClearIcon sx={{ color: "#ffff" }} />
-            </IconButton>
-          </Box>
-          <Box sx={{ p: 4, paddingTop: 0 }}>
-            <Typography
-              variant="h5"
-              className="successHead"
-              sx={{ textAlign: "center" }}
-            >
-              Are You Sure You Want To Delete This Recipient?
-            </Typography>
-            <Box sx={{ textAlign: "center", padding: "20px 0 60px 0" }}>
-              <Button variant="contained" onClick={handleDelete}>
-                Confirm Delete
-              </Button>
-            </Box>
-            <Box sx={{ textAlign: "center", padding: "20px 0 60px 0" }}>
-              <Button variant="contained" onClick={onClose} autFocus="true">
-                Cancel
-              </Button>
-            </Box>
-            <Typography
-              variant="h5"
-              sx={{ textAlign: "center", fontWeight: 500, fontSize: "12px" }}
-            >
-              They Will Be Removed From Your Recipient List And Any Scheduled
-              Gifts For Them Will Be Voided. You Will Be Refunded For Any Gifts
-              You Have Already Paid For, For This Recipient
-            </Typography>
-          </Box>
-        </Box>
-      </Modal>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Are You Sure You Want To Delete This Recipient?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            They Will Be Removed From Your Recipient List And Any Scheduled
+            Gifts For Them Will Be Voided. You Will Be Refunded For Any Gifts
+            You Have Already Paid For, For This Recipient
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDelete}>Delete</Button>
+          <Button onClick={onClose} autofocus>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* to be replaced with alert notifications soon */}
     </>
   );
