@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API, graphqlOperation } from "aws-amplify";
+import { Auth } from "@aws-amplify/auth";
 import { useQuery } from "react-query";
 import { getUser } from "../../graphql/queries";
 import { useOutletContext } from "react-router-dom";
@@ -26,10 +27,11 @@ const Payment = () => {
   useEffect(() => {
     const getSecret = async () => {
       try {
-        // TODO: REMOVE THIS LINE
-        const customerID = "cus_LnJhdY7DreukGt";
+        const currentSession = await Auth.currentSession();
+        const accessToken = currentSession.getAccessToken();
+        const token = accessToken.getJwtToken();
         const response = await API.post("stripe", "/secret", {
-          body: { name, customerID },
+          body: { token },
         });
         // TODO: Remove
         console.log(response);
