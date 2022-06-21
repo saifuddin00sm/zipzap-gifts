@@ -99,6 +99,7 @@ const StepComponent = ({
   formState,
   setInput,
   handleNext,
+  callSubmit,
 }) => {
   let component = null;
   switch (activeStep) {
@@ -135,6 +136,7 @@ const StepComponent = ({
           giftPrice={formState.giftPrice}
           shippingAddressType={formState.shippingAddressType}
           setInput={setInput}
+          callSubmit={callSubmit}
         />
       );
       break;
@@ -146,6 +148,7 @@ const SendAGift = () => {
   const top = useRef(null);
   const [giftSearch, setGiftSearch] = useState("");
   const [formState, setFormState] = useState({ ...initialState });
+  const [callSubmit, setCallSubmit] = useState(false);
 
   function setInput(key, value) {
     let k = key;
@@ -193,6 +196,7 @@ const SendAGift = () => {
     setActiveStep((prevActiveStep) => {
       const nextStep = prevActiveStep + 1;
       if (nextStep >= steps.length) {
+        setCallSubmit(true);
         setOpen(true);
         // Wait a bit for the success modal to render
         setTimeout(reward, 100);
@@ -263,6 +267,7 @@ const SendAGift = () => {
                     formState={formState}
                     setInput={setInput}
                     handleNext={handleNext}
+                    callSubmit={callSubmit}
                   />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>

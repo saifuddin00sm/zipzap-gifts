@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { API, graphqlOperation } from "aws-amplify";
+import { API } from "aws-amplify";
 import { Auth } from "@aws-amplify/auth";
-import { useQuery } from "react-query";
-import { getUser } from "../../graphql/queries";
-import { useOutletContext } from "react-router-dom";
 import { Elements, PaymentElement } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import usePayment from "../../hooks/usePayment";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 
@@ -14,15 +12,28 @@ const stripePromise = loadStripe(
   "pk_test_51HnY3pDT2m7Y85adloVaCn3sNJsUlm2utxtogULtFB14sb9jDQgcMhDtoGLLMucTX0iLvXwXIBcLesCUOebXBOaS00CzaWNb28"
 );
 
-const Payment = () => {
-  const [user] = useOutletContext();
-  const [clientSecret, setClientSecret] = useState("");
-  const [errMsg, setErrMsg] = useState("");
+// A helper component that has to be a child of Elements so that the usePayment
+// hook can properly access the stripe and elements hooks.
+const Submit = ({ setErrorMessage }) => {
+  const { submit, errorMessage } = usePayment();
+  useEffect(() => {
+    if (errorMessage) {
+      setErrorMessage(errorMessage);
+    }
+  }, [errorMessage, setErrorMessage]);
 
-  const { isLoading, isError, data, error } = useQuery("user", () =>
-    API.graphql(graphqlOperation(getUser, { id: user.username }))
-  );
-  const { data: { getUser: { name, stripeID } = {} } = {} } = data || {};
+  useEffect(() => {
+    if (submit) {
+      submit();
+    }
+  }, [submit]);
+
+  return null;
+};
+
+const Payment = ({ callSubmit }) => {
+  const [clientSecret, setClientSecret] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const getSecret = async () => {
@@ -33,27 +44,21 @@ const Payment = () => {
         const response = await API.post("stripe", "/secret", {
           body: { token },
         });
-        // TODO: Remove
-        console.log(response);
         setClientSecret(response.clientSecret);
-        setErrMsg("");
+        setErrorMessage("");
       } catch (error) {
-        // TODO: REMOVE THIS LINE
-        console.log(error);
-        setErrMsg("Cannot collect Payment Information at this time");
+        setErrorMessage("Cannot collect Payment Information at this time");
       }
     };
 
-    if (name || stripeID) {
-      getSecret();
-    }
-  }, [name, stripeID]);
+    getSecret();
+  }, []);
 
-  if (isError || errMsg) {
-    return <Alert severity="error">{error?.toString() || errMsg}</Alert>;
+  if (errorMessage) {
+    return <Alert severity="error">{errorMessage}</Alert>;
   }
 
-  if (isLoading || !clientSecret) {
+  if (!clientSecret) {
     return <CircularProgress />;
   }
 
@@ -63,6 +68,7 @@ const Payment = () => {
   return (
     <Elements stripe={stripePromise} options={options}>
       <PaymentElement />
+      {callSubmit && <Submit setErrorMessage={setErrorMessage} />}
     </Elements>
   );
 };

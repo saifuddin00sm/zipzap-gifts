@@ -141,6 +141,7 @@ const Checkout = ({
   giftPrice,
   shippingAddressType,
   setInput,
+  callSubmit,
 }) => {
   const recipientShippingPrice = 22;
   const officeShippingPrice = 12;
@@ -250,7 +251,7 @@ const Checkout = ({
             }}
           >
             <Box>
-              <Payment />
+              <Payment callSubmit={callSubmit} />
             </Box>
             <Typography variant="body" className="totalPrice">
               Total Price: ${totalPrice}
