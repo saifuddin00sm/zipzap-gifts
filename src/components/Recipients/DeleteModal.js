@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecipients } from "../../hooks/recipients";
 import Button from "@mui/material/Button";
@@ -7,15 +7,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import MuiAlert from "@mui/material/Alert";
 
 const DeleteModal = ({ open, setOpen, recipientId }) => {
-  const Alert = forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
   const { removeRecipient } = useRecipients();
   let navigate = useNavigate();
-  const [success, setSuccess] = useState(false);
   const onClose = () => {
     setOpen(false);
   };
@@ -23,7 +18,6 @@ const DeleteModal = ({ open, setOpen, recipientId }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     await removeRecipient(recipientId);
-    setSuccess(true);
     navigate("/recipients");
   };
 
@@ -53,13 +47,6 @@ const DeleteModal = ({ open, setOpen, recipientId }) => {
           </Button>
         </DialogActions>
       </Dialog>
-      {success ? (
-        <Alert severity="info" autoHideDuration={6000}>
-          {" "}
-          "Recipient Deleted!"
-        </Alert>
-      ) : null}
-      {/* to be replaced with alert notifications soon */}
     </>
   );
 };
