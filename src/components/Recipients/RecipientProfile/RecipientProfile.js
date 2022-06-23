@@ -18,6 +18,7 @@ import Tab from "@mui/material/Tab";
 import GeneralInfo from "./GeneralInfo";
 import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
+import DeleteModal from "../DeleteModal";
 
 // dummy data
 const giftProfileData = {
@@ -119,10 +120,6 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-// const Input = styled("input")({
-//   display: "none",
-// });
-
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div
@@ -159,6 +156,7 @@ const tabIndecators = {
 const RecipientProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
   const { pathname } = location;
   const id = pathname.split("/")[2];
   const {
@@ -171,6 +169,7 @@ const RecipientProfile = () => {
   );
 
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -293,9 +292,18 @@ const RecipientProfile = () => {
               </Box>
             </Box>
             <Box>
-              <Button variant="contained" color="secondary">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpen(true)}
+              >
                 Delete
               </Button>
+              <DeleteModal
+                open={open}
+                setOpen={setOpen}
+                recipientId={recipient.id}
+              />
             </Box>
           </Box>
 
