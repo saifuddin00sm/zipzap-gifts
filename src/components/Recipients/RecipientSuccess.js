@@ -44,9 +44,7 @@ const RecipientSuccess = ({ text, subText, open, onClose, button }) => {
 export default RecipientSuccess;
 
 const style = {
-  textAlign: "center",
   borderRadius: "9px",
-  width: "40%",
   position: "absolute",
   top: "50%",
   left: "50%",

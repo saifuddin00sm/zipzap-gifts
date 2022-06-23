@@ -1,6 +1,10 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { createRecipient, createAddress } from "../graphql/mutations";
+import {
+  createRecipient,
+  createAddress,
+  deleteRecipient,
+} from "../graphql/mutations";
 import { format, isDate } from "date-fns";
 
 const listRecipients = /* GraphQL */ `
@@ -119,6 +123,10 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
 };
 
+const removeRecipient = async (id) => {
+  await API.graphql(graphqlOperation(deleteRecipient, { input: { id } }));
+};
+
 const useRecipients = () => {
   const queryClient = useQueryClient();
   const {
@@ -135,11 +143,19 @@ const useRecipients = () => {
     },
   });
 
+  const removeMutation = useMutation(removeRecipient, {
+    onSuccess: () => {
+      // Invalidate and refresh all of the recipients queries
+      queryClient.invalidateQueries("recipients");
+    },
+  });
+
   return {
     recipients,
     isLoading,
     isError,
     error,
+    removeRecipient: removeMutation.mutateAsync,
     addRecipient: mutation.mutateAsync,
   };
 };
