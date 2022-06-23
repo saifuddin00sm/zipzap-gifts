@@ -99,13 +99,13 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   if (recipient.birthday) {
     const birthday = isDate(recipient.birthday)
       ? recipient.birthday
-      : new Date(recipient.birthday);
+      : new Date(recipient.birthday.replace(/-/g, "/"));
     recipient.birthday = format(birthday, "yyyy-MM-dd");
   }
   if (recipient.startDate) {
     const startDate = isDate(recipient.startDate)
       ? recipient.startDate
-      : new Date(recipient.startDate);
+      : new Date(recipient.startDate.replace(/-/g, "/"));
     recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
   const {
