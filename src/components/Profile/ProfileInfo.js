@@ -6,9 +6,9 @@ import { Image } from "@aws-amplify/ui-react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-// import IconButton from "@mui/material/IconButton";
+import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-// import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Grid from "@mui/material/Grid";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
@@ -132,9 +132,9 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-// const Input = styled("input")({
-//   display: "none",
-// });
+const Input = styled("input")({
+  display: "none",
+});
 
 const ProfileInfo = ({ info }) => {
   const {
@@ -156,7 +156,7 @@ const ProfileInfo = ({ info }) => {
             width="100px"
             height="100px"
           />
-          {/* <Box className="pen">
+          <Box className="pen">
             <label htmlFor="icon-button-file">
               <Input accept="image/*" id="icon-button-file" type="file" />
               <IconButton
@@ -164,10 +164,10 @@ const ProfileInfo = ({ info }) => {
                 aria-label="upload picture"
                 component="span"
               >
-                {/* <PhotoCamera /> */}
-          {/* </IconButton>
+                <PhotoCamera />
+              </IconButton>
             </label>
-          </Box> */}
+          </Box>
         </Box>
         <Box>
           <Typography className="title" variant="h3">
