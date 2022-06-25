@@ -11,15 +11,10 @@ or in the "license" file accompanying this file. This file is distributed on an 
 See the License for the specific language governing permissions and limitations under the License.
 */
 
-import aws from "aws-sdk";
 import express from "express";
 import bodyParser from "body-parser";
 import awsServerlessExpressMiddleware from "aws-serverless-express/middleware.js";
-import Stripe from "stripe";
-import { default as fetch, Request } from "node-fetch";
-
-const GRAPHQL_ENDPOINT = process.env.API_ZIPZAP_GRAPHQLAPIENDPOINTOUTPUT;
-const GRAPHQL_API_KEY = process.env.API_ZIPZAP_GRAPHQLAPIKEYOUTPUT;
+import { stripe, getStripeCustomer } from "./auth.js";
 
 // Declare a new express app
 const app = express();
@@ -33,32 +28,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Get the Stripe secret
-const { Parameters } = await new aws.SSM()
-  .getParameters({
-    Names: ["STRIPE_KEY"].map((secretName) => process.env[secretName]),
-    WithDecryption: true,
-  })
-  .promise();
-const stripe = Stripe(Parameters.pop().Value);
-
-const query = /* GraphQL */ `
-  query GetStripeID($id: ID!) {
-    getUser(id: $id) {
-      name
-      stripeID
-    }
-  }
-`;
-
-const mutation = /* GraphQL */ `
-  mutation UpdateUserStripeID($input: UpdateUserInput!) {
-    updateUser(input: $input) {
-      stripeID
-    }
-  }
-`;
-
 // Returns a Stripe clientSecret associated with a customer that is either
 // already associated with the calling user or creates a new customer in Stripe.
 // Requires the calling user to pass along their GraphQL auth token in the request
@@ -67,58 +36,8 @@ app.post("/secret", async function (req, res) {
   let statusCode = 200;
   let body = {};
 
-  // Get the user's ID from the auth context of the request to verify they're properly authenticated.
-  const cognitoID =
-    req.apiGateway.event.requestContext.identity.cognitoAuthenticationProvider.split(
-      "CognitoSignIn:"
-    )[1];
-  const variables = { id: cognitoID };
-
-  /** @type {import('node-fetch').RequestInit} */
-  const options = {
-    method: "POST",
-    headers: {
-      "x-api-key": GRAPHQL_API_KEY,
-      authorization: req.body.token,
-    },
-    body: JSON.stringify({ query, variables }),
-  };
-  const request = new Request(GRAPHQL_ENDPOINT, options);
-
   try {
-    // Get the User's stripeID
-    const response = await fetch(request);
-    const json = await response.json();
-    const { data: { getUser: { name, stripeID } = {} } = {}, errors } = json;
-    if (errors) {
-      statusCode = 400;
-      console.warn("UNABLE TO GET USER", errors);
-    }
-
-    let customer = stripeID;
-    if (!customer && name) {
-      // Create the Stripe Customer
-      const { id } = await stripe.customers.create({
-        description: `Customer Added: ${new Date().toString()} - from Amplify`,
-        name,
-      });
-
-      // Update the User with the new stripe ID
-      const variables = { input: { id: cognitoID, stripeID: id } };
-      options.body = JSON.stringify({ query: mutation, variables });
-      const request = new Request(GRAPHQL_ENDPOINT, options);
-      const updateResponse = await fetch(request);
-      const json = await updateResponse.json();
-      const {
-        data: { updateUser: { stripeID: updatedStripeID } = {} } = {},
-        errors,
-      } = json;
-      if (errors) {
-        statusCode = 400;
-        console.warn("UNABLE TO UPDATE USER", errors);
-      }
-      customer = updatedStripeID;
-    }
+    const customer = await getStripeCustomer(req);
 
     // Get the client secret from Stripe
     if (customer) {
@@ -137,6 +56,29 @@ app.post("/secret", async function (req, res) {
     statusCode = 500;
     body = {
       error: "Error generating client secret",
+    };
+  }
+
+  res.status(statusCode).send(body);
+});
+
+// Returns a list of Stripe payment methods for the calling user
+app.post("/payments", async function (req, res) {
+  let statusCode = 200;
+  let body = {};
+
+  try {
+    const customer = await getStripeCustomer(req);
+    const paymentMethods = await stripe.customers.listPaymentMethods(customer, {
+      type: "card",
+    });
+
+    body = paymentMethods;
+  } catch (error) {
+    console.warn("CAUGHT ERROR", error);
+    statusCode = 400;
+    body = {
+      error: "Unable to get payment methods",
     };
   }
 

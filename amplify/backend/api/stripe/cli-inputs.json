@@ -13,6 +13,19 @@
           "delete"
         ]
       }
+    },
+    "/payments": {
+      "name": "/payments",
+      "lambdaFunction": "stripe",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }
