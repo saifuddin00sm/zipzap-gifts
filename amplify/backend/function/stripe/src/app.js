@@ -75,11 +75,19 @@ app.post("/payments", async function (req, res) {
     });
 
     body = {
-      ...data.map(({ id, card: { last4, exp_month, exp_year } = {} }) => ({
-        id,
-        exp_month,
-        exp_year,
-      })),
+      ...data.map(
+        ({
+          id,
+          billing_details: { name } = {},
+          card: { last4, exp_month, exp_year } = {},
+        }) => ({
+          id,
+          name,
+          last4,
+          exp_month,
+          exp_year,
+        })
+      ),
     };
   } catch (error) {
     console.warn("CAUGHT ERROR", error);
