@@ -45,6 +45,10 @@ const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
         <Typography>{birthday === null ? "N/A" : birthday}</Typography>
       </Box>
       <Box className="infos">
+        <Typography className="keys">Email</Typography>
+        <Typography>{email === null ? "N/A" : email}</Typography>
+      </Box>
+      <Box className="infos">
         <Typography className="keys">Address</Typography>
         <Typography>{`${address1}${
           address2 ? ` ${address2}` : ""

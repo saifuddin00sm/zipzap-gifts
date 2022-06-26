@@ -113,7 +113,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
         <Input
           name="birthday"
           type="date"
-          value={editBirthday}
+          value={formState.birthday}
           onChange={(event) => setInput("birthday", event.target.value)}
         >
           {birthday === null ? "N/A" : birthday}
@@ -133,7 +133,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
         <Typography className="keys">Address</Typography>
         <Input
           name="address1"
-          value={editAddress1}
+          value={formState.shippingAddress}
           onChange={handleChange}
         >{`${address1}${
           address2 ? ` ${address2}` : ""
@@ -143,7 +143,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
         <Typography className="keys">Job Title</Typography>
         <Input
           name="jobTitle"
-          value={editJobTitle}
+          value={formState.jobTitle}
           onChange={(event) => setInput("jobTitle", event.target.value)}
         >
           {jobTitle === null ? "N/A" : jobTitle}
@@ -154,7 +154,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
         <Input
           type="date"
           name="startDate"
-          value={editStartDate}
+          value={formState.startDate}
           onChange={(event) => setInput("startDate", event.target.value)}
         >
           {startDate === null ? "N/A" : startDate}
@@ -164,7 +164,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
         <Typography className="keys">Department</Typography>
         <Input
           name="department"
-          value={editDepartment}
+          value={formState.department}
           onChange={(event) => setInput("department", event.target.value)}
         />
         {/* {department?.name === null ? "N/A" : department?.name} */}
@@ -173,7 +173,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
         <Button onSubmit={handleSubmit}>Save Changes</Button>
       </Box>
       <Box>
-        <Button onClick={handleClick}>Cancle</Button>
+        <Button onClick={handleClick}>Cancel</Button>
       </Box>
     </Root>
   );
