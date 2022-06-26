@@ -147,13 +147,8 @@ const updateRecipient = async ({ shippingAddress, ...recipient }) => {
       : new Date(recipient.startDate);
     recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
-  const {
-    data: {
-      createAddress: { id },
-    },
-  } = await API.graphql(
-    graphqlOperation(updateRecipient, { input: recipient })
-  );
+  await API.graphql(graphqlOperation(updateUser, { input: recipient }));
+  console.log("success");
 };
 
 const removeRecipient = async (id) => {
@@ -190,7 +185,8 @@ const useRecipients = () => {
     error,
     removeRecipient: removeMutation.mutateAsync,
     addRecipient: mutation.mutateAsync,
+    updateRecipient: mutation.mutateAsync,
   };
 };
 
-export { fetchRecipients, getAllRecipients, useRecipients };
+export { fetchRecipients, getAllRecipients, useRecipients, updateRecipient };

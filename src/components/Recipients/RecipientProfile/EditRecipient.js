@@ -4,26 +4,30 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { Input } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
-import { updateRecipient } from "../../../graphql/recipients";
+import { useRecipients } from "../../../hooks/recipients";
 
 const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
   const {
     id,
+    firstName,
+    lastName,
     birthday,
+    email,
     shippingAddress: { address1, address2, city, state, zip } = {},
     jobTitle,
     startDate,
-    department,
+    // department,
   } = info;
 
   const initialState = {
     id: info.id,
+    firstName: info.firstName,
+    lastName: info.lastName,
     birthday: info.birthday,
     email: info.email,
-    firstName: info.firstName,
     jobTitle: info.jobTitle,
-    lastName: info.lastName,
     phone: info.phone,
     shippingAddress: {
       address1: info.address1,
@@ -32,8 +36,9 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
       state: info.state,
       zip: info.zip,
     },
-    recipientType: "",
-    startDate: new Date("01-01-2020"),
+
+    startDate: info.startDate,
+    // department: info.department,
   };
 
   const { updateRecipient } = useRecipients();
@@ -47,11 +52,9 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
   );
   const [editJobTitle, setEditJobTitle] = useState(jobTitle);
   const [editStartDate, setEditStartDate] = useState(startDate);
-  const [editDepartment, setEditDepartment] = useState(department);
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value });
-    validateForm();
   }
 
   const validateForm = () => {
@@ -73,94 +76,98 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
     validateForm();
   }
 
-  const handleChange = (e) => {
-    if (e.target.name === "birthday") {
-      setEditBirthday(e.target.value);
-      info.birthday = editBirthday;
-    } else if (e.target.name === "address1") {
-      setEditAddress1(e.target.value);
-      info.shippingAddress = editAddress1;
-    } else if (e.target.name === "jobTitle") {
-      setEditJobTitle(e.target.value);
-      info.jobTitle = editJobTitle;
-    } else if (e.target.name === "startDate") {
-      setEditStartDate(e.target.value);
-      info.startDate = editStartDate;
-    } else if (e.target.name === "department") {
-      setEditDepartment(e.target.value);
-      info.department = editDepartment;
-    }
-    console.log(info.jobTitle);
-    console.log(info.department);
-  };
-
   const handleClick = () => {
     setIsEdit(false);
-    console.log(info.jobTitle);
-    console.log(info.department);
   };
 
   const handleSubmit = async (e) => {
+    console.log({ formState });
+    console.log("clicked");
     e.preventDefault();
     await updateRecipient({ ...formState });
     setIsEdit(false);
+    setFormState(initialState);
   };
 
   return (
     <Root>
-      <Box className="infos">
-        <Typography className="keys">Birthday</Typography>
-        <Input
-          name="birthday"
-          type="date"
-          value={formState.birthday}
-          onChange={(event) => setInput("birthday", event.target.value)}
-        >
-          {birthday === null ? "N/A" : birthday}
-        </Input>
-      </Box>
-      <Box className="infos">
-        <Typography className="keys">Email</Typography>
-        <Input
-          name="email"
-          value={formState.email}
-          onChange={(event) => setInput("email", event.target.value)}
-        >
-          {email === null ? "N/A" : email}
-        </Input>
-      </Box>
-      <Box className="infos">
-        <Typography className="keys">Address</Typography>
-        <Input
-          name="address1"
-          value={formState.shippingAddress}
-          onChange={handleChange}
-        >{`${address1}${
-          address2 ? ` ${address2}` : ""
-        }, ${city}, ${state}, ${zip}`}</Input>
-      </Box>
-      <Box className="infos">
-        <Typography className="keys">Job Title</Typography>
-        <Input
-          name="jobTitle"
-          value={formState.jobTitle}
-          onChange={(event) => setInput("jobTitle", event.target.value)}
-        >
-          {jobTitle === null ? "N/A" : jobTitle}
-        </Input>
-      </Box>
-      <Box className="infos">
-        <Typography className="keys">Date Started</Typography>
-        <Input
-          type="date"
-          name="startDate"
-          value={formState.startDate}
-          onChange={(event) => setInput("startDate", event.target.value)}
-        >
-          {startDate === null ? "N/A" : startDate}
-        </Input>
-      </Box>
-      <Box className="infos">
+      <Box onSubmit={handleSubmit} component="form" sx={{ marginTop: "20px" }}>
+        <Box className="infos">
+          <Typography className="keys">First Name</Typography>
+          <TextField
+            name="firstName"
+            value={formState.firstName}
+            onChange={(event) => setInput("firstName", event.target.value)}
+          >
+            {firstName === null ? "N/A" : firstName}
+          </TextField>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Last Name</Typography>
+          <TextField
+            name="lastName"
+            value={formState.lastName}
+            onChange={(event) => setInput("lastName", event.target.value)}
+          >
+            {lastName === null ? "N/A" : lastName}
+          </TextField>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Birthday</Typography>
+          <TextField
+            name="birthday"
+            type="date"
+            value={formState.birthday}
+            onChange={(event) => setInput("birthday", event.target.value)}
+          >
+            {birthday === null ? "N/A" : birthday}
+          </TextField>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Email</Typography>
+          <TextField
+            name="email"
+            value={formState.email}
+            onChange={(event) => setInput("email", event.target.value)}
+          >
+            {email === null ? "N/A" : email}
+          </TextField>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Address</Typography>
+          {/* <TextField
+            name="address1"
+            value={formState.shippingAddress.address1}
+            onChange={(event) =>
+              setAddressInput("address1", event.target.value)
+            }
+            placeholder="Address"
+          >
+            {formState.shippingAddress}
+          </TextField> */}
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Job Title</Typography>
+          <TextField
+            name="jobTitle"
+            value={formState.jobTitle}
+            onChange={(event) => setInput("jobTitle", event.target.value)}
+          >
+            {jobTitle === null ? "N/A" : jobTitle}
+          </TextField>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Date Started</Typography>
+          <TextField
+            type="date"
+            name="startDate"
+            value={formState.startDate}
+            onChange={(event) => setInput("startDate", event.target.value)}
+          >
+            {startDate === null ? "N/A" : startDate}
+          </TextField>
+        </Box>
+        {/* <Box className="infos">
         <Typography className="keys">Department</Typography>
         <Input
           name="department"
@@ -168,12 +175,15 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
           onChange={(event) => setInput("department", event.target.value)}
         />
         {/* {department?.name === null ? "N/A" : department?.name} */}
-      </Box>
-      <Box>
-        <Button onSubmit={handleSubmit}>Save Changes</Button>
-      </Box>
-      <Box>
-        <Button onClick={handleClick}>Cancel</Button>
+
+        <Box>
+          <Button variant="contained" type="submit">
+            Save
+          </Button>
+        </Box>
+        <Box>
+          <Button onClick={handleClick}>Cancel</Button>
+        </Box>
       </Box>
     </Root>
   );

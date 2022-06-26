@@ -26,6 +26,7 @@ const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
   const {
     id,
     birthday,
+    email,
     shippingAddress: { address1, address2, city, state, zip } = {},
     jobTitle,
     startDate,
