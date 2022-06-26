@@ -164,6 +164,13 @@ const useRecipients = () => {
     error,
   } = useQuery("recipients", getAllRecipients);
 
+  const updateMutation = useMutation(updateRecipient, {
+    onSuccess: () => {
+      // Invalidate and refresh all of the recipients queries
+      queryClient.invalidateQueries("recipients");
+    },
+  });
+
   const mutation = useMutation(addRecipient, {
     onSuccess: () => {
       // Invalidate and refresh all of the recipients queries
@@ -185,7 +192,7 @@ const useRecipients = () => {
     error,
     removeRecipient: removeMutation.mutateAsync,
     addRecipient: mutation.mutateAsync,
-    updateRecipient: mutation.mutateAsync,
+    updateRecipient: updateMutation.mutateAsync,
   };
 };
 

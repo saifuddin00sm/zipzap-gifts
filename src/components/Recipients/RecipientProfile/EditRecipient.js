@@ -3,9 +3,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import { Input } from "@mui/material";
 import TextField from "@mui/material/TextField";
-
+import InputLabel from "@mui/material/InputLabel";
 import { useRecipients } from "../../../hooks/recipients";
 
 const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
@@ -134,17 +133,58 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
           </TextField>
         </Box>
         <Box className="infos">
-          <Typography className="keys">Address</Typography>
-          {/* <TextField
-            name="address1"
-            value={formState.shippingAddress.address1}
+          <Label>Address</Label>
+          <TextField
+            variant="standard"
+            fullWidth={true}
             onChange={(event) =>
               setAddressInput("address1", event.target.value)
             }
+            value={formState.shippingAddress.address1}
             placeholder="Address"
-          >
-            {formState.shippingAddress}
-          </TextField> */}
+          ></TextField>
+
+          <Label></Label>
+          <TextField
+            onChange={(event) =>
+              setAddressInput("address2", event.target.value)
+            }
+            value={formState.shippingAddress.address2}
+            placeholder="Address 2"
+            label=""
+            variant="standard"
+            fullWidth={true}
+          />
+
+          <Label>City</Label>
+          <TextField
+            variant="standard"
+            fullWidth={true}
+            onChange={(event) => setAddressInput("city", event.target.value)}
+            value={formState.shippingAddress.city}
+            placeholder="City"
+          ></TextField>
+
+          <Label style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}>
+            State (i.e UT)
+          </Label>
+          <TextField
+            variant="standard"
+            fullWidth={true}
+            onChange={(event) => setAddressInput("state", event.target.value)}
+            value={formState.shippingAddress.state}
+            placeholder="State"
+          ></TextField>
+
+          <Label>Zip Code</Label>
+          <TextField
+            variant="standard"
+            fullWidth={true}
+            onChange={(event) => setAddressInput("zip", event.target.value)}
+            value={formState.shippingAddress.zip}
+            placeholder="Zip"
+            label=""
+          ></TextField>
         </Box>
         <Box className="infos">
           <Typography className="keys">Job Title</Typography>
@@ -205,4 +245,10 @@ const Root = styled("div")(({ theme }) => ({
       lineHight: "30px",
     },
   },
+}));
+const Label = styled(InputLabel)(({ theme }) => ({
+  fontSize: "16px",
+  color: "#000",
+  fontWeight: 600,
+  width: 200,
 }));

@@ -9,7 +9,6 @@ import { useQuery } from "react-query";
 import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
-import { Input } from "@mui/material";
 // import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 // import PhotoCamera from "@mui/icons-material/PhotoCamera";
