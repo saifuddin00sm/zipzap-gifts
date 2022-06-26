@@ -62,18 +62,25 @@ app.post("/secret", async function (req, res) {
   res.status(statusCode).send(body);
 });
 
-// Returns a list of Stripe payment methods for the calling user
+// Returns a list of Stripe payment methods for the calling user.
+// Currently only supports credit cards.
 app.post("/payments", async function (req, res) {
   let statusCode = 200;
   let body = {};
 
   try {
     const customer = await getStripeCustomer(req);
-    const paymentMethods = await stripe.customers.listPaymentMethods(customer, {
+    const { data = [] } = await stripe.customers.listPaymentMethods(customer, {
       type: "card",
     });
 
-    body = paymentMethods;
+    body = {
+      ...data.map(({ id, card: { last4, exp_month, exp_year } = {} }) => ({
+        id,
+        exp_month,
+        exp_year,
+      })),
+    };
   } catch (error) {
     console.warn("CAUGHT ERROR", error);
     statusCode = 400;
