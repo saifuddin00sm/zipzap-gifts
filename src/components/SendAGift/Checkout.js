@@ -140,6 +140,7 @@ const Checkout = ({
   giftImage,
   giftPrice,
   shippingAddressType,
+  paymentID,
   setInput,
   callSubmit,
 }) => {
@@ -251,7 +252,11 @@ const Checkout = ({
             }}
           >
             <Box>
-              <Payment callSubmit={callSubmit} />
+              <Payment
+                callSubmit={callSubmit}
+                paymentID={paymentID}
+                setPaymentID={(id) => setInput("paymentID", id)}
+              />
             </Box>
             <Typography variant="body" className="totalPrice">
               Total Price: ${totalPrice}

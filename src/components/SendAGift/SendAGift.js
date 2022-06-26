@@ -91,6 +91,7 @@ const initialState = {
   recipients: [],
   totalPrice: "",
   shippingAddressType: "RECIPIENT_ADDRESS",
+  paymentID: "",
 };
 
 const StepComponent = ({
@@ -134,6 +135,7 @@ const StepComponent = ({
           recipientCount={formState.recipients.length}
           giftImage={formState.giftImage}
           giftPrice={formState.giftPrice}
+          paymentID={formState.paymentID}
           shippingAddressType={formState.shippingAddressType}
           setInput={setInput}
           callSubmit={callSubmit}

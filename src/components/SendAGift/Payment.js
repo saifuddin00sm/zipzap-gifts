@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Alert from "@mui/material/Alert";
 
 // TODO: Get this from env
@@ -34,40 +35,62 @@ const Submit = ({ setErrorMessage }) => {
   return null;
 };
 
-const CreditCards = ({ cards, addNewCard }) => {
+const CreditCards = ({ cards, addNewCard, paymentID, setPaymentID }) => {
+  useEffect(() => {
+    if (!paymentID) {
+      setPaymentID(cards[0]?.id);
+    }
+  }, [paymentID, cards, setPaymentID]);
+
   return (
     <Box>
       <Typography variant="h6">Choose Credit Card</Typography>
       <Box className="credit_cards">
         <Box className="inner_card">
-          {cards.map(({ isSelected, id, name, last4, exp_month, exp_year }) => (
-            <Box key={id} className="credit_card">
+          {cards.map(({ id, name, last4, exp_month, exp_year }) => {
+            const isSelected = paymentID === id;
+            return (
               <Box
-                className="card_top"
-                sx={{ background: isSelected ? "#F1F1F1" : "#C5D6E2" }}
+                key={id}
+                className="credit_card"
+                onClick={() => setPaymentID(id)}
+                sx={{
+                  border: isSelected && "solid",
+                  borderColor: "secondary.dark",
+                }}
               >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    textAlign: "right",
-                    textTransform: "capitalize",
-                  }}
+                <Box
+                  className="card_top"
+                  sx={{ background: isSelected ? "#F1F1F1" : "#C5D6E2" }}
                 >
-                  Credit Card
-                </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textAlign: "right",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Credit Card
+                  </Typography>
+                </Box>
+                <Box
+                  className="card_bottom"
+                  sx={{ background: isSelected ? "#DEDEDE" : "#ABC4D6" }}
+                >
+                  <Typography variant="h6">Ending In {last4}</Typography>
+                  <Typography variant="body2">
+                    Exp: {exp_month}/{exp_year}
+                  </Typography>
+                  <Typography variant="body2">{name}</Typography>
+                  {isSelected && (
+                    <Typography align="right">
+                      <CheckCircleIcon />
+                    </Typography>
+                  )}
+                </Box>
               </Box>
-              <Box
-                className="card_bottom"
-                sx={{ background: isSelected ? "#DEDEDE" : "#ABC4D6" }}
-              >
-                <Typography variant="h6">Ending In {last4}</Typography>
-                <Typography variant="body2">
-                  Exp: {exp_month}/{exp_year}
-                </Typography>
-                <Typography variant="body2">{name}</Typography>
-              </Box>
-            </Box>
-          ))}
+            );
+          })}
         </Box>
         <Button variant="outlined" onClick={addNewCard}>
           Add New Card
@@ -77,7 +100,7 @@ const CreditCards = ({ cards, addNewCard }) => {
   );
 };
 
-const Payment = ({ callSubmit }) => {
+const Payment = ({ callSubmit, paymentID, setPaymentID }) => {
   const [loading, setLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const [clientSecret, setClientSecret] = useState("");
@@ -126,6 +149,7 @@ const Payment = ({ callSubmit }) => {
   const addNewCard = () => {
     setLoading(true);
     setShowCards(false);
+    setPaymentID("");
   };
 
   if (errorMessage) {
@@ -136,7 +160,12 @@ const Payment = ({ callSubmit }) => {
     return loading ? (
       <CircularProgress />
     ) : (
-      <CreditCards cards={cards} addNewCard={addNewCard} />
+      <CreditCards
+        cards={cards}
+        addNewCard={addNewCard}
+        paymentID={paymentID}
+        setPaymentID={setPaymentID}
+      />
     );
   }
 
