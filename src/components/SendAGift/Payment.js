@@ -34,7 +34,7 @@ const Submit = ({ setErrorMessage }) => {
   return null;
 };
 
-const CreditCards = ({ cards }) => {
+const CreditCards = ({ cards, addNewCard }) => {
   return (
     <Box>
       <Typography variant="h6">Choose Credit Card</Typography>
@@ -69,16 +69,20 @@ const CreditCards = ({ cards }) => {
             </Box>
           ))}
         </Box>
-        <Button variant="outlined">Add New Card</Button>
+        <Button variant="outlined" onClick={addNewCard}>
+          Add New Card
+        </Button>
       </Box>
     </Box>
   );
 };
 
 const Payment = ({ callSubmit }) => {
-  const [loadingCards, setLoadingCards] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const [clientSecret, setClientSecret] = useState("");
+  const [showCards, setShowCards] = useState(true);
+  const [showCancelButton, setShowCancelButton] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -94,7 +98,7 @@ const Payment = ({ callSubmit }) => {
       } catch (error) {
         // Ignoring the error and falling back to having the user submit new payment information
       }
-      setLoadingCards(false);
+      setLoading(false);
     };
 
     getSecret();
@@ -119,16 +123,21 @@ const Payment = ({ callSubmit }) => {
     getSecret();
   }, []);
 
+  const addNewCard = () => {
+    setLoading(true);
+    setShowCards(false);
+  };
+
   if (errorMessage) {
     return <Alert severity="error">{errorMessage}</Alert>;
   }
 
-  if (loadingCards) {
-    return <CircularProgress />;
-  }
-
-  if (cards.length > 0) {
-    return <CreditCards cards={cards} />;
+  if (cards.length > 0 && showCards) {
+    return loading ? (
+      <CircularProgress />
+    ) : (
+      <CreditCards cards={cards} addNewCard={addNewCard} />
+    );
   }
 
   if (!clientSecret) {
@@ -140,8 +149,25 @@ const Payment = ({ callSubmit }) => {
   };
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentElement />
+      {loading && <CircularProgress />}
+      <PaymentElement
+        onReady={() => {
+          setShowCancelButton(true);
+          setLoading(false);
+        }}
+      />
       {callSubmit && <Submit setErrorMessage={setErrorMessage} />}
+      {cards.length > 0 && showCancelButton && (
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setShowCards(true);
+            setShowCancelButton(false);
+          }}
+        >
+          Cancel Adding New Card
+        </Button>
+      )}
     </Elements>
   );
 };
