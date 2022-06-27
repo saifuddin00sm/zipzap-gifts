@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import { useRecipients } from "../../../hooks/recipients";
 
-const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
+const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
   const {
     id,
     firstName,
@@ -17,7 +17,6 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
     shippingAddress: { address1, address2, city, state, zip } = {},
     jobTitle,
     startDate,
-    // department,
   } = info;
 
   const initialState = {
@@ -37,20 +36,12 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
     },
 
     startDate: info.startDate,
-    // department: info.department,
   };
 
   const { updateRecipient } = useRecipients();
 
   const [formState, setFormState] = useState(initialState);
   const [isFormValid, setIsFormValid] = useState(false);
-
-  const [editBirthday, setEditBirthday] = useState(birthday);
-  const [editAddress1, setEditAddress1] = useState(
-    `${address1} ${address2} ${city} ${state} ${zip}`
-  );
-  const [editJobTitle, setEditJobTitle] = useState(jobTitle);
-  const [editStartDate, setEditStartDate] = useState(startDate);
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value });
@@ -79,13 +70,13 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
     setIsEdit(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     console.log({ formState });
-    console.log("clicked");
     e.preventDefault();
-    await updateRecipient({ ...formState });
+    // await updateRecipient({ ...formState });
     setIsEdit(false);
     setFormState(initialState);
+    setOpen(true);
   };
 
   return (
@@ -207,16 +198,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit }) => {
             {startDate === null ? "N/A" : startDate}
           </TextField>
         </Box>
-        {/* <Box className="infos">
-        <Typography className="keys">Department</Typography>
-        <Input
-          name="department"
-          value={formState.department}
-          onChange={(event) => setInput("department", event.target.value)}
-        />
-        {/* {department?.name === null ? "N/A" : department?.name} */}
-
-        <Box>
+        <Box paddingBottom="10px">
           <Button variant="contained" type="submit">
             Save
           </Button>

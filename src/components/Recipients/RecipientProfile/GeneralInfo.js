@@ -3,24 +3,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import EditRecipientProfile from "./EditRecipient";
-import { useNavigate } from "react-router-dom";
-
-const Root = styled("div")(({ theme }) => ({
-  marginTop: "20px",
-  "& .infos": {
-    display: "grid",
-    gridTemplateColumns: "50% 50%",
-    width: "100%",
-    marginBottom: "25px",
-    "& .keys": {
-      color: "#343436",
-      fontWeight: 500,
-      fontSize: "20px",
-      lineHight: "30px",
-    },
-  },
-}));
 
 const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
   const {
@@ -32,8 +14,6 @@ const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
     startDate,
     department,
   } = info;
-
-  let navigate = useNavigate();
 
   const handleClick = () => {
     setIsEdit(true);
@@ -77,3 +57,19 @@ const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
 };
 
 export default GeneralInfo;
+
+const Root = styled("div")(({ theme }) => ({
+  marginTop: "20px",
+  "& .infos": {
+    display: "grid",
+    gridTemplateColumns: "50% 50%",
+    width: "100%",
+    marginBottom: "25px",
+    "& .keys": {
+      color: "#343436",
+      fontWeight: 500,
+      fontSize: "20px",
+      lineHight: "30px",
+    },
+  },
+}));

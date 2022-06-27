@@ -19,6 +19,7 @@ import GeneralInfo from "./GeneralInfo";
 import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
 import EditRecipientProfile from "./EditRecipient";
+import RecipientSuccess from "../RecipientSuccess";
 
 // dummy data
 const giftProfileData = {
@@ -173,6 +174,10 @@ const RecipientProfile = () => {
   );
 
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -251,18 +256,6 @@ const RecipientProfile = () => {
                   className="titles"
                 >
                   {recipient?.firstName} {recipient?.lastName}
-                  {/* {!isEdit ? (
-                    <Box>
-                      <Typography>
-                        {recipient.firstName} {recipient.lastName}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <Box className="infos">
-                      <Typography className="keys">Name</Typography>
-                      <Input name="name" />
-                    </Box>
-                  )} */}
                 </Typography>
                 <Box classSName="tabs">
                   <Box>
@@ -331,6 +324,7 @@ const RecipientProfile = () => {
                     info={recipient}
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
+                    setOpen={setOpen}
                   />
                 )}
               </Box>
@@ -364,6 +358,14 @@ const RecipientProfile = () => {
       </Header>
       <Button onClick={() => navigate("/recipients")}>Back</Button>
       <Root>{userData}</Root>
+
+      <RecipientSuccess
+        text="Your Recipient Information Has Been Saved"
+        subText=""
+        open={open}
+        onClose={onClose}
+        button={false}
+      />
     </Container>
   );
 };
