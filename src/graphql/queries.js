@@ -673,8 +673,14 @@ export const getOrder = /* GraphQL */ `
   query GetOrder($id: ID!) {
     getOrder(id: $id) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -697,6 +703,8 @@ export const getOrder = /* GraphQL */ `
       }
       createdBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -716,13 +724,21 @@ export const listOrders = /* GraphQL */ `
     listOrders(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        giftID
+        giftImage
+        giftPrice
         name
         note
+        toDate
+        fromDate
+        recipientIDs
         giftEvents {
           nextToken
         }
         createdBy
         totalPrice
+        shippingAddressType
+        paymentID
         completed
         orderType
         orderDateType

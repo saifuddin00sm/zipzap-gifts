@@ -1202,8 +1202,14 @@ export const onCreateOrder = /* GraphQL */ `
   subscription OnCreateOrder($owner: String) {
     onCreateOrder(owner: $owner) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1226,6 +1232,8 @@ export const onCreateOrder = /* GraphQL */ `
       }
       createdBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -1240,8 +1248,14 @@ export const onUpdateOrder = /* GraphQL */ `
   subscription OnUpdateOrder($owner: String) {
     onUpdateOrder(owner: $owner) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1264,6 +1278,8 @@ export const onUpdateOrder = /* GraphQL */ `
       }
       createdBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -1278,8 +1294,14 @@ export const onDeleteOrder = /* GraphQL */ `
   subscription OnDeleteOrder($owner: String) {
     onDeleteOrder(owner: $owner) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1302,6 +1324,8 @@ export const onDeleteOrder = /* GraphQL */ `
       }
       createdBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
