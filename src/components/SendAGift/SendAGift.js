@@ -15,6 +15,7 @@ import SelectGifts from "./SelectGifts";
 import { Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useReward } from "react-rewards";
+import { useOrders } from "../../hooks/orders";
 
 const Root = styled("div")(({ theme }) => ({
   background: "#ABC4D6",
@@ -152,10 +153,12 @@ const StepComponent = ({
 
 const SendAGift = () => {
   const top = useRef(null);
+  const { addOrder } = useOrders();
   const [giftSearch, setGiftSearch] = useState("");
   const [formState, setFormState] = useState({ ...initialState });
   const [submitPayment, setSubmitPayment] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   function setInput(key, value) {
     let k = key;
@@ -190,16 +193,29 @@ const SendAGift = () => {
   const rewardRef = useRef(reward);
 
   const submit = () => {
-    setSubmitPayment(true);
+    if (!formState.paymentID) {
+      setSubmitPayment(true);
+    } else {
+      setSuccess(true);
+    }
   };
 
   useEffect(() => {
+    const submitOrder = async () => {
+      try {
+        await addOrder(formState);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
     if (success) {
+      submitOrder();
       setOpen(true);
       // Wait a bit for the success modal to render
       setTimeout(rewardRef.current, 100);
     }
-  }, [success]);
+  }, [success, addOrder, formState]);
 
   const handleSearch = (event) => {
     setGiftSearch(event.target.value);
@@ -299,7 +315,10 @@ const SendAGift = () => {
                     Back
                   </Button>
                   <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleNext} disabled={submitPayment}>
+                  <Button
+                    onClick={handleNext}
+                    disabled={submitPayment || success}
+                  >
                     {activeStep === steps.length - 1 ? "Create Gift" : "Next"}
                   </Button>
                 </Box>
@@ -308,7 +327,7 @@ const SendAGift = () => {
           </Box>
         </Root>
       </Container>
-      <SuccessModal open={open} setOpen={setOpen} />
+      <SuccessModal open={open} setOpen={setOpen} error={error} />
     </>
   );
 };
