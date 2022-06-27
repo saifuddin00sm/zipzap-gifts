@@ -124,17 +124,16 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
           </TextField>
         </Box>
         <Box className="infos">
-          <Label>Address</Label>
+          <Typography className="keys">Address</Typography>
           <TextField
-            variant="standard"
-            fullWidth={true}
             onChange={(event) =>
               setAddressInput("address1", event.target.value)
             }
             value={formState.shippingAddress.address1}
             placeholder="Address"
           ></TextField>
-
+        </Box>
+        <Box className="infos">
           <Label></Label>
           <TextField
             onChange={(event) =>
@@ -143,34 +142,27 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
             value={formState.shippingAddress.address2}
             placeholder="Address 2"
             label=""
-            variant="standard"
-            fullWidth={true}
           />
-
-          <Label>City</Label>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">City</Typography>
           <TextField
-            variant="standard"
-            fullWidth={true}
             onChange={(event) => setAddressInput("city", event.target.value)}
             value={formState.shippingAddress.city}
             placeholder="City"
           ></TextField>
-
-          <Label style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}>
-            State (i.e UT)
-          </Label>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">State (i.e UT)</Typography>
           <TextField
-            variant="standard"
-            fullWidth={true}
             onChange={(event) => setAddressInput("state", event.target.value)}
             value={formState.shippingAddress.state}
             placeholder="State"
           ></TextField>
-
-          <Label>Zip Code</Label>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Zip Code</Typography>
           <TextField
-            variant="standard"
-            fullWidth={true}
             onChange={(event) => setAddressInput("zip", event.target.value)}
             value={formState.shippingAddress.zip}
             placeholder="Zip"
@@ -198,12 +190,11 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
             {startDate === null ? "N/A" : startDate}
           </TextField>
         </Box>
-        <Box paddingBottom="10px">
+        <Box>
           <Button variant="contained" type="submit">
             Save
           </Button>
-        </Box>
-        <Box>
+
           <Button onClick={handleClick}>Cancel</Button>
         </Box>
       </Box>
