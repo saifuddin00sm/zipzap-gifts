@@ -43,6 +43,7 @@ export const createUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -92,6 +93,7 @@ export const updateUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -141,6 +143,7 @@ export const deleteUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -176,6 +179,7 @@ export const createCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -262,6 +266,7 @@ export const updateCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -348,6 +353,7 @@ export const deleteCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -1262,8 +1268,14 @@ export const createOrder = /* GraphQL */ `
   ) {
     createOrder(input: $input, condition: $condition) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1286,6 +1298,8 @@ export const createOrder = /* GraphQL */ `
       }
       createdBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -1303,8 +1317,14 @@ export const updateOrder = /* GraphQL */ `
   ) {
     updateOrder(input: $input, condition: $condition) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1327,6 +1347,8 @@ export const updateOrder = /* GraphQL */ `
       }
       createdBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -1344,8 +1366,14 @@ export const deleteOrder = /* GraphQL */ `
   ) {
     deleteOrder(input: $input, condition: $condition) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1368,6 +1396,8 @@ export const deleteOrder = /* GraphQL */ `
       }
       createdBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType

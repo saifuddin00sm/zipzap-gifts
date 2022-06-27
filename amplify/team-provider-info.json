@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-zipzap-dev-02722-unauthRole",
       "StackName": "amplify-zipzap-dev-02722",
       "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-dev-02722/8bbe7cc0-96d5-11ec-92ae-0a56f2fbf479",
-      "AmplifyAppId": "d2qe40666r920c"
+      "AmplifyAppId": "d2qe40666r920c",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-dev-02722-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -20,6 +21,13 @@
         "amplifyhosting": {
           "appId": "d2qe40666r920c",
           "type": "manual"
+        }
+      },
+      "function": {
+        "stripe": {
+          "secretsPathAmplifyAppId": "d2qe40666r920c",
+          "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
+          "s3Key": "amplify-builds/stripe-51495a436747362b5442-build.zip"
         }
       }
     }

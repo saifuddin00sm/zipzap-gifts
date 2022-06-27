@@ -1,0 +1,14 @@
+{
+  "lambdaLayers": [],
+  "secretNames": [
+    "STRIPE_KEY"
+  ],
+  "permissions": {
+    "api": {
+      "zipzap": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  }
+}

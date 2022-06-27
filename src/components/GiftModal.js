@@ -216,7 +216,7 @@ export default function GiftModal({
         <Box>
           {selectable && (
             <Button
-              onClick={() => setSelectedGift(modalData.id)}
+              onClick={() => setSelectedGift(modalData)}
               fullWidth
               sx={{
                 background: "#ABC4D6",

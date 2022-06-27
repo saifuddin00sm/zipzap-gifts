@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Header from "../Header";
 import Typography from "@mui/material/Typography";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import GiftDetails from "./GiftDetails";
 import ChooseRecipient from "./ChooseRecipient";
 import Checkout from "./Checkout";
 import SuccessModal from "./SuccessModal";
+import GiftStepper from "./GiftStepper";
 import InfoIcon from "@mui/icons-material/Info";
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
@@ -18,10 +15,11 @@ import SelectGifts from "./SelectGifts";
 import { Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useReward } from "react-rewards";
+import { useOrders } from "../../hooks/orders";
 
 const Root = styled("div")(({ theme }) => ({
   background: "#ABC4D6",
-  padding: "50px",
+  padding: "20px 50px 50px",
   [theme.breakpoints.down("md")]: {
     padding: "25px",
   },
@@ -75,15 +73,113 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 const steps = [
-  "Choose a gift",
-  "Gift details",
-  "Choose recipients",
-  "Check out",
+  "Choose a Gift",
+  "Gift Details",
+  "Choose Recipients",
+  "Check Out",
 ];
 
+const initialState = {
+  giftID: "",
+  giftImage: "",
+  giftPrice: 0,
+  name: "",
+  note: "",
+  to: new Date(),
+  from: new Date(),
+  orderType: "ONE_TIME",
+  orderDateType: "",
+  recipients: [],
+  totalPrice: "",
+  shippingAddressType: "RECIPIENT_ADDRESS",
+  paymentID: "",
+};
+
+const StepComponent = ({
+  activeStep,
+  giftSearch,
+  formState,
+  setInput,
+  handleNext,
+  submitPayment,
+  setSubmitPayment,
+  setSuccess,
+}) => {
+  let component = null;
+  switch (activeStep) {
+    case 0:
+      component = (
+        <SelectGifts
+          giftSearch={giftSearch}
+          selectedGift={formState.giftID}
+          setSelectedGift={(gift) => {
+            setInput("gift", gift);
+            handleNext();
+          }}
+        />
+      );
+      break;
+    case 1:
+      component = <GiftDetails {...formState} setInput={setInput} />;
+      break;
+    case 2:
+      component = (
+        <ChooseRecipient
+          selectedRecipients={formState.recipients}
+          setRecipients={(recipients) => setInput("recipients", recipients)}
+          orderDateType={formState.orderDateType}
+        />
+      );
+      break;
+    case 3:
+    default:
+      component = (
+        <Checkout
+          recipientCount={formState.recipients.length}
+          giftImage={formState.giftImage}
+          giftPrice={formState.giftPrice}
+          paymentID={formState.paymentID}
+          shippingAddressType={formState.shippingAddressType}
+          setInput={setInput}
+          submitPayment={submitPayment}
+          setSubmitPayment={setSubmitPayment}
+          setSuccess={setSuccess}
+        />
+      );
+      break;
+  }
+  return component;
+};
+
 const SendAGift = () => {
+  const top = useRef(null);
+  const { addOrder } = useOrders();
   const [giftSearch, setGiftSearch] = useState("");
-  const [selectedGift, setSelectedGift] = useState("");
+  const [formState, setFormState] = useState({ ...initialState });
+  const [submitPayment, setSubmitPayment] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  function setInput(key, value) {
+    let k = key;
+    let v = value;
+    let giftImage;
+    let giftPrice;
+    if (key === "gift") {
+      k = "giftID";
+      v = value.id;
+      giftImage = value?.pictures?.items.filter(
+        ({ alt }) => alt === "thumbnail"
+      )?.[0]?.src;
+      giftPrice = value.price;
+    }
+    setFormState({
+      ...formState,
+      [k]: v,
+      ...(key === "orderType" && value === "ONE_TIME" && { orderDateType: "" }),
+      ...(key === "gift" && { giftImage, giftPrice }),
+    });
+  }
 
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen] = useState(false);
@@ -94,6 +190,32 @@ const SendAGift = () => {
     spread: 85,
     elementSize: 16,
   });
+  const rewardRef = useRef(reward);
+
+  const submit = () => {
+    if (!formState.paymentID) {
+      setSubmitPayment(true);
+    } else {
+      setSuccess(true);
+    }
+  };
+
+  useEffect(() => {
+    const submitOrder = async () => {
+      try {
+        await addOrder(formState);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    if (success) {
+      submitOrder();
+      setOpen(true);
+      // Wait a bit for the success modal to render
+      setTimeout(rewardRef.current, 100);
+    }
+  }, [success, addOrder, formState]);
 
   const handleSearch = (event) => {
     setGiftSearch(event.target.value);
@@ -106,12 +228,11 @@ const SendAGift = () => {
   };
 
   const handleNext = () => {
+    top.current.scrollIntoView({ behavior: "smooth" });
     setActiveStep((prevActiveStep) => {
       const nextStep = prevActiveStep + 1;
       if (nextStep >= steps.length) {
-        setOpen(true);
-        // Wait a bit for the success modal to render
-        setTimeout(reward, 100);
+        submit();
         return steps.length - 1;
       }
       return nextStep;
@@ -119,65 +240,25 @@ const SendAGift = () => {
   };
 
   const handleBack = () => {
+    top.current.scrollIntoView({ behavior: "smooth" });
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const StepComponent = () => {
-    let component = null;
-    switch (activeStep) {
-      case 0:
-        component = (
-          <SelectGifts
-            giftSearch={giftSearch}
-            selectedGift={selectedGift}
-            setSelectedGift={(giftID) => {
-              setSelectedGift(giftID);
-              handleNext();
-            }}
-          />
-        );
-        break;
-      case 1:
-        component = <GiftDetails />;
-        break;
-      case 2:
-        component = <ChooseRecipient />;
-        break;
-      case 3:
-      default:
-        component = <Checkout />;
-        break;
-    }
-    return component;
   };
 
   return (
     <>
-      <Container component="main">
-        <Header>
-          <Typography variant="h1">Send a Gift</Typography>
-        </Header>
-        <Root>
+      <Container sx={{ px: 0 }} component="main">
+        <Root ref={top}>
           <Box className="innerBox">
-            <Stepper
+            <GiftStepper
+              steps={steps}
               activeStep={activeStep}
-              sx={{ width: "180px", marginBottom: "20px", marginLeft: "auto" }}
-            >
-              {steps.map((label) => {
-                const stepProps = {};
-                const labelProps = {};
-                return (
-                  <Step key={label} {...stepProps}>
-                    <StepLabel {...labelProps}></StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
+              setActiveStep={setActiveStep}
+            />
             <Box className="heading">
               <Typography sx={{ display: "inline-block" }} variant="h6">
                 {steps[activeStep]}
               </Typography>
-              {steps[activeStep] === "Choose a gift" && (
+              {steps[activeStep] === steps[0] && (
                 <Tooltip
                   enterTouchDelay={0}
                   title='Select a Gift to send to one or more of your recipients by pressing "Select Gift"'
@@ -213,7 +294,16 @@ const SendAGift = () => {
                 <Box
                   sx={{ overflow: "auto", maxHeight: "600px", height: "100%" }}
                 >
-                  <StepComponent />
+                  <StepComponent
+                    activeStep={activeStep}
+                    giftSearch={giftSearch}
+                    formState={formState}
+                    setInput={setInput}
+                    handleNext={handleNext}
+                    submitPayment={submitPayment}
+                    setSubmitPayment={setSubmitPayment}
+                    setSuccess={setSuccess}
+                  />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Button
@@ -225,7 +315,10 @@ const SendAGift = () => {
                     Back
                   </Button>
                   <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleNext}>
+                  <Button
+                    onClick={handleNext}
+                    disabled={submitPayment || success}
+                  >
                     {activeStep === steps.length - 1 ? "Create Gift" : "Next"}
                   </Button>
                 </Box>
@@ -234,7 +327,7 @@ const SendAGift = () => {
           </Box>
         </Root>
       </Container>
-      <SuccessModal open={open} setOpen={setOpen} />
+      <SuccessModal open={open} setOpen={setOpen} error={error} />
     </>
   );
 };

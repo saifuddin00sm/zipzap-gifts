@@ -1,51 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
-
-const options = [
-  { opt: "To Recipients Home Address", price: "22", selected: true, id: 1 },
-  {
-    opt: "To central office: 200 2000 S America",
-    price: "12",
-    id: 2,
-    selected: false,
-  },
-];
-
-const cards = [
-  {
-    cardName: "credit card",
-    ending: 1993993,
-    exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
-    isSelected: false,
-  },
-  {
-    cardName: "credit card",
-    ending: 9393939,
-    exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
-    isSelected: true,
-  },
-  {
-    cardName: "credit card",
-    ending: 9923939,
-    exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
-    isSelected: false,
-  },
-  {
-    cardName: "credit card",
-    ending: 4393939,
-    exp: "12/2065",
-    name: "Name on Card: Victoria Skylan Black",
-    isSelected: true,
-  },
-];
+import Payment from "./Payment";
 
 const Root = styled("div")(({ theme }) => ({
   "& .headings_text": {
@@ -175,7 +135,35 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-const Checkout = () => {
+const Checkout = ({
+  recipientCount,
+  giftImage,
+  giftPrice,
+  shippingAddressType,
+  paymentID,
+  setInput,
+  submitPayment,
+  setSubmitPayment,
+  setSuccess,
+}) => {
+  const [total, setTotal] = useState(0);
+  const recipientShippingPrice = 22;
+  const officeShippingPrice = 12;
+
+  let shippingCost = 0;
+  if (shippingAddressType === "RECIPIENT_ADDRESS") {
+    shippingCost = recipientShippingPrice;
+  } else if (shippingAddressType === "COMPANY_ADDRESS") {
+    shippingCost = officeShippingPrice;
+  }
+  const totalPrice = giftPrice * recipientCount + shippingCost * recipientCount;
+  useEffect(() => {
+    if (total !== totalPrice) {
+      setInput("totalPrice", totalPrice);
+      setTotal(totalPrice);
+    }
+  }, [setInput, total, totalPrice]);
+
   return (
     <Root>
       <Grid
@@ -191,16 +179,23 @@ const Checkout = () => {
             </Typography>
             <Box className="card_container">
               <Box className="small_card">
-                <img src="" alt="Gift images" />
+                <img
+                  style={{
+                    width: "100%",
+                    objectFit: "cover",
+                  }}
+                  src={giftImage}
+                  alt="Gift images"
+                />
               </Box>
               <Box>
                 <Typography variant="h5" className="big_text">
-                  X 3 recipients
+                  X {recipientCount} recipients
                 </Typography>
                 <Button variant="outlined">
                   <Link
                     className="package_btn"
-                    href="mailto:connect@zipzapgifts.com"
+                    href="mailto:connect@zipzapgifts.com?subject=Custom Packaging&body=Hi, Zip Zap!%0D%0A%0D%0AI am interested in custom packaging for my gift!"
                   >
                     Want Custom Packaging ?
                   </Link>
@@ -212,20 +207,44 @@ const Checkout = () => {
                 Choose Shipping Option
               </Typography>
               <Box>
-                {options.map(({ opt, price, selected, id }) => (
-                  <Box
-                    key={id}
-                    className="shipping_cards"
-                    sx={{ background: selected ? "#ABC6BD" : "#fff" }}
-                  >
-                    <Typography className="address" variant="body">
-                      {opt}
-                    </Typography>
-                    <Typography className="prices" variant="body2">
-                      {"$" + price}
-                    </Typography>
-                  </Box>
-                ))}
+                <Box
+                  onClick={() =>
+                    setInput("shippingAddressType", "RECIPIENT_ADDRESS")
+                  }
+                  className="shipping_cards"
+                  sx={{
+                    background:
+                      shippingAddressType === "RECIPIENT_ADDRESS"
+                        ? "#ABC6BD"
+                        : "#fff",
+                  }}
+                >
+                  <Typography className="address" variant="body">
+                    To Recipient's Address
+                  </Typography>
+                  <Typography className="prices" variant="body2">
+                    ${recipientShippingPrice}
+                  </Typography>
+                </Box>
+                <Box
+                  onClick={() =>
+                    setInput("shippingAddressType", "COMPANY_ADDRESS")
+                  }
+                  className="shipping_cards"
+                  sx={{
+                    background:
+                      shippingAddressType === "COMPANY_ADDRESS"
+                        ? "#ABC6BD"
+                        : "#fff",
+                  }}
+                >
+                  <Typography className="address" variant="body">
+                    Ship Gifts to Company Address
+                  </Typography>
+                  <Typography className="prices" variant="body2">
+                    ${officeShippingPrice}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -242,43 +261,16 @@ const Checkout = () => {
             }}
           >
             <Box>
-              <Typography className="headings_text" variant="h6">
-                Choose Credit Card Option
-              </Typography>
-              <Box className="credit_cards">
-                <Box className="inner_card">
-                  {cards.map(({ cardName, exp, name, isSelected, ending }) => (
-                    <Box key={ending} className="credit_card">
-                      <Box
-                        className="card_top"
-                        sx={{ background: isSelected ? "#F1F1F1" : "#C5D6E2" }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            textAlign: "right",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {cardName}
-                        </Typography>
-                      </Box>
-                      <Box
-                        className="card_bottom"
-                        sx={{ background: isSelected ? "#DEDEDE" : "#ABC4D6" }}
-                      >
-                        <Typography variant="h6">Ending In {ending}</Typography>
-                        <Typography variant="body2">Exp: {exp}</Typography>
-                        <Typography variant="body2">{name}</Typography>
-                      </Box>
-                    </Box>
-                  ))}
-                </Box>
-                <Button variant="outlined">Add New Card</Button>
-              </Box>
+              <Payment
+                submitPayment={submitPayment}
+                paymentID={paymentID}
+                setPaymentID={(id) => setInput("paymentID", id)}
+                setSuccess={setSuccess}
+                setSubmitPayment={setSubmitPayment}
+              />
             </Box>
             <Typography variant="body" className="totalPrice">
-              Total Price: $288.33
+              Total Price: ${totalPrice}
             </Typography>
           </Box>
         </Grid>

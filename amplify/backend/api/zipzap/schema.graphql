@@ -16,8 +16,8 @@ type User
   phoneNumber: AWSPhone
   company: Company @belongsTo
   profilePhoto: String
-  # creditCards: [CreditCard] @hasMany
   accessGroups: [String]
+  stripeID: String
 }
 
 type Company
@@ -152,6 +152,11 @@ enum GiftDateType {
   ANNIVERSARY
 }
 
+enum ShippingAddressType {
+  RECIPIENT_ADDRESS
+  COMPANY_ADDRESS
+}
+
 type Order
   @model
   @auth(
@@ -162,11 +167,19 @@ type Order
     ]
   ) {
   id: ID!
+  giftID: ID!
+  giftImage: String
+  giftPrice: String
   name: String!
   note: String
+  toDate: AWSDateTime
+  fromDate: AWSDateTime
+  recipientIDs: [ID]
   giftEvents: [GiftEvent] @hasMany(indexName: "byOrder", fields: ["id"])
   createdBy: String!
   totalPrice: String
+  shippingAddressType: ShippingAddressType
+  paymentID: String
   # invoice: ?
   completed: AWSDateTime
   orderType: GiftType
