@@ -18,7 +18,15 @@ const stripePromise = loadStripe(
 
 // A helper component that has to be a child of Elements so that the usePayment
 // hook can properly access the stripe and elements hooks.
-const Submit = ({ setErrorMessage }) => {
+// It will only attempt to submit new payment information if we don't
+// already have a paymentID.
+const Submit = ({
+  paymentID,
+  setErrorMessage,
+  setSuccess,
+  setSubmitPayment,
+  setPaymentID,
+}) => {
   const { submit, errorMessage } = usePayment();
   useEffect(() => {
     if (errorMessage) {
@@ -27,10 +35,19 @@ const Submit = ({ setErrorMessage }) => {
   }, [errorMessage, setErrorMessage]);
 
   useEffect(() => {
-    if (submit) {
-      submit();
+    const submitStripe = async () => {
+      const { error, paymentID } = await submit();
+      if (!error) {
+        setPaymentID(paymentID);
+        setSuccess(true);
+      }
+      setSubmitPayment(false);
+    };
+
+    if (!paymentID && submit) {
+      submitStripe();
     }
-  }, [submit]);
+  }, [submit, paymentID, setSuccess, setSubmitPayment, setPaymentID]);
 
   return null;
 };
@@ -100,7 +117,13 @@ const CreditCards = ({ cards, addNewCard, paymentID, setPaymentID }) => {
   );
 };
 
-const Payment = ({ callSubmit, paymentID, setPaymentID }) => {
+const Payment = ({
+  submitPayment,
+  paymentID,
+  setPaymentID,
+  setSuccess,
+  setSubmitPayment,
+}) => {
   const [loading, setLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const [clientSecret, setClientSecret] = useState("");
@@ -152,10 +175,6 @@ const Payment = ({ callSubmit, paymentID, setPaymentID }) => {
     setPaymentID("");
   };
 
-  if (errorMessage) {
-    return <Alert severity="error">{errorMessage}</Alert>;
-  }
-
   if (cards.length > 0 && showCards) {
     return loading ? (
       <CircularProgress />
@@ -178,6 +197,7 @@ const Payment = ({ callSubmit, paymentID, setPaymentID }) => {
   };
   return (
     <Elements stripe={stripePromise} options={options}>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
       {loading && <CircularProgress />}
       <PaymentElement
         onReady={() => {
@@ -185,7 +205,15 @@ const Payment = ({ callSubmit, paymentID, setPaymentID }) => {
           setLoading(false);
         }}
       />
-      {callSubmit && <Submit setErrorMessage={setErrorMessage} />}
+      {submitPayment && (
+        <Submit
+          paymentID={paymentID}
+          setErrorMessage={setErrorMessage}
+          setSuccess={setSuccess}
+          setSubmitPayment={setSubmitPayment}
+          setPaymentID={setPaymentID}
+        />
+      )}
       {cards.length > 0 && showCancelButton && (
         <Button
           variant="outlined"

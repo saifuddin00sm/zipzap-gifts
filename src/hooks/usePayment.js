@@ -25,11 +25,12 @@ const usePayment = () => {
         return_url: window.location.href,
       },
     });
-    const { error } = response;
+    const { error, setupIntent: { payment_method } = {} } = response;
 
     if (error) {
       setErrorMessage(error.message);
     }
+    return { error, paymentID: payment_method };
   }, [elements, stripe]);
 
   return { submit, errorMessage };

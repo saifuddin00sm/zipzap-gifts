@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -100,7 +100,9 @@ const StepComponent = ({
   formState,
   setInput,
   handleNext,
-  callSubmit,
+  submitPayment,
+  setSubmitPayment,
+  setSuccess,
 }) => {
   let component = null;
   switch (activeStep) {
@@ -138,7 +140,9 @@ const StepComponent = ({
           paymentID={formState.paymentID}
           shippingAddressType={formState.shippingAddressType}
           setInput={setInput}
-          callSubmit={callSubmit}
+          submitPayment={submitPayment}
+          setSubmitPayment={setSubmitPayment}
+          setSuccess={setSuccess}
         />
       );
       break;
@@ -150,7 +154,8 @@ const SendAGift = () => {
   const top = useRef(null);
   const [giftSearch, setGiftSearch] = useState("");
   const [formState, setFormState] = useState({ ...initialState });
-  const [callSubmit, setCallSubmit] = useState(false);
+  const [submitPayment, setSubmitPayment] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   function setInput(key, value) {
     let k = key;
@@ -182,6 +187,19 @@ const SendAGift = () => {
     spread: 85,
     elementSize: 16,
   });
+  const rewardRef = useRef(reward);
+
+  const submit = () => {
+    setSubmitPayment(true);
+  };
+
+  useEffect(() => {
+    if (success) {
+      setOpen(true);
+      // Wait a bit for the success modal to render
+      setTimeout(rewardRef.current, 100);
+    }
+  }, [success]);
 
   const handleSearch = (event) => {
     setGiftSearch(event.target.value);
@@ -198,10 +216,7 @@ const SendAGift = () => {
     setActiveStep((prevActiveStep) => {
       const nextStep = prevActiveStep + 1;
       if (nextStep >= steps.length) {
-        setCallSubmit(true);
-        setOpen(true);
-        // Wait a bit for the success modal to render
-        setTimeout(reward, 100);
+        submit();
         return steps.length - 1;
       }
       return nextStep;
@@ -269,7 +284,9 @@ const SendAGift = () => {
                     formState={formState}
                     setInput={setInput}
                     handleNext={handleNext}
-                    callSubmit={callSubmit}
+                    submitPayment={submitPayment}
+                    setSubmitPayment={setSubmitPayment}
+                    setSuccess={setSuccess}
                   />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -282,7 +299,7 @@ const SendAGift = () => {
                     Back
                   </Button>
                   <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleNext}>
+                  <Button onClick={handleNext} disabled={submitPayment}>
                     {activeStep === steps.length - 1 ? "Create Gift" : "Next"}
                   </Button>
                 </Box>

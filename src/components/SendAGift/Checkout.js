@@ -142,7 +142,9 @@ const Checkout = ({
   shippingAddressType,
   paymentID,
   setInput,
-  callSubmit,
+  submitPayment,
+  setSubmitPayment,
+  setSuccess,
 }) => {
   const recipientShippingPrice = 22;
   const officeShippingPrice = 12;
@@ -253,9 +255,11 @@ const Checkout = ({
           >
             <Box>
               <Payment
-                callSubmit={callSubmit}
+                submitPayment={submitPayment}
                 paymentID={paymentID}
                 setPaymentID={(id) => setInput("paymentID", id)}
+                setSuccess={setSuccess}
+                setSubmitPayment={setSubmitPayment}
               />
             </Box>
             <Typography variant="body" className="totalPrice">
