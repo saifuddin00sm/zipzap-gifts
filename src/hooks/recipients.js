@@ -4,7 +4,7 @@ import {
   createRecipient,
   createAddress,
   deleteRecipient,
-  updateUser,
+  updateRecipient,
 } from "../graphql/mutations";
 import { format, isDate } from "date-fns";
 
@@ -124,7 +124,7 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
 };
 
-const updateRecipient = async ({ shippingAddress, ...recipient }) => {
+const editRecipient = async ({ shippingAddress, ...recipient }) => {
   if (!recipient.email) {
     recipient.email = null;
   }
@@ -147,7 +147,7 @@ const updateRecipient = async ({ shippingAddress, ...recipient }) => {
       : new Date(recipient.startDate);
     recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
-  await API.graphql(graphqlOperation(updateUser, { input: recipient }));
+  await API.graphql(graphqlOperation(editRecipient, { input: recipient }));
   console.log("success");
 };
 
@@ -164,7 +164,7 @@ const useRecipients = () => {
     error,
   } = useQuery("recipients", getAllRecipients);
 
-  const updateMutation = useMutation(updateRecipient, {
+  const updateMutation = useMutation(editRecipient, {
     onSuccess: () => {
       // Invalidate and refresh all of the recipients queries
       queryClient.invalidateQueries("recipients");
@@ -192,8 +192,8 @@ const useRecipients = () => {
     error,
     removeRecipient: removeMutation.mutateAsync,
     addRecipient: mutation.mutateAsync,
-    updateRecipient: updateMutation.mutateAsync,
+    editRecipient: updateMutation.mutateAsync,
   };
 };
 
-export { fetchRecipients, getAllRecipients, useRecipients, updateRecipient };
+export { fetchRecipients, getAllRecipients, useRecipients, editRecipient };

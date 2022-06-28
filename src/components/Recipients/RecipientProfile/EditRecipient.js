@@ -38,7 +38,7 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
     startDate: info.startDate,
   };
 
-  const { updateRecipient } = useRecipients();
+  const { editRecipient } = useRecipients();
 
   const [formState, setFormState] = useState(initialState);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -70,10 +70,10 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
     setIsEdit(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     console.log({ formState });
     e.preventDefault();
-    // await updateRecipient({ ...formState });
+    await editRecipient({ ...formState });
     setIsEdit(false);
     setFormState(initialState);
     setOpen(true);
