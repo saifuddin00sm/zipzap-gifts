@@ -12,6 +12,8 @@ import TemplateTable from "./TemplateTable";
 import RecipientSuccess from "./RecipientSuccess";
 import { useRecipients } from "../../hooks/recipients";
 import { useReward } from "react-rewards";
+import CircularProgress from "@mui/material/CircularProgress";
+import Stack from "@mui/material/Stack";
 
 const ImportList = () => {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const ImportList = () => {
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const onClose = () => {
     setOpen(false);
     navigate("/recipients");
@@ -36,72 +39,75 @@ const ImportList = () => {
   const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip\nJohn,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
 
   const changeHandler = (event) => {
-    Papa.parse(event.target.files[0], {
-      header: true,
-      delimiter: ",",
-      transformHeader: (header) => {
-        const headers = {
-          firstname: "firstName",
-          lastname: "lastName",
-          // department: "department",
-          jobtitle: "jobTitle",
-          birthday: "birthday",
-          datestarted: "startDate",
-          address: "address1",
-          city: "city",
-          state: "state",
-          zip: "zip",
-        };
-        return headers?.[header.replace(/\s/g, "").toLowerCase()];
-      },
-      skipEmptyLines: true,
-      complete: async function ({ data, errors }) {
-        if (errors?.length !== 0) {
-          setUploadErrors(
-            errors.map(({ row, message }) => `Row ${row + 2}: ${message}`)
-          );
-          setOpen(true);
-          return;
-        }
-        const errs = [];
-        let count = 0;
-        let successCount = 0;
-
-        for (const row of data) {
-          count = count + 1;
-          const recipient = {
-            ...row,
-            shippingAddress: {
-              address1: row?.address1 || "",
-              city: row?.city || "",
-              state: row?.state || "",
-              zip: row?.zip || "",
-            },
+    setIsLoading(true);
+    if (isLoading) {
+      Papa.parse(event.target.files[0], {
+        header: true,
+        delimiter: ",",
+        transformHeader: (header) => {
+          const headers = {
+            firstname: "firstName",
+            lastname: "lastName",
+            // department: "department",
+            jobtitle: "jobTitle",
+            birthday: "birthday",
+            datestarted: "startDate",
+            address: "address1",
+            city: "city",
+            state: "state",
+            zip: "zip",
           };
-          delete recipient.undefined;
-          delete recipient.address1;
-          delete recipient.city;
-          delete recipient.state;
-          delete recipient.zip;
-          try {
-            await addRecipient(recipient);
-            successCount++;
-          } catch (error) {
-            if (error?.errors?.length > 0) {
-              errs.push(`Row ${count + 1}: ${error.errors[0]?.message}`);
-            } else {
-              errs.push(`Row ${count + 1}: ${error}`);
+          return headers?.[header.replace(/\s/g, "").toLowerCase()];
+        },
+        skipEmptyLines: true,
+        complete: async function ({ data, errors }) {
+          if (errors?.length !== 0) {
+            setUploadErrors(
+              errors.map(({ row, message }) => `Row ${row + 2}: ${message}`)
+            );
+            setOpen(true);
+            return;
+          }
+          const errs = [];
+          let count = 0;
+          let successCount = 0;
+
+          for (const row of data) {
+            count = count + 1;
+            const recipient = {
+              ...row,
+              shippingAddress: {
+                address1: row?.address1 || "",
+                city: row?.city || "",
+                state: row?.state || "",
+                zip: row?.zip || "",
+              },
+            };
+            delete recipient.undefined;
+            delete recipient.address1;
+            delete recipient.city;
+            delete recipient.state;
+            delete recipient.zip;
+            try {
+              await addRecipient(recipient);
+              successCount++;
+            } catch (error) {
+              if (error?.errors?.length > 0) {
+                errs.push(`Row ${count + 1}: ${error.errors[0]?.message}`);
+              } else {
+                errs.push(`Row ${count + 1}: ${error}`);
+              }
             }
           }
-        }
-        setUploadErrors(errs);
-        setUploadCount(successCount);
-        setTotalCount(count);
-        setSuccess(true);
-        setOpen(true);
-        reward();
-      },
-    });
+          setUploadErrors(errs);
+          setUploadCount(successCount);
+          setTotalCount(count);
+          setSuccess(true);
+          setOpen(true);
+          reward();
+        },
+      });
+    }
   };
 
   return (
@@ -119,6 +125,23 @@ const ImportList = () => {
           </Link>
         </Box>
         <Root>
+          {isLoading ? (
+            <Stack
+              style={{
+                position: "relative",
+              }}
+            >
+              <CircularProgress
+                variant="indeterminate"
+                style={{
+                  position: "absolute",
+                  top: 250,
+                  left: 500,
+                  zIndex: 1,
+                }}
+              />
+            </Stack>
+          ) : null}
           <Box className="upload">
             <Box className="uploadHead">
               <Typography variant="h5">Upload a List</Typography>
@@ -205,7 +228,6 @@ const ImportList = () => {
           button={true}
         />
       )}
-      ;
     </>
   );
 };
