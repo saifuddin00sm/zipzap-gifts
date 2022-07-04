@@ -15,20 +15,84 @@ import { getUser } from "../../graphql/queries";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
 
-const ProfileInfo = ({ info, isEdit, setIsEdit }) => {
-  const navigate = useNavigate();
-
+const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
   const {
+    id,
     userName,
     company,
-    contactInfo: { address, email, phone, companySize } = {},
+    companySize,
     cards,
+    phone,
+    birthday,
+    email,
+    address: { address1, address2, city, state, zip } = {},
+    jobTitle,
+    startDate,
   } = info;
 
-  const handleClick = () => {
-    setIsEdit(true);
+  const initialState = {
+    id: info.id,
+    company: info.company,
+    companySize: info.companySize,
+    userName: info.userName,
+    birthday: info.birthday,
+    email: info.email,
+    jobTitle: info.jobTitle,
+    phone: info.phone,
+    address: {
+      address1: info.address1,
+      address2: info.address2,
+      city: info.city,
+      state: info.state,
+      zip: info.zip,
+    },
+
+    startDate: info.startDate,
   };
+
+  //   const { editRecipient } = useRecipients();
+
+  const [formState, setFormState] = useState(initialState);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  function setInput(key, value) {
+    setFormState({ ...formState, [key]: value });
+  }
+
+  const validateForm = () => {
+    if (
+      formState.lastName !== "" &&
+      formState.shippingAddress.address1 !== "" &&
+      formState.shippingAddress.zip !== "" &&
+      formState.email !== ""
+    ) {
+      setIsFormValid(true);
+    }
+  };
+
+  function setAddressInput(key, value) {
+    setFormState({
+      ...formState,
+      shippingAddress: { ...formState.shippingAddress, [key]: value },
+    });
+    validateForm();
+  }
+
+  const handleClick = () => {
+    setIsEdit(false);
+  };
+
+  //   const handleSubmit = async (e) => {
+  //     console.log({ formState });
+  //     e.preventDefault();
+  //     await editRecipient({ ...formState });
+  //     setIsEdit(false);
+  //     setFormState(initialState);
+  //     setOpen(true);
+  //   };
 
   return (
     <Root>
@@ -56,11 +120,29 @@ const ProfileInfo = ({ info, isEdit, setIsEdit }) => {
             </label>
           </Box> */}
         </Box>
-        <Box>
-          <Typography className="title" variant="h3">
-            {userName}
-          </Typography>
-          <Typography className="company">Company: {company}</Typography>
+        <Box
+          //   onSubmit={handleSubmit}
+          component="form"
+          sx={{ marginTop: "20px" }}
+        >
+          <Box className="title">
+            <TextField
+              name="userName"
+              value={formState.userName}
+              onChange={(event) => setInput("userName", event.target.value)}
+            >
+              {userName === null ? "N/A" : userName}
+            </TextField>
+          </Box>
+          <Box className="title">
+            <TextField
+              name="company"
+              value={formState.company}
+              onChange={(event) => setInput("company", event.target.value)}
+            >
+              {company === null ? "N/A" : company}
+            </TextField>
+          </Box>
         </Box>
       </Box>
       <Box className="contactInfo" sx={{ mb: 5 }}>
@@ -76,7 +158,7 @@ const ProfileInfo = ({ info, isEdit, setIsEdit }) => {
           <Typography variant="h5" sx={{ fontWeight: 600, color: "#505050" }}>
             Contact Info
           </Typography>
-          <Button onClick={handleClick}>Edit Information</Button>
+          <Button onClick={handleClick}>Save</Button>
         </Box>
         <Grid
           container
@@ -86,29 +168,58 @@ const ProfileInfo = ({ info, isEdit, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
-              <Typography>Address: {address}</Typography>
+              <Typography>Address: </Typography>
+              <TextField
+                name="address1"
+                value={formState.address1}
+                onChange={(event) => setInput("address1", event.target.value)}
+              />
             </Box>
           </Grid>
           <Grid item xs={6}>
             <Box className="infoBox">
               <PhoneIcon />
-              <Typography>Phone: {phone}</Typography>
+              <Typography>Phone: </Typography>
+              <TextField
+                name="phone"
+                value={formState.phone}
+                onChange={(event) => setInput("phone", event.target.value)}
+              >
+                {phone === null ? "N/A" : phone}
+              </TextField>
             </Box>
           </Grid>
           <Grid item xs={6}>
             <Box className="infoBox">
               <EmailIcon />
-              <Typography>Email: {email}</Typography>
+              <Typography>Email:</Typography>
+              <TextField
+                name="email"
+                value={formState.email}
+                onChange={(event) => setInput("email", event.target.value)}
+              >
+                {info.email}
+              </TextField>
             </Box>
           </Grid>
           <Grid item xs={6}>
             <Box className="infoBox">
               <PeopleOutlineIcon />
-              <Typography>Company Size: {companySize}</Typography>
+              <Typography>Company Size:</Typography>
+              <TextField
+                name="companySize"
+                value={formState.companySize}
+                onChange={(event) =>
+                  setInput("companySize", event.target.value)
+                }
+              >
+                {formState.companySize}
+              </TextField>
             </Box>
           </Grid>
         </Grid>
       </Box>
+
       <Typography
         variant="h5"
         sx={{ mb: 3, fontWeight: 600, color: "#505050" }}
@@ -142,12 +253,15 @@ const ProfileInfo = ({ info, isEdit, setIsEdit }) => {
             </Box>
           </Box>
         ))}
+        <Box>
+          <Button onClick={handleClick}>Cancel</Button>
+        </Box>
       </Box>
     </Root>
   );
 };
 
-export default ProfileInfo;
+export default EditProfile;
 
 const Root = styled("div")(({ theme }) => ({
   "& .profile": {
@@ -268,7 +382,3 @@ const Root = styled("div")(({ theme }) => ({
     gap: "36px",
   },
 }));
-
-// const Input = styled("input")({
-//   display: "none",
-// });

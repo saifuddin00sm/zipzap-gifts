@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Header from "../Header";
 import Typography from "@mui/material/Typography";
@@ -6,6 +6,11 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import useAuth from "../../hooks/useAuth";
 import ProfileInfo from "./ProfileInfo";
+import { useLocation, useNavigate } from "react-router-dom";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getCurrentUser } from "../../hooks/useAuth";
+import EditProfile from "./EditProfile";
 
 const userInfo = {
   userName: "Krista Humphrey",
@@ -47,6 +52,11 @@ const userInfo = {
 // TODO: This Component needs to be refactored to meet the Zip Zap Code of Code
 function ProfilePage() {
   const { signOut } = useAuth();
+  const { currentUser } = getCurrentUser();
+  const [isEdit, setIsEdit] = useState(false);
+
+  console.log({ currentUser });
+
   return (
     <Container component="main">
       <Header>
@@ -56,7 +66,11 @@ function ProfilePage() {
         </Button>
       </Header>
       <Box>
-        <ProfileInfo info={userInfo} />
+        {isEdit ? (
+          <EditProfile info={userInfo} isEdit={isEdit} setIsEdit={setIsEdit} />
+        ) : (
+          <ProfileInfo info={userInfo} isEdit={isEdit} setIsEdit={setIsEdit} />
+        )}
       </Box>
     </Container>
   );
