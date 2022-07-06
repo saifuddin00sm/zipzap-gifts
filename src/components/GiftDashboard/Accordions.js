@@ -65,7 +65,7 @@ const Accordions = () => {
       orderDate,
       date,
     };
-    if (orderDate <= today) {
+    if (new Date(o.toDate) <= today) {
       prev.push({ ...gift, fulfilled: true });
     } else {
       current.push(gift);
