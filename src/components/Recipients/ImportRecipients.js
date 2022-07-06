@@ -125,23 +125,6 @@ const ImportList = () => {
           </Link>
         </Box>
         <Root>
-          {isLoading ? (
-            <Stack
-              style={{
-                position: "relative",
-              }}
-            >
-              <CircularProgress
-                variant="indeterminate"
-                style={{
-                  position: "absolute",
-                  top: 250,
-                  left: 500,
-                  zIndex: 1,
-                }}
-              />
-            </Stack>
-          ) : null}
           <Box className="upload">
             <Box className="uploadHead">
               <Typography variant="h5">Upload a List</Typography>
@@ -156,17 +139,23 @@ const ImportList = () => {
                 Started, Address, City, State, Zip
               </Typography>
               <Box className="uploadBtn">
-                <label htmlFor="contained-button-file">
-                  <Input
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                    onChange={changeHandler}
-                  />
-                  <Button component="span" size="large" variant="contained">
-                    <FileUploadIcon sx={{ width: "2.5em", height: "2.5em" }} />
-                  </Button>
-                </label>
+                {isLoading ? (
+                  <CircularProgress variant="indeterminate" size={136} />
+                ) : (
+                  <label htmlFor="contained-button-file">
+                    <Input
+                      id="contained-button-file"
+                      multiple
+                      type="file"
+                      onChange={changeHandler}
+                    />
+                    <Button component="span" size="large" variant="contained">
+                      <FileUploadIcon
+                        sx={{ width: "2.5em", height: "2.5em" }}
+                      />
+                    </Button>
+                  </label>
+                )}
               </Box>
             </Box>
           </Box>
