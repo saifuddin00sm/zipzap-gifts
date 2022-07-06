@@ -1297,6 +1297,7 @@ export const createOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
       shippingAddressType
       paymentID
@@ -1346,6 +1347,7 @@ export const updateOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
       shippingAddressType
       paymentID
@@ -1395,6 +1397,7 @@ export const deleteOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
       shippingAddressType
       paymentID

@@ -348,7 +348,9 @@ const SendAGift = () => {
                     onClick={handleNext}
                     disabled={submitPayment || success}
                   >
-                    {activeStep === steps.length - 1 ? "Create Gift" : "Next"}
+                    {activeStep === steps.length - 1
+                      ? `${formState.id ? "Update Gift" : "Create Gift"}`
+                      : "Next"}
                   </Button>
                 </Box>
               </Box>

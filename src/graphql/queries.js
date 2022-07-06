@@ -702,6 +702,7 @@ export const getOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
       shippingAddressType
       paymentID
@@ -736,6 +737,7 @@ export const listOrders = /* GraphQL */ `
           nextToken
         }
         createdBy
+        updatedBy
         totalPrice
         shippingAddressType
         paymentID

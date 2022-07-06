@@ -1,7 +1,7 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { Auth } from "@aws-amplify/auth";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { createOrder } from "../graphql/mutations";
+import { createOrder, updateOrder } from "../graphql/mutations";
 
 const listOrders = /* GraphQL */ `
   query GetOrders(
@@ -71,6 +71,7 @@ const getAllOrders = async () => {
 };
 
 const addOrder = async ({
+  id,
   giftID,
   giftImage,
   giftPrice,
@@ -86,7 +87,7 @@ const addOrder = async ({
   paymentID,
 }) => {
   const currentSession = await Auth.currentSession();
-  const createdBy = currentSession.idToken.payload.email;
+  const user = currentSession.idToken.payload.email;
   const order = {
     giftID,
     giftImage,
@@ -96,7 +97,6 @@ const addOrder = async ({
     toDate,
     fromDate,
     recipientIDs,
-    createdBy,
     totalPrice,
     shippingAddressType,
     paymentID,
@@ -107,7 +107,14 @@ const addOrder = async ({
     delete order.orderDateType;
   }
 
-  await API.graphql(graphqlOperation(createOrder, { input: order }));
+  if (id) {
+    order.id = id;
+    order.updatedBy = user;
+    await API.graphql(graphqlOperation(updateOrder, { input: order }));
+  } else {
+    order.createdBy = user;
+    await API.graphql(graphqlOperation(createOrder, { input: order }));
+  }
 };
 
 export const useOrders = () => {
