@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Accordion from "@mui/material/Accordion";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -130,10 +130,7 @@ const Accordions = () => {
                   >
                     <Typography>
                       No Gifts Scheduled!{" "}
-                      <Link
-                        sx={{ color: "#000", fontWeight: 700 }}
-                        href="gifts"
-                      >
+                      <Link sx={{ color: "#000", fontWeight: 700 }} to="/gifts">
                         Create one now
                       </Link>
                     </Typography>
