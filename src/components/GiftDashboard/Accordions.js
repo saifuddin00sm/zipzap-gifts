@@ -8,6 +8,7 @@ import Accordion from "@mui/material/Accordion";
 import { Link } from "react-router-dom";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Button from "@mui/material/Button";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TodayIcon from "@mui/icons-material/Today";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
@@ -189,6 +190,23 @@ const Accordions = () => {
                                 {recipientIDs.length > 1 && "s"}
                               </Typography>
                             </Box>
+                          </Box>
+                          <Box
+                            sx={{ display: "flex", justifyContent: "flex-end" }}
+                          >
+                            <Link
+                              style={{ textDecoration: "none" }}
+                              to={`/gifts/${id}`}
+                            >
+                              <Button
+                                sx={{ marginLeft: "auto" }}
+                                color="secondary"
+                                size="small"
+                                aria-label="edit"
+                              >
+                                Edit Gift
+                              </Button>
+                            </Link>
                           </Box>
                         </AccordionDetails>
                       </Accordion>

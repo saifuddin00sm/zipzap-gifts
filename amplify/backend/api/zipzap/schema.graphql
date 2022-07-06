@@ -177,6 +177,7 @@ type Order
   recipientIDs: [ID]
   giftEvents: [GiftEvent] @hasMany(indexName: "byOrder", fields: ["id"])
   createdBy: String!
+  updatedBy: String
   totalPrice: String
   shippingAddressType: ShippingAddressType
   paymentID: String
