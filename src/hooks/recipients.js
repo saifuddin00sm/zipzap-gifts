@@ -147,7 +147,7 @@ const editRecipient = async ({ shippingAddress, ...recipient }) => {
       : new Date(recipient.startDate);
     recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
-  await API.graphql(graphqlOperation(editRecipient, { input: recipient }));
+  await API.graphql(graphqlOperation(updateRecipient, { input: recipient }));
   console.log("success");
 };
 
