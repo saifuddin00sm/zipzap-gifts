@@ -1,5 +1,5 @@
 import React from "react";
-import { format, compareAsc } from "date-fns";
+import { format, compareAsc, compareDesc } from "date-fns";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -73,6 +73,7 @@ const Accordions = () => {
   });
 
   const dateSort = ({ orderDate: a }, { orderDate: b }) => compareAsc(a, b);
+  const reverseSort = ({ orderDate: a }, { orderDate: b }) => compareDesc(a, b);
 
   const recentGifts = [
     {
@@ -81,7 +82,7 @@ const Accordions = () => {
       tooltip:
         "A One Time Gift is a gift that goes out once! EX: A Get Well Soon Box, A Sympathy Gift, a Welcome Little One Box.",
       icon: <TodayIcon />,
-      gifts: [...oneTime.sort(dateSort), ...prevOneTime.sort(dateSort)],
+      gifts: [...oneTime.sort(dateSort), ...prevOneTime.sort(reverseSort)],
     },
     {
       id: 2,
@@ -89,7 +90,7 @@ const Accordions = () => {
       tooltip:
         "A Recurring Gift is a gift that happens multiple times during a set time frame for different people. EX: Anniversaries or Birthdays",
       icon: <EventRepeatIcon />,
-      gifts: [...recurring.sort(dateSort), ...prevRecurring.sort(dateSort)],
+      gifts: [...recurring.sort(dateSort), ...prevRecurring.sort(reverseSort)],
     },
   ];
 
