@@ -15,6 +15,7 @@ const listOrders = /* GraphQL */ `
         orderType
         name
         toDate
+        fromDate
         recipientIDs
         giftImage
       }

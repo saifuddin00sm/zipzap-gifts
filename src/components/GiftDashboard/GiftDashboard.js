@@ -20,106 +20,6 @@ import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import TodayIcon from "@mui/icons-material/Today";
 import GiftDashboardModal from "./GiftDashboardModal";
 
-const recentGifts = [
-  {
-    type: "oneTime",
-    status: "One Time Gifts This Month",
-    tooltip:
-      "A One Time Gift is a gift that goes out once! EX: A Get Well Soon Box, A Sympathy Gift, a Welcome Little One Box.",
-    icon: <TodayIcon />,
-    gifts: [
-      {
-        name: "Employee of the Month",
-        subItems: {
-          dateShipped: "5/04/2020",
-          recipient: "Victoria Black",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 1,
-      },
-      {
-        name: "New Baby",
-        subItems: {
-          dateShipped: "5/18/2022",
-          recipient: "Malia Morley",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 2,
-      },
-    ],
-    id: 1,
-  },
-
-  {
-    type: "recurring",
-    status: "Recurring Gifts This Month",
-    tooltip:
-      "A Recurring Gift is a gift that happens multiple times during a set time frame for different people. EX: Anniversaries or Birthdays",
-    icon: <EventRepeatIcon />,
-    id: 2,
-    gifts: [
-      {
-        name: "Saif Uddin birthday",
-        subItems: {
-          date: "2022-05-12",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Saif uddin",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 1,
-      },
-      {
-        name: "Amelia Ostler birthday",
-        subItems: {
-          date: "2022-05-18",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Amelia Ostler",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 2,
-      },
-      {
-        name: "Nathan Humphrey anniversary",
-        id: 3,
-        subItems: {
-          date: "2022-05-21",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Nathan Humphrey",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-      },
-      {
-        name: "Krista Humphrey birthday",
-        subItems: {
-          date: "2022-05-15",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Krista Humphrey",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 4,
-      },
-    ],
-  },
-];
-
 // holidays json
 const holidaysData = [
   { name: "New Years Day", date: "2023-01-01" },
@@ -468,7 +368,7 @@ function GiftDashboard() {
         )}
         {/* bottom components */}
         <Box sx={{ mt: 3, mb: 5 }}>
-          <Accordions recentGifts={recentGifts} />
+          <Accordions />
         </Box>
         <Box>
           <UtilizationAndDefault
