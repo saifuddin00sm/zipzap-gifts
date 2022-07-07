@@ -249,7 +249,6 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
       {openModal.open && (
         <GiftModal
           setSelectedGift={setSelectedGift}
-          selectable={true}
           openModal={openModal}
           setOpenModal={setOpenModal}
         />

@@ -111,7 +111,6 @@ const style = {
 export default function GiftModal({
   openModal,
   setOpenModal,
-  selectable,
   setSelectedGift,
 }) {
   const [slideIndex, setSlideIndex] = React.useState(0);
@@ -214,7 +213,7 @@ export default function GiftModal({
           </Box>
         </Box>
         <Box>
-          {selectable && (
+          {setSelectedGift && (
             <Button
               onClick={() => setSelectedGift(modalData)}
               fullWidth
