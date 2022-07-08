@@ -270,7 +270,7 @@ const Checkout = ({
               />
             </Box>
             <Typography variant="body" className="totalPrice">
-              Total Price: ${totalPrice}
+              Estimated Total: ${totalPrice}
             </Typography>
           </Box>
         </Grid>
