@@ -73,7 +73,7 @@ const zipIts = [
 ];
 
 const GiftCatalog = () => {
-  const { isLoading, isError, gifts } = useGifts();
+  const { isLoading, isError, gifts = [] } = useGifts();
 
   return (
     <Container component="main">
