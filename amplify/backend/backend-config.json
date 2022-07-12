@@ -17,7 +17,16 @@
             }
           ]
         }
-      }
+      },
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "ZipZap",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
     },
     "stripe": {
       "service": "API Gateway",

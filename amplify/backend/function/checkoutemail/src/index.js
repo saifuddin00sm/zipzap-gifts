@@ -1,3 +1,10 @@
+/* Amplify Params - DO NOT EDIT
+	API_ZIPZAP_GRAPHQLAPIENDPOINTOUTPUT
+	API_ZIPZAP_GRAPHQLAPIIDOUTPUT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */
+
 /**
  * A serverless function that listens to the DynamoDB stream for
  * Orders to send out emails whenever an Order is updated or created
@@ -7,13 +14,14 @@
 //import aws from "aws-sdk";
 //const ses = new aws.SES();
 import adminNew from "./email-templates/admin-new.js";
+import { getRecipients } from "./graphql.js";
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 export const handler = async (event) => {
   // The event stream may have batched multiple records, so loop through them all
-  event.Records.forEach((record) => {
+  for await (const record of event.Records) {
     const { eventName, dynamodb: { NewImage = {} } = {} } = record;
     const {
       giftID,
@@ -24,6 +32,9 @@ export const handler = async (event) => {
       orderType,
       totalPrice,
     } = NewImage;
+
+    const recipients = await getRecipients(recipientIDs.L.map((r) => r.S));
+    console.log(recipients);
 
     let date = new Date(toDate.S).toLocaleDateString("en-US");
     if (orderType.S === "RECURRING") {
@@ -51,6 +62,6 @@ export const handler = async (event) => {
     }
 
     console.log(email);
-  });
+  }
   return { status: "done" };
 };
