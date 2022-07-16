@@ -13,7 +13,6 @@ import RecipientSuccess from "./RecipientSuccess";
 import { useRecipients } from "../../hooks/recipients";
 import { useReward } from "react-rewards";
 import CircularProgress from "@mui/material/CircularProgress";
-import Stack from "@mui/material/Stack";
 
 const ImportList = () => {
   const navigate = useNavigate();
