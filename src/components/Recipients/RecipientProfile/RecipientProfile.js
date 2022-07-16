@@ -121,10 +121,6 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-// const Input = styled("input")({
-//   display: "none",
-// });
-
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div
