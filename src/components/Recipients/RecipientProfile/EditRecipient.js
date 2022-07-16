@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import { useRecipients } from "../../../hooks/recipients";
 
-const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
+const EditRecipientProfile = ({ info, setIsEdit, setOpen }) => {
   const {
     id,
     firstName,
@@ -41,29 +41,16 @@ const EditRecipientProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
   const { editRecipient } = useRecipients();
 
   const [formState, setFormState] = useState(initialState);
-  const [isFormValid, setIsFormValid] = useState(false);
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value });
   }
-
-  const validateForm = () => {
-    if (
-      formState.lastName !== "" &&
-      formState.shippingAddress.address1 !== "" &&
-      formState.shippingAddress.zip !== "" &&
-      formState.email !== ""
-    ) {
-      setIsFormValid(true);
-    }
-  };
 
   function setAddressInput(key, value) {
     setFormState({
       ...formState,
       shippingAddress: { ...formState.shippingAddress, [key]: value },
     });
-    validateForm();
   }
 
   const handleClick = () => {

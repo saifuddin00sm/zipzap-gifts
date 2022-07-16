@@ -86,41 +86,6 @@ const giftHistoryData = [
   },
 ];
 
-const Root = styled("div")(({ theme }) => ({
-  marginTop: "20px",
-  "& .tabsPanel": {
-    "& .infoBox": {
-      border: "1px solid #F1F1F1",
-      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-      padding: "20px",
-      marginTop: "20px",
-      "& .titles": {
-        color: "#343436",
-        fontWeight: 700,
-        fontSize: "30px",
-        lineHight: "45px",
-      },
-    },
-  },
-  "& .profileBox": {
-    background: "#ABC4D6",
-    padding: "30px",
-    display: "flex",
-    justifyContent: "space-between",
-    gap: "10px",
-    "& .img_box": {
-      position: "relative",
-      "& .pen": {
-        height: "50px",
-        width: "50px",
-        position: "absolute",
-        top: "73px",
-        left: "55px",
-      },
-    },
-  },
-}));
-
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div
@@ -318,7 +283,6 @@ const RecipientProfile = () => {
                 ) : (
                   <EditRecipientProfile
                     info={recipient}
-                    isEdit={isEdit}
                     setIsEdit={setIsEdit}
                     setOpen={setOpen}
                   />
@@ -367,3 +331,38 @@ const RecipientProfile = () => {
 };
 
 export default RecipientProfile;
+
+const Root = styled("div")(({ theme }) => ({
+  marginTop: "20px",
+  "& .tabsPanel": {
+    "& .infoBox": {
+      border: "1px solid #F1F1F1",
+      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      padding: "20px",
+      marginTop: "20px",
+      "& .titles": {
+        color: "#343436",
+        fontWeight: 700,
+        fontSize: "30px",
+        lineHight: "45px",
+      },
+    },
+  },
+  "& .profileBox": {
+    background: "#ABC4D6",
+    padding: "30px",
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "10px",
+    "& .img_box": {
+      position: "relative",
+      "& .pen": {
+        height: "50px",
+        width: "50px",
+        position: "absolute",
+        top: "73px",
+        left: "55px",
+      },
+    },
+  },
+}));
