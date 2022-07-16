@@ -164,8 +164,8 @@ const ProfileInfo = ({ info }) => {
                 aria-label="upload picture"
                 component="span"
               >
-                <PhotoCamera />
-              </IconButton>
+                {/* <PhotoCamera /> */}
+          {/* </IconButton>
             </label>
           </Box> */}
         </Box>

@@ -20,6 +20,7 @@ import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
 import EditRecipientProfile from "./EditRecipient";
 import RecipientSuccess from "../RecipientSuccess";
+import DeleteModal from "../DeleteModal";
 
 // dummy data
 const giftProfileData = {
@@ -123,6 +124,7 @@ const RecipientProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isEdit, setIsEdit] = useState(false);
+
   const { pathname } = location;
   const id = pathname.split("/")[2];
   const {
@@ -261,9 +263,18 @@ const RecipientProfile = () => {
               </Box>
             </Box>
             <Box>
-              <Button variant="contained" color="secondary">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpen(true)}
+              >
                 Delete
               </Button>
+              <DeleteModal
+                open={open}
+                setOpen={setOpen}
+                recipientId={recipient.id}
+              />
             </Box>
           </Box>
 

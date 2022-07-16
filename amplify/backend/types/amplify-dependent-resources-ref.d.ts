@@ -3,6 +3,11 @@ export type AmplifyDependentResourcesAttributes = {
         "zipzap": {
             "GraphQLAPIIdOutput": "string",
             "GraphQLAPIEndpointOutput": "string"
+        },
+        "stripe": {
+            "RootUrl": "string",
+            "ApiName": "string",
+            "ApiId": "string"
         }
     },
     "auth": {
@@ -24,6 +29,14 @@ export type AmplifyDependentResourcesAttributes = {
         "giftbucket": {
             "BucketName": "string",
             "Region": "string"
+        }
+    },
+    "function": {
+        "stripe": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
         }
     }
 }
