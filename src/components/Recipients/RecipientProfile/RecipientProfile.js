@@ -19,7 +19,6 @@ import GeneralInfo from "./GeneralInfo";
 import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
 import EditRecipientProfile from "./EditRecipient";
-import RecipientSuccess from "../RecipientSuccess";
 import DeleteModal from "../DeleteModal";
 
 // dummy data
@@ -138,10 +137,6 @@ const RecipientProfile = () => {
 
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
-  const onClose = () => {
-    setOpen(false);
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -329,14 +324,6 @@ const RecipientProfile = () => {
       </Header>
       <Button onClick={() => navigate("/recipients")}>Back</Button>
       <Root>{userData}</Root>
-
-      <RecipientSuccess
-        text="Your Recipient Information Has Been Saved"
-        subText=""
-        open={open}
-        onClose={onClose}
-        button={false}
-      />
     </Container>
   );
 };
