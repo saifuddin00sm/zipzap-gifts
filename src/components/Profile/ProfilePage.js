@@ -9,53 +9,35 @@ import ProfileInfo from "./ProfileInfo";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
-import { getCurrentUser } from "../../hooks/useAuth";
+import { getUser } from "../../graphql/queries";
 import EditProfile from "./EditProfile";
-
-const userInfo = {
-  userName: "Krista Humphrey",
-  company: "Zip Zap Gifts",
-  contactInfo: {
-    address: "3003 N Thanksgiving Way, Lehi, UT 84043",
-    phone: "(801) 555-2022",
-    email: "hr_department@company.com",
-    companySize: 200,
-  },
-  cards: [
-    {
-      ending: 8839,
-      exp: "12/2055",
-      name: "victoria black",
-      type: "credit card",
-      id: 1,
-      isSelected: true,
-    },
-    {
-      ending: 99393,
-      exp: "12/2023",
-      name: "amelia ostler",
-      type: "credit card",
-      id: 2,
-      isSelected: false,
-    },
-    {
-      ending: 2999,
-      exp: "12/2069",
-      name: "krista humphrey",
-      type: "credit card",
-      id: 3,
-      isSelected: true,
-    },
-  ],
-};
 
 // TODO: This Component needs to be refactored to meet the Zip Zap Code of Code
 function ProfilePage() {
+  const { currentUser } = useAuth();
+  const userID = currentUser?.username;
+  const {
+    isLoading,
+    isError,
+    data: { data: { getUser: userData = {} } = {} } = {},
+    error,
+  } = useQuery(["users", userID], () =>
+    API.graphql(graphqlOperation(getUser, { id: userID }))
+  );
+  console.log(userID);
   const { signOut } = useAuth();
-  const { currentUser } = getCurrentUser();
   const [isEdit, setIsEdit] = useState(false);
 
-  console.log({ currentUser });
+  const userInfo = {
+    userName: userData.userName,
+    company: userData.company,
+    contactInfo: {
+      address: "3003 N Thanksgiving Way, Lehi, UT 84043",
+      phone: "(801) 555-2022",
+      email: "hr_department@company.com",
+      companySize: 200,
+    },
+  };
 
   return (
     <Container component="main">

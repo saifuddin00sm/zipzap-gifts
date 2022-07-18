@@ -16,7 +16,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
 import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
 
 const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
   const {
