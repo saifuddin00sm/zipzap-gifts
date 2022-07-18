@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
 import TextField from "@mui/material/TextField";
+import { useUsers } from "./../../hooks/users";
 
 const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
   const {
@@ -52,7 +53,7 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
     startDate: info.startDate,
   };
 
-  //   const { editRecipient } = useRecipients();
+  const { editUser } = useUsers();
 
   const [formState, setFormState] = useState(initialState);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -82,6 +83,15 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
 
   const handleClick = () => {
     setIsEdit(false);
+  };
+
+  const handleSubmit = async (e) => {
+    console.log({ formState });
+    e.preventDefault();
+    await editUser({ ...formState });
+    setIsEdit(false);
+    setFormState(initialState);
+    setOpen(true);
   };
 
   //   const handleSubmit = async (e) => {
@@ -218,43 +228,11 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
           </Grid>
         </Grid>
       </Box>
-
-      <Typography
-        variant="h5"
-        sx={{ mb: 3, fontWeight: 600, color: "#505050" }}
-      >
-        Credit Cards On File
-      </Typography>
-      <Box className="inner_cards">
-        {cards.map(({ id, type, exp, name, ending, isSelected }) => (
-          <Box key={id} className="credit_card">
-            <Box
-              className="card_top"
-              sx={{ background: isSelected ? "#F1F1F1" : "#C5D6E2" }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  textAlign: "right",
-                  textTransform: "capitalize",
-                }}
-              >
-                {type}
-              </Typography>
-            </Box>
-            <Box
-              className="card_bottom"
-              sx={{ background: isSelected ? "#DEDEDE" : "#ABC4D6" }}
-            >
-              <Typography variant="h6">Ending In {ending}</Typography>
-              <Typography variant="body2">Exp: {exp}</Typography>
-              <Typography variant="body2">Name on the card: {name}</Typography>
-            </Box>
-          </Box>
-        ))}
-        <Box>
-          <Button onClick={handleClick}>Cancel</Button>
-        </Box>
+      <Box>
+        <Button onSubmit={handleSubmit}>Cancel</Button>
+      </Box>
+      <Box>
+        <Button onClick={handleClick}>Cancel</Button>
       </Box>
     </Root>
   );
