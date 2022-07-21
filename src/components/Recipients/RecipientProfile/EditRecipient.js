@@ -7,7 +7,12 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import { useRecipients } from "../../../hooks/recipients";
 
-const EditRecipientProfile = ({ info, setIsEdit, setOpen }) => {
+const EditRecipientProfile = ({
+  info,
+  setIsEdit,
+
+  setEditSuccess,
+}) => {
   const {
     id,
     firstName,
@@ -64,7 +69,7 @@ const EditRecipientProfile = ({ info, setIsEdit, setOpen }) => {
     await editRecipient({ ...formState });
     setIsEdit(false);
     setFormState(initialState);
-    setOpen(true);
+    setEditSuccess(true);
   };
 
   return (

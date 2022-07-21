@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Header from "../../Header";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
-import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
 // import IconButton from "@mui/material/IconButton";
@@ -15,11 +13,16 @@ import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import Alert from "@mui/material/Alert";
+import { getRecipient } from "../../../graphql/queries";
 import GeneralInfo from "./GeneralInfo";
 import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
 import EditRecipientProfile from "./EditRecipient";
 import DeleteModal from "../DeleteModal";
+import Header from "../../Header";
+
+import Snackbar from "@mui/material/Snackbar";
 
 // dummy data
 const giftProfileData = {
@@ -120,6 +123,8 @@ const tabIndecators = {
 };
 
 const RecipientProfile = () => {
+  const [editSuccess, setEditSuccess] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const [isEdit, setIsEdit] = useState(false);
@@ -141,6 +146,14 @@ const RecipientProfile = () => {
     setValue(newValue);
   };
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setEditSuccess(false);
+  };
+
   let userData;
 
   if (isLoading) {
@@ -152,6 +165,43 @@ const RecipientProfile = () => {
   } else {
     userData = (
       <Box>
+        {editSuccess ? (
+          <Box sx={{ paddingBottom: "10px", marginBottom: "10px" }}>
+            <Snackbar
+              open={editSuccess}
+              autoHideDuration={5000}
+              onClose={handleClose}
+            >
+              <Alert
+                onClose={handleClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                Update Successful!
+              </Alert>
+            </Snackbar>
+            {/* <Collapse in={editSuccess}>
+              <Alert
+                sx={{ width: "40%" }}
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setEditSuccess(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                {" "}
+                This is a success message!
+              </Alert>
+            </Collapse> */}
+          </Box>
+        ) : null}
         <Box key={recipient.id}>
           <Box
             className="profileBox"
@@ -285,12 +335,16 @@ const RecipientProfile = () => {
                     info={recipient}
                     isEdit={isEdit}
                     setIsEdit={setIsEdit}
+                    editSuccess={editSuccess}
+                    setEditSuccess={setEditSuccess}
                   />
                 ) : (
                   <EditRecipientProfile
                     info={recipient}
                     setIsEdit={setIsEdit}
                     setOpen={setOpen}
+                    editSuccess={editSuccess}
+                    setEditSuccess={setEditSuccess}
                   />
                 )}
               </Box>

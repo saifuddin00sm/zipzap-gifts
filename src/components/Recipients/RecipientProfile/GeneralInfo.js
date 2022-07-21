@@ -1,10 +1,15 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
-const GeneralInfo = ({ info, isEdit, setIsEdit }) => {
+const GeneralInfo = ({
+  info,
+  isEdit,
+  setIsEdit,
+  editSuccess,
+  setEditSuccess,
+}) => {
   const {
     id,
     birthday,
