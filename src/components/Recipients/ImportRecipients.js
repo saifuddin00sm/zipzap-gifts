@@ -39,74 +39,72 @@ const ImportList = () => {
 
   const changeHandler = (event) => {
     setIsLoading(true);
-    if (isLoading) {
-      Papa.parse(event.target.files[0], {
-        header: true,
-        delimiter: ",",
-        transformHeader: (header) => {
-          const headers = {
-            firstname: "firstName",
-            lastname: "lastName",
-            // department: "department",
-            jobtitle: "jobTitle",
-            birthday: "birthday",
-            datestarted: "startDate",
-            address: "address1",
-            city: "city",
-            state: "state",
-            zip: "zip",
-          };
-          return headers?.[header.replace(/\s/g, "").toLowerCase()];
-        },
-        skipEmptyLines: true,
-        complete: async function ({ data, errors }) {
-          if (errors?.length !== 0) {
-            setUploadErrors(
-              errors.map(({ row, message }) => `Row ${row + 2}: ${message}`)
-            );
-            setOpen(true);
-            return;
-          }
-          const errs = [];
-          let count = 0;
-          let successCount = 0;
+    Papa.parse(event.target.files[0], {
+      header: true,
+      delimiter: ",",
+      transformHeader: (header) => {
+        const headers = {
+          firstname: "firstName",
+          lastname: "lastName",
+          // department: "department",
+          jobtitle: "jobTitle",
+          birthday: "birthday",
+          datestarted: "startDate",
+          address: "address1",
+          city: "city",
+          state: "state",
+          zip: "zip",
+        };
+        return headers?.[header.replace(/\s/g, "").toLowerCase()];
+      },
+      skipEmptyLines: true,
+      complete: async function ({ data, errors }) {
+        if (errors?.length !== 0) {
+          setUploadErrors(
+            errors.map(({ row, message }) => `Row ${row + 2}: ${message}`)
+          );
+          setOpen(true);
+          return;
+        }
+        const errs = [];
+        let count = 0;
+        let successCount = 0;
 
-          for (const row of data) {
-            count = count + 1;
-            const recipient = {
-              ...row,
-              shippingAddress: {
-                address1: row?.address1 || "",
-                city: row?.city || "",
-                state: row?.state || "",
-                zip: row?.zip || "",
-              },
-            };
-            delete recipient.undefined;
-            delete recipient.address1;
-            delete recipient.city;
-            delete recipient.state;
-            delete recipient.zip;
-            try {
-              await addRecipient(recipient);
-              successCount++;
-            } catch (error) {
-              if (error?.errors?.length > 0) {
-                errs.push(`Row ${count + 1}: ${error.errors[0]?.message}`);
-              } else {
-                errs.push(`Row ${count + 1}: ${error}`);
-              }
+        for (const row of data) {
+          count = count + 1;
+          const recipient = {
+            ...row,
+            shippingAddress: {
+              address1: row?.address1 || "",
+              city: row?.city || "",
+              state: row?.state || "",
+              zip: row?.zip || "",
+            },
+          };
+          delete recipient.undefined;
+          delete recipient.address1;
+          delete recipient.city;
+          delete recipient.state;
+          delete recipient.zip;
+          try {
+            await addRecipient(recipient);
+            successCount++;
+          } catch (error) {
+            if (error?.errors?.length > 0) {
+              errs.push(`Row ${count + 1}: ${error.errors[0]?.message}`);
+            } else {
+              errs.push(`Row ${count + 1}: ${error}`);
             }
           }
-          setUploadErrors(errs);
-          setUploadCount(successCount);
-          setTotalCount(count);
-          setSuccess(true);
-          setOpen(true);
-          reward();
-        },
-      });
-    }
+        }
+        setUploadErrors(errs);
+        setUploadCount(successCount);
+        setTotalCount(count);
+        setSuccess(true);
+        setOpen(true);
+        reward();
+      },
+    });
   };
 
   return (
