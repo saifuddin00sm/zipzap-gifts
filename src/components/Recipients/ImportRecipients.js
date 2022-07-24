@@ -12,6 +12,7 @@ import TemplateTable from "./TemplateTable";
 import RecipientSuccess from "./RecipientSuccess";
 import { useRecipients } from "../../hooks/recipients";
 import { useReward } from "react-rewards";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ImportList = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const ImportList = () => {
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const onClose = () => {
     setOpen(false);
     navigate("/recipients");
@@ -36,6 +38,7 @@ const ImportList = () => {
   const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip\nJohn,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
 
   const changeHandler = (event) => {
+    setIsLoading(true);
     Papa.parse(event.target.files[0], {
       header: true,
       delimiter: ",",
@@ -133,17 +136,23 @@ const ImportList = () => {
                 Started, Address, City, State, Zip
               </Typography>
               <Box className="uploadBtn">
-                <label htmlFor="contained-button-file">
-                  <Input
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                    onChange={changeHandler}
-                  />
-                  <Button component="span" size="large" variant="contained">
-                    <FileUploadIcon sx={{ width: "2.5em", height: "2.5em" }} />
-                  </Button>
-                </label>
+                {isLoading ? (
+                  <CircularProgress variant="indeterminate" size={136} />
+                ) : (
+                  <label htmlFor="contained-button-file">
+                    <Input
+                      id="contained-button-file"
+                      multiple
+                      type="file"
+                      onChange={changeHandler}
+                    />
+                    <Button component="span" size="large" variant="contained">
+                      <FileUploadIcon
+                        sx={{ width: "2.5em", height: "2.5em" }}
+                      />
+                    </Button>
+                  </label>
+                )}
               </Box>
             </Box>
           </Box>
@@ -205,7 +214,6 @@ const ImportList = () => {
           button={true}
         />
       )}
-      ;
     </>
   );
 };
