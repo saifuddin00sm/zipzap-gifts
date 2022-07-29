@@ -31,12 +31,12 @@ function ProfilePage() {
   const [isEdit, setIsEdit] = useState(false);
 
   const userInfo = {
-    userName: userData.name,
-    company: userData.company,
+    userName: userData?.name,
+    company: userData?.company,
     contactInfo: {
-      address: userData.address,
-      phone: userData.phoneNumber,
-      email: userData.email,
+      address: userData?.address,
+      phone: userData?.phoneNumber,
+      email: userData?.email,
       companySize: 200,
     },
   };
