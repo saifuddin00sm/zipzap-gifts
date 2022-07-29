@@ -119,9 +119,9 @@ const GiftDetails = ({
                     Start Date
                   </Typography>
                   <DatePicker
-                    value={to}
+                    value={from}
                     inputFormat="MM/dd/yyyy"
-                    onChange={(value) => setInput("to", value)}
+                    onChange={(value) => setInput("from", value)}
                     renderInput={(params) => (
                       <TextField variant="standard" {...params} />
                     )}
@@ -130,9 +130,9 @@ const GiftDetails = ({
                     End Date
                   </Typography>
                   <DatePicker
-                    value={from}
+                    value={to}
                     inputFormat="MM/dd/yyyy"
-                    onChange={(value) => setInput("from", value)}
+                    onChange={(value) => setInput("to", value)}
                     renderInput={(params) => (
                       <TextField variant="standard" {...params} />
                     )}

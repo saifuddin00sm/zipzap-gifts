@@ -27,7 +27,9 @@ const ZipZapRoutes = () => {
         <Route path="catalog" element={<GiftCatalog />} />
         <Route path="recipients/upload" element={<ImportRecipients />} />
         <Route path="recipients/:id" element={<RecipientProfile />} />
-        <Route path="gifts" element={<SendAGift />} />
+        <Route path="gifts" element={<SendAGift />}>
+          <Route path=":id" element={<SendAGift />} />
+        </Route>
         <Route path="orders" element={<Orders />} />
         <Route path="help" element={<Help />} />
         <Route

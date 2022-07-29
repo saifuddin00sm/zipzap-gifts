@@ -1,4 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getOrder } from "../../graphql/queries";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -153,12 +157,37 @@ const StepComponent = ({
 
 const SendAGift = () => {
   const top = useRef(null);
+  const params = useParams();
   const { addOrder } = useOrders();
   const [giftSearch, setGiftSearch] = useState("");
   const [formState, setFormState] = useState({ ...initialState });
   const [submitPayment, setSubmitPayment] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+
+  const { data: { data: { getOrder: order } = {} } = {} } = useQuery(
+    ["orders", params.id],
+    () => API.graphql(graphqlOperation(getOrder, { id: params.id })),
+    { enabled: !!params.id }
+  );
+
+  useEffect(() => {
+    if (params.id) {
+      setActiveStep(1);
+    }
+  }, [params.id]);
+
+  useEffect(() => {
+    if (params.id && order && !formState.id) {
+      setFormState({
+        ...order,
+        recipients: order.recipientIDs,
+        to: new Date(order.toDate),
+        from: new Date(order.fromDate),
+        orderDateType: order.orderDateType || "",
+      });
+    }
+  }, [params.id, order, formState.id]);
 
   function setInput(key, value) {
     let k = key;
@@ -319,7 +348,9 @@ const SendAGift = () => {
                     onClick={handleNext}
                     disabled={submitPayment || success}
                   >
-                    {activeStep === steps.length - 1 ? "Create Gift" : "Next"}
+                    {activeStep === steps.length - 1
+                      ? `${formState.id ? "Update Gift" : "Create Gift"}`
+                      : "Next"}
                   </Button>
                 </Box>
               </Box>
