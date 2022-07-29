@@ -11,10 +11,6 @@ import Button from "@mui/material/Button";
 // import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Grid from "@mui/material/Grid";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
-import { getUser } from "../../graphql/queries";
-import { useLocation, useNavigate } from "react-router-dom";
-import { API, graphqlOperation } from "aws-amplify";
-import { useQuery } from "react-query";
 import TextField from "@mui/material/TextField";
 import { useUsers } from "./../../hooks/users";
 

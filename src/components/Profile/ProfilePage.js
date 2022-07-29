@@ -34,9 +34,9 @@ function ProfilePage() {
     userName: userData.name,
     company: userData.company,
     contactInfo: {
-      address: "3003 N Thanksgiving Way, Lehi, UT 84043",
+      address: userData.address,
       phone: userData.phoneNumber,
-      email: "hr_department@company.com",
+      email: userData.email,
       companySize: 200,
     },
   };
