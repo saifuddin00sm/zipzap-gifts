@@ -21,19 +21,21 @@ function ProfilePage() {
     isError,
     data: { data: { getUser: userData = {} } = {} } = {},
     error,
-  } = useQuery(["users", userID], () =>
-    API.graphql(graphqlOperation(getUser, { id: userID }))
+  } = useQuery(
+    ["users", userID],
+    () => API.graphql(graphqlOperation(getUser, { id: userID })),
+    { enabled: !!userID }
   );
-  console.log(userID);
+  console.log(userData);
   const { signOut } = useAuth();
   const [isEdit, setIsEdit] = useState(false);
 
   const userInfo = {
-    userName: userData.userName,
+    userName: userData.name,
     company: userData.company,
     contactInfo: {
       address: "3003 N Thanksgiving Way, Lehi, UT 84043",
-      phone: "(801) 555-2022",
+      phone: userData.phoneNumber,
       email: "hr_department@company.com",
       companySize: 200,
     },

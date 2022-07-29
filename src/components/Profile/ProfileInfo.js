@@ -109,40 +109,6 @@ const ProfileInfo = ({ info, isEdit, setIsEdit }) => {
           </Grid>
         </Grid>
       </Box>
-      <Typography
-        variant="h5"
-        sx={{ mb: 3, fontWeight: 600, color: "#505050" }}
-      >
-        Credit Cards On File
-      </Typography>
-      <Box className="inner_cards">
-        {cards.map(({ id, type, exp, name, ending, isSelected }) => (
-          <Box key={id} className="credit_card">
-            <Box
-              className="card_top"
-              sx={{ background: isSelected ? "#F1F1F1" : "#C5D6E2" }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  textAlign: "right",
-                  textTransform: "capitalize",
-                }}
-              >
-                {type}
-              </Typography>
-            </Box>
-            <Box
-              className="card_bottom"
-              sx={{ background: isSelected ? "#DEDEDE" : "#ABC4D6" }}
-            >
-              <Typography variant="h6">Ending In {ending}</Typography>
-              <Typography variant="body2">Exp: {exp}</Typography>
-              <Typography variant="body2">Name on the card: {name}</Typography>
-            </Box>
-          </Box>
-        ))}
-      </Box>
     </Root>
   );
 };
