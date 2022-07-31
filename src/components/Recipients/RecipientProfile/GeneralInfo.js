@@ -11,7 +11,6 @@ const GeneralInfo = ({
   setEditSuccess,
 }) => {
   const {
-    id,
     birthday,
     email,
     shippingAddress: { address1, address2, city, state, zip } = {},
