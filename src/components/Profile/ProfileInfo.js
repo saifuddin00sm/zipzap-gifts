@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import EmailIcon from "@mui/icons-material/Email";
@@ -11,19 +11,12 @@ import Button from "@mui/material/Button";
 // import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Grid from "@mui/material/Grid";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
-import { getUser } from "../../graphql/queries";
-import { useLocation, useNavigate } from "react-router-dom";
-import { API, graphqlOperation } from "aws-amplify";
-import { useQuery } from "react-query";
 
-const ProfileInfo = ({ info, isEdit, setIsEdit }) => {
-  const navigate = useNavigate();
-
+const ProfileInfo = ({ info, setIsEdit }) => {
   const {
     userName,
     company,
     contactInfo: { address, email, phone, companySize } = {},
-    cards,
   } = info;
 
   const handleClick = () => {

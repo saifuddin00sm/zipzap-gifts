@@ -14,67 +14,23 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import TextField from "@mui/material/TextField";
 import { useUsers } from "./../../hooks/users";
 
-const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
-  const {
-    id,
-    userName,
-    company,
-    companySize,
-    cards,
-    phone,
-    birthday,
-    email,
-    address: { address1, address2, city, state, zip } = {},
-    jobTitle,
-    startDate,
-  } = info;
-
+const EditProfile = ({ info, setIsEdit }) => {
   const initialState = {
     id: info.id,
     company: info.company,
     companySize: info.companySize,
     userName: info.userName,
-    birthday: info.birthday,
     email: info.email,
-    jobTitle: info.jobTitle,
     phone: info.phone,
-    address: {
-      address1: info.address1,
-      address2: info.address2,
-      city: info.city,
-      state: info.state,
-      zip: info.zip,
-    },
-
-    startDate: info.startDate,
+    address: info.address,
   };
 
   const { editUser } = useUsers();
 
   const [formState, setFormState] = useState(initialState);
-  const [isFormValid, setIsFormValid] = useState(false);
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value });
-  }
-
-  const validateForm = () => {
-    if (
-      formState.lastName !== "" &&
-      formState.shippingAddress.address1 !== "" &&
-      formState.shippingAddress.zip !== "" &&
-      formState.email !== ""
-    ) {
-      setIsFormValid(true);
-    }
-  };
-
-  function setAddressInput(key, value) {
-    setFormState({
-      ...formState,
-      shippingAddress: { ...formState.shippingAddress, [key]: value },
-    });
-    validateForm();
   }
 
   const handleClick = () => {
@@ -87,17 +43,7 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
     await editUser({ ...formState });
     setIsEdit(false);
     setFormState(initialState);
-    setOpen(true);
   };
-
-  //   const handleSubmit = async (e) => {
-  //     console.log({ formState });
-  //     e.preventDefault();
-  //     await editRecipient({ ...formState });
-  //     setIsEdit(false);
-  //     setFormState(initialState);
-  //     setOpen(true);
-  //   };
 
   return (
     <Root>
@@ -136,7 +82,7 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
               value={formState.userName}
               onChange={(event) => setInput("userName", event.target.value)}
             >
-              {userName === null ? "N/A" : userName}
+              {info.userName === null ? "N/A" : info.userName}
             </TextField>
           </Box>
           <Box className="title">
@@ -145,7 +91,7 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
               value={formState.company}
               onChange={(event) => setInput("company", event.target.value)}
             >
-              {company === null ? "N/A" : company}
+              {info.company === null ? "N/A" : info.company}
             </TextField>
           </Box>
         </Box>
@@ -163,7 +109,7 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
           <Typography variant="h5" sx={{ fontWeight: 600, color: "#505050" }}>
             Contact Info
           </Typography>
-          <Button onClick={handleClick}>Save</Button>
+          <Button onClick={handleSubmit}>Save</Button>
         </Box>
         <Grid
           container
@@ -175,9 +121,9 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
               <HomeIcon />
               <Typography>Address: </Typography>
               <TextField
-                name="address1"
-                value={formState.address1}
-                onChange={(event) => setInput("address1", event.target.value)}
+                name="address"
+                value={formState.address}
+                onChange={(event) => setInput("address", event.target.value)}
               />
             </Box>
           </Grid>
@@ -190,7 +136,7 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
                 value={formState.phone}
                 onChange={(event) => setInput("phone", event.target.value)}
               >
-                {phone === null ? "N/A" : phone}
+                {info.phone === null ? "N/A" : info.phone}
               </TextField>
             </Box>
           </Grid>
@@ -203,7 +149,7 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
                 value={formState.email}
                 onChange={(event) => setInput("email", event.target.value)}
               >
-                {info.email}
+                {formState.email}
               </TextField>
             </Box>
           </Grid>
@@ -223,9 +169,6 @@ const EditProfile = ({ info, isEdit, setIsEdit, setOpen }) => {
             </Box>
           </Grid>
         </Grid>
-      </Box>
-      <Box>
-        <Button onSubmit={handleSubmit}>Cancel</Button>
       </Box>
       <Box>
         <Button onClick={handleClick}>Cancel</Button>
