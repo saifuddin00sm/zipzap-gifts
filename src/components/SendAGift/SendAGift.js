@@ -164,6 +164,7 @@ const SendAGift = () => {
   const [submitPayment, setSubmitPayment] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [invalid, setInvalid] = useState(false);
 
   const { data: { data: { getOrder: order } = {} } = {} } = useQuery(
     ["orders", params.id],
@@ -228,6 +229,16 @@ const SendAGift = () => {
       setSuccess(true);
     }
   };
+
+  useEffect(() => {
+    if (formState.orderType === "RECURRING" && formState.orderDateType) {
+      setInvalid(true);
+    } else if (formState.orderType === "ONE_TIME") {
+      setInvalid(true);
+    } else {
+      setInvalid(false);
+    }
+  }, [formState.orderType, formState.orderDateType]);
 
   useEffect(() => {
     const submitOrder = async () => {
@@ -332,6 +343,7 @@ const SendAGift = () => {
                     submitPayment={submitPayment}
                     setSubmitPayment={setSubmitPayment}
                     setSuccess={setSuccess}
+                    setInvalid={setInvalid}
                   />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -346,7 +358,7 @@ const SendAGift = () => {
                   <Box sx={{ flex: "1 1 auto" }} />
                   <Button
                     onClick={handleNext}
-                    disabled={submitPayment || success}
+                    disabled={submitPayment || success || !invalid}
                   >
                     {activeStep === steps.length - 1
                       ? `${formState.id ? "Update Gift" : "Create Gift"}`
