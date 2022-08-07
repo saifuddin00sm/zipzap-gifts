@@ -296,7 +296,7 @@ function GiftDashboard() {
   useEffect(() => {
     async function addUser() {
       const newUser = {
-        // id: user.username,
+        id: user.attributes.email,
         email: user.attributes.email,
         name: user.attributes.name,
         phoneNumber: user.attributes.phone_number,
@@ -307,7 +307,7 @@ function GiftDashboard() {
 
     async function fetchCurrentUser() {
       const userData = await API.graphql(
-        graphqlOperation(getUser, { id: user.username })
+        graphqlOperation(getUser, { id: user.attributes.email })
       );
 
       if (!userData.data.getUser) {
