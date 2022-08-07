@@ -79,14 +79,15 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
           </Box> */}
         </Box>
         <Box
-          //   onSubmit={handleSubmit}
+          onSubmit={handleSubmit}
           component="form"
           sx={{ marginTop: "20px" }}
         >
           <Box className="title">
             <TextField
+              sx={{ width: "20vw" }}
               name="userName"
-              // value={formState.userName}
+              value={formState.userName}
               onChange={(event) => setInput("userName", event.target.value)}
             >
               {info.userName === null ? "N/A" : info.userName}
@@ -94,8 +95,9 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
           </Box>
           <Box className="title">
             <TextField
+              sx={{ width: "20vw" }}
               name="company"
-              // value={formState.company}
+              value={formState.company}
               onChange={(event) => setInput("company", event.target.value)}
             >
               {info.company === null ? "N/A" : info.company}
@@ -128,8 +130,9 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
               <HomeIcon />
               <Typography>Address: </Typography>
               <TextField
+                sx={{ width: "20vw" }}
                 name="address"
-                // value={formState.address}
+                value={formState.address}
                 onChange={(event) => setInput("address", event.target.value)}
               />
             </Box>
@@ -139,8 +142,9 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
               <PhoneIcon />
               <Typography>Phone: </Typography>
               <TextField
+                sx={{ width: "20vw" }}
                 name="phone"
-                // value={formState.phone}
+                value={formState.phone}
                 onChange={(event) => setInput("phone", event.target.value)}
               >
                 {info.phone === null ? "N/A" : info.phone}
@@ -152,6 +156,7 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
               <EmailIcon />
               <Typography>Email:</Typography>
               <TextField
+                sx={{ width: "20vw" }}
                 name="email"
                 value={formState.email}
                 onChange={(event) => setInput("email", event.target.value)}
@@ -165,6 +170,7 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
               <PeopleOutlineIcon />
               <Typography>Company Size:</Typography>
               <TextField
+                sx={{ width: "20vw" }}
                 name="companySize"
                 value={formState.companySize}
                 onChange={(event) =>
