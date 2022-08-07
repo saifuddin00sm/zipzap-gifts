@@ -296,7 +296,7 @@ function GiftDashboard() {
   useEffect(() => {
     async function addUser() {
       const newUser = {
-        id: user.username,
+        // id: user.username,
         email: user.attributes.email,
         name: user.attributes.name,
         phoneNumber: user.attributes.phone_number,
