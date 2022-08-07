@@ -25,6 +25,7 @@ function ProfilePage() {
   const [isEdit, setIsEdit] = useState(false);
 
   const userInfo = {
+    id: userData?.id,
     userName: userData?.name,
     company: userData?.company,
     contactInfo: {

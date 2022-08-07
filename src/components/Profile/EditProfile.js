@@ -14,15 +14,21 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import TextField from "@mui/material/TextField";
 import { useUsers } from "./../../hooks/users";
 
-const EditProfile = ({ info, setIsEdit }) => {
+const EditProfile = ({ info, setIsEdit, setOpen }) => {
   const initialState = {
     id: info.id,
-    company: info.company,
-    companySize: info.companySize,
+    company: info.company === null ? "N/A" : info.company,
+    companySize:
+      info.companySize === null || info.companySize === undefined
+        ? "N/A"
+        : info.companySize,
     userName: info.userName,
-    email: info.email,
-    phone: info.phone,
-    address: info.address,
+    email: info.contactInfo.email,
+    phone: info.contactInfo.phone,
+    address:
+      info.address === null || info.address === undefined
+        ? "N/A"
+        : info.address,
   };
 
   const { editUser } = useUsers();
@@ -38,10 +44,11 @@ const EditProfile = ({ info, setIsEdit }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log({ initialState });
     console.log({ formState });
     e.preventDefault();
     await editUser({ ...formState });
-    setIsEdit(false);
+    // setIsEdit(false);
     setFormState(initialState);
   };
 
@@ -79,7 +86,7 @@ const EditProfile = ({ info, setIsEdit }) => {
           <Box className="title">
             <TextField
               name="userName"
-              value={formState.userName}
+              // value={formState.userName}
               onChange={(event) => setInput("userName", event.target.value)}
             >
               {info.userName === null ? "N/A" : info.userName}
@@ -88,7 +95,7 @@ const EditProfile = ({ info, setIsEdit }) => {
           <Box className="title">
             <TextField
               name="company"
-              value={formState.company}
+              // value={formState.company}
               onChange={(event) => setInput("company", event.target.value)}
             >
               {info.company === null ? "N/A" : info.company}
@@ -122,7 +129,7 @@ const EditProfile = ({ info, setIsEdit }) => {
               <Typography>Address: </Typography>
               <TextField
                 name="address"
-                value={formState.address}
+                // value={formState.address}
                 onChange={(event) => setInput("address", event.target.value)}
               />
             </Box>
@@ -133,7 +140,7 @@ const EditProfile = ({ info, setIsEdit }) => {
               <Typography>Phone: </Typography>
               <TextField
                 name="phone"
-                value={formState.phone}
+                // value={formState.phone}
                 onChange={(event) => setInput("phone", event.target.value)}
               >
                 {info.phone === null ? "N/A" : info.phone}
