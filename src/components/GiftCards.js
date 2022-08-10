@@ -46,7 +46,8 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
     {
       name: "Zip it!",
       category: "zipIt",
-      subText: "Virtual Gifts: choose your amount and send via email",
+      subText:
+        "Virtual Gifts: choose your amount and send via email | COMING SOON",
     },
     { name: "Recommended gifts", category: "recommendedGifts" },
     { name: "Birthday Gifts", category: "birthday" },
