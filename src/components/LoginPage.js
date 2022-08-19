@@ -20,7 +20,7 @@ const LoginPage = ({ children }) => {
   useEffect(() => {
     async function addUser() {
       const newUser = {
-        id: user.attributes.email,
+        id: user.username,
         email: user.attributes.email,
         name: user.attributes.name,
         phoneNumber: user.attributes.phone_number,
@@ -31,7 +31,7 @@ const LoginPage = ({ children }) => {
 
     async function fetchCurrentUser() {
       const userData = await API.graphql(
-        graphqlOperation(getUser, { id: user.attributes.email })
+        graphqlOperation(getUser, { id: user.username })
       );
 
       if (!userData.data.getUser) {
