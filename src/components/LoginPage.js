@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useAuth from "../hooks/useAuth";
+import { useOutletContext } from "react-router-dom";
+import { getUser } from "../graphql/queries";
+import { createUser } from "../graphql/mutations";
+import { API, graphqlOperation } from "aws-amplify";
 
 const backgroundBlue = "#C5D4DF";
 const headingBlue = "#9EB1BE";
@@ -11,6 +15,38 @@ const headingBlue = "#9EB1BE";
  * user is currently not logged in.
  */
 const LoginPage = ({ children }) => {
+  const [user] = useOutletContext();
+
+  useEffect(() => {
+    async function addUser() {
+      const newUser = {
+        id: user.attributes.email,
+        email: user.attributes.email,
+        name: user.attributes.name,
+        phoneNumber: user.attributes.phone_number,
+      };
+      await API.graphql(graphqlOperation(createUser, { input: newUser }));
+      fetchCurrentUser();
+    }
+
+    async function fetchCurrentUser() {
+      const userData = await API.graphql(
+        graphqlOperation(getUser, { id: user.attributes.email })
+      );
+
+      if (!userData.data.getUser) {
+        addUser();
+      }
+    }
+
+    fetchCurrentUser();
+  }, [
+    user.username,
+    user.attributes.email,
+    user.attributes.name,
+    user.attributes.phone_number,
+  ]);
+
   const { currentUser } = useAuth();
 
   // If the user is already logged in, do not render the login page

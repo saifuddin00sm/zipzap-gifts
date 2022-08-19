@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Header from "../Header.js";
 import Typography from "@mui/material/Typography";
@@ -8,10 +8,7 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
-import { useOutletContext, useNavigate } from "react-router-dom";
-import { getUser } from "../../graphql/queries";
-import { createUser } from "../../graphql/mutations";
-import { API, graphqlOperation } from "aws-amplify";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Accordions from "./Accordions.js";
 import UtilizationAndDefault from "./UtilizationAndDefault";
@@ -288,43 +285,10 @@ function GiftDashboard() {
   // set this true when user have no recipient from the api/backend
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-  //congito user information
   const [user] = useOutletContext();
+  //congito user information
+
   const [open, setOpen] = useState(false);
-
-  // TODO: Refactor this into a custom hook and move it out of this file
-  useEffect(() => {
-    async function addUser() {
-      const newUser = {
-        id: user.attributes.email,
-        email: user.attributes.email,
-        name: user.attributes.name,
-        phoneNumber: user.attributes.phone_number,
-      };
-      await API.graphql(graphqlOperation(createUser, { input: newUser }));
-      fetchCurrentUser();
-    }
-
-    async function fetchCurrentUser() {
-      const userData = await API.graphql(
-        graphqlOperation(getUser, { id: user.attributes.email })
-      );
-
-      if (!userData.data.getUser) {
-        addUser();
-      } else if (!userData.data.getUser.company) {
-        setOpen(true);
-      }
-    }
-
-    fetchCurrentUser();
-  }, [
-    user.username,
-    user.attributes.email,
-    user.attributes.name,
-    user.attributes.phone_number,
-  ]);
-
   const handleDayClick = (day) => {};
 
   return (
