@@ -25,7 +25,7 @@ const useUsers = () => {
   const mutation = useMutation(editUser, {
     onSuccess: () => {
       // Invalidate and refresh all of the user queries
-      queryClient.invalidateQueries("user");
+      queryClient.invalidateQueries("users");
     },
   });
 
