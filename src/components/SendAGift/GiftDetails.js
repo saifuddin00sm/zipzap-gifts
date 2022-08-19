@@ -121,7 +121,7 @@ const GiftDetails = ({
                   <DatePicker
                     value={from}
                     inputFormat="MM/dd/yyyy"
-                    minDate={from}
+                    disablePast="true"
                     onChange={(value) => setInput("from", value)}
                     renderInput={(params) => (
                       <TextField variant="standard" {...params} />
@@ -133,7 +133,7 @@ const GiftDetails = ({
                   <DatePicker
                     value={to}
                     inputFormat="MM/dd/yyyy"
-                    minDate={from}
+                    disablePast="true"
                     maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("to", value)}
                     renderInput={(params) => (
