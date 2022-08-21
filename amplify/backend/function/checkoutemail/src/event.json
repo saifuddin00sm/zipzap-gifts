@@ -1,5 +1,84 @@
 {
-  "key1": "value1",
-  "key2": "value2",
-  "key3": "value3"
+  "Records": [
+    {
+      "eventID": "085737d967bf0b4981a9740eb9cdf0b5",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-west-2",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1661122919,
+        "Keys": { "id": { "S": "ba727a66-6001-4357-bcfc-d67220f3d2e1" } },
+        "OldImage": {
+          "note": { "S": "This is a custom note. Test test test test." },
+          "orderType": { "S": "RECURRING" },
+          "giftImage": {
+            "S": "gifts02722-dev.s3.us-west-2.amazonaws.com/public/images/35c1e97e-6063-4389-ae4a-aaa41c6d2bedPhotoRoom_20220510_193308.PNG"
+          },
+          "recipientIDs": {
+            "L": [
+              {
+                "S": "cf559a33-835e-462d-8cc1-4706dc67c009"
+              },
+              {
+                "S": "0a92784f-c555-45f3-8c1f-279426079d86"
+              },
+              {
+                "S": "a4868c22-3ff7-4fe9-8be0-21db59c367b7"
+              },
+              {
+                "S": "85eca9e6-56ae-443e-a67f-ee8ccc609016"
+              },
+              {
+                "S": "292c6e81-6fd8-402f-a2d9-9f5e134e9407"
+              },
+              {
+                "S": "d793c55e-9e2b-4b62-85e5-5e14646bac48"
+              },
+              {
+                "S": "a7524368-4db5-488e-9997-20af6dff554a"
+              },
+              {
+                "S": "151a09ea-86c2-4c8a-a72b-9a7bfeff84d1"
+              },
+              {
+                "S": "49812465-4087-43cc-87f9-7f464b03437c"
+              },
+              {
+                "S": "017259db-240d-41a3-91c9-ffe10b83bb89"
+              },
+              {
+                "S": "3f217851-181b-41d3-aa46-58fa1968f1d0"
+              },
+              {
+                "S": "cf22ac06-c097-4950-87ad-5c4e45992bfd"
+              },
+              {
+                "S": "422d2ec9-1e3a-452c-9952-f71109a5a7b2"
+              }
+            ]
+          },
+          "totalPrice": { "S": "2074" },
+          "__typename": { "S": "Order" },
+          "toDate": { "S": "2023-05-31T14:49:09.000Z" },
+          "fromDate": { "S": "2022-08-01T14:49:09.000Z" },
+          "createdAt": { "S": "2022-08-21T22:51:10.139Z" },
+          "giftID": { "S": "f9c49580-ceb8-485c-9473-a5c89453d2bb" },
+          "createdBy": { "S": "amelia.mendicino@gmail.com" },
+          "paymentID": { "S": "pm_1LF6DtDT2m7Y85adix08e7Vd" },
+          "giftPrice": { "S": "100" },
+          "name": { "S": "Test Gift (Delete Me!)" },
+          "shippingAddressType": { "S": "RECIPIENT_ADDRESS" },
+          "id": { "S": "ba727a66-6001-4357-bcfc-d67220f3d2e1" },
+          "orderDateType": { "S": "BIRTHDAY" },
+          "updatedAt": { "S": "2022-08-21T22:51:10.139Z" }
+        },
+        "SequenceNumber": "812040700000000022564056547",
+        "SizeBytes": 1288,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      }
+      ,
+      "eventSourceARN": "arn:aws:dynamodb:us-west-2:229932334462:table/Order-njx44ztw2nezlmdvmvrezysdh4-dev/stream/2022-03-04T07:54:24.259"
+    }
+  ]
 }
