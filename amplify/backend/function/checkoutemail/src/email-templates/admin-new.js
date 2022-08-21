@@ -16,7 +16,7 @@ const email = ({ emailAddress, giftName, recipients, date, price }) => {
   </p>
 
   <ul>
-    ${recipients.map((r) => `<li>${r.S}</li>`).join("")}
+    ${recipients.map((r) => `<li>${r.id}: ${r.name}</li>`).join("")}
   </ul>
     
   <p>

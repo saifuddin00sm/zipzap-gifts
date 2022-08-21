@@ -14,7 +14,7 @@ Amplify Params - DO NOT EDIT */
 //import aws from "aws-sdk";
 //const ses = new aws.SES();
 import adminNew from "./email-templates/admin-new.js";
-import { getRecipients } from "./graphql.js";
+import { getRecipients, getGiftName } from "./graphql.js";
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -34,7 +34,7 @@ export const handler = async (event) => {
     } = NewImage;
 
     const recipients = await getRecipients(recipientIDs.L.map((r) => r.S));
-    console.log(recipients);
+    const giftName = await getGiftName(giftID.S);
 
     let date = new Date(toDate.S).toLocaleDateString("en-US");
     if (orderType.S === "RECURRING") {
@@ -45,8 +45,8 @@ export const handler = async (event) => {
     if (eventName === "INSERT") {
       email = adminNew({
         emailAddress: createdBy.S,
-        giftName: giftID.S,
-        recipients: recipientIDs.L,
+        giftName,
+        recipients,
         date,
         price: totalPrice.S,
       });
@@ -54,8 +54,8 @@ export const handler = async (event) => {
       // TODO: Calculate differences and stuff...
       email = adminNew({
         emailAddress: createdBy.S,
-        giftName: giftID.S,
-        recipients: recipientIDs.L,
+        giftName,
+        recipients,
         date,
         price: totalPrice.S,
       });
