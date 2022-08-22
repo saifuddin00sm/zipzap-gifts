@@ -31,8 +31,10 @@ const LoginPage = ({ children }) => {
 
     async function fetchCurrentUser() {
       const userData = await API.graphql(
-        graphqlOperation(getUser, { id: currentUser.attributes.email })
+        graphqlOperation(getUser, { id: currentUser?.attributes?.email })
       );
+
+      console.log({ currentUser }, { userData });
 
       if (!userData.data.getUser) {
         addUser();
@@ -41,10 +43,10 @@ const LoginPage = ({ children }) => {
 
     fetchCurrentUser();
   }, [
-    currentUser.username,
-    currentUser.attributes.email,
-    currentUser.attributes.name,
-    currentUser.attributes.phone_number,
+    currentUser?.username,
+    currentUser?.attributes?.email,
+    currentUser?.attributes?.name,
+    currentUser?.attributes?.phone_number,
   ]);
 
   // If the user is already logged in, do not render the login page
