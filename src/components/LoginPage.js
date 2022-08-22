@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useAuth from "../hooks/useAuth";
-import { useOutletContext } from "react-router-dom";
+// import { useOutletContext } from "react-router-dom";
 import { getUser } from "../graphql/queries";
 import { createUser } from "../graphql/mutations";
 import { API, graphqlOperation } from "aws-amplify";
@@ -15,15 +15,15 @@ const headingBlue = "#9EB1BE";
  * user is currently not logged in.
  */
 const LoginPage = ({ children }) => {
-  const [user] = useOutletContext();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     async function addUser() {
       const newUser = {
-        id: user.username,
-        email: user.attributes.email,
-        name: user.attributes.name,
-        phoneNumber: user.attributes.phone_number,
+        id: currentUser.attributes.email,
+        email: currentUser.attributes.email,
+        name: currentUser.attributes.name,
+        phoneNumber: currentUser.attributes.phone_number,
       };
       await API.graphql(graphqlOperation(createUser, { input: newUser }));
       fetchCurrentUser();
@@ -31,7 +31,7 @@ const LoginPage = ({ children }) => {
 
     async function fetchCurrentUser() {
       const userData = await API.graphql(
-        graphqlOperation(getUser, { id: user.username })
+        graphqlOperation(getUser, { id: currentUser.attributes.email })
       );
 
       if (!userData.data.getUser) {
@@ -41,19 +41,16 @@ const LoginPage = ({ children }) => {
 
     fetchCurrentUser();
   }, [
-    user.username,
-    user.attributes.email,
-    user.attributes.name,
-    user.attributes.phone_number,
+    currentUser.username,
+    currentUser.attributes.email,
+    currentUser.attributes.name,
+    currentUser.attributes.phone_number,
   ]);
-
-  const { currentUser } = useAuth();
 
   // If the user is already logged in, do not render the login page
   if (currentUser) {
     return children;
   }
-
   return (
     <Box
       sx={{
