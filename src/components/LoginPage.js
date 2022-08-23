@@ -33,9 +33,6 @@ const LoginPage = ({ children }) => {
       const userData = await API.graphql(
         graphqlOperation(getUser, { id: currentUser?.attributes?.email })
       );
-
-      console.log({ currentUser }, { userData });
-
       if (!userData.data.getUser) {
         addUser();
       }
