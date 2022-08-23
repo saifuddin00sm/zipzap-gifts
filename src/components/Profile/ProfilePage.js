@@ -27,12 +27,21 @@ function ProfilePage() {
   const userInfo = {
     id: userData?.id,
     userName: userData?.name,
-    company: userData?.company,
+    company:
+      userData?.company === null || userData?.company === undefined
+        ? "N/A"
+        : userData.company,
     contactInfo: {
-      address: userData?.address,
+      address:
+        userData?.address === null || userData?.address === undefined
+          ? "N/A"
+          : userData.address,
       phone: userData?.phoneNumber,
       email: userData?.email,
-      companySize: 200,
+      companySize:
+        userData?.companySize === null || userData?.companSize === undefined
+          ? "N/A"
+          : userData.companySize,
     },
   };
 

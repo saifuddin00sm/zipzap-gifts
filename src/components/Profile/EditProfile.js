@@ -17,7 +17,10 @@ import { useUsers } from "./../../hooks/users";
 const EditProfile = ({ info, setIsEdit, setOpen }) => {
   const initialState = {
     id: info.id,
-    company: info.company === null ? "N/A" : info.company,
+    company:
+      info.company === null || info.address === undefined
+        ? "N/A"
+        : info.company,
     companySize:
       info.companySize === null || info.companySize === undefined
         ? "N/A"
@@ -84,16 +87,16 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
           sx={{ marginTop: "20px" }}
         >
           <Box className="title">
+            <Typography>Name: </Typography>
             <TextField
               sx={{ width: "20vw" }}
               name="userName"
               value={formState.userName}
               onChange={(event) => setInput("userName", event.target.value)}
-            >
-              {info.userName === null ? "N/A" : info.userName}
-            </TextField>
+            ></TextField>
           </Box>
           <Box className="title">
+            <Typography>Company: </Typography>
             <TextField
               sx={{ width: "20vw" }}
               name="company"
