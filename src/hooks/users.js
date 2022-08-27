@@ -4,6 +4,7 @@ import { updateUser } from "../graphql/mutations";
 import { getUser } from "../graphql/queries";
 
 const editUser = async ({ ...user }) => {
+  console.log(user);
   if (!user.email) {
     user.email = null;
   }
@@ -11,6 +12,7 @@ const editUser = async ({ ...user }) => {
     user.phone = null;
   }
   if (!user.name) {
+    console.log("Testing");
     new Error("Missing First and Last Name");
     return;
   }

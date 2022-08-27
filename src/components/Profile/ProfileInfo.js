@@ -14,7 +14,7 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const ProfileInfo = ({ info, setIsEdit }) => {
   const {
-    userName,
+    name,
     company,
     contactInfo: { address, email, phone, companySize } = {},
   } = info;
@@ -51,7 +51,7 @@ const ProfileInfo = ({ info, setIsEdit }) => {
         </Box>
         <Box>
           <Typography className="title" variant="h3">
-            {userName}
+            {name}
           </Typography>
           <Typography className="company">Company: {company}</Typography>
         </Box>

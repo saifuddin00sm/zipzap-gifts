@@ -25,7 +25,7 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
       info.companySize === null || info.companySize === undefined
         ? "N/A"
         : info.companySize,
-    userName: info.userName,
+    name: info.name,
     email: info.contactInfo.email,
     phone: info.contactInfo.phone,
     address:
@@ -47,12 +47,9 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log({ initialState });
-    console.log({ formState });
     e.preventDefault();
     await editUser({ ...formState });
     // setIsEdit(false);
-    setFormState(initialState);
   };
 
   return (
@@ -82,7 +79,7 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
           </Box> */}
         </Box>
         <Box
-          onSubmit={handleSubmit}
+          // onSubmit=
           component="form"
           sx={{ marginTop: "20px" }}
         >
@@ -90,9 +87,9 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
             <Typography>Name: </Typography>
             <TextField
               sx={{ width: "20vw" }}
-              name="userName"
-              value={formState.userName}
-              onChange={(event) => setInput("userName", event.target.value)}
+              name="name"
+              value={formState.name}
+              onChange={(event) => setInput("name", event.target.value)}
             ></TextField>
           </Box>
           <Box className="title">

@@ -14,7 +14,7 @@ import Header from "../Header";
 // TODO: This Component needs to be refactored to meet the Zip Zap Code of Code
 function ProfilePage() {
   const { currentUser } = useAuth();
-  const userID = currentUser?.username;
+  const userID = currentUser?.username || "empty";
   const { data: { data: { getUser: userData = {} } = {} } = {} } = useQuery(
     ["users", userID],
     () => API.graphql(graphqlOperation(getUser, { id: userID })),
@@ -26,7 +26,7 @@ function ProfilePage() {
 
   const userInfo = {
     id: userData?.id,
-    userName: userData?.name,
+    name: userData?.name,
     company:
       userData?.company === null || userData?.company === undefined
         ? "N/A"
