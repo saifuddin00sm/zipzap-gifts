@@ -31,9 +31,18 @@ const editUser = async ({ ...user }) => {
   console.log("success");
 };
 
-const useUsers = () => {
+const useUsers = (userID) => {
   const queryClient = useQueryClient();
-  const { isLoading, isError, data: user, error } = useQuery("user", getUser);
+  const {
+    isLoading,
+    isError,
+    error,
+    data: { data: { getUser: user = {} } = {} } = {},
+  } = useQuery(
+    ["users", userID],
+    () => API.graphql(graphqlOperation(getUser, { id: userID })),
+    { enabled: !!userID }
+  );
 
   const mutation = useMutation(editUser, {
     onSuccess: () => {
