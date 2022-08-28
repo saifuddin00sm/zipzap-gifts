@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { updateUser } from "../graphql/mutations";
+import { updateUser, createCompany } from "../graphql/mutations";
 import { getUser } from "../graphql/queries";
 
 const editUser = async ({ ...user }) => {
@@ -16,6 +16,17 @@ const editUser = async ({ ...user }) => {
     new Error("Missing First and Last Name");
     return;
   }
+
+  if (!user.companyUsersId) {
+    const {
+      data: {
+        createCompany: { companyUsersId },
+      },
+    } = await API.graphql(graphqlOperation(createCompany, { input: user }));
+    createCompany = companyUsersId;
+    await API.graphql(graphqlOperation(createCompany, { input: user }));
+  }
+
   await API.graphql(graphqlOperation(updateUser, { input: user }));
   console.log("success");
 };

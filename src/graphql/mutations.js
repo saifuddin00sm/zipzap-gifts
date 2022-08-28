@@ -469,6 +469,7 @@ export const deleteAddress = /* GraphQL */ `
     }
   }
 `;
+
 export const createRecipient = /* GraphQL */ `
   mutation CreateRecipient(
     $input: CreateRecipientInput!

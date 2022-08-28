@@ -21,10 +21,10 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
       info.company === null || info.address === undefined
         ? "N/A"
         : info.company,
-    companySize:
-      info.companySize === null || info.companySize === undefined
-        ? "N/A"
-        : info.companySize,
+    // companySize:
+    //   info.companySize === null || info.companySize === undefined
+    //     ? "N/A"
+    //     : info.companySize,
     name: info.name,
     email: info.contactInfo.email,
     phone: info.contactInfo.phone,
@@ -165,7 +165,7 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
               </TextField>
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <Box className="infoBox">
               <PeopleOutlineIcon />
               <Typography>Company Size:</Typography>
@@ -180,7 +180,7 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
                 {formState.companySize}
               </TextField>
             </Box>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
       <Box>

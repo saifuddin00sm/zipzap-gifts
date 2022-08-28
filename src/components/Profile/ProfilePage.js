@@ -16,7 +16,8 @@ function ProfilePage() {
   const { currentUser } = useAuth();
   const userID = currentUser?.username || "empty";
   const { data: { data: { getUser: userData = {} } = {} } = {} } = useQuery(
-    ["users", userID],
+    // ["users", userID],
+    ["users"],
     () => API.graphql(graphqlOperation(getUser, { id: userID })),
     { enabled: !!userID }
   );
@@ -38,10 +39,10 @@ function ProfilePage() {
           : userData.address,
       phone: userData?.phoneNumber,
       email: userData?.email,
-      companySize:
-        userData?.companySize === null || userData?.companSize === undefined
-          ? "N/A"
-          : userData.companySize,
+      // companySize:
+      //   userData?.companySize === null || userData?.companSize === undefined
+      //     ? "N/A"
+      //     : userData.companySize,
     },
   };
 

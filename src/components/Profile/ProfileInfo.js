@@ -13,11 +13,7 @@ import Grid from "@mui/material/Grid";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const ProfileInfo = ({ info, setIsEdit }) => {
-  const {
-    name,
-    company,
-    contactInfo: { address, email, phone, companySize } = {},
-  } = info;
+  const { name, company, contactInfo: { address, email, phone } = {} } = info;
 
   const handleClick = () => {
     setIsEdit(true);
@@ -94,12 +90,12 @@ const ProfileInfo = ({ info, setIsEdit }) => {
               <Typography>Email: {email}</Typography>
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <Box className="infoBox">
               <PeopleOutlineIcon />
               <Typography>Company Size: {companySize}</Typography>
             </Box>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </Root>
