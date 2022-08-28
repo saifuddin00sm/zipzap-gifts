@@ -10,10 +10,16 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 // import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Grid from "@mui/material/Grid";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+// import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const ProfileInfo = ({ info, setIsEdit }) => {
-  const { name, company, contactInfo: { address, email, phone } = {} } = info;
+  const {
+    name,
+    email,
+    phone,
+    company: { name: companyName, address } = {},
+  } = info;
+  const { address1, address2, city, state, zip } = address || {};
 
   const handleClick = () => {
     setIsEdit(true);
@@ -49,7 +55,7 @@ const ProfileInfo = ({ info, setIsEdit }) => {
           <Typography className="title" variant="h3">
             {name}
           </Typography>
-          <Typography className="company">Company: {company}</Typography>
+          <Typography className="company">Company: {companyName}</Typography>
         </Box>
       </Box>
       <Box className="contactInfo" sx={{ mb: 5 }}>
@@ -75,7 +81,13 @@ const ProfileInfo = ({ info, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
-              <Typography>Address: {address}</Typography>
+              <Typography>
+                Address:{" "}
+                {address &&
+                  `${address1}${
+                    address2 ? ` ${address2}` : ""
+                  }, ${city}, ${state}, ${zip}`}
+              </Typography>
             </Box>
           </Grid>
           <Grid item xs={6}>
