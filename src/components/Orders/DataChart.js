@@ -12,21 +12,21 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 // chart dummy data
 const data = [
-  { date: "2021-11-14", gifts: 5 },
-  { date: "2021-7-18", gifts: 10 },
-  { date: "2021-9-22", gifts: 20 },
-  { date: "2021-8-22", gifts: 25 },
-  { date: "2021-2-25", gifts: 30 },
-  { date: "2021-3-31", gifts: 35 },
+  { date: "2021-11-14T00:00:00", gifts: 5 },
+  { date: "2021-07-18T00:00:00", gifts: 10 },
+  { date: "2021-09-22T00:00:00", gifts: 20 },
+  { date: "2021-08-22T00:00:00", gifts: 25 },
+  { date: "2021-02-25T00:00:00", gifts: 30 },
+  { date: "2021-03-31T00:00:00", gifts: 35 },
 ];
 
 const dateFormatter = (date) => {
   // TODO: When we use real data, if date is in ISO 8601, it won't work in Safari. Use date-fns parseISO instead.
-  return format(new Date(date), "MMM");
+  return format(parseISO(date), "MMM");
 };
 
 const DataChart = () => {
