@@ -19,10 +19,11 @@ const EditProfile = ({ info, setIsEdit }) => {
     id,
     name,
     email,
-    phone = "",
-    company: { name: companyName = "", address } = {},
+    phoneNumber = "",
+    company: { id: companyID, name: companyName = "", address } = {},
   } = info;
   const {
+    id: addressID,
     address1 = "",
     address2 = "",
     city = "",
@@ -31,10 +32,13 @@ const EditProfile = ({ info, setIsEdit }) => {
   } = address || {};
   const { editUser } = useUsers(id);
   const [formState, setFormState] = useState({
+    id,
     name,
     email,
-    phone,
+    phoneNumber,
+    companyID,
     companyName,
+    addressID,
     address1,
     address2,
     city,
@@ -52,8 +56,14 @@ const EditProfile = ({ info, setIsEdit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await editUser({ ...formState });
-    setIsEdit(false);
+    try {
+      await editUser({ ...formState });
+      setIsEdit(false);
+    } catch (error) {
+      // TODO: Show a user-friendly error message to the user and get rid of the console.log
+      // It's easy to get errors for the phone number and email because they have validation on the formatting from AWS...
+      console.log(error);
+    }
   };
 
   return (
@@ -146,9 +156,11 @@ const EditProfile = ({ info, setIsEdit }) => {
               <Typography>Phone: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
-                name="phone"
-                value={formState.phone}
-                onChange={(event) => setInput("phone", event.target.value)}
+                name="phoneNumber"
+                value={formState.phoneNumber}
+                onChange={(event) =>
+                  setInput("phoneNumber", event.target.value)
+                }
               />
             </Box>
           </Grid>

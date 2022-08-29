@@ -1,34 +1,85 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { updateUser, createCompany } from "../graphql/mutations";
+import {
+  updateUser,
+  createAddress,
+  updateAddress,
+  createCompany,
+  updateCompany,
+} from "../graphql/mutations";
 import { getUser } from "../graphql/queries";
 
-const editUser = async ({ ...user }) => {
-  console.log(user);
-  if (!user.email) {
+const saveAddress = async (address) => {
+  const { data } = await API.graphql(
+    graphqlOperation(address.id ? updateAddress : createAddress, {
+      input: address,
+    })
+  );
+
+  const id = data?.[`${address.id ? "updateAddress" : "createAddress"}`]?.id;
+
+  return id;
+};
+
+const saveCompany = async (company) => {
+  const { data } = await API.graphql(
+    graphqlOperation(company.id ? updateCompany : createCompany, {
+      input: company,
+    })
+  );
+
+  const id = data?.[`${company.id ? "updateCompany" : "createCompany"}`]?.id;
+
+  return id;
+};
+
+const editUser = async ({
+  id,
+  name,
+  email,
+  phoneNumber,
+  companyID,
+  companyName,
+  addressID,
+  address1,
+  address2,
+  city,
+  state,
+  zip,
+}) => {
+  if (!name) {
+    throw new Error("Missing User Name");
+  }
+
+  const addressId = await saveAddress({
+    id: addressID,
+    address1,
+    address2,
+    city,
+    state,
+    zip,
+  });
+  const companyId = await saveCompany({
+    id: companyID,
+    name: companyName,
+    companyAddressId: addressId,
+  });
+
+  const user = { id, name, email, phoneNumber, companyUsersId: companyId };
+  // We have to null out the email and phone if they're empty because they're special AWS types in GraphQL
+  if (!email) {
     user.email = null;
   }
-  if (!user.phoneNumber) {
-    user.phone = null;
-  }
-  if (!user.name) {
-    console.log("Testing");
-    new Error("Missing First and Last Name");
-    return;
+  if (!phoneNumber) {
+    user.phoneNumber = null;
   }
 
-  if (!user.companyUsersId) {
-    const {
-      data: {
-        createCompany: { companyUsersId },
-      },
-    } = await API.graphql(graphqlOperation(createCompany, { input: user }));
-    createCompany = companyUsersId;
-    await API.graphql(graphqlOperation(createCompany, { input: user }));
-  }
-
-  await API.graphql(graphqlOperation(updateUser, { input: user }));
-  console.log("success");
+  const response = await API.graphql(
+    graphqlOperation(updateUser, {
+      input: user,
+    })
+  );
+  return response;
 };
 
 const useUsers = (userID) => {

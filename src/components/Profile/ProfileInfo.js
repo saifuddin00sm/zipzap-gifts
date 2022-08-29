@@ -16,7 +16,7 @@ const ProfileInfo = ({ info, setIsEdit }) => {
   const {
     name,
     email,
-    phone,
+    phoneNumber,
     company: { name: companyName, address } = {},
   } = info;
   const { address1, address2, city, state, zip } = address || {};
@@ -83,7 +83,7 @@ const ProfileInfo = ({ info, setIsEdit }) => {
               <HomeIcon />
               <Typography>
                 Address:{" "}
-                {address &&
+                {address1 &&
                   `${address1}${
                     address2 ? ` ${address2}` : ""
                   }, ${city}, ${state}, ${zip}`}
@@ -93,7 +93,7 @@ const ProfileInfo = ({ info, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <PhoneIcon />
-              <Typography>Phone: {phone}</Typography>
+              <Typography>Phone: {phoneNumber}</Typography>
             </Box>
           </Grid>
           <Grid item xs={6}>
