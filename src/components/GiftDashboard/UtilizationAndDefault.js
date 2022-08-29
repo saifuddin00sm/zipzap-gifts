@@ -184,6 +184,7 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                                 </Typography>
                                 <Box className="iconBox">{icon}</Box>
                                 <Typography variant="h6" className="date">
+                                  {/* TODO: new Date might not work here in Safari if date is ISO 8601 */}
                                   {format(new Date(date), "MMM Qo")}
                                 </Typography>
                               </SmallCards>

@@ -25,6 +25,7 @@ const data = [
 ];
 
 const dateFormatter = (date) => {
+  // TODO: When we use real data, if date is in ISO 8601, it won't work in Safari. Use date-fns parseISO instead.
   return format(new Date(date), "MMM");
 };
 
