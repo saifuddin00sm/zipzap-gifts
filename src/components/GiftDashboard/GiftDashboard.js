@@ -199,7 +199,7 @@ const defaultGifts = [
     gifts: [
       {
         name: "national donut day",
-        date: "2022-1-05",
+        date: "2022-01-05T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -207,7 +207,7 @@ const defaultGifts = [
       },
       {
         name: "father's day",
-        date: "2022-12-09",
+        date: "2022-12-09T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -215,7 +215,7 @@ const defaultGifts = [
       },
       {
         name: "international yoga day",
-        date: "2022-05-3",
+        date: "2022-05-03T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -223,7 +223,7 @@ const defaultGifts = [
       },
       {
         name: "independence day",
-        date: "2022-7-20",
+        date: "2022-07-20T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
@@ -237,7 +237,7 @@ const defaultGifts = [
     gifts: [
       {
         name: "Kelsey Zaugg Birthday",
-        date: "2022-8-12",
+        date: "2022-08-12T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -248,7 +248,7 @@ const defaultGifts = [
       },
       {
         name: "Andrew Zaugg Birthday",
-        date: "2022-6-19",
+        date: "2022-06-19T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -259,7 +259,7 @@ const defaultGifts = [
       },
       {
         name: "Michael Scott Anniversary",
-        date: "2022-5-14",
+        date: "2022-05-14T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -270,7 +270,7 @@ const defaultGifts = [
       },
       {
         name: "Kelsey Zaugg Anniversary",
-        date: "2022-6-04",
+        date: "2022-06-04T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
