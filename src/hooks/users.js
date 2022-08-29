@@ -51,19 +51,27 @@ const editUser = async ({
     throw new Error("Missing User Name");
   }
 
-  const addressId = await saveAddress({
+  const address = {
     id: addressID,
     address1,
     address2,
     city,
     state,
     zip,
-  });
-  const companyId = await saveCompany({
+  };
+  if (!addressID) {
+    delete address.id;
+  }
+  const addressId = await saveAddress(address);
+  const company = {
     id: companyID,
     name: companyName,
     companyAddressId: addressId,
-  });
+  };
+  if (!companyID) {
+    delete company.id;
+  }
+  const companyId = await saveCompany(company);
 
   const user = { id, name, email, phoneNumber, companyUsersId: companyId };
   // We have to null out the email and phone if they're empty because they're special AWS types in GraphQL
