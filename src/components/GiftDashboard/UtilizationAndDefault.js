@@ -9,7 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import CelebrationIcon from "@mui/icons-material/Celebration";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import "react-circular-progressbar/dist/styles.css";
 
 const Root = styled("div")(({ theme }) => ({
@@ -184,7 +184,8 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                                 </Typography>
                                 <Box className="iconBox">{icon}</Box>
                                 <Typography variant="h6" className="date">
-                                  {format(new Date(date), "MMM Qo")}
+                                  {/* TODO: new Date might not work here in Safari if date is ISO 8601 */}
+                                  {format(parseISO(date), "MMM Qo")}
                                 </Typography>
                               </SmallCards>
                             </Grid>

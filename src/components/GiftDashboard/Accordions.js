@@ -1,5 +1,5 @@
 import React from "react";
-import { format, compareAsc, compareDesc } from "date-fns";
+import { format, compareAsc, compareDesc, parseISO } from "date-fns";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -49,13 +49,13 @@ const Accordions = () => {
 
   // Separate the orders into Recurring and OneTime gifts for display
   orders.forEach((o) => {
-    let orderDate = new Date(o.toDate);
+    let orderDate = parseISO(o.toDate);
     let date = format(orderDate, "M/d/yyyy");
     let prev = prevOneTime;
     let current = oneTime;
 
     if (o.orderType === "RECURRING") {
-      orderDate = new Date(o.fromDate);
+      orderDate = parseISO(o.fromDate);
       date = `${format(orderDate, "M/d/yyyy")}-` + date;
       prev = prevRecurring;
       current = recurring;
@@ -66,7 +66,7 @@ const Accordions = () => {
       orderDate,
       date,
     };
-    if (new Date(o.toDate) <= today) {
+    if (parseISO(o.toDate) <= today) {
       prev.push({ ...gift, fulfilled: true });
     } else {
       current.push(gift);
