@@ -10,33 +10,41 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 // import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Grid from "@mui/material/Grid";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+// import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import TextField from "@mui/material/TextField";
 import { useUsers } from "./../../hooks/users";
 
-const EditProfile = ({ info, setIsEdit, setOpen }) => {
-  const initialState = {
-    id: info.id,
-    company:
-      info.company === null || info.address === undefined
-        ? "N/A"
-        : info.company,
-    // companySize:
-    //   info.companySize === null || info.companySize === undefined
-    //     ? "N/A"
-    //     : info.companySize,
-    name: info.name,
-    email: info.contactInfo.email,
-    phone: info.contactInfo.phone,
-    address:
-      info.address === null || info.address === undefined
-        ? "N/A"
-        : info.address,
-  };
-
-  const { editUser } = useUsers();
-
-  const [formState, setFormState] = useState(initialState);
+const EditProfile = ({ info, setIsEdit }) => {
+  const {
+    id,
+    name,
+    email,
+    phoneNumber = "",
+    company: { id: companyID, name: companyName = "", address } = {},
+  } = info;
+  const {
+    id: addressID,
+    address1 = "",
+    address2 = "",
+    city = "",
+    state = "",
+    zip = "",
+  } = address || {};
+  const { editUser } = useUsers(id);
+  const [formState, setFormState] = useState({
+    id,
+    name,
+    email,
+    phoneNumber,
+    companyID,
+    companyName,
+    addressID,
+    address1,
+    address2,
+    city,
+    state,
+    zip,
+  });
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value });
@@ -48,8 +56,14 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await editUser({ ...formState });
-    // setIsEdit(false);
+    try {
+      await editUser({ ...formState });
+      setIsEdit(false);
+    } catch (error) {
+      // TODO: Show a user-friendly error message to the user and get rid of the console.log
+      // It's easy to get errors for the phone number and email because they have validation on the formatting from AWS...
+      console.log(error);
+    }
   };
 
   return (
@@ -90,18 +104,16 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
               name="name"
               value={formState.name}
               onChange={(event) => setInput("name", event.target.value)}
-            ></TextField>
+            />
           </Box>
           <Box className="title">
             <Typography>Company: </Typography>
             <TextField
               sx={{ width: "20vw" }}
-              name="company"
-              value={formState.company}
-              onChange={(event) => setInput("company", event.target.value)}
-            >
-              {info.company === null ? "N/A" : info.company}
-            </TextField>
+              name="companyName"
+              value={formState.companyName}
+              onChange={(event) => setInput("companyName", event.target.value)}
+            />
           </Box>
         </Box>
       </Box>
@@ -128,12 +140,13 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
+              {/* TODO: Break this up into each of the address fields... */}
               <Typography>Address: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
-                name="address"
-                value={formState.address}
-                onChange={(event) => setInput("address", event.target.value)}
+                name="address1"
+                value={formState.address1}
+                onChange={(event) => setInput("address1", event.target.value)}
               />
             </Box>
           </Grid>
@@ -143,12 +156,12 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
               <Typography>Phone: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
-                name="phone"
-                value={formState.phone}
-                onChange={(event) => setInput("phone", event.target.value)}
-              >
-                {info.phone === null ? "N/A" : info.phone}
-              </TextField>
+                name="phoneNumber"
+                value={formState.phoneNumber}
+                onChange={(event) =>
+                  setInput("phoneNumber", event.target.value)
+                }
+              />
             </Box>
           </Grid>
           <Grid item xs={6}>
@@ -160,9 +173,7 @@ const EditProfile = ({ info, setIsEdit, setOpen }) => {
                 name="email"
                 value={formState.email}
                 onChange={(event) => setInput("email", event.target.value)}
-              >
-                {formState.email}
-              </TextField>
+              />
             </Box>
           </Grid>
           {/* <Grid item xs={6}>

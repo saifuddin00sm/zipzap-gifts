@@ -11,40 +11,17 @@ import useAuth from "../../hooks/useAuth";
 import ProfileInfo from "./ProfileInfo";
 import Header from "../Header";
 
-// TODO: This Component needs to be refactored to meet the Zip Zap Code of Code
 function ProfilePage() {
   const { currentUser } = useAuth();
-  const userID = currentUser?.username || "empty";
+  const userID = currentUser?.username;
   const { data: { data: { getUser: userData = {} } = {} } = {} } = useQuery(
-    ["users", userID],
-    // ["users"],
+    // ["users", userID],
+    ["users"],
     () => API.graphql(graphqlOperation(getUser, { id: userID })),
     { enabled: !!userID }
   );
-  console.log(userData);
   const { signOut } = useAuth();
   const [isEdit, setIsEdit] = useState(false);
-
-  const userInfo = {
-    id: userData?.id,
-    name: userData?.name,
-    company:
-      userData?.company === null || userData?.company === undefined
-        ? "N/A"
-        : userData.company,
-    contactInfo: {
-      address:
-        userData?.address === null || userData?.address === undefined
-          ? "N/A"
-          : userData.address,
-      phone: userData?.phoneNumber,
-      email: userData?.email,
-      // companySize:
-      //   userData?.companySize === null || userData?.companSize === undefined
-      //     ? "N/A"
-      //     : userData.companySize,
-    },
-  };
 
   return (
     <Container component="main">
@@ -56,9 +33,9 @@ function ProfilePage() {
       </Header>
       <Box>
         {isEdit ? (
-          <EditProfile info={userInfo} isEdit={isEdit} setIsEdit={setIsEdit} />
+          <EditProfile info={userData} isEdit={isEdit} setIsEdit={setIsEdit} />
         ) : (
-          <ProfileInfo info={userInfo} isEdit={isEdit} setIsEdit={setIsEdit} />
+          <ProfileInfo info={userData} isEdit={isEdit} setIsEdit={setIsEdit} />
         )}
       </Box>
     </Container>
