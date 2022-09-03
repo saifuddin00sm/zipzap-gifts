@@ -26,6 +26,7 @@ export const handler = async (event) => {
       const { eventName, dynamodb: { NewImage = {} } = {} } = record;
       const {
         giftID,
+        name,
         createdBy,
         recipientIDs,
         toDate,
@@ -34,6 +35,7 @@ export const handler = async (event) => {
         totalPrice,
       } = NewImage;
 
+      // TODO: This fails on eventName REMOVE
       const recipients = await getRecipients(recipientIDs.L.map((r) => r.S));
       const giftName = await getGiftName(giftID.S);
 
@@ -45,6 +47,7 @@ export const handler = async (event) => {
       let email;
       if (eventName === "INSERT") {
         email = adminNew({
+          name: name.S,
           emailAddress: createdBy.S,
           giftName,
           recipients,
@@ -52,8 +55,10 @@ export const handler = async (event) => {
           price: totalPrice.S,
         });
       } else if (eventName === "MODIFY") {
-        // TODO: Calculate differences and stuff...
+        // TODO: Calculate differences so we only show what's changed
         email = adminNew({
+          name: name.S,
+          updated: true,
           emailAddress: createdBy.S,
           giftName,
           recipients,
@@ -66,7 +71,7 @@ export const handler = async (event) => {
     }
   } catch (err) {
     // Wrapped the whole function in a try-catch so that it doesn't re-run if it fails
-    console.log(err);
+    console.error(err);
   }
   return { status: "done" };
 };

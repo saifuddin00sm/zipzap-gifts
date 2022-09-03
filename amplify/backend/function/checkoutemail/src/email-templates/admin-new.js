@@ -1,7 +1,15 @@
 import { template } from "./email.js";
 
-const email = ({ emailAddress, giftName, recipients, date, price }) => {
-  const title = "Hooray Hooray!!";
+const email = ({
+  updated = false,
+  name,
+  emailAddress,
+  giftName,
+  recipients,
+  date,
+  price,
+}) => {
+  const title = updated ? "Gift Order Updated!" : "Hooray Hooray!!";
   const body = `
   <p>
     <b>Client Email:</b> ${emailAddress}
@@ -12,11 +20,17 @@ const email = ({ emailAddress, giftName, recipients, date, price }) => {
   </p>
 
   <p>
+    <b>Name:</b> ${name}
+  </p>
+
+  <p>
     <b>How Many and Who:</b> ${recipients.length}
   </p>
 
   <ul>
-    ${recipients.map((r) => `<li>${r.id}: ${r.name}</li>`).join("")}
+    ${recipients
+      .map((r) => `<li><span title="${r.id}">${r.name}</span></li>`)
+      .join("")}
   </ul>
     
   <p>
