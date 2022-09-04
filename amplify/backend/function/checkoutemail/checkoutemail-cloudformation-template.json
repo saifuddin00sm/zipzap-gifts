@@ -23,6 +23,12 @@
     "apizipzapGraphQLAPIEndpointOutput": {
       "Type": "String",
       "Default": "apizipzapGraphQLAPIEndpointOutput"
+    },
+    "adminEmail": {
+      "Type": "String"
+    },
+    "sesEmail": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -83,6 +89,12 @@
             },
             "API_ZIPZAP_GRAPHQLAPIENDPOINTOUTPUT": {
               "Ref": "apizipzapGraphQLAPIEndpointOutput"
+            },
+            "ADMIN_EMAIL": {
+              "Ref": "adminEmail"
+            },
+            "SES_EMAIL": {
+              "Ref": "sesEmail"
             }
           }
         },
@@ -301,6 +313,33 @@
           ]
         }
       }
+    },
+    "CustomLambdaExecutionPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "custom-lambda-execution-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                "arn:aws:ses:us-west-2:229932334462:identity/zipzap.gifts"
+              ]
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ]
+      },
+      "DependsOn": "LambdaExecutionRole"
     }
   },
   "Outputs": {

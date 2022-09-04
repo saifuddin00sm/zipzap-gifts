@@ -15,6 +15,7 @@ Amplify Params - DO NOT EDIT */
 //const ses = new aws.SES();
 import adminNew from "./email-templates/admin-new.js";
 import { getRecipients, getGiftName } from "./graphql.js";
+import { sendAdminEmail } from "./email.js";
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -44,8 +45,10 @@ export const handler = async (event) => {
         date = new Date(fromDate.S).toLocaleDateString("en-US") + " - " + date;
       }
 
+      let subject;
       let email;
       if (eventName === "INSERT") {
+        subject = "New Gift Order";
         email = adminNew({
           name: name.S,
           emailAddress: createdBy.S,
@@ -55,6 +58,7 @@ export const handler = async (event) => {
           price: totalPrice.S,
         });
       } else if (eventName === "MODIFY") {
+        subject = "Gift Order Update";
         // TODO: Calculate differences so we only show what's changed
         email = adminNew({
           name: name.S,
@@ -67,7 +71,7 @@ export const handler = async (event) => {
         });
       }
 
-      console.log(email);
+      await sendAdminEmail(subject, email);
     }
   } catch (err) {
     // Wrapped the whole function in a try-catch so that it doesn't re-run if it fails
