@@ -49,7 +49,8 @@ export default function BasicModal({ open, setOpen, error }) {
   };
 
   let title = "Congrats!";
-  let body = "You have created a gift";
+  let body =
+    "A Gift Expert will be in touch with you soon to finalize details!";
   if (error) {
     title = "Oops!";
     body = "Unable to create gift. Please refresh the page and try again.";

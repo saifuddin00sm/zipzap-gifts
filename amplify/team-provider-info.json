@@ -28,6 +28,12 @@
           "secretsPathAmplifyAppId": "d2qe40666r920c",
           "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
           "s3Key": "amplify-builds/stripe-4434705a51764465306a-build.zip"
+        },
+        "checkoutemail": {
+          "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
+          "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip",
+          "sesEmail": "noreply@zipzap.gifts",
+          "adminEmail": "connect+admin@zipzapgifts.com"
         }
       }
     }
