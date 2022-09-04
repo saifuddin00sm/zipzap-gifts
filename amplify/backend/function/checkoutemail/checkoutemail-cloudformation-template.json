@@ -24,10 +24,10 @@
       "Type": "String",
       "Default": "apizipzapGraphQLAPIEndpointOutput"
     },
-    "adminEmail": {
+    "sesEmail": {
       "Type": "String"
     },
-    "sesEmail": {
+    "adminEmail": {
       "Type": "String"
     }
   },
@@ -90,11 +90,11 @@
             "API_ZIPZAP_GRAPHQLAPIENDPOINTOUTPUT": {
               "Ref": "apizipzapGraphQLAPIEndpointOutput"
             },
-            "ADMIN_EMAIL": {
-              "Ref": "adminEmail"
-            },
             "SES_EMAIL": {
               "Ref": "sesEmail"
+            },
+            "ADMIN_EMAIL": {
+              "Ref": "adminEmail"
             }
           }
         },
@@ -328,7 +328,9 @@
               ],
               "Effect": "Allow",
               "Resource": [
-                "arn:aws:ses:us-west-2:229932334462:identity/zipzap.gifts"
+                "arn:aws:ses:us-west-2:229932334462:identity/zipzap.gifts",
+                "arn:aws:ses:us-west-2:229932334462:identity/connect+admin@zipzapgifts.com",
+                "arn:aws:ses:us-west-2:229932334462:identity/connect@zipzapgifts.com"
               ]
             }
           ]

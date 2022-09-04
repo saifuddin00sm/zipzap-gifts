@@ -32,8 +32,8 @@
         "checkoutemail": {
           "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
           "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip",
-          "adminEmail": "amelia.mendicino@gmail.com",
-          "sesEmail": "noreply@zipzap.gifts"
+          "sesEmail": "noreply@zipzap.gifts",
+          "adminEmail": "connect+admin@zipzapgifts.com"
         }
       }
     }
