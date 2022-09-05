@@ -16,8 +16,8 @@ type User
   phoneNumber: AWSPhone
   company: Company @belongsTo
   profilePhoto: String
-  # creditCards: [CreditCard] @hasMany
   accessGroups: [String]
+  stripeID: String
 }
 
 type Company
@@ -64,6 +64,7 @@ type Recipient
       { allow: owner }
       { allow: groups, groups: ["Admin"] }
       { allow: groups, groupsField: "accessGroups" }
+      { allow: private, operations: [read], provider: iam }
     ]
   ) {
   id: ID!
@@ -152,6 +153,11 @@ enum GiftDateType {
   ANNIVERSARY
 }
 
+enum ShippingAddressType {
+  RECIPIENT_ADDRESS
+  COMPANY_ADDRESS
+}
+
 type Order
   @model
   @auth(
@@ -162,11 +168,20 @@ type Order
     ]
   ) {
   id: ID!
+  giftID: ID!
+  giftImage: String
+  giftPrice: String
   name: String!
   note: String
+  toDate: AWSDateTime
+  fromDate: AWSDateTime
+  recipientIDs: [ID]
   giftEvents: [GiftEvent] @hasMany(indexName: "byOrder", fields: ["id"])
   createdBy: String!
+  updatedBy: String
   totalPrice: String
+  shippingAddressType: ShippingAddressType
+  paymentID: String
   # invoice: ?
   completed: AWSDateTime
   orderType: GiftType

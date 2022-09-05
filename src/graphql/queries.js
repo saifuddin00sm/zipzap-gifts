@@ -40,6 +40,7 @@ export const getUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -70,6 +71,7 @@ export const listUsers = /* GraphQL */ `
         }
         profilePhoto
         accessGroups
+        stripeID
         createdAt
         updatedAt
         companyUsersId
@@ -104,6 +106,7 @@ export const getCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -670,8 +673,14 @@ export const getOrder = /* GraphQL */ `
   query GetOrder($id: ID!) {
     getOrder(id: $id) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -693,7 +702,10 @@ export const getOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -713,13 +725,22 @@ export const listOrders = /* GraphQL */ `
     listOrders(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        giftID
+        giftImage
+        giftPrice
         name
         note
+        toDate
+        fromDate
+        recipientIDs
         giftEvents {
           nextToken
         }
         createdBy
+        updatedBy
         totalPrice
+        shippingAddressType
+        paymentID
         completed
         orderType
         orderDateType

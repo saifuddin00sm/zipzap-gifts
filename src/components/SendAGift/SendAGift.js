@@ -1,4 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { API, graphqlOperation } from "aws-amplify";
+import { parseISO } from "date-fns";
+import { useQuery } from "react-query";
+import { getOrder } from "../../graphql/queries";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -15,6 +20,7 @@ import SelectGifts from "./SelectGifts";
 import { Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useReward } from "react-rewards";
+import { useOrders } from "../../hooks/orders";
 
 const Root = styled("div")(({ theme }) => ({
   background: "#ABC4D6",
@@ -91,6 +97,7 @@ const initialState = {
   recipients: [],
   totalPrice: "",
   shippingAddressType: "RECIPIENT_ADDRESS",
+  paymentID: "",
 };
 
 const StepComponent = ({
@@ -99,6 +106,9 @@ const StepComponent = ({
   formState,
   setInput,
   handleNext,
+  submitPayment,
+  setSubmitPayment,
+  setSuccess,
 }) => {
   let component = null;
   switch (activeStep) {
@@ -133,8 +143,12 @@ const StepComponent = ({
           recipientCount={formState.recipients.length}
           giftImage={formState.giftImage}
           giftPrice={formState.giftPrice}
+          paymentID={formState.paymentID}
           shippingAddressType={formState.shippingAddressType}
           setInput={setInput}
+          submitPayment={submitPayment}
+          setSubmitPayment={setSubmitPayment}
+          setSuccess={setSuccess}
         />
       );
       break;
@@ -144,8 +158,37 @@ const StepComponent = ({
 
 const SendAGift = () => {
   const top = useRef(null);
+  const params = useParams();
+  const { addOrder } = useOrders();
   const [giftSearch, setGiftSearch] = useState("");
   const [formState, setFormState] = useState({ ...initialState });
+  const [submitPayment, setSubmitPayment] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const { data: { data: { getOrder: order } = {} } = {} } = useQuery(
+    ["orders", params.id],
+    () => API.graphql(graphqlOperation(getOrder, { id: params.id })),
+    { enabled: !!params.id }
+  );
+
+  useEffect(() => {
+    if (params.id) {
+      setActiveStep(1);
+    }
+  }, [params.id]);
+
+  useEffect(() => {
+    if (params.id && order && !formState.id) {
+      setFormState({
+        ...order,
+        recipients: order.recipientIDs,
+        to: parseISO(order.toDate),
+        from: parseISO(order.fromDate),
+        orderDateType: order.orderDateType || "",
+      });
+    }
+  }, [params.id, order, formState.id]);
 
   function setInput(key, value) {
     let k = key;
@@ -177,6 +220,32 @@ const SendAGift = () => {
     spread: 85,
     elementSize: 16,
   });
+  const rewardRef = useRef(reward);
+
+  const submit = () => {
+    if (!formState.paymentID) {
+      setSubmitPayment(true);
+    } else {
+      setSuccess(true);
+    }
+  };
+
+  useEffect(() => {
+    const submitOrder = async () => {
+      try {
+        await addOrder(formState);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    if (success) {
+      submitOrder();
+      setOpen(true);
+      // Wait a bit for the success modal to render
+      setTimeout(rewardRef.current, 100);
+    }
+  }, [success, addOrder, formState]);
 
   const handleSearch = (event) => {
     setGiftSearch(event.target.value);
@@ -193,9 +262,7 @@ const SendAGift = () => {
     setActiveStep((prevActiveStep) => {
       const nextStep = prevActiveStep + 1;
       if (nextStep >= steps.length) {
-        setOpen(true);
-        // Wait a bit for the success modal to render
-        setTimeout(reward, 100);
+        submit();
         return steps.length - 1;
       }
       return nextStep;
@@ -263,6 +330,9 @@ const SendAGift = () => {
                     formState={formState}
                     setInput={setInput}
                     handleNext={handleNext}
+                    submitPayment={submitPayment}
+                    setSubmitPayment={setSubmitPayment}
+                    setSuccess={setSuccess}
                   />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -275,8 +345,13 @@ const SendAGift = () => {
                     Back
                   </Button>
                   <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? "Create Gift" : "Next"}
+                  <Button
+                    onClick={handleNext}
+                    disabled={submitPayment || success}
+                  >
+                    {activeStep === steps.length - 1
+                      ? `${formState.id ? "Update Gift" : "Create Gift"}`
+                      : "Next"}
                   </Button>
                 </Box>
               </Box>
@@ -284,7 +359,7 @@ const SendAGift = () => {
           </Box>
         </Root>
       </Container>
-      <SuccessModal open={open} setOpen={setOpen} />
+      <SuccessModal open={open} setOpen={setOpen} error={error} />
     </>
   );
 };

@@ -1,16 +1,21 @@
 import React from "react";
-import { format } from "date-fns";
+import { format, compareAsc, compareDesc, parseISO } from "date-fns";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Accordion from "@mui/material/Accordion";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import Button from "@mui/material/Button";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import TodayIcon from "@mui/icons-material/Today";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useOrders } from "../../hooks/orders";
 
 const Root = styled("div")(({ theme }) => ({
   "& .cards": {
@@ -33,11 +38,67 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
-const Accordions = ({ recentGifts }) => {
+const Accordions = () => {
+  const { orders = [] } = useOrders();
+
+  const today = new Date();
+  const prevOneTime = [];
+  const oneTime = [];
+  const prevRecurring = [];
+  const recurring = [];
+
+  // Separate the orders into Recurring and OneTime gifts for display
+  orders.forEach((o) => {
+    let orderDate = parseISO(o.toDate);
+    let date = format(orderDate, "M/d/yyyy");
+    let prev = prevOneTime;
+    let current = oneTime;
+
+    if (o.orderType === "RECURRING") {
+      orderDate = parseISO(o.fromDate);
+      date = `${format(orderDate, "M/d/yyyy")}-` + date;
+      prev = prevRecurring;
+      current = recurring;
+    }
+
+    const gift = {
+      ...o,
+      orderDate,
+      date,
+    };
+    if (parseISO(o.toDate) <= today) {
+      prev.push({ ...gift, fulfilled: true });
+    } else {
+      current.push(gift);
+    }
+  });
+
+  const dateSort = ({ orderDate: a }, { orderDate: b }) => compareAsc(a, b);
+  const reverseSort = ({ orderDate: a }, { orderDate: b }) => compareDesc(a, b);
+
+  const recentGifts = [
+    {
+      id: 1,
+      status: "One Time Gifts",
+      tooltip:
+        "A One Time Gift is a gift that goes out once! EX: A Get Well Soon Box, A Sympathy Gift, a Welcome Little One Box.",
+      icon: <TodayIcon />,
+      gifts: [...oneTime.sort(dateSort), ...prevOneTime.sort(reverseSort)],
+    },
+    {
+      id: 2,
+      status: "Recurring Gifts",
+      tooltip:
+        "A Recurring Gift is a gift that happens multiple times during a set time frame for different people. EX: Anniversaries or Birthdays",
+      icon: <EventRepeatIcon />,
+      gifts: [...recurring.sort(dateSort), ...prevRecurring.sort(reverseSort)],
+    },
+  ];
+
   return (
     <Root>
       <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        {recentGifts.map(({ gifts, id, status, icon, type, tooltip }) => (
+        {recentGifts.map(({ gifts, id, status, icon, tooltip }) => (
           <Grid key={id} item lg={6} xl={6} md={6} xs={12} sm={12}>
             <Box className="cards">
               <Box
@@ -69,11 +130,8 @@ const Accordions = ({ recentGifts }) => {
                     }}
                   >
                     <Typography>
-                      No Gifts this month!{" "}
-                      <Link
-                        sx={{ color: "#000", fontWeight: 700 }}
-                        href="gifts"
-                      >
+                      No Gifts Scheduled!{" "}
+                      <Link sx={{ color: "#000", fontWeight: 700 }} to="/gifts">
                         Create one now
                       </Link>
                     </Typography>
@@ -82,14 +140,11 @@ const Accordions = ({ recentGifts }) => {
                   gifts.map(
                     ({
                       id,
-                      subItems: {
-                        date,
-                        dateShipped,
-                        timeLine,
-                        recipient,
-                        image: { src, alt } = {},
-                      } = {},
                       name,
+                      date,
+                      recipientIDs,
+                      giftImage,
+                      fulfilled,
                     }) => (
                       <Accordion sx={{ mb: 1 }} key={id}>
                         <AccordionSummary
@@ -104,7 +159,13 @@ const Accordions = ({ recentGifts }) => {
                               textTransform: "capitalize",
                             }}
                           >
-                            {name}
+                            {name}{" "}
+                            {fulfilled && (
+                              <CheckCircleIcon
+                                color="secondary"
+                                fontSize="small"
+                              />
+                            )}
                           </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
@@ -112,31 +173,40 @@ const Accordions = ({ recentGifts }) => {
                             sx={{
                               display: "flex",
                               gap: "0 20px",
-                              textTransform: "capitalize",
                             }}
                           >
                             <Box>
                               <img
                                 height="100px"
                                 width="100"
-                                src={src}
-                                alt={alt}
+                                src={giftImage}
+                                alt="gift"
                               />
                             </Box>
                             <Box>
-                              <Typography>Recipient: {recipient}</Typography>
-                              {date && (
-                                <Typography>
-                                  Date: {format(new Date(date), "M/d/yyyy")}
-                                </Typography>
-                              )}
+                              <Typography>Date: {date}</Typography>
                               <Typography>
-                                {type === "recurring"
-                                  ? "Timeline"
-                                  : "Date shipped"}
-                                : {type === "oneTime" ? dateShipped : timeLine}
+                                Shipping to {recipientIDs.length} Recipient
+                                {recipientIDs.length > 1 && "s"}
                               </Typography>
                             </Box>
+                          </Box>
+                          <Box
+                            sx={{ display: "flex", justifyContent: "flex-end" }}
+                          >
+                            <Link
+                              style={{ textDecoration: "none" }}
+                              to={`/gifts/${id}`}
+                            >
+                              <Button
+                                sx={{ marginLeft: "auto" }}
+                                color="secondary"
+                                size="small"
+                                aria-label="edit"
+                              >
+                                Edit Gift
+                              </Button>
+                            </Link>
                           </Box>
                         </AccordionDetails>
                       </Accordion>

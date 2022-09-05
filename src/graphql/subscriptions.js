@@ -40,6 +40,7 @@ export const onCreateUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -86,6 +87,7 @@ export const onUpdateUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -132,6 +134,7 @@ export const onDeleteUser = /* GraphQL */ `
       }
       profilePhoto
       accessGroups
+      stripeID
       createdAt
       updatedAt
       companyUsersId
@@ -164,6 +167,7 @@ export const onCreateCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -247,6 +251,7 @@ export const onUpdateCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -330,6 +335,7 @@ export const onDeleteCompany = /* GraphQL */ `
           phoneNumber
           profilePhoto
           accessGroups
+          stripeID
           createdAt
           updatedAt
           companyUsersId
@@ -1196,8 +1202,14 @@ export const onCreateOrder = /* GraphQL */ `
   subscription OnCreateOrder($owner: String) {
     onCreateOrder(owner: $owner) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1219,7 +1231,10 @@ export const onCreateOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -1234,8 +1249,14 @@ export const onUpdateOrder = /* GraphQL */ `
   subscription OnUpdateOrder($owner: String) {
     onUpdateOrder(owner: $owner) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1257,7 +1278,10 @@ export const onUpdateOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType
@@ -1272,8 +1296,14 @@ export const onDeleteOrder = /* GraphQL */ `
   subscription OnDeleteOrder($owner: String) {
     onDeleteOrder(owner: $owner) {
       id
+      giftID
+      giftImage
+      giftPrice
       name
       note
+      toDate
+      fromDate
+      recipientIDs
       giftEvents {
         items {
           id
@@ -1295,7 +1325,10 @@ export const onDeleteOrder = /* GraphQL */ `
         nextToken
       }
       createdBy
+      updatedBy
       totalPrice
+      shippingAddressType
+      paymentID
       completed
       orderType
       orderDateType

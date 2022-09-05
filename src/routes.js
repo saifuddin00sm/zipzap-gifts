@@ -25,10 +25,12 @@ const ZipZapRoutes = () => {
         <Route path="todo" element={<Todo />} />
         <Route path="recipients" element={<RecipientList />} />
         <Route path="catalog" element={<GiftCatalog />} />
-        <Route path="gifts" element={<SendAGift />} />
         <Route path="admin" element={<UploadGift />} />
         <Route path="recipients/upload" element={<ImportRecipients />} />
         <Route path="recipients/:id" element={<RecipientProfile />} />
+        <Route path="gifts" element={<SendAGift />}>
+          <Route path=":id" element={<SendAGift />} />
+        </Route>
         <Route path="orders" element={<Orders />} />
         <Route path="help" element={<Help />} />
         <Route

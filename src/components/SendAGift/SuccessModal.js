@@ -42,11 +42,19 @@ const style = {
   },
 };
 
-export default function BasicModal({ open, setOpen }) {
+export default function BasicModal({ open, setOpen, error }) {
   const navigate = useNavigate();
   const handleClose = () => {
-    setOpen(false);
+    if (!error) setOpen(false);
   };
+
+  let title = "Congrats!";
+  let body =
+    "A Gift Expert will be in touch with you soon to finalize details!";
+  if (error) {
+    title = "Oops!";
+    body = "Unable to create gift. Please refresh the page and try again.";
+  }
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -61,8 +69,8 @@ export default function BasicModal({ open, setOpen }) {
           </IconButton>
         </Box>
         <Box id="send-gift-success-id" className="congrats_text">
-          <Typography variant="h4">Congrats!</Typography>
-          <Typography variant="h6">You have created a gift</Typography>
+          <Typography variant="h4">{title}</Typography>
+          <Typography variant="h6">{body}</Typography>
         </Box>
         <Box sx={{ padding: 2, textAlign: "right" }}>
           <Button onClick={() => navigate("/")} size="small">

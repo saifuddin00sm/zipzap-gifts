@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -141,8 +141,13 @@ const Checkout = ({
   giftImage,
   giftPrice,
   shippingAddressType,
+  paymentID,
   setInput,
+  submitPayment,
+  setSubmitPayment,
+  setSuccess,
 }) => {
+  const [total, setTotal] = useState(0);
   const recipientShippingPrice = 22;
   const officeShippingPrice = 12;
 
@@ -153,6 +158,12 @@ const Checkout = ({
     shippingCost = officeShippingPrice;
   }
   const totalPrice = giftPrice * recipientCount + shippingCost * recipientCount;
+  useEffect(() => {
+    if (total !== totalPrice) {
+      setInput("totalPrice", totalPrice);
+      setTotal(totalPrice);
+    }
+  }, [setInput, total, totalPrice]);
 
   return (
     <Root>
@@ -251,10 +262,16 @@ const Checkout = ({
             }}
           >
             <Box>
-              <Payment />
+              <Payment
+                submitPayment={submitPayment}
+                paymentID={paymentID}
+                setPaymentID={(id) => setInput("paymentID", id)}
+                setSuccess={setSuccess}
+                setSubmitPayment={setSubmitPayment}
+              />
             </Box>
             <Typography variant="body" className="totalPrice">
-              Total Price: ${totalPrice}
+              Estimated Total: ${totalPrice}
             </Typography>
           </Box>
         </Grid>

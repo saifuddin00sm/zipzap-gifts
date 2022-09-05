@@ -1,6 +1,10 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { createRecipient, createAddress } from "../graphql/mutations";
+import {
+  createRecipient,
+  createAddress,
+  deleteRecipient,
+} from "../graphql/mutations";
 import { format, isDate } from "date-fns";
 
 const listRecipients = /* GraphQL */ `
@@ -99,13 +103,13 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   if (recipient.birthday) {
     const birthday = isDate(recipient.birthday)
       ? recipient.birthday
-      : new Date(recipient.birthday);
+      : new Date(recipient.birthday.replace(/-/g, "/"));
     recipient.birthday = format(birthday, "yyyy-MM-dd");
   }
   if (recipient.startDate) {
     const startDate = isDate(recipient.startDate)
       ? recipient.startDate
-      : new Date(recipient.startDate);
+      : new Date(recipient.startDate.replace(/-/g, "/"));
     recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
   const {
@@ -117,6 +121,10 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   );
   recipient.recipientShippingAddressId = id;
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
+};
+
+const removeRecipient = async (id) => {
+  await API.graphql(graphqlOperation(deleteRecipient, { input: { id } }));
 };
 
 const useRecipients = () => {
@@ -135,11 +143,19 @@ const useRecipients = () => {
     },
   });
 
+  const removeMutation = useMutation(removeRecipient, {
+    onSuccess: () => {
+      // Invalidate and refresh all of the recipients queries
+      queryClient.invalidateQueries("recipients");
+    },
+  });
+
   return {
     recipients,
     isLoading,
     isError,
     error,
+    removeRecipient: removeMutation.mutateAsync,
     addRecipient: mutation.mutateAsync,
   };
 };

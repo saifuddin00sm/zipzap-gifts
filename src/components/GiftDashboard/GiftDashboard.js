@@ -18,107 +18,8 @@ import UtilizationAndDefault from "./UtilizationAndDefault";
 import GiftCalendar from "./GiftCalendar";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import TodayIcon from "@mui/icons-material/Today";
+import CakeIcon from "@mui/icons-material/Cake";
 import GiftDashboardModal from "./GiftDashboardModal";
-
-const recentGifts = [
-  {
-    type: "oneTime",
-    status: "One Time Gifts This Month",
-    tooltip:
-      "A One Time Gift is a gift that goes out once! EX: A Get Well Soon Box, A Sympathy Gift, a Welcome Little One Box.",
-    icon: <TodayIcon />,
-    gifts: [
-      {
-        name: "Employee of the Month",
-        subItems: {
-          dateShipped: "5/04/2020",
-          recipient: "Victoria Black",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 1,
-      },
-      {
-        name: "New Baby",
-        subItems: {
-          dateShipped: "5/18/2022",
-          recipient: "Malia Morley",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 2,
-      },
-    ],
-    id: 1,
-  },
-
-  {
-    type: "recurring",
-    status: "Recurring Gifts This Month",
-    tooltip:
-      "A Recurring Gift is a gift that happens multiple times during a set time frame for different people. EX: Anniversaries or Birthdays",
-    icon: <EventRepeatIcon />,
-    id: 2,
-    gifts: [
-      {
-        name: "Saif Uddin birthday",
-        subItems: {
-          date: "2022-05-12",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Saif uddin",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 1,
-      },
-      {
-        name: "Amelia Ostler birthday",
-        subItems: {
-          date: "2022-05-18",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Amelia Ostler",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 2,
-      },
-      {
-        name: "Nathan Humphrey anniversary",
-        id: 3,
-        subItems: {
-          date: "2022-05-21",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Nathan Humphrey",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-      },
-      {
-        name: "Krista Humphrey birthday",
-        subItems: {
-          date: "2022-05-15",
-          timeLine: "1/1/22- 12/31/22",
-          recipient: "Krista Humphrey",
-          image: {
-            src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-            alt: "gift image",
-          },
-        },
-        id: 4,
-      },
-    ],
-  },
-];
 
 // holidays json
 const holidaysData = [
@@ -178,7 +79,7 @@ const holidaysData = [
   { name: "National Women's Day", date: "2022-08-09" },
   { name: "Back to School", date: "2022-08-20" },
 
-  { name: "Labor Day", date: "2022-09-06" },
+  { name: "Labor Day", date: "2022-09-05" },
   { name: "Patriot Day", date: "2022-09-11" },
   { name: "Software Developer Day", date: "2022-09-13" },
   { name: "Batman Day", date: "2022-09-18" },
@@ -298,36 +199,28 @@ const defaultGifts = [
     giftType: "Upcoming Holidays",
     gifts: [
       {
-        name: "national donut day",
-        date: "2022-1-05",
+        name: "Labor Day",
+        date: "2022-09-05T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 1,
       },
       {
-        name: "father's day",
-        date: "2022-12-09",
+        name: "Patriot Day",
+        date: "2022-09-11T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 2,
       },
       {
-        name: "international yoga day",
-        date: "2022-05-3",
+        name: "Software Developer Day",
+        date: "2022-09-13T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 3,
-      },
-      {
-        name: "independence day",
-        date: "2022-7-20",
-        icon: (
-          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
-        ),
-        id: 4,
       },
     ],
     id: 1,
@@ -336,19 +229,16 @@ const defaultGifts = [
     giftType: "Upcoming Recipient Events",
     gifts: [
       {
-        name: "Kelsey Zaugg Birthday",
-        date: "2022-8-12",
+        name: "Andrew Smith Birthday",
+        date: "2022-09-09T00:00:00",
         icon: (
-          <EventRepeatIcon
-            sx={{ fontSize: { lg: "2.7rem" } }}
-            color="secondary"
-          />
+          <CakeIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 1,
       },
       {
-        name: "Andrew Zaugg Birthday",
-        date: "2022-6-19",
+        name: "Michael Scott Anniversary",
+        date: "2022-09-15T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -358,8 +248,8 @@ const defaultGifts = [
         id: 2,
       },
       {
-        name: "Michael Scott Anniversary",
-        date: "2022-5-14",
+        name: "Kelsey Zaugg Anniversary",
+        date: "2022-09-21T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -367,17 +257,6 @@ const defaultGifts = [
           />
         ),
         id: 3,
-      },
-      {
-        name: "Kelsey Zaugg Anniversary",
-        date: "2022-6-04",
-        icon: (
-          <EventRepeatIcon
-            sx={{ fontSize: { lg: "2.7rem" } }}
-            color="secondary"
-          />
-        ),
-        id: 4,
       },
     ],
     id: 2,
@@ -468,7 +347,7 @@ function GiftDashboard() {
         )}
         {/* bottom components */}
         <Box sx={{ mt: 3, mb: 5 }}>
-          <Accordions recentGifts={recentGifts} />
+          <Accordions />
         </Box>
         <Box>
           <UtilizationAndDefault

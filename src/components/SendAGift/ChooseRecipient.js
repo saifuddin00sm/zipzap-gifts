@@ -8,10 +8,11 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
 import { useRecipients } from "../../hooks/recipients";
 import Fuse from "fuse.js";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 const style = {
   "& .list_items": {
@@ -69,7 +70,7 @@ const ChooseRecipient = ({
   setRecipients,
   orderDateType,
 }) => {
-  const { recipients } = useRecipients();
+  const { isLoading, recipients } = useRecipients();
   const [data, setData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -130,6 +131,10 @@ const ChooseRecipient = ({
       }
     }
   }, [searchValue, recipients]);
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box sx={style}>
@@ -214,7 +219,7 @@ const ChooseRecipient = ({
                       {date && (
                         <Box>
                           <Typography variant="body">
-                            {format(new Date(date), "M/d")}
+                            {format(parseISO(date), "M/d")}
                           </Typography>
                         </Box>
                       )}
@@ -286,7 +291,7 @@ const ChooseRecipient = ({
                       {date && (
                         <Box>
                           <Typography variant="body">
-                            {format(new Date(date), "M/d")}
+                            {format(parseISO(date), "M/d")}
                           </Typography>
                         </Box>
                       )}
