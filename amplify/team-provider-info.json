@@ -15,7 +15,8 @@
     "categories": {
       "auth": {
         "ZipZap": {},
-        "userPoolGroups": {}
+        "userPoolGroups": {},
+        "true": {}
       },
       "function": {
         "stripe": {
