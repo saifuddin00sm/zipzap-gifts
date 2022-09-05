@@ -1,16 +1,16 @@
 {
   "main": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-zipzap-main-231020-authRole",
-      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-231020-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-231020-authRole",
+      "AuthRoleName": "amplify-zipzap-main-104234-authRole",
+      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-104234-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-104234-authRole",
       "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-zipzap-main-231020-deployment",
-      "UnauthRoleName": "amplify-zipzap-main-231020-unauthRole",
-      "StackName": "amplify-zipzap-main-231020",
-      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-main-231020/0aac41e0-2cd9-11ed-a382-02ca1de8b5c7",
+      "DeploymentBucketName": "amplify-zipzap-main-104234-deployment",
+      "UnauthRoleName": "amplify-zipzap-main-104234-unauthRole",
+      "StackName": "amplify-zipzap-main-104234",
+      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-main-104234/bedaf5c0-2d39-11ed-bda0-0a58c277654b",
       "AmplifyAppId": "d36qqcyplgrvk3",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-main-231020-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-main-104234-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -20,13 +20,13 @@
       "function": {
         "stripe": {
           "secretsPathAmplifyAppId": "d36qqcyplgrvk3",
-          "deploymentBucketName": "amplify-zipzap-main-231020-deployment",
-          "s3Key": "amplify-builds/stripe-6f6e7336365a6a496b4d-build.zip"
+          "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
+          "s3Key": "amplify-builds/stripe-644b777a5a412b657252-build.zip"
         },
         "checkoutemail": {
           "sesEmail": "noreply@zipzap.gifts",
           "adminEmail": "connect+admin@zipzapgifts.com",
-          "deploymentBucketName": "amplify-zipzap-main-231020-deployment",
+          "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
           "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip"
         }
       },
