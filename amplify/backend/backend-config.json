@@ -93,7 +93,13 @@
       ]
     }
   },
-  "hosting": {},
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "type": "cicd",
+      "lastPushTimeStamp": "2022-09-05T06:42:38.242Z"
+    }
+  },
   "storage": {
     "giftbucket": {
       "service": "S3",
