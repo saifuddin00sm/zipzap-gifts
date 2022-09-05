@@ -1,39 +1,33 @@
 {
-  "dev": {
+  "main": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-zipzap-dev-02722-authRole",
-      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-authRole",
+      "AuthRoleName": "amplify-zipzap-main-231020-authRole",
+      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-231020-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-231020-authRole",
       "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-zipzap-dev-02722-deployment",
-      "UnauthRoleName": "amplify-zipzap-dev-02722-unauthRole",
-      "StackName": "amplify-zipzap-dev-02722",
-      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-dev-02722/8bbe7cc0-96d5-11ec-92ae-0a56f2fbf479",
-      "AmplifyAppId": "d2qe40666r920c",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-dev-02722-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "DeploymentBucketName": "amplify-zipzap-main-231020-deployment",
+      "UnauthRoleName": "amplify-zipzap-main-231020-unauthRole",
+      "StackName": "amplify-zipzap-main-231020",
+      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-main-231020/0aac41e0-2cd9-11ed-a382-02ca1de8b5c7",
+      "AmplifyAppId": "d36qqcyplgrvk3",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-main-231020-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "ZipZap": {},
         "userPoolGroups": {}
       },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d2qe40666r920c",
-          "type": "manual"
-        }
-      },
       "function": {
         "stripe": {
-          "secretsPathAmplifyAppId": "d2qe40666r920c",
-          "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
-          "s3Key": "amplify-builds/stripe-4434705a51764465306a-build.zip"
+          "secretsPathAmplifyAppId": "d36qqcyplgrvk3",
+          "deploymentBucketName": "amplify-zipzap-main-231020-deployment",
+          "s3Key": "amplify-builds/stripe-694a45754e2b562b346e-build.zip"
         },
         "checkoutemail": {
-          "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
-          "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip",
           "sesEmail": "noreply@zipzap.gifts",
-          "adminEmail": "connect+admin@zipzapgifts.com"
+          "adminEmail": "connect+admin@zipzapgifts.com",
+          "deploymentBucketName": "amplify-zipzap-main-231020-deployment",
+          "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip"
         }
       }
     }
