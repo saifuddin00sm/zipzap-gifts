@@ -39,6 +39,20 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "ZipZap",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "userPoolGroups",
+          "attributes": [
+            "AdminGroupRole"
+          ]
         }
       ]
     }
