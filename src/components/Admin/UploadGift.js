@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Storage } from "aws-amplify";
+import { AmplifyS3Image } from "@aws-amplify/ui-react/legacy";
 import { v4 as uuid } from "uuid";
 import Header from "../Header";
 import Container from "@mui/material/Container";
@@ -21,12 +22,6 @@ import IconButton from "@mui/material/IconButton";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 import { createGift, useGiftItems } from "../../hooks/admin";
-import config from "../../aws-exports";
-
-const {
-  aws_user_files_s3_bucket_region: region,
-  aws_user_files_s3_bucket: bucket,
-} = config;
 
 const initialGiftState = {
   name: "",
@@ -87,19 +82,25 @@ const GiftImageCard = ({
       return;
     }
     const { type: mimeType } = file;
-    const key = `images/${uuid()}${name}.${extension}`;
-    const url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
+    const key = `${uuid()}_${name}.${extension}`;
 
     await Storage.put(key, file, {
       contentType: mimeType,
     });
-    setInput("src", url);
+    setInput("src", key);
   };
 
   // TODO: Add spinner to show that image is uploading and disable submit button until it's done
   return (
     <Card sx={{ maxWidth: 300 }}>
-      {src && <CardMedia component="img" height="140" image={src} alt={alt} />}
+      {src && (
+        <CardMedia
+          component={AmplifyS3Image}
+          height="140"
+          imgKey={src}
+          alt={alt}
+        />
+      )}
       <CardHeader
         title={`${type} Image ${isThumbnail ? " Thumbnail" : ""}`}
         action={

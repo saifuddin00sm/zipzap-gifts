@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import Payment from "./Payment";
+import S3Image from "../S3Image";
 
 const Root = styled("div")(({ theme }) => ({
   "& .headings_text": {
@@ -180,12 +181,13 @@ const Checkout = ({
             </Typography>
             <Box className="card_container">
               <Box className="small_card">
-                <img
+                <S3Image
+                  component="img"
                   style={{
                     width: "100%",
                     objectFit: "cover",
                   }}
-                  src={giftImage}
+                  s3key={giftImage}
                   alt="Gift images"
                 />
               </Box>
