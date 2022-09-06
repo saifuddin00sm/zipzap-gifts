@@ -15,6 +15,7 @@ import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import S3Image from "../S3Image";
 import { useOrders } from "../../hooks/orders";
 
 const Root = styled("div")(({ theme }) => ({
@@ -176,10 +177,10 @@ const Accordions = () => {
                             }}
                           >
                             <Box>
-                              <img
-                                height="100px"
-                                width="100"
-                                src={giftImage}
+                              <S3Image
+                                component="img"
+                                width="100px"
+                                s3key={giftImage}
                                 alt="gift"
                               />
                             </Box>
