@@ -7,6 +7,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+import S3Image from "./S3Image";
 
 const style = {
   position: "absolute",
@@ -130,10 +131,10 @@ export default function GiftModal({
     .reduce((imgs, pictures) => {
       return [...imgs, ...pictures];
     }, [])
-    .filter(({ alt }) => alt !== "thumbnail");
+    .filter(({ alt, src }) => alt !== "thumbnail" && src);
 
   const imgs = [
-    ...pictures.items.filter(({ alt }) => alt !== "thumbnail"),
+    ...pictures.items.filter(({ alt, src }) => alt !== "thumbnail" && src),
     ...itemImgs,
   ];
 
@@ -147,37 +148,45 @@ export default function GiftModal({
         </Box>
         <Box className="modalContents">
           <Box className="img_box">
-            <IconButton
-              onClick={() => {
-                setSlideIndex(
-                  slideIndex > 0 ? slideIndex - 1 : imgs.length - 1
-                );
-              }}
-              className="left_arrow arrows"
-            >
-              <ChevronLeftIcon sx={{ fontSize: "2.5rem" }} />
-            </IconButton>
+            {imgs.length > 1 && (
+              <IconButton
+                onClick={() => {
+                  setSlideIndex(
+                    slideIndex > 0 ? slideIndex - 1 : imgs.length - 1
+                  );
+                }}
+                className="left_arrow arrows"
+              >
+                <ChevronLeftIcon sx={{ fontSize: "2.5rem" }} />
+              </IconButton>
+            )}
             <Box className="slide">
               {!imgs ? (
                 <Typography>Loading...</Typography>
               ) : imgs.length > 0 ? (
-                <img src={imgs[slideIndex].src} alt="gift images" />
+                <S3Image
+                  component="img"
+                  s3key={imgs[slideIndex].src}
+                  alt="gift images"
+                />
               ) : (
                 <Typography sx={{ textAlign: "center" }}>
                   No images found
                 </Typography>
               )}
             </Box>
-            <IconButton
-              onClick={() => {
-                setSlideIndex(
-                  slideIndex < imgs.length - 1 ? slideIndex + 1 : 0
-                );
-              }}
-              className="right_arrow arrows"
-            >
-              <ChevronRightIcon sx={{ fontSize: "2.5rem" }} />
-            </IconButton>
+            {imgs.length > 1 && (
+              <IconButton
+                onClick={() => {
+                  setSlideIndex(
+                    slideIndex < imgs.length - 1 ? slideIndex + 1 : 0
+                  );
+                }}
+                className="right_arrow arrows"
+              >
+                <ChevronRightIcon sx={{ fontSize: "2.5rem" }} />
+              </IconButton>
+            )}
           </Box>
           <Box>
             <Typography

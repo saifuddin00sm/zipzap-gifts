@@ -10,8 +10,8 @@ import Todo from "./components/Todo";
 import RecipientList from "./components/Recipients/RecipientList";
 import SendAGift from "./components/SendAGift/SendAGift";
 import Help from "./components/Help/Help.js";
-
 import GiftCatalog from "./components/GiftCatalog/GiftCatalog";
+import UploadGift from "./components/Admin/UploadGift";
 import ImportRecipients from "./components/Recipients/ImportRecipients";
 import RecipientProfile from "./components/Recipients/RecipientProfile/RecipientProfile";
 
@@ -25,6 +25,7 @@ const ZipZapRoutes = () => {
         <Route path="todo" element={<Todo />} />
         <Route path="recipients" element={<RecipientList />} />
         <Route path="catalog" element={<GiftCatalog />} />
+        <Route path="admin" element={<UploadGift />} />
         <Route path="recipients/upload" element={<ImportRecipients />} />
         <Route path="recipients/:id" element={<RecipientProfile />} />
         <Route path="gifts" element={<SendAGift />}>

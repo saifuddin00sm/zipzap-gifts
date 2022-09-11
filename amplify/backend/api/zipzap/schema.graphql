@@ -64,6 +64,7 @@ type Recipient
       { allow: owner }
       { allow: groups, groups: ["Admin"] }
       { allow: groups, groupsField: "accessGroups" }
+      { allow: private, operations: [read], provider: iam }
     ]
   ) {
   id: ID!

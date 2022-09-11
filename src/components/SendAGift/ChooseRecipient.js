@@ -12,7 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
 import { useRecipients } from "../../hooks/recipients";
 import Fuse from "fuse.js";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 const style = {
   "& .list_items": {
@@ -219,7 +219,7 @@ const ChooseRecipient = ({
                       {date && (
                         <Box>
                           <Typography variant="body">
-                            {format(new Date(date), "M/d")}
+                            {format(parseISO(date), "M/d")}
                           </Typography>
                         </Box>
                       )}
@@ -291,7 +291,7 @@ const ChooseRecipient = ({
                       {date && (
                         <Box>
                           <Typography variant="body">
-                            {format(new Date(date), "M/d")}
+                            {format(parseISO(date), "M/d")}
                           </Typography>
                         </Box>
                       )}
