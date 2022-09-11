@@ -105,7 +105,9 @@ const GiftDetails = ({
                 <Typography variant="h6">Gift Date</Typography>
                 <DatePicker
                   value={to}
+                  disablePast={true}
                   inputFormat="MM/dd/yyyy"
+                  maxDate={new Date().setDate(395)}
                   onChange={(value) => setInput("to", value)}
                   renderInput={(params) => (
                     <TextField variant="standard" {...params} />
@@ -121,7 +123,8 @@ const GiftDetails = ({
                   <DatePicker
                     value={from}
                     inputFormat="MM/dd/yyyy"
-                    disablePast="true"
+                    disablePast={true}
+                    maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("from", value)}
                     renderInput={(params) => (
                       <TextField variant="standard" {...params} />
@@ -133,7 +136,7 @@ const GiftDetails = ({
                   <DatePicker
                     value={to}
                     inputFormat="MM/dd/yyyy"
-                    disablePast="true"
+                    disablePast={true}
                     maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("to", value)}
                     renderInput={(params) => (
