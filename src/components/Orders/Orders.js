@@ -10,6 +10,7 @@ const Orders = () => {
   return (
     <Container component="main">
       <Header>
+        <Typography variant="h1">Coming Soon...!!</Typography>
         <Typography variant="h1">Orders</Typography>
       </Header>
       <Box sx={{ marginBottom: "56px" }}>
