@@ -16,20 +16,18 @@ import { useUsers } from "./../../hooks/users";
 
 const EditProfile = ({ info, setIsEdit }) => {
   const {
-    id,
     name,
     email,
-    phoneNumber = "",
-    company: { id: companyID, name: companyName = "", address } = {},
+    phoneNumber,
+    companyID,
+    companyName,
+    companyAddress1,
+    companyAddress2,
+    companyCity,
+    companyState,
+    companyZip,
   } = info;
-  const {
-    id: addressID,
-    address1 = "",
-    address2 = "",
-    city = "",
-    state = "",
-    zip = "",
-  } = address || {};
+
   const { editUser } = useUsers(id);
   const [formState, setFormState] = useState({
     id,
@@ -38,12 +36,12 @@ const EditProfile = ({ info, setIsEdit }) => {
     phoneNumber,
     companyID,
     companyName,
-    addressID,
-    address1,
-    address2,
-    city,
-    state,
-    zip,
+    companyAddressID,
+    companyAddress1,
+    companyAddress2,
+    companyCity,
+    companyState,
+    companyZip,
   });
 
   function setInput(key, value) {
@@ -144,9 +142,11 @@ const EditProfile = ({ info, setIsEdit }) => {
               <Typography>Address: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
-                name="address1"
-                value={formState.address1}
-                onChange={(event) => setInput("address1", event.target.value)}
+                name="companyAddress1"
+                value={formState.companyAddress1}
+                onChange={(event) =>
+                  setInput("companyAddress1", event.target.value)
+                }
               />
             </Box>
           </Grid>
