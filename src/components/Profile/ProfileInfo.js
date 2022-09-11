@@ -56,6 +56,9 @@ const ProfileInfo = ({ info, setIsEdit }) => {
             {name}
           </Typography>
           <Typography className="company">Company: {companyName}</Typography>
+          <Typography className="company">
+            Company Address: {address}
+          </Typography>
         </Box>
       </Box>
       <Box className="contactInfo" sx={{ mb: 5 }}>
