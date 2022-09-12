@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getUser } from "../../graphql/queries";
 import Container from "@mui/material/Container";
 import Header from "../Header.js";
 import Typography from "@mui/material/Typography";
@@ -282,14 +285,25 @@ const defaultGifts = [
 ];
 
 function GiftDashboard() {
-  // set this true when user have no recipient from the api/backend
+  // TODO: Check if we want to still use this: show the modal if the user has no recipients
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
   const [user] = useOutletContext();
-  //congito user information
-
+  const userID = user?.username;
+  const { data: { data: { getUser: userData } = {} } = {} } = useQuery(
+    ["users", userID],
+    () => API.graphql(graphqlOperation(getUser, { id: userID })),
+    { enabled: !!userID }
+  );
   const [open, setOpen] = useState(false);
   const handleDayClick = (day) => {};
+
+  // Display the "Finish Setting Up Profile" message if they don't have a Company yet
+  useEffect(() => {
+    if (userData && !userData.company?.name) {
+      setOpen(true);
+    }
+  }, [userData]);
 
   return (
     <>
