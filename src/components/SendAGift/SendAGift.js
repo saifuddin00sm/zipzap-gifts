@@ -165,6 +165,7 @@ const SendAGift = () => {
   const [submitPayment, setSubmitPayment] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [invalid, setInvalid] = useState(true);
 
   const { data: { data: { getOrder: order } = {} } = {} } = useQuery(
     ["orders", params.id],
@@ -229,6 +230,19 @@ const SendAGift = () => {
       setSuccess(true);
     }
   };
+
+  useEffect(() => {
+    if (
+      activeStep === steps.indexOf("Gift Details") &&
+      formState.orderType === "RECURRING" &&
+      !formState.orderDateType
+    ) {
+      // Disable the "Next" button if they haven't selected an orderDateType on the "Gift Details" step
+      setInvalid(true);
+    } else {
+      setInvalid(false);
+    }
+  }, [activeStep, formState.orderType, formState.orderDateType]);
 
   useEffect(() => {
     const submitOrder = async () => {
@@ -347,7 +361,7 @@ const SendAGift = () => {
                   <Box sx={{ flex: "1 1 auto" }} />
                   <Button
                     onClick={handleNext}
-                    disabled={submitPayment || success}
+                    disabled={submitPayment || success || invalid}
                   >
                     {activeStep === steps.length - 1
                       ? `${formState.id ? "Update Gift" : "Create Gift"}`
