@@ -232,14 +232,17 @@ const SendAGift = () => {
   };
 
   useEffect(() => {
-    if (formState.orderType === "RECURRING" && formState.orderDateType) {
-      setInvalid(false);
-    } else if (formState.orderType === "ONE_TIME") {
-      setInvalid(false);
-    } else {
+    if (
+      activeStep === steps.indexOf("Gift Details") &&
+      formState.orderType === "RECURRING" &&
+      !formState.orderDateType
+    ) {
+      // Disable the "Next" button if they haven't selected an orderDateType on the "Gift Details" step
       setInvalid(true);
+    } else {
+      setInvalid(false);
     }
-  }, [formState.orderType, formState.orderDateType]);
+  }, [activeStep, formState.orderType, formState.orderDateType]);
 
   useEffect(() => {
     const submitOrder = async () => {
