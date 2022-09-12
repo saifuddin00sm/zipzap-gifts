@@ -16,8 +16,6 @@ Install the Amplify CLI (Command Line Interface) tool with `npm install -g @aws-
 
 To get the most current version of the project, run `amplify pull`. It is good practice to run `amplify pull` to fetch changes from upstream before beginning work on new backend features.
 
-When you are ready to deploy your changes, run `amplify push` and then make sure to `git commit` your changes and the files automatically updated by amplify.
-
 Please read the [Team Environments Overview](https://docs.amplify.aws/cli/teams/overview/) to see how to switch between dev and prod environments.
 
 # Create React App

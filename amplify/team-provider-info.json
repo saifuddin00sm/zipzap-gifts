@@ -1,33 +1,79 @@
 {
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-zipzap-main-104234-authRole",
+      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-104234-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-main-104234-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-zipzap-main-104234-deployment",
+      "UnauthRoleName": "amplify-zipzap-main-104234-unauthRole",
+      "StackName": "amplify-zipzap-main-104234",
+      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-main-104234/bedaf5c0-2d39-11ed-bda0-0a58c277654b",
+      "AmplifyAppId": "d36qqcyplgrvk3",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-main-104234-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "ZipZap": {},
+        "userPoolGroups": {},
+        "true": {}
+      },
+      "function": {
+        "stripe": {
+          "secretsPathAmplifyAppId": "d36qqcyplgrvk3",
+          "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
+          "s3Key": "amplify-builds/stripe-6f6e7336365a6a496b4d-build.zip"
+        },
+        "checkoutemail": {
+          "sesEmail": "noreply@zipzap.gifts",
+          "adminEmail": "connect+admin@zipzapgifts.com",
+          "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
+          "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d36qqcyplgrvk3",
+          "type": "cicd"
+        }
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-zipzap-dev-02722-authRole",
-      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-02722-authRole",
+      "AuthRoleName": "amplify-zipzap-dev-100820-authRole",
+      "UnauthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-100820-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::229932334462:role/amplify-zipzap-dev-100820-authRole",
       "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-zipzap-dev-02722-deployment",
-      "UnauthRoleName": "amplify-zipzap-dev-02722-unauthRole",
-      "StackName": "amplify-zipzap-dev-02722",
-      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-dev-02722/8bbe7cc0-96d5-11ec-92ae-0a56f2fbf479",
-      "AmplifyAppId": "d2qe40666r920c",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-dev-02722-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "DeploymentBucketName": "amplify-zipzap-dev-100820-deployment",
+      "UnauthRoleName": "amplify-zipzap-dev-100820-unauthRole",
+      "StackName": "amplify-zipzap-dev-100820",
+      "StackId": "arn:aws:cloudformation:us-west-2:229932334462:stack/amplify-zipzap-dev-100820/f6ad8670-2d34-11ed-ad05-061675b62b11",
+      "AmplifyAppId": "d36qqcyplgrvk3",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-zipzap-dev-100820-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "ZipZap": {},
         "userPoolGroups": {}
       },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d2qe40666r920c",
-          "type": "manual"
-        }
-      },
       "function": {
         "stripe": {
-          "secretsPathAmplifyAppId": "d2qe40666r920c",
-          "deploymentBucketName": "amplify-zipzap-dev-02722-deployment",
-          "s3Key": "amplify-builds/stripe-4434705a51764465306a-build.zip"
+          "secretsPathAmplifyAppId": "d36qqcyplgrvk3",
+          "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
+          "s3Key": "amplify-builds/stripe-644b777a5a412b657252-build.zip"
+        },
+        "checkoutemail": {
+          "sesEmail": "noreply@zipzap.gifts",
+          "adminEmail": "connect+admin@zipzapgifts.com",
+          "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
+          "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d36qqcyplgrvk3",
+          "type": "cicd"
         }
       }
     }

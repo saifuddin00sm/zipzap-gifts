@@ -1,0 +1,21 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "api": {
+      "zipzap": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "sesEmail",
+      "environmentVariableName": "SES_EMAIL"
+    },
+    {
+      "cloudFormationParameterName": "adminEmail",
+      "environmentVariableName": "ADMIN_EMAIL"
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import { Icon } from "@aws-amplify/ui-react";
 export const IconFullLogo = (props) => (
   <Icon
     {...props}
-    ariaLabel="Favorite"
+    ariaLabel="Zip Zap Logo"
     viewBox={{ width: 750, height: 390 }}
     pathData="M206.31 199.91h20.56v14.4h-50l23.2-34.73h-19.81v-14.4h49ZM246.32 
     134.84a9.9 9.9 0 1 1-9.89 9.89 9.85 9.85 0 0 1 9.89-9.89Zm8.79 30.34v49.13h-17.58v-49.13ZM281.27 
