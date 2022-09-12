@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/material/styles";
 import GiftModal from "./GiftModal";
+import S3Image from "./S3Image";
 
 const StyledCard = styled(Toolbar)(({ theme }) => ({
   background: "#ffff",
@@ -46,7 +47,8 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
     {
       name: "Zip it!",
       category: "zipIt",
-      subText: "Virtual Gifts: choose your amount and send via email",
+      subText:
+        "Virtual Gifts: choose your amount and send via email | COMING SOON",
     },
     { name: "Recommended gifts", category: "recommendedGifts" },
     { name: "Birthday Gifts", category: "birthday" },
@@ -152,13 +154,14 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
                         }}
                       >
                         <Box className="inner_card">
-                          <img
+                          <S3Image
+                            component="img"
                             style={{
                               width: "100%",
                               height: "174px",
                               objectFit: "cover",
                             }}
-                            src={item?.pictures?.items[0]?.src}
+                            s3key={item?.pictures?.items[0]?.src}
                             alt={item?.pictures?.items[0]?.alt}
                           />
                           <Typography variant="h6" sx={{ fontSize: "1.1rem" }}>

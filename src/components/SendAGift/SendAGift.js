@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
+import { parseISO } from "date-fns";
 import { useQuery } from "react-query";
 import { getOrder } from "../../graphql/queries";
 import Box from "@mui/material/Box";
@@ -183,8 +184,8 @@ const SendAGift = () => {
       setFormState({
         ...order,
         recipients: order.recipientIDs,
-        to: new Date(order.toDate),
-        from: new Date(order.fromDate),
+        to: parseISO(order.toDate),
+        from: parseISO(order.fromDate),
         orderDateType: order.orderDateType || "",
       });
     }
