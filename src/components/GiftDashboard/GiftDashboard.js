@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getUser } from "../../graphql/queries";
 import Container from "@mui/material/Container";
 import Header from "../Header.js";
 import Typography from "@mui/material/Typography";
@@ -8,10 +11,7 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
-import { useOutletContext, useNavigate } from "react-router-dom";
-import { getUser } from "../../graphql/queries";
-import { createUser } from "../../graphql/mutations";
-import { API, graphqlOperation } from "aws-amplify";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Accordions from "./Accordions.js";
 import UtilizationAndDefault from "./UtilizationAndDefault";
@@ -264,47 +264,25 @@ const defaultGifts = [
 ];
 
 function GiftDashboard() {
-  // set this true when user have no recipient from the api/backend
+  // TODO: Check if we want to still use this: show the modal if the user has no recipients
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-  //congito user information
   const [user] = useOutletContext();
+  const userID = user?.username;
+  const { data: { data: { getUser: userData } = {} } = {} } = useQuery(
+    ["users", userID],
+    () => API.graphql(graphqlOperation(getUser, { id: userID })),
+    { enabled: !!userID }
+  );
   const [open, setOpen] = useState(false);
-
-  // TODO: Refactor this into a custom hook and move it out of this file
-  useEffect(() => {
-    async function addUser() {
-      const newUser = {
-        id: user.username,
-        email: user.attributes.email,
-        name: user.attributes.name,
-        phoneNumber: user.attributes.phone_number,
-      };
-      await API.graphql(graphqlOperation(createUser, { input: newUser }));
-      fetchCurrentUser();
-    }
-
-    async function fetchCurrentUser() {
-      const userData = await API.graphql(
-        graphqlOperation(getUser, { id: user.username })
-      );
-
-      if (!userData.data.getUser) {
-        addUser();
-      } else if (!userData.data.getUser.company) {
-        setOpen(true);
-      }
-    }
-
-    fetchCurrentUser();
-  }, [
-    user.username,
-    user.attributes.email,
-    user.attributes.name,
-    user.attributes.phone_number,
-  ]);
-
   const handleDayClick = (day) => {};
+
+  // Display the "Finish Setting Up Profile" message if they don't have a Company yet
+  useEffect(() => {
+    if (userData && !userData.company?.name) {
+      setOpen(true);
+    }
+  }, [userData]);
 
   return (
     <>
