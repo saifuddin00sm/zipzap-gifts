@@ -106,7 +106,9 @@ const GiftDetails = ({
                 <Typography variant="h6">Gift Date</Typography>
                 <DatePicker
                   value={to}
+                  disablePast={true}
                   inputFormat="MM/dd/yyyy"
+                  maxDate={new Date().setDate(395)}
                   onChange={(value) => setInput("to", value)}
                   renderInput={(params) => (
                     <TextField variant="standard" {...params} />
@@ -122,6 +124,8 @@ const GiftDetails = ({
                   <DatePicker
                     value={from}
                     inputFormat="MM/dd/yyyy"
+                    disablePast={true}
+                    maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("from", value)}
                     renderInput={(params) => (
                       <TextField variant="standard" {...params} />
@@ -133,9 +137,15 @@ const GiftDetails = ({
                   <DatePicker
                     value={to}
                     inputFormat="MM/dd/yyyy"
+                    disablePast={true}
+                    maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("to", value)}
                     renderInput={(params) => (
-                      <TextField variant="standard" {...params} />
+                      <TextField
+                        variant="standard"
+                        {...params}
+                        helperText="You can only plan Gifts for one year in advance. Don't worry, we will remind you to schedule these out again next year!"
+                      />
                     )}
                   />
                   <Typography sx={{ fontSize: "1.1rem" }} variant="h6">

@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getUser } from "../../graphql/queries";
 import Container from "@mui/material/Container";
 import Header from "../Header.js";
 import Typography from "@mui/material/Typography";
@@ -8,16 +11,14 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
-import { useOutletContext, useNavigate } from "react-router-dom";
-import { getUser } from "../../graphql/queries";
-import { createUser } from "../../graphql/mutations";
-import { API, graphqlOperation } from "aws-amplify";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Accordions from "./Accordions.js";
 import UtilizationAndDefault from "./UtilizationAndDefault";
 import GiftCalendar from "./GiftCalendar";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import TodayIcon from "@mui/icons-material/Today";
+import CakeIcon from "@mui/icons-material/Cake";
 import GiftDashboardModal from "./GiftDashboardModal";
 
 // holidays json
@@ -78,7 +79,7 @@ const holidaysData = [
   { name: "National Women's Day", date: "2022-08-09" },
   { name: "Back to School", date: "2022-08-20" },
 
-  { name: "Labor Day", date: "2022-09-06" },
+  { name: "Labor Day", date: "2022-09-05" },
   { name: "Patriot Day", date: "2022-09-11" },
   { name: "Software Developer Day", date: "2022-09-13" },
   { name: "Batman Day", date: "2022-09-18" },
@@ -198,36 +199,28 @@ const defaultGifts = [
     giftType: "Upcoming Holidays",
     gifts: [
       {
-        name: "national donut day",
-        date: "2022-1-05",
+        name: "Labor Day",
+        date: "2022-09-05T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 1,
       },
       {
-        name: "father's day",
-        date: "2022-12-09",
+        name: "Patriot Day",
+        date: "2022-09-11T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 2,
       },
       {
-        name: "international yoga day",
-        date: "2022-05-3",
+        name: "Software Developer Day",
+        date: "2022-09-13T00:00:00",
         icon: (
           <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 3,
-      },
-      {
-        name: "independence day",
-        date: "2022-7-20",
-        icon: (
-          <TodayIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
-        ),
-        id: 4,
       },
     ],
     id: 1,
@@ -236,19 +229,16 @@ const defaultGifts = [
     giftType: "Upcoming Recipient Events",
     gifts: [
       {
-        name: "Kelsey Zaugg Birthday",
-        date: "2022-8-12",
+        name: "Andrew Smith Birthday",
+        date: "2022-09-09T00:00:00",
         icon: (
-          <EventRepeatIcon
-            sx={{ fontSize: { lg: "2.7rem" } }}
-            color="secondary"
-          />
+          <CakeIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
         ),
         id: 1,
       },
       {
-        name: "Andrew Zaugg Birthday",
-        date: "2022-6-19",
+        name: "Michael Scott Anniversary",
+        date: "2022-09-15T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -258,8 +248,8 @@ const defaultGifts = [
         id: 2,
       },
       {
-        name: "Michael Scott Anniversary",
-        date: "2022-5-14",
+        name: "Kelsey Zaugg Anniversary",
+        date: "2022-09-21T00:00:00",
         icon: (
           <EventRepeatIcon
             sx={{ fontSize: { lg: "2.7rem" } }}
@@ -268,64 +258,31 @@ const defaultGifts = [
         ),
         id: 3,
       },
-      {
-        name: "Kelsey Zaugg Anniversary",
-        date: "2022-6-04",
-        icon: (
-          <EventRepeatIcon
-            sx={{ fontSize: { lg: "2.7rem" } }}
-            color="secondary"
-          />
-        ),
-        id: 4,
-      },
     ],
     id: 2,
   },
 ];
 
 function GiftDashboard() {
-  // set this true when user have no recipient from the api/backend
+  // TODO: Check if we want to still use this: show the modal if the user has no recipients
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-  //congito user information
   const [user] = useOutletContext();
+  const userID = user?.username;
+  const { data: { data: { getUser: userData } = {} } = {} } = useQuery(
+    ["users", userID],
+    () => API.graphql(graphqlOperation(getUser, { id: userID })),
+    { enabled: !!userID }
+  );
   const [open, setOpen] = useState(false);
-
-  // TODO: Refactor this into a custom hook and move it out of this file
-  useEffect(() => {
-    async function addUser() {
-      const newUser = {
-        id: user.username,
-        email: user.attributes.email,
-        name: user.attributes.name,
-        phoneNumber: user.attributes.phone_number,
-      };
-      await API.graphql(graphqlOperation(createUser, { input: newUser }));
-      fetchCurrentUser();
-    }
-
-    async function fetchCurrentUser() {
-      const userData = await API.graphql(
-        graphqlOperation(getUser, { id: user.username })
-      );
-
-      if (!userData.data.getUser) {
-        addUser();
-      } else if (!userData.data.getUser.company) {
-        setOpen(true);
-      }
-    }
-
-    fetchCurrentUser();
-  }, [
-    user.username,
-    user.attributes.email,
-    user.attributes.name,
-    user.attributes.phone_number,
-  ]);
-
   const handleDayClick = (day) => {};
+
+  // Display the "Finish Setting Up Profile" message if they don't have a Company yet
+  useEffect(() => {
+    if (userData && !userData.company?.name) {
+      setOpen(true);
+    }
+  }, [userData]);
 
   return (
     <>
