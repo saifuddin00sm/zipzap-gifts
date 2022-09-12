@@ -15,13 +15,8 @@ import TextField from "@mui/material/TextField";
 import { useUsers } from "./../../hooks/users";
 
 const EditProfile = ({ info, setIsEdit }) => {
-  const {
-    id,
-    name,
-    email,
-    phoneNumber = "",
-    company: { id: companyID, name: companyName = "", address } = {},
-  } = info;
+  const { id, name, email, phoneNumber = "", company } = info;
+  const { id: companyID, name: companyName = "", address } = company || {};
   const {
     id: addressID,
     address1 = "",

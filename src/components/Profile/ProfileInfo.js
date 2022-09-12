@@ -13,12 +13,8 @@ import Grid from "@mui/material/Grid";
 // import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const ProfileInfo = ({ info, setIsEdit }) => {
-  const {
-    name,
-    email,
-    phoneNumber,
-    company: { name: companyName, address } = {},
-  } = info;
+  const { name, email, phoneNumber, company } = info;
+  const { name: companyName, address } = company || {};
   const { address1, address2, city, state, zip } = address || {};
 
   const handleClick = () => {
