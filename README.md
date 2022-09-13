@@ -4,6 +4,8 @@ An AWS Amplify project for Zip Zap Gifts.
 
 ## Notes
 
+Copy the .env.example file to .env and ask nicely for the values to fill it up with.
+
 You need to have Node 17+ running on your local machine for development.
 
 In the amplify/backend/api/zipzap/cli-inputs.json file, you will need to make the `"gqlSchemaPath"` an absolute path on your machine to be able to properly use the amplify GraphQL commands.
