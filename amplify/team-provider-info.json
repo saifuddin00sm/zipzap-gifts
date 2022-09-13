@@ -22,13 +22,13 @@
         "stripe": {
           "secretsPathAmplifyAppId": "d36qqcyplgrvk3",
           "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
-          "s3Key": "amplify-builds/stripe-6f6e7336365a6a496b4d-build.zip"
+          "s3Key": "amplify-builds/stripe-627665617576367a4972-build.zip"
         },
         "checkoutemail": {
           "sesEmail": "noreply@zipzap.gifts",
           "adminEmail": "connect+admin@zipzapgifts.com",
           "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
-          "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip"
+          "s3Key": "amplify-builds/checkoutemail-30356a45726c677a4255-build.zip"
         }
       },
       "hosting": {
