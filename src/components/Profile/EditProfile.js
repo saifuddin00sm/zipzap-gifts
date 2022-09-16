@@ -147,6 +147,58 @@ const EditProfile = ({ info, setIsEdit }) => {
           </Grid>
           <Grid item xs={6}>
             <Box className="infoBox">
+              <HomeIcon />
+              {/* TODO: Break this up into each of the address fields... */}
+              <Typography>Address 2: </Typography>
+              <TextField
+                sx={{ width: "20vw" }}
+                name="address2"
+                value={formState.address2}
+                onChange={(event) => setInput("address2", event.target.value)}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <HomeIcon />
+              {/* TODO: Break this up into each of the address fields... */}
+              <Typography>City: </Typography>
+              <TextField
+                sx={{ width: "20vw" }}
+                name="address1"
+                value={formState.city}
+                onChange={(event) => setInput("city", event.target.value)}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <HomeIcon />
+              {/* TODO: Break this up into each of the address fields... */}
+              <Typography>State </Typography>
+              <TextField
+                sx={{ width: "20vw" }}
+                name="state"
+                value={formState.state}
+                onChange={(event) => setInput("state", event.target.value)}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <HomeIcon />
+              {/* TODO: Break this up into each of the address fields... */}
+              <Typography>Zip: </Typography>
+              <TextField
+                sx={{ width: "20vw" }}
+                name="zip"
+                value={formState.zip}
+                onChange={(event) => setInput("zip", event.target.value)}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
               <PhoneIcon />
               <Typography>Phone: </Typography>
               <TextField
