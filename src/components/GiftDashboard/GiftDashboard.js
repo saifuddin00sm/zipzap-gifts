@@ -18,7 +18,6 @@ import UtilizationAndDefault from "./UtilizationAndDefault";
 import GiftCalendar from "./GiftCalendar";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import TodayIcon from "@mui/icons-material/Today";
-import CakeIcon from "@mui/icons-material/Cake";
 import GiftDashboardModal from "./GiftDashboardModal";
 
 // holidays json
