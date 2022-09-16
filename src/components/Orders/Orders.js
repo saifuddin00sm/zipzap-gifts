@@ -13,9 +13,9 @@ const Orders = () => {
         <Typography variant="h1">Coming Soon...!!</Typography>
         <Typography variant="h1">Orders</Typography>
       </Header>
-      <Box sx={{ marginBottom: "56px" }}>
+      {/* <Box sx={{ marginBottom: "56px" }}>
         <DataChart />
-      </Box>
+      </Box> */}
       <Box>
         <DataTable />
       </Box>
