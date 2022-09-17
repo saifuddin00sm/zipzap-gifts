@@ -29,6 +29,10 @@
           "adminEmail": "connect+admin@zipzapgifts.com",
           "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
           "s3Key": "amplify-builds/checkoutemail-30356a45726c677a4255-build.zip"
+        },
+        "favorites": {
+          "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
+          "s3Key": "amplify-builds/favorites-434b3266492b39757257-build.zip"
         }
       },
       "hosting": {
