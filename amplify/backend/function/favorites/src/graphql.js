@@ -14,16 +14,30 @@ const recipientQuery = /* GraphQL */ `
     listRecipients(filter: $filter) {
       items {
         id
-        email
-        firstName
-        lastName
         favorites {
           items {
+            id
             type
             value
           }
         }
       }
+    }
+  }
+`;
+
+const createFavoriteMutation = /* GraphQL */ `
+  mutation AddFavorite($input: CreateProfileFavoriteInput!) {
+    createProfileFavorite(input: $input) {
+      id
+    }
+  }
+`;
+
+const updateFavoriteMutation = /* GraphQL */ `
+  mutation UpdateFavorite($input: UpdateProfileFavoriteInput!) {
+    updateProfileFavorite(input: $input) {
+      id
     }
   }
 `;
@@ -79,4 +93,23 @@ export const getRecipient = async (email) => {
   }
 
   return recipient;
+};
+
+export const createFavorite = async (recipientFavoritesId, type, value) => {
+  await graphQLQuery(createFavoriteMutation, {
+    input: {
+      recipientFavoritesId,
+      type,
+      value,
+    },
+  });
+};
+
+export const updateFavorite = async (id, value) => {
+  await graphQLQuery(updateFavoriteMutation, {
+    input: {
+      id,
+      value,
+    },
+  });
 };
