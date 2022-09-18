@@ -20,70 +20,18 @@ import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
 import DeleteModal from "../DeleteModal";
 
-// dummy data
 const giftProfileData = {
-  favColor: "Blue",
-  favSnack: "Salty, Crunchy",
-  favSwag: "Hat",
-  hobbies: ["Mountain Biking", "Basketball", "Camping"],
-  allergies: "Diabetic, please don't send sugary snacks",
   suggestedGift: [
     {
-      giftName: "the outdoor lover",
+      giftName: "Coming Soon!",
       image: {
-        src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-        alt: "the one outdoor",
+        src: "https://s3.amazonaws.com/content.zipzapgifts.com/login-photo.jpg",
+        alt: "Suggested Gifts Coming Soon!",
       },
       id: 1,
     },
-    {
-      giftName: "The Adventure Kit",
-      image: {
-        src: "https://m.media-amazon.com/images/I/514yQATe68L._AC_SL1001_.jpg",
-        alt: "the adventure",
-      },
-      id: 2,
-    },
-    {
-      giftName: "Zen Meditation Bag",
-      image: {
-        src: "https://cdn.shopify.com/s/files/1/0036/3714/9763/products/20210713-tupelo-5144-Web_1296x.jpg?v=1633548059",
-        alt: "zen box",
-      },
-      id: 3,
-    },
   ],
 };
-
-const giftHistoryData = [
-  {
-    date: "06/04/2021",
-    giftName: "the outdoor lover",
-    image: {
-      src: "https://i.etsystatic.com/18853869/r/il/e79240/2325509792/il_340x270.2325509792_995t.jpg",
-      alt: "the outdoor lover",
-    },
-    id: 1,
-  },
-  {
-    date: "10/31/2021",
-    giftName: "Halloween Surprise",
-    image: {
-      src: "https://m.media-amazon.com/images/I/61f9y8JeB0L._AC_UL320_.jpg",
-      alt: "Halloween box",
-    },
-    id: 2,
-  },
-  {
-    date: "12/24/2021",
-    giftName: "Company Christmas Gift",
-    image: {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVSk5tmzn3vnZlB_jBN2xIBTc1Pp-n_cLdmGIJuhKGk2KRyak87YEcLm7APwNfeTmgaSUzK4k&usqp=CAc",
-      alt: "Christmas",
-    },
-    id: 3,
-  },
-];
 
 const Root = styled("div")(({ theme }) => ({
   marginTop: "20px",
@@ -191,10 +139,8 @@ const RecipientProfile = () => {
             className="profileBox"
             sx={{
               flexDirection: {
-                xl: "row",
-                lg: "row",
                 xs: "column",
-                sm: "column",
+                md: "row",
               },
             }}
           >
@@ -203,10 +149,8 @@ const RecipientProfile = () => {
                 display: "flex",
                 gap: "0 25px",
                 flexDirection: {
-                  xl: "row",
-                  lg: "row",
                   xs: "column",
-                  sm: "column",
+                  lg: "row",
                 },
               }}
             >
@@ -238,10 +182,8 @@ const RecipientProfile = () => {
                   sx={{
                     marginBottom: "16px",
                     textAlign: {
-                      xl: "left",
-                      lg: "left",
                       xs: "center",
-                      sm: "center",
+                      md: "left",
                     },
                   }}
                   variant="h3"
@@ -249,7 +191,7 @@ const RecipientProfile = () => {
                 >
                   {recipient?.firstName} {recipient?.lastName}
                 </Typography>
-                <Box classSName="tabs">
+                <Box className="tabs">
                   <Box>
                     <Tabs
                       sx={{
@@ -261,10 +203,8 @@ const RecipientProfile = () => {
                           gap: "10px 15px",
                           marginBottom: "15px",
                           flexDirection: {
-                            lg: "row",
-                            xl: "row",
                             xs: "column",
-                            sm: "column",
+                            md: "row",
                           },
                         },
                       }}
@@ -280,11 +220,6 @@ const RecipientProfile = () => {
                         sx={tabIndecators}
                         label="Gift Profile"
                         {...a11yProps(1)}
-                      />
-                      <Tab
-                        sx={tabIndecators}
-                        label="Gift History"
-                        {...a11yProps(2)}
                       />
                     </Tabs>
                   </Box>
@@ -322,15 +257,12 @@ const RecipientProfile = () => {
                 <Typography className="titles" variant="h5">
                   Gift Profile
                 </Typography>
-                <GiftProfile info={giftProfileData} />
-              </Box>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <Box className="infoBox">
-                <Typography className="titles" variant="h5">
-                  Gift History
-                </Typography>
-                <GiftHistory info={giftHistoryData} />
+                <GiftProfile
+                  info={{
+                    favorites: recipient?.favorites?.items,
+                    ...giftProfileData,
+                  }}
+                />
               </Box>
             </TabPanel>
           </Box>

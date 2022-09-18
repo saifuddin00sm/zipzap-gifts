@@ -5,6 +5,8 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
+import Email from "@mui/icons-material/Email";
 
 const Root = styled("div")(({ theme }) => ({
   marginTop: "20px",
@@ -22,34 +24,46 @@ const Root = styled("div")(({ theme }) => ({
   },
 }));
 
+const questionMap = {
+  "What is your favorite color out of these colors:": "Favorite Color",
+  "What category does your favorite snack belong to:": "Favorite Snack Type",
+  "What are your favorite pieces of swag?": "Favorite Swag Item",
+  "Which hobbies do you enjoy the most?": "Hobbies",
+  "Anything we should know? (A gift specialist will contact you for more info)":
+    "Allergies/ Aversions/ Goals",
+};
+
 const GiftProfile = ({ info }) => {
-  const { favColor, favSnack, favSwag, hobbies, allergies, suggestedGift } =
-    info;
+  const { favorites = [], suggestedGift } = info;
   return (
     <Root>
       <Box>
-        <Box className="infos">
-          <Typography className="keys">Favorite Color</Typography>
-          <Typography>{favColor || "N/A"}</Typography>
-        </Box>
-        <Box className="infos">
-          <Typography className="keys">Favorite Snack Type</Typography>
-          <Typography>{favSnack || "N/A"}</Typography>
-        </Box>
-        <Box className="infos">
-          <Typography className="keys">Favorite Swag Item</Typography>
-          <Typography>{favSwag || "N/A"}</Typography>
-        </Box>
-        <Box className="infos">
-          <Typography className="keys">Hobbies</Typography>
-          <Typography>
-            {hobbies?.length ? hobbies.join(", ") : "N/A"}
-          </Typography>
-        </Box>
-        <Box className="infos">
-          <Typography className="keys">Allergies/ Aversions/ Goals</Typography>
-          <Typography>{allergies || "N/A"}</Typography>
-        </Box>
+        {favorites.length > 0 ? (
+          favorites.map(
+            ({ type, value }) =>
+              questionMap[type.trim()] && (
+                <Box className="infos" key={type}>
+                  <Typography className="keys">
+                    {questionMap[type.trim()]}
+                  </Typography>
+                  <Typography>{value || "N/A"}</Typography>
+                </Box>
+              )
+          )
+        ) : (
+          <Box>
+            <Typography className="keys">
+              No favorites yet! Send email again?
+              <IconButton
+                sx={{ color: "#263238" }}
+                aria-label="send email"
+                component="span"
+              >
+                <Email />
+              </IconButton>
+            </Typography>
+          </Box>
+        )}
       </Box>
       <Box sx={{ mt: 5 }}>
         <Typography variant="h3" sx={{ marginBottom: "14px" }}>
