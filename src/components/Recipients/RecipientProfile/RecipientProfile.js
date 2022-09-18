@@ -17,7 +17,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import GeneralInfo from "./GeneralInfo";
 import GiftProfile from "./GiftProfile";
-import GiftHistory from "./GiftHistory";
 import DeleteModal from "../DeleteModal";
 
 const giftProfileData = {
