@@ -1,45 +1,35 @@
 {
-  "e": {
-      "authMode": "FULL",
-      "namedValues": {
-          "What is your favorite color out of these colors:": [
-              "Pink"
-          ],
-          "What category does your favorite snack belong to: ": [
-              "Sweet fruity, Sweet chocolatey, Sour fruity"
-          ],
-          "What are your favorite pieces of swag?": [
-              "T shirts, Something for my desk"
-          ],
-          "Which hobbies do you enjoy the most?": [
-              "Playing video games, Baking"
-          ],
-          "Anything we should know? (A gift specialist will contact you for more info)": [
-              "I am trying to eat healthy"
-          ],
-          "Email Address": [
-              "nekokatts@gmail.com"
-          ],
-          "Timestamp": [
-              "9/17/2022 11:37:34"
-          ]
-      },
-      "range": {
-          "columnEnd": 7,
-          "columnStart": 1,
-          "rowEnd": 7,
-          "rowStart": 7
-      },
-      "source": {},
-      "triggerUid": "12773020",
-      "values": [
-          "9/17/2022 11:37:34",
-          "nekokatts@gmail.com",
-          "Pink",
-          "Sweet fruity, Sweet chocolatey, Sour fruity",
-          "T shirts, Something for my desk",
-          "Playing video games, Baking",
-          "I am trying to eat healthy"
-      ]
-  }
+  "authMode": "FULL",
+  "namedValues": {
+    "What is your favorite color out of these colors:": ["Pink"],
+    "What category does your favorite snack belong to: ": [
+      "Sweet fruity, Sweet chocolatey, Sour fruity"
+    ],
+    "What are your favorite pieces of swag?": [
+      "T shirts, Something for my desk"
+    ],
+    "Which hobbies do you enjoy the most?": ["Playing video games, Baking"],
+    "Anything we should know? (A gift specialist will contact you for more info)": [
+      "I am trying to eat healthy"
+    ],
+    "Email Address": ["nekokatts@gmail.com"],
+    "Timestamp": ["9/17/2022 11:37:34"]
+  },
+  "range": {
+    "columnEnd": 7,
+    "columnStart": 1,
+    "rowEnd": 7,
+    "rowStart": 7
+  },
+  "source": {},
+  "triggerUid": "12773020",
+  "values": [
+    "9/17/2022 11:37:34",
+    "nekokatts@gmail.com",
+    "Pink",
+    "Sweet fruity, Sweet chocolatey, Sour fruity",
+    "T shirts, Something for my desk",
+    "Playing video games, Baking",
+    "I am trying to eat healthy"
+  ]
 }

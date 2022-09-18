@@ -64,7 +64,7 @@ type Recipient
       { allow: owner }
       { allow: groups, groups: ["Admin"] }
       { allow: groups, groupsField: "accessGroups" }
-      { allow: private, operations: [read], provider: iam }
+      { allow: private, operations: [read, update], provider: iam }
     ]
   ) {
   id: ID!
@@ -111,6 +111,7 @@ type ProfileFavorite
       { allow: owner }
       { allow: groups, groups: ["Admin"] }
       { allow: groups, groupsField: "accessGroups" }
+      { allow: private, provider: iam }
     ]
   ) {
   id: ID!
