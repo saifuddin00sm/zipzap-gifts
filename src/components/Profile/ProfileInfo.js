@@ -10,7 +10,107 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 // import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Grid from "@mui/material/Grid";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+// import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+
+const ProfileInfo = ({ info, setIsEdit }) => {
+  const { name, email, phoneNumber, company } = info;
+  const { name: companyName, address } = company || {};
+  const { address1, address2, city, state, zip } = address || {};
+
+  const handleClick = () => {
+    setIsEdit(true);
+  };
+
+  return (
+    <Root>
+      <Box className="profile">
+        <Box className="img_box">
+          <Image
+            borderRadius="50%"
+            objectFit="cover"
+            objectPosition="50% 50%"
+            maxWidth="100px"
+            src="/BluePersonalLogo.png"
+            width="100px"
+            height="100px"
+          />
+          {/* <Box className="pen">
+            <label htmlFor="icon-button-file">
+              <Input accept="image/*" id="icon-button-file" type="file" />
+              <IconButton
+                sx={{ color: "#263238" }}
+                aria-label="upload picture"
+                component="span"
+              >
+                {/* <PhotoCamera /> */}
+          {/* </IconButton>
+            </label>
+          </Box> */}
+        </Box>
+        <Box>
+          <Typography className="title" variant="h3">
+            {name}
+          </Typography>
+          <Typography className="company">Company: {companyName}</Typography>
+        </Box>
+      </Box>
+      <Box className="contactInfo" sx={{ mb: 5 }}>
+        <Box className="styles" />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 4,
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: 600, color: "#505050" }}>
+            Contact Info
+          </Typography>
+          <Button onClick={handleClick}>Edit Information</Button>
+        </Box>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <HomeIcon />
+              <Typography>
+                Address:{" "}
+                {address1 &&
+                  `${address1}${
+                    address2 ? ` ${address2}` : ""
+                  }, ${city}, ${state}, ${zip}`}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <PhoneIcon />
+              <Typography>Phone: {phoneNumber}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className="infoBox">
+              <EmailIcon />
+              <Typography>Email: {email}</Typography>
+            </Box>
+          </Grid>
+          {/* <Grid item xs={6}>
+            <Box className="infoBox">
+              <PeopleOutlineIcon />
+              <Typography>Company Size: {companySize}</Typography>
+            </Box>
+          </Grid> */}
+        </Grid>
+      </Box>
+    </Root>
+  );
+};
+
+export default ProfileInfo;
 
 const Root = styled("div")(({ theme }) => ({
   "& .profile": {
@@ -135,129 +235,3 @@ const Root = styled("div")(({ theme }) => ({
 // const Input = styled("input")({
 //   display: "none",
 // });
-
-const ProfileInfo = ({ info }) => {
-  const {
-    userName,
-    company,
-    contactInfo: { address, email, phone, companySize } = {},
-    cards,
-  } = info;
-  return (
-    <Root>
-      <Box className="profile">
-        <Box className="img_box">
-          <Image
-            borderRadius="50%"
-            objectFit="cover"
-            objectPosition="50% 50%"
-            maxWidth="100px"
-            src="/BluePersonalLogo.png"
-            width="100px"
-            height="100px"
-          />
-          {/* <Box className="pen">
-            <label htmlFor="icon-button-file">
-              <Input accept="image/*" id="icon-button-file" type="file" />
-              <IconButton
-                sx={{ color: "#263238" }}
-                aria-label="upload picture"
-                component="span"
-              >
-                {/* <PhotoCamera /> */}
-          {/* </IconButton>
-            </label>
-          </Box> */}
-        </Box>
-        <Box>
-          <Typography className="title" variant="h3">
-            {userName}
-          </Typography>
-          <Typography className="company">Company: {company}</Typography>
-        </Box>
-      </Box>
-      <Box className="contactInfo" sx={{ mb: 5 }}>
-        <Box className="styles" />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 4,
-          }}
-        >
-          <Typography variant="h5" sx={{ fontWeight: 600, color: "#505050" }}>
-            Contact Info
-          </Typography>
-          <Button>Edit Information</Button>
-        </Box>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          <Grid item xs={6}>
-            <Box className="infoBox">
-              <HomeIcon />
-              <Typography>Address: {address}</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Box className="infoBox">
-              <PhoneIcon />
-              <Typography>Phone: {phone}</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Box className="infoBox">
-              <EmailIcon />
-              <Typography>Email: {email}</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Box className="infoBox">
-              <PeopleOutlineIcon />
-              <Typography>Company Size: {companySize}</Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
-      <Typography
-        variant="h5"
-        sx={{ mb: 3, fontWeight: 600, color: "#505050" }}
-      >
-        Credit Cards On File
-      </Typography>
-      <Box className="inner_cards">
-        {cards.map(({ id, type, exp, name, ending, isSelected }) => (
-          <Box key={id} className="credit_card">
-            <Box
-              className="card_top"
-              sx={{ background: isSelected ? "#F1F1F1" : "#C5D6E2" }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  textAlign: "right",
-                  textTransform: "capitalize",
-                }}
-              >
-                {type}
-              </Typography>
-            </Box>
-            <Box
-              className="card_bottom"
-              sx={{ background: isSelected ? "#DEDEDE" : "#ABC4D6" }}
-            >
-              <Typography variant="h6">Ending In {ending}</Typography>
-              <Typography variant="body2">Exp: {exp}</Typography>
-              <Typography variant="body2">Name on the card: {name}</Typography>
-            </Box>
-          </Box>
-        ))}
-      </Box>
-    </Root>
-  );
-};
-
-export default ProfileInfo;

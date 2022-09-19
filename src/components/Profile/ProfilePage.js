@@ -1,52 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
-import Header from "../Header";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { API, graphqlOperation } from "aws-amplify";
+import { useQuery } from "react-query";
+import { getUser } from "../../graphql/queries";
+import EditProfile from "./EditProfile";
 import useAuth from "../../hooks/useAuth";
 import ProfileInfo from "./ProfileInfo";
+import Header from "../Header";
 
-const userInfo = {
-  userName: "Krista Humphrey",
-  company: "Zip Zap Gifts",
-  contactInfo: {
-    address: "3003 N Thanksgiving Way, Lehi, UT 84043",
-    phone: "(801) 555-2022",
-    email: "hr_department@company.com",
-    companySize: 200,
-  },
-  cards: [
-    {
-      ending: 8839,
-      exp: "12/2055",
-      name: "victoria black",
-      type: "credit card",
-      id: 1,
-      isSelected: true,
-    },
-    {
-      ending: 99393,
-      exp: "12/2023",
-      name: "amelia ostler",
-      type: "credit card",
-      id: 2,
-      isSelected: false,
-    },
-    {
-      ending: 2999,
-      exp: "12/2069",
-      name: "krista humphrey",
-      type: "credit card",
-      id: 3,
-      isSelected: true,
-    },
-  ],
-};
-
-// TODO: This Component needs to be refactored to meet the Zip Zap Code of Code
 function ProfilePage() {
+  const { currentUser } = useAuth();
+  const userID = currentUser?.username;
+  const { data: { data: { getUser: userData = {} } = {} } = {} } = useQuery(
+    ["users", userID],
+    () => API.graphql(graphqlOperation(getUser, { id: userID })),
+    { enabled: !!userID }
+  );
   const { signOut } = useAuth();
+  const [isEdit, setIsEdit] = useState(false);
+
   return (
     <Container component="main">
       <Header>
@@ -56,7 +31,11 @@ function ProfilePage() {
         </Button>
       </Header>
       <Box>
-        <ProfileInfo info={userInfo} />
+        {isEdit ? (
+          <EditProfile info={userData} isEdit={isEdit} setIsEdit={setIsEdit} />
+        ) : (
+          <ProfileInfo info={userData} isEdit={isEdit} setIsEdit={setIsEdit} />
+        )}
       </Box>
     </Container>
   );
