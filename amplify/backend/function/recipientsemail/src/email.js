@@ -1,9 +1,10 @@
+import { template } from "./email_template.js";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 const sesClient = new SESClient({ region: process.env.REGION });
 
 const fromEmail = "noreply@zipzap.gifts";
 const subject = "Hooray! Your Employer Wants To Send You Cool Gifts!";
-const body = "Hello, World!";
+const body = template;
 
 /**
  * Sends the favorites survey email individually to each of the passed
