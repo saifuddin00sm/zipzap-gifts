@@ -95,6 +95,20 @@ const UtilizationAndDefault = ({ utilization, defaultGifts }) => {
                 color: "#747474",
               }}
             >
+              Coming Soon...!!
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 500,
+                fontSize: "25px",
+                lineHeight: "38px",
+                textTransform: "capitalize",
+                textAlign: "center",
+                marginBottom: "20px",
+                color: "#747474",
+              }}
+            >
               Monthly Gift Utilization
             </Typography>
             <Box

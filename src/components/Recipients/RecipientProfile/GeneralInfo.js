@@ -4,36 +4,29 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 
-const Root = styled("div")(({ theme }) => ({
-  marginTop: "20px",
-  "& .infos": {
-    display: "grid",
-    gridTemplateColumns: "50% 50%",
-    width: "100%",
-    marginBottom: "25px",
-    "& .keys": {
-      color: "#343436",
-      fontWeight: 500,
-      fontSize: "20px",
-      lineHight: "30px",
-    },
-  },
-}));
-
-const GeneralInfo = ({ info }) => {
+const GeneralInfo = ({ info, setIsEdit }) => {
   const {
     birthday,
+    email,
     shippingAddress: { address1, address2, city, state, zip } = {},
     jobTitle,
     startDate,
     department,
   } = info;
 
+  const handleClick = () => {
+    setIsEdit(true);
+  };
+
   return (
     <Root>
       <Box className="infos">
         <Typography className="keys">Birthday</Typography>
         <Typography>{birthday === null ? "N/A" : birthday}</Typography>
+      </Box>
+      <Box className="infos">
+        <Typography className="keys">Email</Typography>
+        <Typography>{email === null ? "N/A" : email}</Typography>
       </Box>
       <Box className="infos">
         <Typography className="keys">Address</Typography>
@@ -56,10 +49,26 @@ const GeneralInfo = ({ info }) => {
         </Typography>
       </Box>
       <Box>
-        <Button>Edit Information</Button>
+        <Button onClick={handleClick}>Edit Information</Button>
       </Box>
     </Root>
   );
 };
 
 export default GeneralInfo;
+
+const Root = styled("div")(({ theme }) => ({
+  marginTop: "20px",
+  "& .infos": {
+    display: "grid",
+    gridTemplateColumns: "50% 50%",
+    width: "100%",
+    marginBottom: "25px",
+    "& .keys": {
+      color: "#343436",
+      fontWeight: 500,
+      fontSize: "20px",
+      lineHight: "30px",
+    },
+  },
+}));

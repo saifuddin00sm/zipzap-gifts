@@ -1,0 +1,10 @@
+[
+  {
+    "Action": [
+      "ses:SendEmail",
+      "ses:SendRawEmail"
+    ],
+    "Effect": "Allow",
+    "Resource": ["arn:aws:ses:us-west-2:229932334462:identity/zipzap.gifts"]
+  }
+]

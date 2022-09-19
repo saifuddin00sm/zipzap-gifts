@@ -23,6 +23,7 @@ const ImportList = () => {
   const [open, setOpen] = useState(false);
   const { addRecipient } = useRecipients();
   const [success, setSuccess] = useState(false);
+  const [newIDs, setNewIDs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const onClose = () => {
     setOpen(false);
@@ -46,6 +47,7 @@ const ImportList = () => {
         const headers = {
           firstname: "firstName",
           lastname: "lastName",
+          email: "email",
           // department: "department",
           jobtitle: "jobTitle",
           birthday: "birthday",
@@ -66,6 +68,7 @@ const ImportList = () => {
           setOpen(true);
           return;
         }
+        const ids = [];
         const errs = [];
         let count = 0;
         let successCount = 0;
@@ -87,8 +90,9 @@ const ImportList = () => {
           delete recipient.state;
           delete recipient.zip;
           try {
-            await addRecipient(recipient);
+            const newID = await addRecipient(recipient);
             successCount++;
+            ids.push(newID);
           } catch (error) {
             if (error?.errors?.length > 0) {
               errs.push(`Row ${count + 1}: ${error.errors[0]?.message}`);
@@ -99,6 +103,7 @@ const ImportList = () => {
         }
         setUploadErrors(errs);
         setUploadCount(successCount);
+        setNewIDs(ids);
         setTotalCount(count);
         setSuccess(true);
         setOpen(true);
@@ -210,6 +215,7 @@ const ImportList = () => {
             </>
           }
           open={open}
+          ids={newIDs}
           onClose={onClose}
           button={true}
         />
