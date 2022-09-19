@@ -1,17 +1,81 @@
-import React from "react";
+import React, { useState, forwardRef } from "react";
+import { API } from "aws-amplify";
+import { Auth } from "@aws-amplify/auth";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import ClearIcon from "@mui/icons-material/Clear";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import CircularProgress from "@mui/material/CircularProgress";
+import MuiAlert from "@mui/material/Alert";
 
-const RecipientSuccess = ({ text, subText, open, onClose, button }) => {
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const RecipientSuccess = ({ text, subText, open, onClose, button, ids }) => {
+  const [messageStatus, setMessageStatus] = useState("success");
+  const [message, setMessage] = useState("");
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
   const handleClose = () => onClose();
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+    handleClose();
+  };
+
+  const sendEmails = async () => {
+    if (emailLoading) {
+      return;
+    }
+
+    setEmailLoading(true);
+    try {
+      const currentSession = await Auth.currentSession();
+      const accessToken = currentSession.getAccessToken();
+      const token = accessToken.getJwtToken();
+      const { count } = await API.post("recipients", "/favorites/survey", {
+        body: { token, ids },
+      });
+
+      if (count === ids.length) {
+        setMessageStatus("success");
+        setMessage("Successfully emailed recipients!");
+      } else {
+        setMessageStatus("warning");
+        setMessage(
+          "Unable to send emails at this time. Please try again later."
+        );
+      }
+    } catch (error) {
+      setMessageStatus("error");
+      setMessage("Error sending email!");
+    }
+    setSnackOpen(true);
+    setEmailLoading(false);
+  };
 
   return (
     <Modal open={open}>
       <Box sx={style}>
+        <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity={messageStatus}
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        </Snackbar>
         <Box className="closeBtn">
           <IconButton className="mainBtn" onClick={handleClose}>
             <ClearIcon sx={{ color: "#ffff" }} />
@@ -25,15 +89,20 @@ const RecipientSuccess = ({ text, subText, open, onClose, button }) => {
             {subText}
           </Typography>
           <Box sx={{ textAlign: "center" }}>
-            {button ? (
+            {button && (
               <Button
                 id="confetti-id"
                 variant="contained"
-                onClick={handleClose}
+                onClick={sendEmails}
+                disabled={emailLoading}
               >
-                Send Email
+                {emailLoading ? (
+                  <CircularProgress color="secondary" />
+                ) : (
+                  `Send Email`
+                )}
               </Button>
-            ) : null}
+            )}
           </Box>
         </Box>
       </Box>
