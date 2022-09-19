@@ -124,10 +124,10 @@ const tabIndecators = {
 
 const RecipientProfile = () => {
   const [editSuccess, setEditSuccess] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [isEdit, setIsEdit] = useState(false);
 
   const { pathname } = location;
   const id = pathname.split("/")[2];
@@ -165,7 +165,7 @@ const RecipientProfile = () => {
   } else {
     userData = (
       <Box>
-        {editSuccess ? (
+        {editSuccess && (
           <Box sx={{ paddingBottom: "10px", marginBottom: "10px" }}>
             <Snackbar
               open={editSuccess}
@@ -180,28 +180,8 @@ const RecipientProfile = () => {
                 Update Successful!
               </Alert>
             </Snackbar>
-            {/* <Collapse in={editSuccess}>
-              <Alert
-                sx={{ width: "40%" }}
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => {
-                      setEditSuccess(false);
-                    }}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-              >
-                {" "}
-                This is a success message!
-              </Alert>
-            </Collapse> */}
           </Box>
-        ) : null}
+        )}
         <Box key={recipient.id}>
           <Box
             className="profileBox"
@@ -331,19 +311,11 @@ const RecipientProfile = () => {
                   General Information
                 </Typography>
                 {!isEdit ? (
-                  <GeneralInfo
-                    info={recipient}
-                    isEdit={isEdit}
-                    setIsEdit={setIsEdit}
-                    editSuccess={editSuccess}
-                    setEditSuccess={setEditSuccess}
-                  />
+                  <GeneralInfo info={recipient} setIsEdit={setIsEdit} />
                 ) : (
                   <EditRecipientProfile
                     info={recipient}
                     setIsEdit={setIsEdit}
-                    setOpen={setOpen}
-                    editSuccess={editSuccess}
                     setEditSuccess={setEditSuccess}
                   />
                 )}
