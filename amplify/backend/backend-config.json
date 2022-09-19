@@ -55,6 +55,34 @@
           ]
         }
       ]
+    },
+    "recipients": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "recipientsemail",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "ZipZap",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "userPoolGroups",
+          "attributes": [
+            "AdminGroupRole"
+          ]
+        }
+      ]
     }
   },
   "auth": {
@@ -168,6 +196,21 @@
       ]
     },
     "favorites": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "zipzap",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ]
+        }
+      ]
+    },
+    "recipientsemail": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",

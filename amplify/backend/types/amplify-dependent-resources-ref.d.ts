@@ -8,6 +8,11 @@ export type AmplifyDependentResourcesAttributes = {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"
+        },
+        "recipients": {
+            "RootUrl": "string",
+            "ApiName": "string",
+            "ApiId": "string"
         }
     },
     "auth": {
@@ -45,6 +50,12 @@ export type AmplifyDependentResourcesAttributes = {
             "LambdaExecutionRole": "string"
         },
         "favorites": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
+        },
+        "recipientsemail": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

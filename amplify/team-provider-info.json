@@ -32,7 +32,11 @@
         },
         "favorites": {
           "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
-          "s3Key": "amplify-builds/favorites-434b3266492b39757257-build.zip"
+          "s3Key": "amplify-builds/favorites-674e4761695a564c7237-build.zip"
+        },
+        "recipientsemail": {
+          "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
+          "s3Key": "amplify-builds/recipientsemail-4b7872357a2b79364775-build.zip"
         }
       },
       "hosting": {
