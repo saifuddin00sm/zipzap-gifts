@@ -96,6 +96,7 @@ const NavigationMenu = ({ signOut }) => {
           {menu.map(({ name, link, Icon, signOutLink }) => (
             <li key={name + link}>
               <NavLink
+                end
                 to={link}
                 style={({ isActive }) => ({
                   ...styles.link,
