@@ -7,7 +7,7 @@ import {
   deleteRecipient,
   updateRecipient,
 } from "../graphql/mutations";
-import { format, isDate } from "date-fns";
+import { format, isDate, parseISO } from "date-fns";
 
 const listRecipients = /* GraphQL */ `
   query ListRecipients(
@@ -138,13 +138,13 @@ const editRecipient = async ({ shippingAddress, ...recipient }) => {
   if (recipient.birthday) {
     const birthday = isDate(recipient.birthday)
       ? recipient.birthday
-      : new Date(recipient.birthday);
+      : parseISO(recipient.birthday);
     recipient.birthday = format(birthday, "yyyy-MM-dd");
   }
   if (recipient.startDate) {
     const startDate = isDate(recipient.startDate)
       ? recipient.startDate
-      : new Date(recipient.startDate);
+      : parseISO(recipient.startDate);
     recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
   await API.graphql(graphqlOperation(updateRecipient, { input: recipient }));
