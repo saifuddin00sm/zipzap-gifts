@@ -5,6 +5,7 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 import { getEmails } from "./graphql.js";
+import { sendSurveyEmails } from "./email.js";
 
 /**
  * This lambda function takes a GraphQL AppSync token and list of Recipient ids
@@ -13,8 +14,13 @@ import { getEmails } from "./graphql.js";
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 export const handler = async (event) => {
-  const emails = await getEmails(event);
-  console.log({ emails });
+  let count = 0;
+  try {
+    const emails = await getEmails(event);
+    count = await sendSurveyEmails(emails);
+  } catch (error) {
+    console.error(error);
+  }
 
   return {
     statusCode: 200,
@@ -22,6 +28,6 @@ export const handler = async (event) => {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",
     },
-    body: JSON.stringify(`Found ${emails.length} email addresses`),
+    body: JSON.stringify(`Successfully sent ${count} email(s).`),
   };
 };
