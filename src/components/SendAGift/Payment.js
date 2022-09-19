@@ -11,10 +11,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Alert from "@mui/material/Alert";
 
-// TODO: Get this from env
-const stripePromise = loadStripe(
-  "pk_test_51HnY3pDT2m7Y85adloVaCn3sNJsUlm2utxtogULtFB14sb9jDQgcMhDtoGLLMucTX0iLvXwXIBcLesCUOebXBOaS00CzaWNb28"
-);
+const REACT_APP_STRIPE_KEY = process.env.REACT_APP_STRIPE_KEY || "";
+const stripePromise = loadStripe(REACT_APP_STRIPE_KEY);
 
 // A helper component that has to be a child of Elements so that the usePayment
 // hook can properly access the stripe and elements hooks.
