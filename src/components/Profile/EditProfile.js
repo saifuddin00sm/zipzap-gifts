@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
 import EmailIcon from "@mui/icons-material/Email";
@@ -13,8 +13,16 @@ import Grid from "@mui/material/Grid";
 // import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import TextField from "@mui/material/TextField";
 import { useUsers } from "./../../hooks/users";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const EditProfile = ({ info, setIsEdit }) => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackOpen, setSnackOpen] = useState(false);
   const { id, name, email, phoneNumber = "", company } = info;
   const { id: companyID, name: companyName = "", address } = company || {};
   const {
@@ -49,20 +57,45 @@ const EditProfile = ({ info, setIsEdit }) => {
     setIsEdit(false);
   };
 
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await editUser({ ...formState });
       setIsEdit(false);
     } catch (error) {
-      // TODO: Show a user-friendly error message to the user and get rid of the console.log
       // It's easy to get errors for the phone number and email because they have validation on the formatting from AWS...
-      console.log(error);
+      const { errors = [] } = error;
+      if (errors.length > 0) {
+        setErrorMessage(errors[0]?.message);
+      } else {
+        setErrorMessage(error.toString());
+      }
+      setSnackOpen(true);
     }
   };
 
   return (
     <Root>
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackClose}
+      >
+        <Alert
+          onClose={handleSnackClose}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       <Box className="profile">
         <Box className="img_box">
           <Image
