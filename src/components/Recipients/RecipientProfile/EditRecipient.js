@@ -6,20 +6,20 @@ import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import { useRecipients } from "../../../hooks/recipients";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
-const EditRecipientProfile = ({
-  info,
-  setIsEdit,
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-  setEditSuccess,
-}) => {
+const EditRecipientProfile = ({ info, setIsEdit, setEditSuccess }) => {
   const {
     id,
     firstName,
     lastName,
     birthday,
     email,
-    phone,
     shippingAddress: {
       id: shippingAddressID,
       address1,
@@ -34,12 +34,11 @@ const EditRecipientProfile = ({
 
   const initialState = {
     id: id,
-    firstName: firstName,
-    lastName: lastName,
+    firstName: firstName || "",
+    lastName: lastName || "",
     birthday: birthday,
-    email: email,
-    jobTitle: jobTitle,
-    phone: phone,
+    email: email || "",
+    jobTitle: jobTitle || "",
     shippingAddress: {
       id: shippingAddressID,
       address1: address1 || "",
@@ -53,7 +52,8 @@ const EditRecipientProfile = ({
   };
 
   const { editRecipient } = useRecipients();
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [snackOpen, setSnackOpen] = React.useState(false);
   const [formState, setFormState] = useState(initialState);
 
   function setInput(key, value) {
@@ -72,16 +72,37 @@ const EditRecipientProfile = ({
   };
 
   const handleSubmit = async (e) => {
-    console.log({ formState });
-    e.preventDefault();
-    await editRecipient({ ...formState });
-    setIsEdit(false);
-    setFormState(initialState);
-    setEditSuccess(true);
+    try {
+      e.preventDefault();
+      await editRecipient({ ...formState });
+      setIsEdit(false);
+      setFormState(initialState);
+      setEditSuccess(true);
+    } catch (error) {
+      const { errors = [] } = error;
+      if (errors.length > 0) {
+        setErrorMessage(errors[0]?.message);
+      } else {
+        setErrorMessage(error.toString());
+      }
+      setSnackOpen(true);
+    }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
   };
 
   return (
     <Root>
+      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       <Box onSubmit={handleSubmit} component="form" sx={{ marginTop: "20px" }}>
         <Box className="infos">
           <Typography className="keys">First Name</Typography>
@@ -192,7 +213,7 @@ const EditRecipientProfile = ({
           </TextField>
         </Box>
         <Box>
-          <Button variant="contained" type="submit">
+          <Button variant="contained" type="submit" sx={{ mx: 2 }}>
             Save
           </Button>
 
