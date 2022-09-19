@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   createRecipient,
   createAddress,
+  updateAddress,
   deleteRecipient,
   updateRecipient,
 } from "../graphql/mutations";
@@ -132,8 +133,7 @@ const editRecipient = async ({ shippingAddress, ...recipient }) => {
     recipient.phone = null;
   }
   if (!recipient.firstName && !recipient.lastName) {
-    new Error("Missing First and Last Name");
-    return;
+    throw new Error("Missing First and Last Name");
   }
   if (recipient.birthday) {
     const birthday = isDate(recipient.birthday)
@@ -148,7 +148,9 @@ const editRecipient = async ({ shippingAddress, ...recipient }) => {
     recipient.startDate = format(startDate, "yyyy-MM-dd");
   }
   await API.graphql(graphqlOperation(updateRecipient, { input: recipient }));
-  console.log("success");
+  await API.graphql(
+    graphqlOperation(updateAddress, { input: shippingAddress })
+  );
 };
 
 const removeRecipient = async (id) => {
@@ -196,4 +198,4 @@ const useRecipients = () => {
   };
 };
 
-export { fetchRecipients, getAllRecipients, useRecipients, editRecipient };
+export { fetchRecipients, getAllRecipients, useRecipients };

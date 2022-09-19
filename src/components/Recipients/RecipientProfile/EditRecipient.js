@@ -20,7 +20,14 @@ const EditRecipientProfile = ({
     birthday,
     email,
     phone,
-    shippingAddress: { address1, address2, city, state, zip } = {},
+    shippingAddress: {
+      id: shippingAddressID,
+      address1,
+      address2,
+      city,
+      state,
+      zip,
+    } = {},
     jobTitle,
     startDate,
   } = info;
@@ -34,11 +41,12 @@ const EditRecipientProfile = ({
     jobTitle: jobTitle,
     phone: phone,
     shippingAddress: {
-      address1: address1,
-      address2: address2,
-      city: city,
-      state: state,
-      zip: zip,
+      id: shippingAddressID,
+      address1: address1 || "",
+      address2: address2 || "",
+      city: city || "",
+      state: state || "",
+      zip: zip || "",
     },
 
     startDate: info.startDate,
