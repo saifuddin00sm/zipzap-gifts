@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Header from "../../Header";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
-import { getRecipient } from "../../../graphql/queries";
 import { styled } from "@mui/material/styles";
 import { Image } from "@aws-amplify/ui-react";
 // import IconButton from "@mui/material/IconButton";
@@ -15,10 +13,16 @@ import Button from "@mui/material/Button";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import Alert from "@mui/material/Alert";
+import { getRecipient } from "../../../graphql/queries";
 import GeneralInfo from "./GeneralInfo";
 import GiftProfile from "./GiftProfile";
 import GiftHistory from "./GiftHistory";
+import EditRecipientProfile from "./EditRecipient";
 import DeleteModal from "../DeleteModal";
+import Header from "../../Header";
+
+import Snackbar from "@mui/material/Snackbar";
 
 // dummy data
 const giftProfileData = {
@@ -85,41 +89,6 @@ const giftHistoryData = [
   },
 ];
 
-const Root = styled("div")(({ theme }) => ({
-  marginTop: "20px",
-  "& .tabsPanel": {
-    "& .infoBox": {
-      border: "1px solid #F1F1F1",
-      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-      padding: "20px",
-      marginTop: "20px",
-      "& .titles": {
-        color: "#343436",
-        fontWeight: 700,
-        fontSize: "30px",
-        lineHight: "45px",
-      },
-    },
-  },
-  "& .profileBox": {
-    background: "#ABC4D6",
-    padding: "30px",
-    display: "flex",
-    justifyContent: "space-between",
-    gap: "10px",
-    "& .img_box": {
-      position: "relative",
-      "& .pen": {
-        height: "50px",
-        width: "50px",
-        position: "absolute",
-        top: "73px",
-        left: "55px",
-      },
-    },
-  },
-}));
-
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div
@@ -154,6 +123,9 @@ const tabIndecators = {
 };
 
 const RecipientProfile = () => {
+  const [editSuccess, setEditSuccess] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -170,9 +142,16 @@ const RecipientProfile = () => {
 
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setEditSuccess(false);
   };
 
   let userData;
@@ -186,6 +165,23 @@ const RecipientProfile = () => {
   } else {
     userData = (
       <Box>
+        {editSuccess && (
+          <Box sx={{ paddingBottom: "10px", marginBottom: "10px" }}>
+            <Snackbar
+              open={editSuccess}
+              autoHideDuration={5000}
+              onClose={handleClose}
+            >
+              <Alert
+                onClose={handleClose}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                Update Successful!
+              </Alert>
+            </Snackbar>
+          </Box>
+        )}
         <Box key={recipient.id}>
           <Box
             className="profileBox"
@@ -314,7 +310,15 @@ const RecipientProfile = () => {
                 <Typography variant="h5" className="titles">
                   General Information
                 </Typography>
-                <GeneralInfo info={recipient} />
+                {!isEdit ? (
+                  <GeneralInfo info={recipient} setIsEdit={setIsEdit} />
+                ) : (
+                  <EditRecipientProfile
+                    info={recipient}
+                    setIsEdit={setIsEdit}
+                    setEditSuccess={setEditSuccess}
+                  />
+                )}
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -351,3 +355,38 @@ const RecipientProfile = () => {
 };
 
 export default RecipientProfile;
+
+const Root = styled("div")(({ theme }) => ({
+  marginTop: "20px",
+  "& .tabsPanel": {
+    "& .infoBox": {
+      border: "1px solid #F1F1F1",
+      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      padding: "20px",
+      marginTop: "20px",
+      "& .titles": {
+        color: "#343436",
+        fontWeight: 700,
+        fontSize: "30px",
+        lineHight: "45px",
+      },
+    },
+  },
+  "& .profileBox": {
+    background: "#ABC4D6",
+    padding: "30px",
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "10px",
+    "& .img_box": {
+      position: "relative",
+      "& .pen": {
+        height: "50px",
+        width: "50px",
+        position: "absolute",
+        top: "73px",
+        left: "55px",
+      },
+    },
+  },
+}));
