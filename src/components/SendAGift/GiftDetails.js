@@ -29,7 +29,6 @@ const GiftDetails = ({
   to,
   from,
   setInput,
-  setInvalid,
 }) => {
   return (
     <Box sx={style}>

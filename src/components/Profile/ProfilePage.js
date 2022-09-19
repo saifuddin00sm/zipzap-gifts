@@ -15,8 +15,7 @@ function ProfilePage() {
   const { currentUser } = useAuth();
   const userID = currentUser?.username;
   const { data: { data: { getUser: userData = {} } = {} } = {} } = useQuery(
-    // ["users", userID],
-    ["users"],
+    ["users", userID],
     () => API.graphql(graphqlOperation(getUser, { id: userID })),
     { enabled: !!userID }
   );
