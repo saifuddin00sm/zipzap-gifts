@@ -3,9 +3,11 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   createRecipient,
   createAddress,
+  updateAddress,
   deleteRecipient,
+  updateRecipient,
 } from "../graphql/mutations";
-import { format, isDate } from "date-fns";
+import { format, isDate, parseISO } from "date-fns";
 
 const listRecipients = /* GraphQL */ `
   query ListRecipients(
@@ -123,6 +125,34 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
   await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
 };
 
+const editRecipient = async ({ shippingAddress, ...recipient }) => {
+  if (!recipient.email) {
+    recipient.email = null;
+  }
+  if (!recipient.phone) {
+    recipient.phone = null;
+  }
+  if (!recipient.firstName && !recipient.lastName) {
+    throw new Error("Missing First and Last Name");
+  }
+  if (recipient.birthday) {
+    const birthday = isDate(recipient.birthday)
+      ? recipient.birthday
+      : parseISO(recipient.birthday);
+    recipient.birthday = format(birthday, "yyyy-MM-dd");
+  }
+  if (recipient.startDate) {
+    const startDate = isDate(recipient.startDate)
+      ? recipient.startDate
+      : parseISO(recipient.startDate);
+    recipient.startDate = format(startDate, "yyyy-MM-dd");
+  }
+  await API.graphql(graphqlOperation(updateRecipient, { input: recipient }));
+  await API.graphql(
+    graphqlOperation(updateAddress, { input: shippingAddress })
+  );
+};
+
 const removeRecipient = async (id) => {
   await API.graphql(graphqlOperation(deleteRecipient, { input: { id } }));
 };
@@ -135,6 +165,13 @@ const useRecipients = () => {
     data: recipients,
     error,
   } = useQuery("recipients", getAllRecipients);
+
+  const updateMutation = useMutation(editRecipient, {
+    onSuccess: () => {
+      // Invalidate and refresh all of the recipients queries
+      queryClient.invalidateQueries("recipients");
+    },
+  });
 
   const mutation = useMutation(addRecipient, {
     onSuccess: () => {
@@ -157,6 +194,7 @@ const useRecipients = () => {
     error,
     removeRecipient: removeMutation.mutateAsync,
     addRecipient: mutation.mutateAsync,
+    editRecipient: updateMutation.mutateAsync,
   };
 };
 
