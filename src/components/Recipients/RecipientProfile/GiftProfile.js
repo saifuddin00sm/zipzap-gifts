@@ -1,4 +1,6 @@
-import React from "react";
+import React, { forwardRef, useState } from "react";
+import { API } from "aws-amplify";
+import { Auth } from "@aws-amplify/auth";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -7,6 +9,13 @@ import { styled } from "@mui/material/styles";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import Email from "@mui/icons-material/Email";
+import Snackbar from "@mui/material/Snackbar";
+import CircularProgress from "@mui/material/CircularProgress";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Root = styled("div")(({ theme }) => ({
   marginTop: "20px",
@@ -34,9 +43,61 @@ const questionMap = {
 };
 
 const GiftProfile = ({ info }) => {
-  const { favorites = [], suggestedGift } = info;
+  const { id, favorites = [], suggestedGift } = info;
+  const [messageStatus, setMessageStatus] = useState("success");
+  const [message, setMessage] = useState("");
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
+  const sendEmail = async () => {
+    if (emailLoading) {
+      return;
+    }
+
+    setEmailLoading(true);
+    try {
+      const currentSession = await Auth.currentSession();
+      const accessToken = currentSession.getAccessToken();
+      const token = accessToken.getJwtToken();
+      const { count } = await API.post("recipients", "/favorites/survey", {
+        body: { token, ids: [id] },
+      });
+
+      if (count === 1) {
+        setMessageStatus("success");
+        setMessage("Successfully emailed recipient!");
+      } else {
+        setMessageStatus("warning");
+        setMessage(
+          "Unable to send email at this time. Please try again later."
+        );
+      }
+    } catch (error) {
+      setMessageStatus("error");
+      setMessage("Error sending email!");
+    }
+    setSnackOpen(true);
+    setEmailLoading(false);
+  };
+
   return (
     <Root>
+      <Snackbar open={snackOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={messageStatus}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
       <Box>
         {favorites.length > 0 ? (
           favorites.map(
@@ -58,8 +119,13 @@ const GiftProfile = ({ info }) => {
                 sx={{ color: "#263238" }}
                 aria-label="send email"
                 component="span"
+                onClick={sendEmail}
               >
-                <Email />
+                {emailLoading ? (
+                  <CircularProgress color="secondary" />
+                ) : (
+                  <Email />
+                )}
               </IconButton>
             </Typography>
           </Box>

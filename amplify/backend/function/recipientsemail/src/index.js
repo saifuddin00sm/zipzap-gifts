@@ -28,6 +28,6 @@ export const handler = async (event) => {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",
     },
-    body: JSON.stringify(`Successfully sent ${count} email(s).`),
+    body: JSON.stringify({ count }),
   };
 };

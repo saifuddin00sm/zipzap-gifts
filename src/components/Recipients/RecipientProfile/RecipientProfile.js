@@ -258,6 +258,7 @@ const RecipientProfile = () => {
                 </Typography>
                 <GiftProfile
                   info={{
+                    id: recipient?.id,
                     favorites: recipient?.favorites?.items,
                     ...giftProfileData,
                   }}
