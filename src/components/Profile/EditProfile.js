@@ -135,7 +135,6 @@ const EditProfile = ({ info, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
-              {/* TODO: Break this up into each of the address fields... */}
               <Typography>Address: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
@@ -148,7 +147,6 @@ const EditProfile = ({ info, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
-              {/* TODO: Break this up into each of the address fields... */}
               <Typography>Address 2: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
@@ -161,11 +159,10 @@ const EditProfile = ({ info, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
-              {/* TODO: Break this up into each of the address fields... */}
               <Typography>City: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
-                name="address1"
+                name="city"
                 value={formState.city}
                 onChange={(event) => setInput("city", event.target.value)}
               />
@@ -174,7 +171,6 @@ const EditProfile = ({ info, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
-              {/* TODO: Break this up into each of the address fields... */}
               <Typography>State </Typography>
               <TextField
                 sx={{ width: "20vw" }}
@@ -187,7 +183,6 @@ const EditProfile = ({ info, setIsEdit }) => {
           <Grid item xs={6}>
             <Box className="infoBox">
               <HomeIcon />
-              {/* TODO: Break this up into each of the address fields... */}
               <Typography>Zip: </Typography>
               <TextField
                 sx={{ width: "20vw" }}
