@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "zipzap": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

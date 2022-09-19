@@ -66,9 +66,9 @@ const AddRecipient = ({ onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addRecipient({ ...formState });
+    const id = await addRecipient({ ...formState });
     setFormState(initialState);
-    onSuccess();
+    onSuccess(id);
   };
 
   const validateForm = () => {
