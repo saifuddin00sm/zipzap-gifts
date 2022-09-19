@@ -33,6 +33,7 @@ const RecipientList = () => {
   const [search, setSearch] = useState("");
   const [rows, setRows] = useState([]);
   const [success, setSuccess] = useState(false);
+  const [newID, setNewID] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleSearch = (event) => {
@@ -85,7 +86,8 @@ const RecipientList = () => {
     navigate(id);
   };
 
-  const onSuccess = () => {
+  const onSuccess = (id) => {
+    setNewID(id);
     setSuccess(true);
     reward();
   };
@@ -218,6 +220,7 @@ const RecipientList = () => {
           open={open}
           onClose={handleClose}
           button={true}
+          ids={[newID]}
         />
       ) : (
         <RecipientModal open={open} setOpen={setOpen} onSuccess={onSuccess} />

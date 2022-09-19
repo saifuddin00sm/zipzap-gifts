@@ -122,7 +122,14 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
     graphqlOperation(createAddress, { input: shippingAddress })
   );
   recipient.recipientShippingAddressId = id;
-  await API.graphql(graphqlOperation(createRecipient, { input: recipient }));
+  const {
+    data: {
+      createRecipient: { id: recipientID },
+    },
+  } = await API.graphql(
+    graphqlOperation(createRecipient, { input: recipient })
+  );
+  return recipientID;
 };
 
 const editRecipient = async ({ shippingAddress, ...recipient }) => {
