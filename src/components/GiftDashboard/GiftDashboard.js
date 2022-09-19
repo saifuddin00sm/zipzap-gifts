@@ -18,7 +18,6 @@ import UtilizationAndDefault from "./UtilizationAndDefault";
 import GiftCalendar from "./GiftCalendar";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import TodayIcon from "@mui/icons-material/Today";
-import CakeIcon from "@mui/icons-material/Cake";
 import GiftDashboardModal from "./GiftDashboardModal";
 
 // holidays json
@@ -225,42 +224,42 @@ const defaultGifts = [
     ],
     id: 1,
   },
-  {
-    giftType: "Upcoming Recipient Events",
-    gifts: [
-      {
-        name: "Andrew Smith Birthday",
-        date: "2022-09-09T00:00:00",
-        icon: (
-          <CakeIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
-        ),
-        id: 1,
-      },
-      {
-        name: "Michael Scott Anniversary",
-        date: "2022-09-15T00:00:00",
-        icon: (
-          <EventRepeatIcon
-            sx={{ fontSize: { lg: "2.7rem" } }}
-            color="secondary"
-          />
-        ),
-        id: 2,
-      },
-      {
-        name: "Kelsey Zaugg Anniversary",
-        date: "2022-09-21T00:00:00",
-        icon: (
-          <EventRepeatIcon
-            sx={{ fontSize: { lg: "2.7rem" } }}
-            color="secondary"
-          />
-        ),
-        id: 3,
-      },
-    ],
-    id: 2,
-  },
+  // {
+  //   giftType: "Upcoming Recipient Events",
+  //   gifts: [
+  //     {
+  //       name: "Andrew Smith Birthday",
+  //       date: "2022-09-09T00:00:00",
+  //       icon: (
+  //         <CakeIcon sx={{ fontSize: { lg: "2.7rem" } }} color="secondary" />
+  //       ),
+  //       id: 1,
+  //     },
+  //     {
+  //       name: "Michael Scott Anniversary",
+  //       date: "2022-09-15T00:00:00",
+  //       icon: (
+  //         <EventRepeatIcon
+  //           sx={{ fontSize: { lg: "2.7rem" } }}
+  //           color="secondary"
+  //         />
+  //       ),
+  //       id: 2,
+  //     },
+  //     {
+  //       name: "Kelsey Zaugg Anniversary",
+  //       date: "2022-09-21T00:00:00",
+  //       icon: (
+  //         <EventRepeatIcon
+  //           sx={{ fontSize: { lg: "2.7rem" } }}
+  //           color="secondary"
+  //         />
+  //       ),
+  //       id: 3,
+  //     },
+  //   ],
+  //   id: 2,
+  //  },
 ];
 
 function GiftDashboard() {
