@@ -112,6 +112,7 @@ type ProfileFavorite
       { allow: groups, groups: ["Admin"] }
       { allow: groups, groupsField: "accessGroups" }
       { allow: private, provider: iam }
+      { allow: private, operations: [read] }
     ]
   ) {
   id: ID!
