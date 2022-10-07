@@ -50,9 +50,9 @@ const GiftCards = ({ data, loading, error, selectedGift, setSelectedGift }) => {
       subText:
         "Virtual Gifts: choose your amount and send via email | COMING SOON",
     },
+    { name: "Upcoming Holiday Gifts", category: "upcomingHoliday" },
     { name: "Recommended gifts", category: "recommendedGifts" },
     { name: "Birthday Gifts", category: "birthday" },
-    { name: "Upcoming Holiday Gifts", category: "upcomingHoliday" },
     { name: "Anniversary / Promotion Gifts", category: "anniversaryPromotion" },
     { name: "Sympathy/ Get Well", category: "sympathyGetWell" },
     { name: "Just because", category: "justBecause" },
