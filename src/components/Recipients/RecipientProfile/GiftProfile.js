@@ -40,6 +40,7 @@ const questionMap = {
   "Which hobbies do you enjoy the most?": "Hobbies",
   "Anything we should know? (A gift specialist will contact you for more info)":
     "Allergies/ Aversions/ Goals",
+  "Shirt Size": "Shirt Size",
 };
 
 const GiftProfile = ({ info }) => {
