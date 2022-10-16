@@ -1,4 +1,5 @@
 import React from "react";
+import { addDays } from "date-fns";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
@@ -30,6 +31,7 @@ const GiftDetails = ({
   from,
   setInput,
 }) => {
+  const nextWeek = addDays(new Date(), 7);
   return (
     <Box sx={style}>
       <Grid container rowSpacing={1} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -105,7 +107,7 @@ const GiftDetails = ({
                 <Typography variant="h6">Gift Date</Typography>
                 <DatePicker
                   value={to}
-                  disablePast={true}
+                  minDate={nextWeek}
                   inputFormat="MM/dd/yyyy"
                   maxDate={new Date().setDate(395)}
                   onChange={(value) => setInput("to", value)}
@@ -123,7 +125,7 @@ const GiftDetails = ({
                   <DatePicker
                     value={from}
                     inputFormat="MM/dd/yyyy"
-                    disablePast={true}
+                    minDate={nextWeek}
                     maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("from", value)}
                     renderInput={(params) => (
@@ -136,7 +138,7 @@ const GiftDetails = ({
                   <DatePicker
                     value={to}
                     inputFormat="MM/dd/yyyy"
-                    disablePast={true}
+                    minDate={nextWeek}
                     maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("to", value)}
                     renderInput={(params) => (

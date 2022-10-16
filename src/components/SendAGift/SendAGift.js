@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { API, graphqlOperation } from "aws-amplify";
-import { parseISO } from "date-fns";
+import { parseISO, addDays } from "date-fns";
 import { useQuery } from "react-query";
 import { getOrder } from "../../graphql/queries";
 import Box from "@mui/material/Box";
@@ -90,8 +90,8 @@ const initialState = {
   giftPrice: 0,
   name: "",
   note: "",
-  to: new Date(),
-  from: new Date(),
+  to: addDays(new Date(), 7),
+  from: addDays(new Date(), 7),
   orderType: "ONE_TIME",
   orderDateType: "",
   recipients: [],
