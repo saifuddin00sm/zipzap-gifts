@@ -98,36 +98,12 @@ const ChooseRecipient = ({
         );
         setData(fuse.search(searchValue).map((i) => i.item));
       } else {
-        setData(recipients);
-      }
-    }
-  }, [searchValue, recipients]);
-
-  useEffect(() => {
-    const searchOptions = {
-      tokenize: false,
-      threshold: 0.3,
-      keys: [
-        { name: "firstName", weight: 2 },
-        { name: "lastName", weight: 2 },
-        "fullName",
-        "jobTitle",
-        "department.name",
-        "birthday",
-        "startDate",
-      ],
-    };
-    if (recipients) {
-      if (searchValue) {
-        const fuse = new Fuse(
-          recipients.map((r) => {
-            return { ...r, fullName: `${r.firstName} ${r.lastName}` };
-          }),
-          searchOptions
+        setData(
+          // Sort alphabetically
+          recipients.sort((a, b) =>
+            a.firstName > b.firstName ? 1 : b.firstName > a.firstName ? -1 : 0
+          )
         );
-        setData(fuse.search(searchValue).map((i) => i.item));
-      } else {
-        setData(recipients);
       }
     }
   }, [searchValue, recipients]);

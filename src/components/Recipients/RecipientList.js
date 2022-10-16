@@ -70,7 +70,12 @@ const RecipientList = () => {
         );
         setRows(fuse.search(search).map((i) => i.item));
       } else {
-        setRows(recipients);
+        setRows(
+          // Sort alphabetically
+          recipients.sort((a, b) =>
+            a.firstName > b.firstName ? 1 : b.firstName > a.firstName ? -1 : 0
+          )
+        );
       }
     }
   }, [search, recipients]);
