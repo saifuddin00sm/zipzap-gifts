@@ -149,8 +149,8 @@ const Checkout = ({
   setSuccess,
 }) => {
   const [total, setTotal] = useState(0);
-  const recipientShippingPrice = 22;
-  const officeShippingPrice = 12;
+  const recipientShippingPrice = 14;
+  const officeShippingPrice = 10;
 
   let shippingCost = 0;
   if (shippingAddressType === "RECIPIENT_ADDRESS") {
