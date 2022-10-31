@@ -998,7 +998,8 @@ export const onCreateGiftEvent = /* GraphQL */ `
         }
         active
         needs_subscription
-        no_shipping
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1092,7 +1093,8 @@ export const onUpdateGiftEvent = /* GraphQL */ `
         }
         active
         needs_subscription
-        no_shipping
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1186,7 +1188,8 @@ export const onDeleteGiftEvent = /* GraphQL */ `
         }
         active
         needs_subscription
-        no_shipping
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1374,7 +1377,8 @@ export const onCreateGift = /* GraphQL */ `
       }
       active
       needs_subscription
-      no_shipping
+      no_shipping_fee
+      can_schedule_immediately
       createdAt
       updatedAt
     }
@@ -1412,7 +1416,8 @@ export const onUpdateGift = /* GraphQL */ `
       }
       active
       needs_subscription
-      no_shipping
+      no_shipping_fee
+      can_schedule_immediately
       createdAt
       updatedAt
     }
@@ -1450,7 +1455,8 @@ export const onDeleteGift = /* GraphQL */ `
       }
       active
       needs_subscription
-      no_shipping
+      no_shipping_fee
+      can_schedule_immediately
       createdAt
       updatedAt
     }
@@ -1665,7 +1671,8 @@ export const onCreateGiftItems = /* GraphQL */ `
         }
         active
         needs_subscription
-        no_shipping
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1713,7 +1720,8 @@ export const onUpdateGiftItems = /* GraphQL */ `
         }
         active
         needs_subscription
-        no_shipping
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1761,7 +1769,8 @@ export const onDeleteGiftItems = /* GraphQL */ `
         }
         active
         needs_subscription
-        no_shipping
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }

@@ -4007,7 +4007,19 @@
               "deprecationReason": null
             },
             {
-              "name": "no_shipping",
+              "name": "no_shipping_fee",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "can_schedule_immediately",
               "description": null,
               "args": [],
               "type": {
@@ -6359,7 +6371,17 @@
               "defaultValue": null
             },
             {
-              "name": "no_shipping",
+              "name": "no_shipping_fee",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelBooleanInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "can_schedule_immediately",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -11493,7 +11515,17 @@
               "defaultValue": null
             },
             {
-              "name": "no_shipping",
+              "name": "no_shipping_fee",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "can_schedule_immediately",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -11574,7 +11606,17 @@
               "defaultValue": null
             },
             {
-              "name": "no_shipping",
+              "name": "no_shipping_fee",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelBooleanInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "can_schedule_immediately",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -11707,7 +11749,17 @@
               "defaultValue": null
             },
             {
-              "name": "no_shipping",
+              "name": "no_shipping_fee",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "can_schedule_immediately",
               "description": null,
               "type": {
                 "kind": "SCALAR",
