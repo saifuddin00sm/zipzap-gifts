@@ -98,6 +98,8 @@ const initialState = {
   totalPrice: "",
   shippingAddressType: "RECIPIENT_ADDRESS",
   paymentID: "",
+  canScheduleImmediately: false,
+  noShippingFee: false,
 };
 
 const StepComponent = ({
@@ -145,6 +147,7 @@ const StepComponent = ({
           giftPrice={formState.giftPrice}
           paymentID={formState.paymentID}
           shippingAddressType={formState.shippingAddressType}
+          noShippingFee={formState.noShippingFee}
           setInput={setInput}
           submitPayment={submitPayment}
           setSubmitPayment={setSubmitPayment}
@@ -196,6 +199,8 @@ const SendAGift = () => {
     let v = value;
     let giftImage;
     let giftPrice;
+    let canScheduleImmediately = false;
+    let noShippingFee = false;
     if (key === "gift") {
       k = "giftID";
       v = value.id;
@@ -203,12 +208,19 @@ const SendAGift = () => {
         ({ alt }) => alt === "thumbnail"
       )?.[0]?.src;
       giftPrice = value.price;
+      canScheduleImmediately = value.can_schedule_immediately;
+      noShippingFee = value.no_shipping_fee;
     }
     setFormState({
       ...formState,
       [k]: v,
       ...(key === "orderType" && value === "ONE_TIME" && { orderDateType: "" }),
-      ...(key === "gift" && { giftImage, giftPrice }),
+      ...(key === "gift" && {
+        giftImage,
+        giftPrice,
+        canScheduleImmediately,
+        noShippingFee,
+      }),
     });
   }
 

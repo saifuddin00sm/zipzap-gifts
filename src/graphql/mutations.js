@@ -1055,6 +1055,8 @@ export const createGiftEvent = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1151,6 +1153,8 @@ export const updateGiftEvent = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1247,6 +1251,8 @@ export const deleteGiftEvent = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1446,6 +1452,8 @@ export const createGift = /* GraphQL */ `
       }
       active
       needs_subscription
+      no_shipping_fee
+      can_schedule_immediately
       createdAt
       updatedAt
     }
@@ -1486,6 +1494,8 @@ export const updateGift = /* GraphQL */ `
       }
       active
       needs_subscription
+      no_shipping_fee
+      can_schedule_immediately
       createdAt
       updatedAt
     }
@@ -1526,6 +1536,8 @@ export const deleteGift = /* GraphQL */ `
       }
       active
       needs_subscription
+      no_shipping_fee
+      can_schedule_immediately
       createdAt
       updatedAt
     }
@@ -1770,6 +1782,8 @@ export const createGiftItems = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1820,6 +1834,8 @@ export const updateGiftItems = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1870,6 +1886,8 @@ export const deleteGiftItems = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }

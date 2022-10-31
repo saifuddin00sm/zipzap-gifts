@@ -18,6 +18,8 @@ const listGifts = /* GraphQL */ `
           }
         }
         price
+        no_shipping_fee
+        can_schedule_immediately
         items {
           items {
             item {

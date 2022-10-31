@@ -596,6 +596,8 @@ export const getGiftEvent = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -653,6 +655,8 @@ export const listGiftEvents = /* GraphQL */ `
           description
           active
           needs_subscription
+          no_shipping_fee
+          can_schedule_immediately
           createdAt
           updatedAt
         }
@@ -785,6 +789,8 @@ export const getGift = /* GraphQL */ `
       }
       active
       needs_subscription
+      no_shipping_fee
+      can_schedule_immediately
       createdAt
       updatedAt
     }
@@ -811,6 +817,8 @@ export const listGifts = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -969,6 +977,8 @@ export const getGiftItems = /* GraphQL */ `
         }
         active
         needs_subscription
+        no_shipping_fee
+        can_schedule_immediately
         createdAt
         updatedAt
       }
@@ -1015,6 +1025,8 @@ export const listGiftItems = /* GraphQL */ `
           description
           active
           needs_subscription
+          no_shipping_fee
+          can_schedule_immediately
           createdAt
           updatedAt
         }
