@@ -208,6 +208,7 @@ type Gift
   pictures: [GiftImage] @hasMany
   active: Boolean
   needs_subscription: Boolean
+  no_shipping: Boolean
 }
 
 type Item
