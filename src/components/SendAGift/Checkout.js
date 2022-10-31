@@ -143,6 +143,7 @@ const Checkout = ({
   giftPrice,
   shippingAddressType,
   paymentID,
+  noShippingFee,
   setInput,
   submitPayment,
   setSubmitPayment,
@@ -158,7 +159,13 @@ const Checkout = ({
   } else if (shippingAddressType === "COMPANY_ADDRESS") {
     shippingCost = officeShippingPrice;
   }
-  const totalPrice = giftPrice * recipientCount + shippingCost * recipientCount;
+  if (noShippingFee) {
+    shippingCost = 0;
+  }
+  const totalPrice = (
+    giftPrice * recipientCount +
+    shippingCost * recipientCount
+  ).toFixed(2);
   useEffect(() => {
     if (total !== totalPrice) {
       setInput("totalPrice", totalPrice);
@@ -205,51 +212,53 @@ const Checkout = ({
                 </Button>
               </Box>
             </Box>
-            <Box className="shipping_container">
-              <Typography className="headings_text" variant="h6">
-                Choose Shipping Option
-              </Typography>
-              <Box>
-                <Box
-                  onClick={() =>
-                    setInput("shippingAddressType", "RECIPIENT_ADDRESS")
-                  }
-                  className="shipping_cards"
-                  sx={{
-                    background:
-                      shippingAddressType === "RECIPIENT_ADDRESS"
-                        ? "#ABC6BD"
-                        : "#fff",
-                  }}
-                >
-                  <Typography className="address" variant="body">
-                    To Recipient's Address
-                  </Typography>
-                  <Typography className="prices" variant="body2">
-                    ${recipientShippingPrice}
-                  </Typography>
-                </Box>
-                <Box
-                  onClick={() =>
-                    setInput("shippingAddressType", "COMPANY_ADDRESS")
-                  }
-                  className="shipping_cards"
-                  sx={{
-                    background:
-                      shippingAddressType === "COMPANY_ADDRESS"
-                        ? "#ABC6BD"
-                        : "#fff",
-                  }}
-                >
-                  <Typography className="address" variant="body">
-                    Ship Gifts to Company Address
-                  </Typography>
-                  <Typography className="prices" variant="body2">
-                    ${officeShippingPrice}
-                  </Typography>
+            {!noShippingFee && (
+              <Box className="shipping_container">
+                <Typography className="headings_text" variant="h6">
+                  Choose Shipping Option
+                </Typography>
+                <Box>
+                  <Box
+                    onClick={() =>
+                      setInput("shippingAddressType", "RECIPIENT_ADDRESS")
+                    }
+                    className="shipping_cards"
+                    sx={{
+                      background:
+                        shippingAddressType === "RECIPIENT_ADDRESS"
+                          ? "#ABC6BD"
+                          : "#fff",
+                    }}
+                  >
+                    <Typography className="address" variant="body">
+                      To Recipient's Address
+                    </Typography>
+                    <Typography className="prices" variant="body2">
+                      ${recipientShippingPrice}
+                    </Typography>
+                  </Box>
+                  <Box
+                    onClick={() =>
+                      setInput("shippingAddressType", "COMPANY_ADDRESS")
+                    }
+                    className="shipping_cards"
+                    sx={{
+                      background:
+                        shippingAddressType === "COMPANY_ADDRESS"
+                          ? "#ABC6BD"
+                          : "#fff",
+                    }}
+                  >
+                    <Typography className="address" variant="body">
+                      Ship Gifts to Company Address
+                    </Typography>
+                    <Typography className="prices" variant="body2">
+                      ${officeShippingPrice}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
+            )}
           </Box>
         </Grid>
         <Grid item xs={6}>

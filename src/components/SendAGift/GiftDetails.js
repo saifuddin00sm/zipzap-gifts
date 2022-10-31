@@ -27,11 +27,12 @@ const GiftDetails = ({
   note,
   orderType,
   orderDateType,
+  canScheduleImmediately,
   to,
   from,
   setInput,
 }) => {
-  const nextWeek = addDays(new Date(), 7);
+  const minScheduleDate = addDays(new Date(), canScheduleImmediately ? 0 : 7);
   return (
     <Box sx={style}>
       <Grid container rowSpacing={1} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -107,7 +108,7 @@ const GiftDetails = ({
                 <Typography variant="h6">Gift Date</Typography>
                 <DatePicker
                   value={to}
-                  minDate={nextWeek}
+                  minDate={minScheduleDate}
                   inputFormat="MM/dd/yyyy"
                   maxDate={new Date().setDate(395)}
                   onChange={(value) => setInput("to", value)}
@@ -125,7 +126,7 @@ const GiftDetails = ({
                   <DatePicker
                     value={from}
                     inputFormat="MM/dd/yyyy"
-                    minDate={nextWeek}
+                    minDate={minScheduleDate}
                     maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("from", value)}
                     renderInput={(params) => (
@@ -138,7 +139,7 @@ const GiftDetails = ({
                   <DatePicker
                     value={to}
                     inputFormat="MM/dd/yyyy"
-                    minDate={nextWeek}
+                    minDate={minScheduleDate}
                     maxDate={new Date().setDate(395)}
                     onChange={(value) => setInput("to", value)}
                     renderInput={(params) => (
