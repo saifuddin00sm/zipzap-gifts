@@ -3,6 +3,7 @@ import { template } from "./email.js";
 const email = ({
   updated = false,
   name,
+  note,
   emailAddress,
   giftName,
   recipients,
@@ -21,6 +22,10 @@ const email = ({
 
   <p>
     <b>Name:</b> ${name}
+  </p>
+
+  <p>
+    <b>Custom Note:</b> ${note}
   </p>
 
   <p>

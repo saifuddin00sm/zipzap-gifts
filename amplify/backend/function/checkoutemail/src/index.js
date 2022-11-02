@@ -28,6 +28,7 @@ export const handler = async (event) => {
       const {
         giftID,
         name,
+        note,
         createdBy,
         recipientIDs,
         toDate,
@@ -51,6 +52,7 @@ export const handler = async (event) => {
         subject = "New Gift Order";
         email = adminNew({
           name: name.S,
+          note: note.S,
           emailAddress: createdBy.S,
           giftName,
           recipients,
@@ -62,6 +64,7 @@ export const handler = async (event) => {
         // TODO: Calculate differences so we only show what's changed
         email = adminNew({
           name: name.S,
+          note: note.S,
           updated: true,
           emailAddress: createdBy.S,
           giftName,

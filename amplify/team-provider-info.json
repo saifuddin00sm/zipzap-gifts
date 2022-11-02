@@ -28,7 +28,7 @@
           "sesEmail": "noreply@zipzap.gifts",
           "adminEmail": "connect+admin@zipzapgifts.com",
           "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
-          "s3Key": "amplify-builds/checkoutemail-30356a45726c677a4255-build.zip"
+          "s3Key": "amplify-builds/checkoutemail-667077716a71366c5534-build.zip"
         },
         "favorites": {
           "deploymentBucketName": "amplify-zipzap-main-104234-deployment",
