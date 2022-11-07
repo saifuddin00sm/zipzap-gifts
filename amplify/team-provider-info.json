@@ -69,13 +69,21 @@
         "stripe": {
           "secretsPathAmplifyAppId": "d36qqcyplgrvk3",
           "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
-          "s3Key": "amplify-builds/stripe-644b777a5a412b657252-build.zip"
+          "s3Key": "amplify-builds/stripe-627665617576367a4972-build.zip"
         },
         "checkoutemail": {
           "sesEmail": "noreply@zipzap.gifts",
           "adminEmail": "connect+admin@zipzapgifts.com",
           "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
-          "s3Key": "amplify-builds/checkoutemail-3372394951786a46774d-build.zip"
+          "s3Key": "amplify-builds/checkoutemail-645741707a3639713254-build.zip"
+        },
+        "favorites": {
+          "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
+          "s3Key": "amplify-builds/favorites-684b7158452f54573276-build.zip"
+        },
+        "recipientsemail": {
+          "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
+          "s3Key": "amplify-builds/recipientsemail-62336d762b6b6775326d-build.zip"
         }
       },
       "hosting": {
