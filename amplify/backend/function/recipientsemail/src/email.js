@@ -5,8 +5,7 @@ import { SESClient, SendRawEmailCommand } from "@aws-sdk/client-ses";
 const sesClient = new SESClient({ region: process.env.REGION });
 
 const unsubscribeEmail = "connect@zipzapgifts.com";
-const fromEmail = "noreply@zipzap.gifts";
-const subject = "Hooray! Your Employer Wants To Send You Cool Gifts!";
+const fromEmail = "Zip Zap Gifts <noreply@zipzap.gifts>";
 const body = template;
 
 /**
@@ -17,12 +16,14 @@ export const sendSurveyEmails = async (emails) => {
   let count = 0;
 
   // Send each of the emails in parallel
-  const promises = emails.map(async (email) => {
+  const promises = emails.map(async ({ email, companyName }) => {
     return new Promise((resolve, reject) => {
       try {
         var mailOptions = {
           from: fromEmail,
-          subject: subject,
+          subject: `Hooray! ${
+            companyName || "Someone"
+          } wants to send you a gift!`,
           text: text,
           html: body,
           to: email,

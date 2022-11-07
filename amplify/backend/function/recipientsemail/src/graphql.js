@@ -8,6 +8,9 @@ const query = /* GraphQL */ `
     listRecipients(filter: $filter) {
       items {
         email
+        company {
+          name
+        }
       }
     }
   }
@@ -41,6 +44,11 @@ export const getEmails = async ({ body }) => {
   if (errors) {
     console.warn("UNABLE TO GET Recipients", errors);
   }
-  const emails = items.map(({ email }) => email);
+  const emails = items.map(({ email, company }) => {
+    return {
+      email,
+      companyName: company?.name,
+    };
+  });
   return emails;
 };

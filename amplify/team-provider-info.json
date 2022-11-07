@@ -83,7 +83,7 @@
         },
         "recipientsemail": {
           "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
-          "s3Key": "amplify-builds/recipientsemail-62336d762b6b6775326d-build.zip"
+          "s3Key": "amplify-builds/recipientsemail-38422f6b71595072466c-build.zip"
         }
       },
       "hosting": {
