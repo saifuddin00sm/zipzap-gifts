@@ -1,7 +1,10 @@
 import { template } from "./email_template.js";
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { text } from "./text_template.js";
+import mailcomposer from "mailcomposer";
+import { SESClient, SendRawEmailCommand } from "@aws-sdk/client-ses";
 const sesClient = new SESClient({ region: process.env.REGION });
 
+const unsubscribeEmail = "connect@zipzapgifts.com";
 const fromEmail = "noreply@zipzap.gifts";
 const subject = "Hooray! Your Employer Wants To Send You Cool Gifts!";
 const body = template;
@@ -15,32 +18,39 @@ export const sendSurveyEmails = async (emails) => {
 
   // Send each of the emails in parallel
   const promises = emails.map(async (email) => {
-    try {
-      const sendEmailCommand = new SendEmailCommand({
-        Destination: {
-          ToAddresses: [email],
-        },
-        Message: {
-          Body: {
-            Html: {
-              Charset: "UTF-8",
-              Data: body,
-            },
+    return new Promise((resolve, reject) => {
+      try {
+        var mailOptions = {
+          from: fromEmail,
+          subject: subject,
+          text: text,
+          html: body,
+          to: email,
+          headers: {
+            "List-Unsubscribe": `<mailto:${unsubscribeEmail}>`,
           },
-          Subject: {
-            Charset: "UTF-8",
-            Data: subject,
-          },
-        },
-        Source: fromEmail,
-      });
-      const response = await sesClient.send(sendEmailCommand);
-      // TODO: Remove this line, determine how we should count these...
-      console.log(response);
-      count++;
-    } catch (error) {
-      console.error(error);
-    }
+        };
+
+        var mail = mailcomposer(mailOptions);
+
+        mail.build(async (err, message) => {
+          if (err) {
+            console.error(err);
+            reject();
+          }
+
+          const response = await sesClient.send(
+            new SendRawEmailCommand({ RawMessage: { Data: message } })
+          );
+          console.log(response);
+          count++;
+          resolve();
+        });
+      } catch (error) {
+        console.error(error);
+        reject();
+      }
+    });
   });
 
   // Wait for all of the emails to finish sending

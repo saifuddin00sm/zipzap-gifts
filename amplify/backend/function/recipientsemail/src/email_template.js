@@ -1,7 +1,5 @@
 export const template = `
 <html>
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
    <body style="background-color:#C6D4DF; font-family:Poppins, sans-serif,Trebuchet MS,sans-serif; padding: 20px">
       <div style="margin: 0 auto; width: 600px; padding-top: 20px; background-color: #fff; font-size: 1.2rem; font-style: normal;font-weight: normal;line-height: 19px;" align="center">
