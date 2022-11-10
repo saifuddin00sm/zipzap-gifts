@@ -92,7 +92,7 @@ const GiftCalendar = ({ showDetailsHandle, giftDates, holidaysData }) => {
               .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
               .map(({ id, icon, name }) => (
                 <Typography variant="body" key={id}>
-                  <Tooltip title={name} enterTouchDelay={100}>
+                  <Tooltip title={name} enterTouchDelay={0}>
                     {icon}
                   </Tooltip>
                 </Typography>
