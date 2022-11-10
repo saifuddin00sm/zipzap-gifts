@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { parseISO, isAfter } from "date-fns";
+import { parseISO, isAfter, format } from "date-fns";
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery } from "react-query";
 import { getUser } from "../../graphql/queries";
+import { useRecipients } from "../../hooks/recipients";
 import Container from "@mui/material/Container";
 import Header from "../Header.js";
 import Typography from "@mui/material/Typography";
@@ -19,6 +20,7 @@ import UtilizationAndDefault from "./UtilizationAndDefault";
 import GiftCalendar from "./GiftCalendar";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import TodayIcon from "@mui/icons-material/Today";
+import CakeIcon from "@mui/icons-material/Cake";
 import GiftDashboardModal from "./GiftDashboardModal";
 
 // TODO: Put the holidays in the database or something. They need to be updated again next May
@@ -121,76 +123,6 @@ const holidaysData = [
   { name: "National BBQ Day", date: "2023-05-16" },
 ];
 
-// calendar events
-const calendarEvents = [
-  {
-    name: "Krista Humphrey Birthday",
-    icon: (
-      <EventRepeatIcon
-        sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
-        color="secondary"
-      />
-    ),
-    date: "2022-05-15",
-    id: 2,
-  },
-  {
-    name: "Nathan Humphrey Anniversary",
-    icon: (
-      <EventRepeatIcon
-        sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
-        color="secondary"
-      />
-    ),
-    date: "2022-05-21",
-    id: 3,
-  },
-  {
-    name: "Amelia Ostler Birthday",
-    icon: (
-      <EventRepeatIcon
-        sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
-        color="secondary"
-      />
-    ),
-    date: "2022-05-18",
-    id: 4,
-  },
-  {
-    name: "Saif Uddin Birthday",
-    icon: (
-      <EventRepeatIcon
-        sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
-        color="secondary"
-      />
-    ),
-    date: "2022-06-12",
-    id: 5,
-  },
-  {
-    name: "Skill Achievement Reward",
-    icon: (
-      <TodayIcon
-        sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
-        color="secondary"
-      />
-    ),
-    date: "2022-05-04",
-    id: 6,
-  },
-  {
-    name: "New Baby",
-    icon: (
-      <TodayIcon
-        sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
-        color="secondary"
-      />
-    ),
-    date: "2022-05-18",
-    id: 7,
-  },
-];
-
 // utilization and default gift dummy data
 const utilization = 60;
 
@@ -247,6 +179,7 @@ function GiftDashboard() {
     () => API.graphql(graphqlOperation(getUser, { id: userID })),
     { enabled: !!userID }
   );
+  const { recipients } = useRecipients();
   const [open, setOpen] = useState(false);
   const handleDayClick = (day) => {};
 
@@ -256,6 +189,36 @@ function GiftDashboard() {
       setOpen(true);
     }
   }, [userData]);
+
+  let calendarEvents = [];
+  if (recipients?.length > 0) {
+    // Move all anniversaries and birthdays to this year so they show up on the Calendar
+    const thisYear = new Date().getFullYear();
+    calendarEvents = recipients.flatMap((recipient) => [
+      {
+        name: `${recipient.firstName} ${recipient.lastName} Birthday`,
+        icon: (
+          <CakeIcon
+            sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
+            color="secondary"
+          />
+        ),
+        date: format(parseISO(recipient.birthday), `${thisYear}-MM-dd`),
+        id: `${recipient.id}-birthday`,
+      },
+      {
+        name: `${recipient.firstName} ${recipient.lastName} Anniversary`,
+        icon: (
+          <EventRepeatIcon
+            sx={{ fontSize: { lg: "2.5rem", xs: "1rem" } }}
+            color="secondary"
+          />
+        ),
+        date: format(parseISO(recipient.startDate), `${thisYear}-MM-dd`),
+        id: `${recipient.id}-anniversary`,
+      },
+    ]);
+  }
 
   return (
     <>

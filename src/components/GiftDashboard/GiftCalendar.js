@@ -6,6 +6,7 @@ import {
   isSameDay,
   lastDayOfWeek,
 } from "date-fns";
+import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
@@ -75,17 +76,6 @@ const GiftCalendar = ({ showDetailsHandle, giftDates, holidaysData }) => {
             <Typography variant="body" className="number">
               {formattedDate}
             </Typography>
-            {giftDates
-              .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
-              .map(({ id, icon }) => (
-                <Typography
-                  variant="body"
-                  sx={{ position: "absolute", top: { lg: "0", xs: "-9px" } }}
-                  key={id}
-                >
-                  {icon}
-                </Typography>
-              ))}
             <Box sx={{ position: "absolute", bottom: "0", left: "2px" }}>
               {holidaysData
                 .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
@@ -98,9 +88,15 @@ const GiftCalendar = ({ showDetailsHandle, giftDates, holidaysData }) => {
                   </Typography>
                 ))}
             </Box>
-            <Typography variant="body" className="bg">
-              {formattedDate}
-            </Typography>
+            {giftDates
+              .filter(({ date }) => date === format(cloneDay, "yyyy-MM-dd"))
+              .map(({ id, icon, name }) => (
+                <Typography variant="body" key={id}>
+                  <Tooltip title={name} enterTouchDelay={100}>
+                    {icon}
+                  </Tooltip>
+                </Typography>
+              ))}
           </Box>
         );
         day = addDays(day, 1);
