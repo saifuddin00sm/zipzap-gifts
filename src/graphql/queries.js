@@ -125,6 +125,7 @@ export const getCompany = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -299,6 +300,7 @@ export const getRecipient = /* GraphQL */ `
       jobTitle
       birthday
       startDate
+      group
       departmentID
       department {
         id
@@ -393,6 +395,7 @@ export const listRecipients = /* GraphQL */ `
         jobTitle
         birthday
         startDate
+        group
         departmentID
         department {
           id
@@ -437,6 +440,7 @@ export const getDepartment = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -555,6 +559,7 @@ export const getGiftEvent = /* GraphQL */ `
         jobTitle
         birthday
         startDate
+        group
         departmentID
         department {
           id
@@ -634,6 +639,7 @@ export const listGiftEvents = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed

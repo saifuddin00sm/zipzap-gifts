@@ -186,6 +186,7 @@ export const onCreateCompany = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -270,6 +271,7 @@ export const onUpdateCompany = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -354,6 +356,7 @@ export const onDeleteCompany = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -496,6 +499,7 @@ export const onCreateRecipient = /* GraphQL */ `
       jobTitle
       birthday
       startDate
+      group
       departmentID
       department {
         id
@@ -606,6 +610,7 @@ export const onUpdateRecipient = /* GraphQL */ `
       jobTitle
       birthday
       startDate
+      group
       departmentID
       department {
         id
@@ -716,6 +721,7 @@ export const onDeleteRecipient = /* GraphQL */ `
       jobTitle
       birthday
       startDate
+      group
       departmentID
       department {
         id
@@ -788,6 +794,7 @@ export const onCreateDepartment = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -823,6 +830,7 @@ export const onUpdateDepartment = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -858,6 +866,7 @@ export const onDeleteDepartment = /* GraphQL */ `
           jobTitle
           birthday
           startDate
+          group
           departmentID
           profilePhoto
           welcomed
@@ -957,6 +966,7 @@ export const onCreateGiftEvent = /* GraphQL */ `
         jobTitle
         birthday
         startDate
+        group
         departmentID
         department {
           id
@@ -1052,6 +1062,7 @@ export const onUpdateGiftEvent = /* GraphQL */ `
         jobTitle
         birthday
         startDate
+        group
         departmentID
         department {
           id
@@ -1147,6 +1158,7 @@ export const onDeleteGiftEvent = /* GraphQL */ `
         jobTitle
         birthday
         startDate
+        group
         departmentID
         department {
           id
