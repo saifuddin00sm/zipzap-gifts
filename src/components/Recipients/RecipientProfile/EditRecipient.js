@@ -30,6 +30,7 @@ const EditRecipientProfile = ({ info, setIsEdit, setEditSuccess }) => {
     } = {},
     jobTitle,
     startDate,
+    group,
   } = info;
 
   const initialState = {
@@ -47,8 +48,8 @@ const EditRecipientProfile = ({ info, setIsEdit, setEditSuccess }) => {
       state: state || "",
       zip: zip || "",
     },
-
-    startDate: info.startDate,
+    group: group || "",
+    startDate: startDate,
   };
 
   const { editRecipient } = useRecipients();
@@ -210,6 +211,16 @@ const EditRecipientProfile = ({ info, setIsEdit, setEditSuccess }) => {
             onChange={(event) => setInput("startDate", event.target.value)}
           >
             {startDate === null ? "N/A" : startDate}
+          </TextField>
+        </Box>
+        <Box className="infos">
+          <Typography className="keys">Group</Typography>
+          <TextField
+            name="group"
+            value={formState.group}
+            onChange={(event) => setInput("group", event.target.value)}
+          >
+            {group === null ? "N/A" : group}
           </TextField>
         </Box>
         <Box>
