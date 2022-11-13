@@ -236,16 +236,16 @@ const AddRecipient = ({ onSuccess }) => {
               )}
             />
           </FormControl>
-
-          {/* Adding back in later */}
-          {/* <FormControl>
-            <Typography
-              style={{ fontSize: "16px", color: "#000", fontWeight: 600 }}
-            >
-              Department (optional)
-            </Typography>
-            <Input placeholder="Department" />
-          </FormControl> */}
+          <FormControl>
+            <Label>Group</Label>
+            <TextField
+              variant="standard"
+              fullWidth={true}
+              onChange={(event) => setInput("group", event.target.value)}
+              value={formState.group}
+              placeholder="Group"
+            ></TextField>
+          </FormControl>
           <FormControl
             sx={{
               justifyContent: "center",

@@ -32,8 +32,8 @@ const rows = [
   {
     firstName: "Wylie",
     lastName: "Sawer",
-    department: "Engineering",
-    title: "Android Jr. Developer",
+    group: "Engineering",
+    jobtitle: "Android Jr. Developer",
     birthday: "12/3/2000",
     startedDate: "4/5/2021",
     address: "122 Easy street",
@@ -45,8 +45,8 @@ const rows = [
   {
     firstName: "Abram",
     lastName: "McDaniel",
-    department: "Human Resources",
-    title: "Company Coordinator",
+    group: "Human Resources",
+    jobtitle: "Company Coordinator",
     birthday: "1/2/1997",
     startedDate: "1/2/2003",
     address: "484 W Bulldog Blvd",
@@ -58,8 +58,8 @@ const rows = [
   {
     firstName: "Stephany",
     lastName: "Cardenas",
-    department: "IT",
-    title: "Project Manager",
+    group: "IT",
+    jobtitle: "Project Manager",
     birthday: "10/12/1992",
     startedDate: "2/14/2015",
     address: "1200 N University",
@@ -71,8 +71,8 @@ const rows = [
   {
     firstName: "Reed",
     lastName: "Green",
-    department: "Accounting",
-    title: "Manager",
+    group: "Accounting",
+    jobtitle: "Manager",
     birthday: "6/3/1968",
     startedDate: "6/4/2016",
     address: "111 E 800 N",
@@ -84,8 +84,8 @@ const rows = [
   {
     firstName: "Tyrone",
     lastName: "Hudson",
-    department: "IT",
-    title: "Cloud Architect",
+    group: "IT",
+    jobtitle: "Cloud Architect",
     birthday: "8/18/1951",
     startedDate: "12/2/2018",
     address: "1831 N State St",
@@ -99,8 +99,8 @@ const rows = [
 const cells = [
   "first name",
   "last name",
-  "department",
-  "title",
+  "group",
+  "job title",
   "birthday",
   "date started",
   "address",
@@ -132,8 +132,8 @@ export default function TemplateTable() {
                 {row.firstName}
               </StyledTableCell>
               <StyledTableCell>{row.lastName}</StyledTableCell>
-              <StyledTableCell>{row.department}</StyledTableCell>
-              <StyledTableCell>{row.title}</StyledTableCell>
+              <StyledTableCell>{row.group}</StyledTableCell>
+              <StyledTableCell>{row.jobtitle}</StyledTableCell>
               <StyledTableCell>{row.birthday}</StyledTableCell>
               <StyledTableCell>{row.startedDate}</StyledTableCell>
               <StyledTableCell>{row.address}</StyledTableCell>

@@ -36,7 +36,7 @@ const ImportList = () => {
     elementSize: 18,
   });
 
-  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Job Title,Birthday,Date Started,Address,City,State,Zip\nJohn,Doe,john.doe@example.com,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
+  const csvFile = `data:text/csv;charset=utf-8,First Name,Last Name,Email,Group,Job Title,Birthday,Date Started,Address,City,State,Zip\nJohn,Doe,john.doe@example.com,Human Resources,HR Manager,1990/12/13,2020/11/01,1616 W Traverse Pkwy,Lehi,UT,84043`;
 
   const changeHandler = (event) => {
     setIsLoading(true);
@@ -48,7 +48,7 @@ const ImportList = () => {
           firstname: "firstName",
           lastname: "lastName",
           email: "email",
-          // department: "department",
+          group: "group",
           jobtitle: "jobTitle",
           birthday: "birthday",
           datestarted: "startDate",
@@ -137,7 +137,7 @@ const ImportList = () => {
                 following attributes (see example below)
               </Typography>
               <Typography variant="body2" sx={{ textTransform: "capitalize" }}>
-                First name, last name, department, job title, birthday , Date
+                First name, last name, group, job title, birthday , Date
                 Started, Address, City, State, Zip
               </Typography>
               <Box className="uploadBtn">
