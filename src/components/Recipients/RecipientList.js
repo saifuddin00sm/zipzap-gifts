@@ -55,7 +55,7 @@ const RecipientList = () => {
         { name: "lastName", weight: 2 },
         "fullName",
         "jobTitle",
-        "department.name",
+        "group",
         "birthday",
         "startDate",
       ],
@@ -139,7 +139,7 @@ const RecipientList = () => {
         shippingAddress: { address1, address2, city, state, zip } = {},
         jobTitle,
         startDate,
-        department,
+        group,
       }) => (
         <TableRow
           hover
@@ -158,7 +158,7 @@ const RecipientList = () => {
           </TableCell>
           <TableCell>{jobTitle}</TableCell>
           <TableCell>{startDate}</TableCell>
-          <TableCell>{department?.name}</TableCell>
+          <TableCell>{group}</TableCell>
         </TableRow>
       )
     );
@@ -201,7 +201,7 @@ const RecipientList = () => {
                   <TableCell>Address</TableCell>
                   <TableCell>Job Title</TableCell>
                   <TableCell>Date Started</TableCell>
-                  <TableCell>Department</TableCell>
+                  <TableCell>Group</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>{tableBody}</TableBody>
