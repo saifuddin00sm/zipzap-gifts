@@ -11,7 +11,7 @@ const GeneralInfo = ({ info, setIsEdit }) => {
     shippingAddress: { address1, address2, city, state, zip } = {},
     jobTitle,
     startDate,
-    department,
+    group,
   } = info;
 
   const handleClick = () => {
@@ -43,10 +43,8 @@ const GeneralInfo = ({ info, setIsEdit }) => {
         <Typography>{startDate === null ? "N/A" : startDate}</Typography>
       </Box>
       <Box className="infos">
-        <Typography className="keys">Department</Typography>
-        <Typography>
-          {department?.name === null ? "N/A" : department?.name}
-        </Typography>
+        <Typography className="keys">Group</Typography>
+        <Typography>{group === null ? "N/A" : group}</Typography>
       </Box>
       <Box>
         <Button onClick={handleClick}>Edit Information</Button>

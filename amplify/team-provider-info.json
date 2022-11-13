@@ -69,7 +69,7 @@
         "stripe": {
           "secretsPathAmplifyAppId": "d36qqcyplgrvk3",
           "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
-          "s3Key": "amplify-builds/stripe-627665617576367a4972-build.zip"
+          "s3Key": "amplify-builds/stripe-6f6e7336365a6a496b4d-build.zip"
         },
         "checkoutemail": {
           "sesEmail": "noreply@zipzap.gifts",
@@ -79,7 +79,7 @@
         },
         "favorites": {
           "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",
-          "s3Key": "amplify-builds/favorites-684b7158452f54573276-build.zip"
+          "s3Key": "amplify-builds/favorites-674e4761695a564c7237-build.zip"
         },
         "recipientsemail": {
           "deploymentBucketName": "amplify-zipzap-dev-100820-deployment",

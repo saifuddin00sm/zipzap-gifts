@@ -83,7 +83,7 @@ const ChooseRecipient = ({
         { name: "lastName", weight: 2 },
         "fullName",
         "jobTitle",
-        "department.name",
+        "group",
         "birthday",
         "startDate",
       ],
@@ -132,7 +132,7 @@ const ChooseRecipient = ({
                 />
 
                 <Tooltip
-                  title="Filter your Recipients by Birthday, Department, Name or Anniversary!"
+                  title="Filter your Recipients by Birthday, Group, Name or Anniversary!"
                   placement="right-start"
                   arrow={true}
                   enterTouchDelay={0}

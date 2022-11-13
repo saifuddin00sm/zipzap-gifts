@@ -33,6 +33,7 @@ const listRecipients = /* GraphQL */ `
         jobTitle
         birthday
         startDate
+        group
         departmentID
         department {
           id
