@@ -1,6 +1,7 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
+  createUser,
   updateUser,
   createAddress,
   updateAddress,
@@ -39,13 +40,14 @@ const editUser = async ({
   email,
   phoneNumber,
   companyID,
-  companyName,
+  companyName = "",
   addressID,
-  address1,
+  address1 = "",
   address2,
   city,
   state,
-  zip,
+  zip = "",
+  newUser = false,
 }) => {
   if (!name) {
     throw new Error("Missing User Name");
@@ -83,7 +85,7 @@ const editUser = async ({
   }
 
   const response = await API.graphql(
-    graphqlOperation(updateUser, {
+    graphqlOperation(newUser ? createUser : updateUser, {
       input: user,
     })
   );

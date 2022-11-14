@@ -6,6 +6,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
+import useAuth from "../../hooks/useAuth";
+import { useUsers } from "../../hooks/users";
 import { useRecipients } from "../../hooks/recipients";
 
 const Root = styled("div")(({ theme }) => ({
@@ -56,6 +58,9 @@ const initialState = {
 
 const AddRecipient = ({ onSuccess }) => {
   const { addRecipient } = useRecipients();
+  const { currentUser } = useAuth();
+  const userID = currentUser?.username;
+  const { user: userData } = useUsers(userID);
   const [isFormValid, setIsFormValid] = useState(false);
   const [formState, setFormState] = useState(initialState);
 
@@ -66,7 +71,10 @@ const AddRecipient = ({ onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const id = await addRecipient({ ...formState });
+    const id = await addRecipient({
+      ...formState,
+      companyRecipientsId: userData.company?.id,
+    });
     setFormState(initialState);
     onSuccess(id);
   };

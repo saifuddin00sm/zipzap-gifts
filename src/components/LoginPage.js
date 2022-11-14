@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { getUser } from "../graphql/queries";
-import { createUser } from "../graphql/mutations";
-import { API, graphqlOperation } from "aws-amplify";
-import { useQuery, useMutation, useQueryClient } from "react-query";
 import useAuth from "../hooks/useAuth";
+import { useUsers } from "../hooks/users";
 
 const backgroundBlue = "#C5D4DF";
 const headingBlue = "#9EB1BE";
@@ -15,30 +12,9 @@ const headingBlue = "#9EB1BE";
  * user is currently not logged in.
  */
 const LoginPage = ({ children }) => {
-  const queryClient = useQueryClient();
   const { currentUser } = useAuth();
   const userID = currentUser?.username;
-  const { isLoading, data: { data: { getUser: userData } = {} } = {} } =
-    useQuery(
-      ["users", userID],
-      () => API.graphql(graphqlOperation(getUser, { id: userID })),
-      { enabled: !!userID }
-    );
-  const addUser = async () => {
-    const input = {
-      id: currentUser.username,
-      email: currentUser.attributes.email,
-      name: currentUser.attributes.name,
-      phoneNumber: currentUser.attributes.phone_number,
-    };
-    await API.graphql(graphqlOperation(createUser, { input }));
-  };
-
-  const mutation = useMutation(addUser, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("users");
-    },
-  });
+  const { isLoading, user: userData, editUser } = useUsers(userID);
 
   // Add the user to the GraphQL database if they're not in there yet
   useEffect(() => {
@@ -46,10 +22,16 @@ const LoginPage = ({ children }) => {
     if (currentUser?.username) {
       // Check that react-query is done loading but we still don't have userData
       if (!isLoading && !userData) {
-        mutation.mutateAsync();
+        editUser({
+          newUser: true,
+          id: currentUser.username,
+          email: currentUser.attributes.email,
+          name: currentUser.attributes.name,
+          phoneNumber: currentUser.attributes.phone_number,
+        });
       }
     }
-  }, [currentUser, userData, isLoading, mutation]);
+  }, [currentUser, userData, isLoading, editUser]);
 
   // If the user is already logged in, do not render the login page
   if (currentUser) {

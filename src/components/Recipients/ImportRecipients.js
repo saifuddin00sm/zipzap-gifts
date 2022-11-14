@@ -11,6 +11,8 @@ import Papa from "papaparse";
 import TemplateTable from "./TemplateTable";
 import RecipientSuccess from "./RecipientSuccess";
 import { useRecipients } from "../../hooks/recipients";
+import useAuth from "../../hooks/useAuth";
+import { useUsers } from "../../hooks/users";
 import { useReward } from "react-rewards";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -21,6 +23,9 @@ const ImportList = () => {
   const [uploadCount, setUploadCount] = useState();
   const [totalCount, setTotalCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const { currentUser } = useAuth();
+  const userID = currentUser?.username;
+  const { user: userData } = useUsers(userID);
   const { addRecipient } = useRecipients();
   const [success, setSuccess] = useState(false);
   const [newIDs, setNewIDs] = useState([]);
@@ -89,7 +94,9 @@ const ImportList = () => {
           delete recipient.city;
           delete recipient.state;
           delete recipient.zip;
+
           try {
+            recipient.companyRecipientsId = userData.company?.id;
             const newID = await addRecipient(recipient);
             successCount++;
             ids.push(newID);
