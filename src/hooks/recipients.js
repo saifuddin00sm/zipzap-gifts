@@ -93,6 +93,10 @@ const getAllRecipients = async () => {
 };
 
 const addRecipient = async ({ shippingAddress, ...recipient }) => {
+  if (!recipient.companyRecipientsId) {
+    throw new Error("Missing Recipient Company ID");
+  }
+
   if (!recipient.email) {
     recipient.email = null;
   }
@@ -100,8 +104,7 @@ const addRecipient = async ({ shippingAddress, ...recipient }) => {
     recipient.phone = null;
   }
   if (!recipient.firstName && !recipient.lastName) {
-    new Error("Missing First and Last Name");
-    return;
+    throw new Error("Missing First and Last Name");
   }
   if (recipient.birthday) {
     const birthday = isDate(recipient.birthday)
